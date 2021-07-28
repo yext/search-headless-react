@@ -30,6 +30,6 @@ function VerticalResultsDisplay({ results, randomString }: Props) {
 export default listenToStatefulCore(state => {
   console.log('state listener for vresults!', state)
   return {
-    results: state.vertical.results
+    results: state.vertical.results?.verticalResults.results
   };
 })(VerticalResultsDisplay)

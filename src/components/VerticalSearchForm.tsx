@@ -1,5 +1,5 @@
 import { useRef, KeyboardEvent } from 'react';
-import { StatefulCore } from '../../../lib/esm';
+import { StatefulCore } from '@yext/answers-headless';
 import { connectToStatefulCore } from '../bindings/connectToStatefulCore';
 
 function VerticalSearchForm(props: { statefulCore: StatefulCore }) {

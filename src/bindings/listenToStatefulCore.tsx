@@ -1,6 +1,6 @@
 import { ComponentType, useMemo, useReducer } from 'react';
 import { Unsubscribe } from '@reduxjs/toolkit';
-import { State } from '../../../lib/esm/models/state';
+import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { useStatefulCore } from './useStatefulCore';
 
 type StateReducer = (s: State) => any;
@@ -15,7 +15,7 @@ export function listenToStatefulCore(mapStateToProps: StateReducer) {
         unsubscribeCallback();
       }
       unsubscribeCallback = statefulCore.addListener({
-        valueAccessor: state => state,
+        valueAccessor: (state: State) => state,
         callback: (state: State) => dispatch(state)
       });
       const coreReducer = (_componentState: any, coreState: State) => ({

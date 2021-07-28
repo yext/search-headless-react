@@ -1,4 +1,4 @@
-import { StatefulCore } from '../../../lib/esm';
+import { StatefulCore } from '@yext/answers-headless'
 import { connectToStatefulCore } from '../bindings/connectToStatefulCore';
 import { listenToStatefulCore } from '../bindings/listenToStatefulCore';
 
