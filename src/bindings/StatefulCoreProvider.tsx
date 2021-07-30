@@ -4,12 +4,16 @@ import { AnswersConfig } from '@yext/answers-core';
 import { StatefulCoreContext } from './StatefulCoreContext';
 
 interface Props extends AnswersConfig {
+  verticalKey?: string
   children?: ReactChildren | ReactChild | ReactChildren[] | ReactChild[]
 }
 
 export function StatefulCoreProvider(props: Props) {
-  const { children, ...answerConfig } = props;
+  const { children, verticalKey, ...answerConfig } = props;
   const statefulCore = provideStatefulCore(answerConfig)
+  if (verticalKey) {
+    statefulCore.setVerticalKey(verticalKey);
+  }
   return (
     <StatefulCoreContext.Provider value={statefulCore}>
       {children}

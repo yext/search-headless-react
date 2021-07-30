@@ -5,6 +5,8 @@ import { useStatefulCore } from './useStatefulCore';
 
 type StateReducer = (s: State) => any;
 
+// Add hook version, useStoreState
+// stateToProps, decoratePropsWithState?
 export function listenToStatefulCore(mapStateToProps: StateReducer) {
   return function generateListenerComponentFunction(WrappedComponent: ComponentType<any>) {
     let unsubscribeCallback: Unsubscribe;
@@ -23,9 +25,8 @@ export function listenToStatefulCore(mapStateToProps: StateReducer) {
         ...mapStateToProps(coreState)
       });
       const [mergedProps, dispatch] = useReducer(coreReducer, props);
-  
+      // return <WrappedComponent {...mergedProps}/>;
       return useMemo(() => <WrappedComponent {...mergedProps}/>, [mergedProps]);
     }
   }
 }
-

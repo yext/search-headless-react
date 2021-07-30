@@ -15,8 +15,8 @@ function VerticalSearchForm(props: { statefulCore: StatefulCore }) {
     }
   }
   return (
-    <div>
-      <input ref={inputRef} onKeyDown={e => handleKeyDown(e)}/>
+    <div className='SearchForm'>
+      <input className='SearchForm-input' ref={inputRef} onKeyDown={e => handleKeyDown(e)}/>
       <button onClick={executeSearch}>
         Vertical Search
       </button>

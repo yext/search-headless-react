@@ -1,5 +1,5 @@
 {
-  "name": "react-test-site",
+  "name": "answers-headless-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -18,7 +18,7 @@
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "@yext/answers-core": "^1.2.0",
-    "@yext/answers-headless": "0.0.2-beta.0",
+    "@yext/answers-headless": "file:../answers-headless",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
     "babel-loader": "8.1.0",

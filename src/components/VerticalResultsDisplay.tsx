@@ -8,11 +8,11 @@ interface Props {
 function VerticalResultsDisplay({ results, randomString }: Props) {
   return (
     <div>
+      my special random string: {randomString}
       {
-        results && results.map(result => {
+        results && results.length !== 0 ? results.map(result => {
           return (
             <div className='result' key={result.id}>
-              {randomString}
               <div className='result-name'>
                 name: {result.name}
               </div>
@@ -21,15 +21,14 @@ function VerticalResultsDisplay({ results, randomString }: Props) {
               </div>
             </div>
           )
-        })
+        }) : null
       }
     </div>
   )
 }
 
 export default listenToStatefulCore(state => {
-  console.log('state listener for vresults!', state)
   return {
-    results: state.vertical.results?.verticalResults.results
+    results: state.vertical.results?.verticalResults.results,
   };
 })(VerticalResultsDisplay)
