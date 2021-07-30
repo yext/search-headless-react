@@ -1,22 +1,22 @@
 import { ReactChild, ReactChildren } from 'react';
 import { provideStatefulCore } from '@yext/answers-headless';
 import { AnswersConfig } from '@yext/answers-core';
-import { StatefulCoreContext } from './StatefulCoreContext';
+import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 interface Props extends AnswersConfig {
   verticalKey?: string
   children?: ReactChildren | ReactChild | ReactChildren[] | ReactChild[]
 }
 
-export function StatefulCoreProvider(props: Props) {
+export function AnswersHeadlessProvider(props: Props) {
   const { children, verticalKey, ...answerConfig } = props;
-  const statefulCore = provideStatefulCore(answerConfig)
+  const storeActions = provideStatefulCore(answerConfig)
   if (verticalKey) {
-    statefulCore.setVerticalKey(verticalKey);
+    storeActions.setVerticalKey(verticalKey);
   }
   return (
-    <StatefulCoreContext.Provider value={statefulCore}>
+    <AnswersHeadlessContext.Provider value={storeActions}>
       {children}
-    </StatefulCoreContext.Provider>
+    </AnswersHeadlessContext.Provider>
   )
 }

@@ -1,13 +1,13 @@
 import { useRef, KeyboardEvent } from 'react';
 import { StatefulCore } from '@yext/answers-headless';
-import { connectToStatefulCore } from '@yext/answers-headless-react';
+import { decorateWithStore } from '@yext/answers-headless-react';
 
-function VerticalSearchForm(props: { statefulCore: StatefulCore }) {
-  const statefulCore: StatefulCore = props.statefulCore;
+function VerticalSearchForm(props: { storeActions: StatefulCore }) {
+  const storeActions: StatefulCore = props.storeActions;
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
   const executeSearch = () => {
-    statefulCore.setQuery(inputRef.current.value || '');
-    statefulCore.executeVerticalQuery();
+    storeActions.setQuery(inputRef.current.value || '');
+    storeActions.executeVerticalQuery();
   }
   const handleKeyDown = (evt : KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
@@ -24,4 +24,4 @@ function VerticalSearchForm(props: { statefulCore: StatefulCore }) {
   )
 }
 
-export default connectToStatefulCore(VerticalSearchForm)
+export default decorateWithStore(VerticalSearchForm)

@@ -1,22 +1,21 @@
 import { ComponentType, useMemo, useReducer } from 'react';
 import { Unsubscribe } from '@reduxjs/toolkit';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
-import { useStatefulCore } from './useStatefulCore';
+import { useStoreActions } from './useStoreActions';
 
 type StateReducer = (s: State) => any;
 
-// Add hook version, useStoreState
-// stateToProps, decoratePropsWithState?
-export function listenToStatefulCore(mapStateToProps: StateReducer) {
+// TODO: Add hook version, useStoreState
+export function mapStateToProps(mapStateToProps: StateReducer) {
   return function generateListenerComponentFunction(WrappedComponent: ComponentType<any>) {
     let unsubscribeCallback: Unsubscribe;
 
     return function StatefulCoreListener(props: any) {
-      const statefulCore = useStatefulCore();
+      const storeActions = useStoreActions();
       if (unsubscribeCallback) {
         unsubscribeCallback();
       }
-      unsubscribeCallback = statefulCore.addListener({
+      unsubscribeCallback = storeActions.addListener({
         valueAccessor: (state: State) => state,
         callback: (state: State) => dispatch(state)
       });

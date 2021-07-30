@@ -1,11 +1,11 @@
-import { connectToStatefulCore } from './connectToStatefulCore'
-import { useStatefulCore } from './useStatefulCore'
-import { listenToStatefulCore } from './listenToStatefulCore'
-import { StatefulCoreProvider } from './StatefulCoreProvider'
+import { decorateWithStore } from './decorateWithStore'
+import { useStoreActions } from './useStoreActions'
+import { mapStateToProps } from './mapStateToProps'
+import { AnswersHeadlessProvider } from './AnswersHeadlessProvider'
 
 export {
-  connectToStatefulCore,
-  listenToStatefulCore,
-  useStatefulCore,
-  StatefulCoreProvider
+  decorateWithStore,
+  mapStateToProps,
+  useStoreActions,
+  AnswersHeadlessProvider
 }

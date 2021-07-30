@@ -1,5 +1,5 @@
 import { Result } from '@yext/answers-core';
-import { listenToStatefulCore } from '@yext/answers-headless-react';
+import { mapStateToProps } from '@yext/answers-headless-react';
 
 interface Props {
   results: Result[],
@@ -27,7 +27,7 @@ function VerticalResultsDisplay({ results, randomString }: Props) {
   )
 }
 
-export default listenToStatefulCore(state => {
+export default mapStateToProps(state => {
   return {
     results: state.vertical.results?.verticalResults.results,
   };

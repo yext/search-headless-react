@@ -1,8 +1,6 @@
 import { CombinedFilter, Filter, FilterCombinator, Matcher } from '@yext/answers-core';
 import { useEffect, useState } from 'react';
-import { useStatefulCore } from '@yext/answers-headless-react';
-
-console.log(useStatefulCore)
+import { useStoreActions } from '@yext/answers-headless-react';
 
 interface Props {
   options: {
@@ -14,7 +12,7 @@ interface Props {
 
 export default function StaticFilters({ options, title }: Props) {
   const [selectedFilters, updateSelectedFilters] = useState<boolean[]>([])
-  const statefulCore = useStatefulCore();
+  const storeActions = useStoreActions();
   useEffect(() => {
     const filtersState = selectedFilters
       .map((isChecked, index) => {
@@ -27,17 +25,17 @@ export default function StaticFilters({ options, title }: Props) {
         }
     }).filter(x => x) as (Filter|CombinedFilter)[]
     if (!filtersState.length) {
-      statefulCore.setFilter(null);
+      storeActions.setFilter(null);
     } else if (filtersState.length === 1) {
-      statefulCore.setFilter(filtersState[0])
+      storeActions.setFilter(filtersState[0])
     } else {
       const filter = {
         combinator: FilterCombinator.AND,
         filters: filtersState
       };
-      statefulCore.setFilter(filter)
+      storeActions.setFilter(filter)
     }
-    statefulCore.executeVerticalQuery();
+    storeActions.executeVerticalQuery();
   })
 
   const handleOptionSelection = (index: number, isChecked: boolean) => {
