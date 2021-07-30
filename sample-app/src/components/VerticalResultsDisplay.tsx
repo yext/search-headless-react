@@ -1,5 +1,5 @@
 import { Result } from '@yext/answers-core';
-import { listenToStatefulCore } from '../bindings/listenToStatefulCore';
+import { listenToStatefulCore } from '@yext/answers-headless-react';
 
 interface Props {
   results: Result[],

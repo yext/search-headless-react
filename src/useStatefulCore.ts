@@ -1,5 +1,9 @@
+import React from 'react';
 import { useContext } from 'react';
 import { StatefulCoreContext } from './StatefulCoreContext';
+
+// Add this in node_modules/react-dom/index.js
+globalThis.React2 = React;
 
 // useStoreActions
 export function useStatefulCore() {

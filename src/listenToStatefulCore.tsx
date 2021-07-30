@@ -25,7 +25,6 @@ export function listenToStatefulCore(mapStateToProps: StateReducer) {
         ...mapStateToProps(coreState)
       });
       const [mergedProps, dispatch] = useReducer(coreReducer, props);
-      // return <WrappedComponent {...mergedProps}/>;
       return useMemo(() => <WrappedComponent {...mergedProps}/>, [mergedProps]);
     }
   }

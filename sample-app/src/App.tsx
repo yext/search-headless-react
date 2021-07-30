@@ -1,13 +1,10 @@
-// import VerticalKeyInput from './components/VerticalKeyInput';
 import VerticalResultsDisplay from './components/VerticalResultsDisplay';
 import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './App.css';
-import { StatefulCoreProvider } from './bindings/StatefulCoreProvider';
+import { StatefulCoreProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
-
-// import TwoWayData from './components/TwoWayData';
 
 function App() {
   const staticFilterOptions = [
@@ -32,6 +29,7 @@ function App() {
       verticalKey='people'
     >
       <div className='left'>
+        test
         <StaticFilters
           title='~Employee Departments~'
           options={staticFilterOptions}

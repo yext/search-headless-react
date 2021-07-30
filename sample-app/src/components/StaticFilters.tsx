@@ -1,6 +1,8 @@
 import { CombinedFilter, Filter, FilterCombinator, Matcher } from '@yext/answers-core';
 import { useEffect, useState } from 'react';
-import { useStatefulCore } from '../bindings/useStatefulCore';
+import { useStatefulCore } from '@yext/answers-headless-react';
+
+console.log(useStatefulCore)
 
 interface Props {
   options: {
@@ -25,7 +27,7 @@ export default function StaticFilters({ options, title }: Props) {
         }
     }).filter(x => x) as (Filter|CombinedFilter)[]
     if (!filtersState.length) {
-      statefulCore.unsetFilters();
+      statefulCore.setFilter(null);
     } else if (filtersState.length === 1) {
       statefulCore.setFilter(filtersState[0])
     } else {

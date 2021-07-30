@@ -1,4 +1,4 @@
-import { listenToStatefulCore } from '../bindings/listenToStatefulCore'
+import { listenToStatefulCore } from '@yext/answers-headless-react'
 
 interface Props {
   count: number
