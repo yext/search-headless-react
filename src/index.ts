@@ -1,11 +1,10 @@
-import { decorateWithStore } from './decorateWithStore'
-import { useStoreActions } from './useStoreActions'
-import { mapStateToProps } from './mapStateToProps'
-import { AnswersHeadlessProvider } from './AnswersHeadlessProvider'
-
+import { useAnswersActions } from './useAnswersActions';
+import { subscribeToStateUpdates } from './subscribeToStateUpdates';
+import { AnswersActionsProvider } from './AnswersActionsProvider';
+import { AnswersActionsContext } from './AnswersActionsContext';
 export {
-  decorateWithStore,
-  mapStateToProps,
-  useStoreActions,
-  AnswersHeadlessProvider
-}
+  AnswersActionsContext,
+  subscribeToStateUpdates,
+  useAnswersActions,
+  AnswersActionsProvider
+};

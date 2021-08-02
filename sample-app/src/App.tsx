@@ -2,7 +2,7 @@ import VerticalResultsDisplay from './components/VerticalResultsDisplay';
 import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './App.css';
-import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
+import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
 
@@ -22,11 +22,10 @@ function App() {
     }
   ]
   return (
-    <AnswersHeadlessProvider
+    <AnswersActionsProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
       experienceKey='slanswers'
       locale='en'
-      verticalKey='people'
     >
       <div className='left'>
         test
@@ -36,13 +35,13 @@ function App() {
         />
       </div>
       <div className='right'>
-        <VerticalSearchForm/>
+        <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
         <VerticalResultsDisplay
           randomString='this is my arbitrary string!'
         />
       </div>
-    </AnswersHeadlessProvider>
+    </AnswersActionsProvider>
   );
 }
 

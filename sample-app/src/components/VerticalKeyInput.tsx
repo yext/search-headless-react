@@ -1,17 +1,13 @@
-import { StatefulCore } from '@yext/answers-headless'
-import { decorateWithStore } from '@yext/answers-headless-react';
+import { useAnswersActions } from '@yext/answers-headless-react';
 
-interface Props {
-  storeActions: StatefulCore
-};
-
-function VerticalKeyInput({ storeActions }: Props) {
+function VerticalKeyInput() {
+  const answersActions = useAnswersActions();
   return (
     <div>
       <label>Set Vertical Key</label>
-      <input onChange={(e) => storeActions.setVerticalKey(e.target.value)} />
+      <input onChange={(e) => answersActions.setVerticalKey(e.target.value)} />
     </div>
   )
 }
 
-export default decorateWithStore(VerticalKeyInput);
+export default VerticalKeyInput;
