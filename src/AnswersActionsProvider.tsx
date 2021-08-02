@@ -8,7 +8,7 @@ interface Props extends AnswersConfig {
   children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[]
 }
 
-export function AnswersHeadlessProvider(props: Props): JSX.Element {
+export function AnswersActionsProvider(props: Props): JSX.Element {
   const { children, verticalKey, ...answerConfig } = props;
   const storeActions: AnswersActions = provideStatefulCore(answerConfig);
   if (verticalKey) {

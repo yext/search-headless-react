@@ -1,10 +1,10 @@
 import { useAnswersActions } from './useAnswersActions';
 import { mapStateToProps } from './mapStateToProps';
-import { AnswersHeadlessProvider } from './AnswersActionsProvider';
+import { AnswersActionsProvider } from './AnswersActionsProvider';
 import { AnswersActionsContext } from './AnswersActionsContext';
 export {
   AnswersActionsContext,
   mapStateToProps,
   useAnswersActions,
-  AnswersHeadlessProvider
+  AnswersActionsProvider
 };
