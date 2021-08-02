@@ -1,7 +1,7 @@
 import { useRef, KeyboardEvent } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 
-function VerticalSearchForm({ verticalKey }: { verticalKey: string}) {
+function VerticalSearchForm({ verticalKey }: { verticalKey: string }) {
   const answersActions = useAnswersActions();
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
 
