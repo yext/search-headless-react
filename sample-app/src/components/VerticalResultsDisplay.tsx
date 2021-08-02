@@ -5,8 +5,7 @@ interface Props {
   results: Result[],
   randomString: string
 }
-function VerticalResultsDisplay(props2: Props) {
-  const { results, randomString } = props2;
+function VerticalResultsDisplay({ results, randomString }: Props) {
   return (
     <div>
       my special random string: {randomString}
