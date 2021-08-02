@@ -1,6 +1,6 @@
 import { CombinedFilter, Filter, FilterCombinator, Matcher } from '@yext/answers-core';
 import { useEffect, useState } from 'react';
-import { useStoreActions } from '@yext/answers-headless-react';
+import { useAnswersActions } from '@yext/answers-headless-react';
 
 interface Props {
   options: {
@@ -12,7 +12,7 @@ interface Props {
 
 export default function StaticFilters({ options, title }: Props) {
   const [selectedFilters, updateSelectedFilters] = useState<boolean[]>([])
-  const storeActions = useStoreActions();
+  const storeActions = useAnswersActions();
   useEffect(() => {
     const filtersState = selectedFilters
       .map((isChecked, index) => {
