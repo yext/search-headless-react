@@ -26,7 +26,6 @@ function App() {
       apiKey='2d8c550071a64ea23e263118a2b0680b'
       experienceKey='slanswers'
       locale='en'
-      verticalKey='people'
     >
       <div className='left'>
         test
@@ -36,7 +35,7 @@ function App() {
         />
       </div>
       <div className='right'>
-        <VerticalSearchForm/>
+        <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
         <VerticalResultsDisplay
           randomString='this is my arbitrary string!'

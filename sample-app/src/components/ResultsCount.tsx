@@ -1,4 +1,4 @@
-import { mapStateToProps } from '@yext/answers-headless-react'
+import { subscribeToStateUpdates } from '@yext/answers-headless-react'
 
 interface Props {
   count: number
@@ -10,7 +10,7 @@ function ResultsCount({ count }: Props) {
   )
 }
 
-export default mapStateToProps(state => {
+export default subscribeToStateUpdates(state => {
   return {
     count: state.vertical.results?.verticalResults.resultsCount
   }

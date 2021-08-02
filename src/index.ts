@@ -1,10 +1,10 @@
 import { useAnswersActions } from './useAnswersActions';
-import { mapStateToProps } from './mapStateToProps';
+import { subscribeToStateUpdates } from './subscribeToStateUpdates';
 import { AnswersActionsProvider } from './AnswersActionsProvider';
 import { AnswersActionsContext } from './AnswersActionsContext';
 export {
   AnswersActionsContext,
-  mapStateToProps,
+  subscribeToStateUpdates,
   useAnswersActions,
   AnswersActionsProvider
 };

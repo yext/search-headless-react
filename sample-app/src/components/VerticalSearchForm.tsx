@@ -1,12 +1,14 @@
 import { useRef, KeyboardEvent } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 
-function VerticalSearchForm() {
-  const storeActions = useAnswersActions();
+function VerticalSearchForm({ verticalKey }: { verticalKey: string}) {
+  const answersActions = useAnswersActions();
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
+
+  answersActions.setVerticalKey(verticalKey);
   const executeSearch = () => {
-    storeActions.setQuery(inputRef.current.value || '');
-    storeActions.executeVerticalQuery();
+    answersActions.setQuery(inputRef.current.value || '');
+    answersActions.executeVerticalQuery();
   }
   const handleKeyDown = (evt : KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
