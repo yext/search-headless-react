@@ -2,9 +2,10 @@ import VerticalResults from './components/VerticalResults';
 import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './App.css';
-import { AnswersActionsProvider } from '@yext/answers-headless-react';
+import { AnswersActionsProvider, subscribeToStateUpdates } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
+import { CardType } from './models/cardTypes';
 
 function App() {
   const staticFilterOptions = [
@@ -37,10 +38,14 @@ function App() {
       <div className='right'>
         <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
-        <VerticalResults />
+        <DecoratedVerticalResults cardType={CardType.Standard}/>
       </div>
     </AnswersActionsProvider>
   );
 }
+
+const DecoratedVerticalResults = subscribeToStateUpdates(state => {
+  return { results: state.vertical.results?.verticalResults.results };
+})(VerticalResults);
 
 export default App;
