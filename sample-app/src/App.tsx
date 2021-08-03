@@ -1,4 +1,4 @@
-import VerticalResultsDisplay from './components/VerticalResultsDisplay';
+import VerticalResults from './components/VerticalResults';
 import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './App.css';
@@ -37,9 +37,7 @@ function App() {
       <div className='right'>
         <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
-        <VerticalResultsDisplay
-          randomString='this is my arbitrary string!'
-        />
+        <VerticalResults />
       </div>
     </AnswersActionsProvider>
   );
