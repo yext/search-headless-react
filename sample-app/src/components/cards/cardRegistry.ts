@@ -1,6 +1,6 @@
 import { CardComponent } from '../../models/cardComponent';
 import { CardType } from '../../models/cardTypes';
-import StandardCard from './StandardCard';
+import { StandardCard, StandardCardConfig } from './StandardCard';
 
 const cardRegistry: Record<CardType, CardComponent> = {
   [CardType.Standard]: StandardCard
@@ -18,3 +18,8 @@ export function getComponentClassFromType(type: CardType): CardComponent {
     throw Error(`${type} is not a supported card type`);
   }
 }
+
+/**
+ * The config types for each supported card.
+ */
+export type CardConfigTypes = StandardCardConfig;

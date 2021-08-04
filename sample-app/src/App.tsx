@@ -38,7 +38,10 @@ function App() {
       <div className='right'>
         <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
-        <DecoratedVerticalResults cardType={CardType.Standard}/>
+        <DecoratedVerticalResults 
+          cardType={CardType.Standard}
+          cardConfig={{ showOrdinal: true }}
+        />
       </div>
     </AnswersActionsProvider>
   );

@@ -1,10 +1,12 @@
 import { Result } from '@yext/answers-core';
+import { CardConfigTypes } from '../components/cards/cardRegistry';
 
 /**
  * The props provided to every {@link CardComponent).
  */
 export interface CardProps {
-  result: Result
+  result: Result,
+  configuration: CardConfigTypes
 }
 
 /**
