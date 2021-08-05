@@ -3,7 +3,6 @@
 // May require use of typescript generics.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, useMemo, useReducer, ComponentState, useEffect } from 'react';
-import { Unsubscribe } from '@reduxjs/toolkit';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { useAnswersActions } from './useAnswersActions';
 
