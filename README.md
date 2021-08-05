@@ -19,7 +19,7 @@ Yext Answers-core is an open-sourced library licensed under the [BSD-3 License](
 
 ## Development
 
-First, run `npm install`, and then `npm install-sample-app` to set up the testing app.
+First, run `npm install`, and then `npm run install-sample-app` to set up the testing app.
 
 Then, run `npm start` to kick off the development server.
 Finally, run `npm run watch` (in a separate terminal) to rebuild the react bindings layer whenever source code changes are mode.
