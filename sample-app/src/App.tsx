@@ -5,8 +5,7 @@ import './App.css';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
-import { CardType } from './models/cardTypes';
-import { getComponentClassFromType } from './components/cards/cardRegistry';
+import { StandardCard } from './components/cards/StandardCard';
 
 function App() {
   const staticFilterOptions = [
@@ -40,7 +39,7 @@ function App() {
         <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
         <VerticalResults 
-          CardComponent={getComponentClassFromType(CardType.Standard)}
+          CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
         />
       </div>

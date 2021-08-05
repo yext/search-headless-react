@@ -1,7 +1,6 @@
 import { Result } from '@yext/answers-core';
 import { subscribeToStateUpdates } from '@yext/answers-headless-react';
-import { CardComponent } from '../models/cardComponent';
-import { CardConfigTypes } from './cards/cardRegistry';
+import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 
 interface Props {
   CardComponent: CardComponent,

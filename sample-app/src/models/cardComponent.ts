@@ -1,5 +1,10 @@
 import { Result } from '@yext/answers-core';
-import { CardConfigTypes } from '../components/cards/cardRegistry';
+import { StandardCardConfig } from '../components/cards/StandardCard';
+
+/**
+ * The config types for each supported card.
+ */
+ export type CardConfigTypes = StandardCardConfig;
 
 /**
  * The props provided to every {@link CardComponent).
