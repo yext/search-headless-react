@@ -1,5 +1,13 @@
 import { CardProps } from '../../models/cardComponent';
 
+export interface StandardCardConfig {
+  showOrdinal?: boolean
+}
+
+export interface StandardCardProps extends CardProps {
+  configuration: StandardCardConfig
+}
+
 /**
  * This Component renders the base result card.
  * 
@@ -30,12 +38,4 @@ function renderOrdinal(ordinal: number) {
 
 function renderTitle(title: string) {
   return <div className='yxt-StandardCard-title'>{title}</div>
-}
-
-export interface StandardCardConfig {
-  showOrdinal?: boolean
-}
-
-export interface StandardCardProps extends CardProps {
-  configuration: StandardCardConfig
 }
