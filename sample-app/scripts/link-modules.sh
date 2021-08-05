@@ -3,6 +3,6 @@
 
 cd ..
 npm run build
+npm link sample-app/node_modules/react
 cd sample-app
 npm link ..
-npm link ../node_modules/react
