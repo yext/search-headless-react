@@ -1,0 +1,20 @@
+.SearchBar {
+  height: 40px;
+  width: 100%;
+  font-size: 20px;
+
+  &-search {
+    display: flex;
+    flex-grow: 1;
+    font-size: 20px;
+  }
+
+  &-input {
+    flex-grow: 1;
+    font-size: 20px;
+  }
+
+  &-submit {
+    font-size: 20px;
+  }
+}

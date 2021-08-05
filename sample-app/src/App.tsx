@@ -1,5 +1,5 @@
 import VerticalResults from './components/VerticalResults';
-import VerticalSearchForm from './components/VerticalSearchForm';
+import SearchBar from './components/SearchBar';
 
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
@@ -36,7 +36,7 @@ function App() {
         />
       </div>
       <div className='right'>
-        <VerticalSearchForm verticalKey='people' />
+        <SearchBar verticalKey='people' name='main-searchbar'/>
         <ResultsCount />
         <VerticalResults 
           CardComponent={StandardCard}

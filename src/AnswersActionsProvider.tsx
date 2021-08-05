@@ -8,8 +8,8 @@ interface Props extends AnswersConfig {
 }
 
 export function AnswersActionsProvider(props: Props): JSX.Element {
-  const { children, ...answerConfig } = props;
-  const answersActions: AnswersActions = provideStatefulCore(answerConfig);
+  const { children, ...answersConfig } = props;
+  const answersActions: AnswersActions = provideStatefulCore(answersConfig);
   return (
     <AnswersActionsContext.Provider value={answersActions}>
       {children}
