@@ -43,7 +43,11 @@ function SearchBar({ verticalKey }: { name: string, verticalKey: string }) {
           <MagnifyingGlassIcon/>
         </button>
       </div>
-      <Autocomplete inputRef={inputRef} autocompleteResults={autocompleteResults}/>
+      <Autocomplete
+        inputRef={inputRef}
+        autocompleteResults={autocompleteResults}
+        onEnter={() => executeSearch()}
+      />
     </div>
   )
 }

@@ -6,9 +6,10 @@ import '../sass/Autocomplete.scss';
 interface Props {
   autocompleteResults: AutocompleteResult[]
   inputRef: MutableRefObject<HTMLInputElement>
+  onEnter: () => unknown
 }
 
-export default function Autocomplete({ autocompleteResults, inputRef }: Props) {
+export default function Autocomplete({ autocompleteResults, inputRef, onEnter }: Props) {
   const [selectedIndex, updateSelected] = useState<number>(-1);
   const [shouldDisplay, toggleDisplay] = useState<boolean>(true);
   const answersActions = useAnswersActions();
@@ -18,12 +19,19 @@ export default function Autocomplete({ autocompleteResults, inputRef }: Props) {
       return;
     }
     function handleKeyDown(evt: KeyboardEvent) {
-      if (evt.key === 'Escape') {
+      if (evt.key === 'Enter') {
+        toggleDisplay(false);
+        selectedIndex !== -1 && submitOption(selectedIndex);
+        updateSelected(-1);
+        onEnter();
+      } else if (evt.key === 'Escape') {
         toggleDisplay(false);
       } else if (evt.key === 'ArrowDown') {
-        updateSelected(selectedIndex + 1);
+        selectedIndex < autocompleteResults.length - 1 && updateSelected(selectedIndex + 1);
       } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
         updateSelected(selectedIndex - 1);
+      } else {
+        toggleDisplay(true);
       }
     }
     function toggleOn() {
