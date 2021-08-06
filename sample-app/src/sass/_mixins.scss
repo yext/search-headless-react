@@ -1,0 +1,102 @@
+@mixin Text(
+  $size: var(--yxt-font-size-md),
+  $line-height: var(--yxt-line-height-xs),
+  $weight: var(--yxt-font-weight-normal),
+  $style: normal,
+  $color: var(--yxt-color-text-primary)
+) {
+  font-family: var(--yxt-font-family);
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  font-style: $style;
+  color: $color;
+}
+
+@mixin TextButton(
+  $padding: 5px 10px,
+  $focus-color: var(--yxt-color-brand-hover)
+) {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: $padding;
+
+  &:not(:disabled) {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      color: $focus-color;
+      border: 1px solid $focus-color;
+    }
+  }
+}
+
+@mixin Button(
+
+) {
+  border: 0;
+  border-radius: 3px;
+  margin-top: 16px;
+  background: var(--yxt-color-brand-primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  &:not(:disabled){
+    cursor: pointer;
+
+    &:hover, &:focus {
+      background: padding-box var(--yxt-color-brand-hover);
+    }
+
+    &:focus {
+      border: var(--yxt-button-focus-border-size) double #0c5ecb;
+    }
+  }
+}
+
+@mixin Link(
+  $base-color: inherit,
+  $base-decoration: none,
+  $hover-color: $base-color,
+  $hover-decoration: underline,
+  $active-color: $hover-color
+) {
+    &:link,
+    &:visited
+   {
+       color: $base-color;
+       text-decoration: $base-decoration;
+   }
+
+    &:hover,
+    &:focus
+    {
+      color: $hover-color;
+      text-decoration: $hover-decoration;
+    }
+
+    &:active
+    {
+        color: $active-color;
+        text-decoration: $hover-decoration;
+    }
+}
+
+@mixin Link-1
+{
+  @include Link($base-color: var(--yxt-color-brand-primary));
+}
+
+@mixin Link-2
+{
+  @include Link(
+    $base-color: var(--yxt-color-brand-primary),
+    $base-decoration: underline,
+    $hover-decoration: none
+  );
+}

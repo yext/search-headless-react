@@ -1,3 +1,9 @@
+// Variables and mixins
+@import "layout";
+@import "mixins";
+@import "fonts";
+@import "colors";
+
 .App {
   display: flex;
   align-items: center;
