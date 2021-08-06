@@ -9,15 +9,12 @@ const initialState: State = {
   filters: {},
 };
 
-/**
- * The type of a function which returns part of the state
- */
-type StateSlicer<T> = (s: State) => T;
+type MapState<T> = (s: State) => T;
 
 /**
- * Returns the entire answers state, or a part of it if a state slicer is supplied
+ * Returns the Answers State returned by the map function
  */
-export function useAnswersState<T>(stateSlicer?: StateSlicer<T>): State | T {
+export function useAnswersState<T>(mapState: MapState<T>): T {
   const [answersState, setState] = useState(initialState);
   const answersActions = useAnswersActions();
 
@@ -28,5 +25,5 @@ export function useAnswersState<T>(stateSlicer?: StateSlicer<T>): State | T {
     });
   });
 
-  return stateSlicer ? stateSlicer(answersState) : answersState;
+  return mapState(answersState);
 }

@@ -1,11 +1,12 @@
-import { Result } from '@yext/answers-core';
-import { subscribeToStateUpdates } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/answers-headless-react';
 
 interface Props {
-  results: Result[],
   randomString: string
 }
-function VerticalResultsDisplay({ results, randomString }: Props) {
+
+export default function VerticalResultsDisplay({ randomString }: Props) {
+  const results = useAnswersState(state => state.vertical.results?.verticalResults.results);
+
   return (
     <div>
       my special random string: {randomString}
@@ -26,9 +27,3 @@ function VerticalResultsDisplay({ results, randomString }: Props) {
     </div>
   )
 }
-
-export default subscribeToStateUpdates(state => {
-  return {
-    results: state.vertical.results?.verticalResults.results,
-  };
-})(VerticalResultsDisplay)
