@@ -4,8 +4,8 @@ import VerticalSearchForm from './components/VerticalSearchForm';
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
-import ResultsCount from './components/ResultsCount';
 import { StandardCard } from './components/cards/StandardCard';
+import VerticalResultsHeader from './components/VerticalResultsHeader';
 
 function App() {
   const staticFilterOptions = [
@@ -37,11 +37,12 @@ function App() {
       </div>
       <div className='right'>
         <VerticalSearchForm verticalKey='people' />
-        <ResultsCount />
         <VerticalResults 
           CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
-        />
+        >
+          <VerticalResultsHeader showResultsCount={true} />
+        </VerticalResults>
       </div>
     </AnswersActionsProvider>
   );

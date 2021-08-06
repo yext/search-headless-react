@@ -3,6 +3,7 @@ import { subscribeToStateUpdates } from '@yext/answers-headless-react';
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 
 interface Props {
+  children: JSX.Element,
   CardComponent: CardComponent,
   cardConfig: CardConfigTypes,
   results?: Result[]
@@ -15,10 +16,11 @@ interface Props {
  *                to be used.
  */
 function VerticalResults(props: Props): JSX.Element {
-  const { results, CardComponent, cardConfig } = props;
+  const { results, CardComponent, cardConfig, children } = props;
 
   return (
     <section className='yxt-Results'>
+      {children}
       <div className='yxt-Results-items'>
         {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
       </div>
@@ -34,7 +36,11 @@ function VerticalResults(props: Props): JSX.Element {
  * @param result - The result to render.
  */
 function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes, result: Result): JSX.Element {
-  return <CardComponent result={result} configuration={cardConfig} key={result.id}/>;
+  return (
+    <div className='yxt-Card'>
+      <CardComponent result={result} configuration={cardConfig} key={result.id}/>
+    </div>
+  );
 }
 
 export default subscribeToStateUpdates(state => {
