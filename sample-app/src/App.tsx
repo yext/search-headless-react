@@ -1,10 +1,11 @@
-import VerticalResultsDisplay from './components/VerticalResultsDisplay';
+import VerticalResults from './components/VerticalResults';
 import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
+import { StandardCard } from './components/cards/StandardCard';
 
 function App() {
   const staticFilterOptions = [
@@ -37,8 +38,9 @@ function App() {
       <div className='right'>
         <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
-        <VerticalResultsDisplay
-          randomString='this is my arbitrary string!'
+        <VerticalResults 
+          CardComponent={StandardCard}
+          cardConfig={{ showOrdinal: true }}
         />
       </div>
     </AnswersActionsProvider>
