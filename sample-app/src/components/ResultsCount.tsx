@@ -1,17 +1,9 @@
-import { subscribeToStateUpdates } from '@yext/answers-headless-react'
+import { useAnswersState } from '@yext/answers-headless-react'
 
-interface Props {
-  count: number
-}
+export default function ResultsCount() {
+  const count = useAnswersState(state => state.vertical.results?.verticalResults.resultsCount);
 
-function ResultsCount({ count }: Props) {
   return (
     <div> #Results - {count || 0} </div>
   )
 }
-
-export default subscribeToStateUpdates(state => {
-  return {
-    count: state.vertical.results?.verticalResults.resultsCount
-  }
-})(ResultsCount)
