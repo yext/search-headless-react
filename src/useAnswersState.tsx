@@ -15,7 +15,7 @@ const initialState: State = {
 type StateSlicer<T> = (s: State) => T;
 
 /**
- * Returns the entire answes state, or a part of it if a state slicer is supplied
+ * Returns the entire answers state, or a part of it if a state slicer is supplied
  */
 export function useAnswersState<T>(stateSlicer?: StateSlicer<T>): State | T {
   const [answersState, setState] = useState(initialState);
