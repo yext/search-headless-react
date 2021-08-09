@@ -1,6 +1,5 @@
 import { useEffect, Fragment, ReactChild, ReactChildren } from 'react';
 import { AnswersActionsProvider, useAnswersActions } from '@yext/answers-headless-react';
-
 import VerticalResults from './components/VerticalResults';
 import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';

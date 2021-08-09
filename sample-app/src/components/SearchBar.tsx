@@ -1,12 +1,14 @@
 import { useRef, ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
 import { AutocompleteResult } from '@yext/answers-core';
 import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
-
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 
-function SearchBar() {
+/**
+ * Renders a SearchBar that is hooked up with an Autocomplete component
+ */
+export default function SearchBar() {
   const answersActions = useAnswersActions();
   const globalQueryState = useAnswersState(state => state.query?.query) || '';
   const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
@@ -60,5 +62,3 @@ function SearchBar() {
     </div>
   )
 }
-
-export default SearchBar;
