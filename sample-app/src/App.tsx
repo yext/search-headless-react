@@ -26,6 +26,7 @@ function App() {
   return (
     <Provider>
       <div className='left'>
+        <SearchBar />
         test
         <StaticFilters
           title='~Employee Departments~'

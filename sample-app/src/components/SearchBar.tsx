@@ -1,6 +1,6 @@
 import { useRef, ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
 import { AutocompleteResult } from '@yext/answers-core';
-import { useAnswersActions } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
@@ -8,6 +8,7 @@ import '../sass/SearchBar.scss';
 
 function SearchBar() {
   const answersActions = useAnswersActions();
+  const globalQueryState = useAnswersState(state => state.query?.query) || '';
   const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
   const [displayQuery, setDisplayQuery] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
@@ -49,7 +50,7 @@ function SearchBar() {
         inputRef={inputRef}
         autocompleteResults={autocompleteResults}
         onSelect={query => {
-          setDisplayQuery(query || answersActions.state.query.query || '');
+          setDisplayQuery(query || globalQueryState || '');
         }}
         onOptionClick={query => {
           setDisplayQuery(query);
