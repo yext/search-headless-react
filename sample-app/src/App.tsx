@@ -4,10 +4,26 @@ import VerticalSearchForm from './components/VerticalSearchForm';
 import './App.css';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
+import FilterBox from './components/FilterBox';
 import ResultsCount from './components/ResultsCount';
 
 function App() {
   const staticFilterOptions = [
+    {
+      label: 'canada',
+      field: 'c_employeeCountry',
+      value: 'Canada',
+    },
+    {
+      label: 'remote',
+      field: 'c_employeeCountry',
+      value: 'Remote'
+    },
+    {
+      label: 'usa',
+      field: 'c_employeeCountry',
+      value: 'United States',
+    },
     {
       field: 'c_employeeDepartment',
       value: 'Technology'
@@ -29,8 +45,8 @@ function App() {
     >
       <div className='left'>
         test
-        <StaticFilters
-          title='~Employee Departments~'
+        <FilterBox
+          title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
       </div>
