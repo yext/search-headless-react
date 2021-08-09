@@ -204,7 +204,6 @@ export default class FilterBox extends React.Component<FilterBoxProps, State> {
         combinator: FilterCombinator.AND,
         filters: revisedFilterState
       }
-      console.log(returnedFilterState)
       this.context.setFilter(returnedFilterState)
     }
     this.context.executeVerticalQuery();
