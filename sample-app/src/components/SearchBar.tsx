@@ -9,24 +9,20 @@ import '../sass/SearchBar.scss';
 function SearchBar() {
   const answersActions = useAnswersActions();
   const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
-  const [query, setQuery] = useState<string>('');
-  const [queryState, setQueryState] = useState<string>('');
+  const [displayQuery, setDisplayQuery] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
-
-  const executeSearch = () => {
+ 
+  const executeSearch = (query: string) => {
+    answersActions.setQuery(query);
     answersActions.executeVerticalQuery();
   }
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = evt => {
     if (evt.key === 'Enter') {
-      evt.preventDefault();
-      setQueryState(query);
-      answersActions.setQuery(query);
-      executeSearch();
+      executeSearch(displayQuery);
     }
   }
   const handleChange: ChangeEventHandler<HTMLInputElement> = evt => {
-    setQuery(evt.target.value)
-    setQueryState(evt.target.value);
+    setDisplayQuery(evt.target.value);
     answersActions.setQuery(evt.target.value);
     answersActions.executeVerticalAutoComplete().then(autocompleteResponse => {
       if (!autocompleteResponse) {
@@ -35,31 +31,30 @@ function SearchBar() {
       setAutocompleteResults(autocompleteResponse.results)
     });
   }
-  const handleSelectAutocomplete = (value: string) => {
-    setQuery(value);
-  }
   return (
     <div className='SearchBar'>
       <div className='SearchBar-search'>
         <input
           className='SearchBar-input'
           ref={inputRef}
-          onKeyDown={handleKeyDown}
           onChange={handleChange}
-          value={query}
-          data-query={query}
-          data-queryState={queryState}
+          onKeyDown={handleKeyDown}
+          value={displayQuery}
         />
-        <button className='SearchBar-submit' onClick={executeSearch}>
+        <button className='SearchBar-submit' onClick={() => executeSearch(displayQuery)}>
           <MagnifyingGlassIcon/>
         </button>
       </div>
       <Autocomplete
         inputRef={inputRef}
         autocompleteResults={autocompleteResults}
-        onEnter={() => executeSearch()}
-        onSelect={handleSelectAutocomplete}
-        onReset={() => setQuery(queryState)}
+        onSelect={query => {
+          setDisplayQuery(query || answersActions.state.query.query || '');
+        }}
+        onOptionClick={query => {
+          setDisplayQuery(query);
+          executeSearch(query);
+        }}
       />
     </div>
   )

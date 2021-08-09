@@ -1,86 +1,66 @@
 import { AutocompleteResult } from '@yext/answers-core';
-import { useAnswersActions } from '@yext/answers-headless-react';
 import { MutableRefObject, useEffect, useState } from 'react';
 import '../sass/Autocomplete.scss';
 
 interface Props {
   autocompleteResults: AutocompleteResult[]
   inputRef: MutableRefObject<HTMLInputElement>
-  onEnter: () => void
-  onSelect: (selectedOptionValue: string) => unknown
-  onReset: () => void
+  onOptionClick?: (selectedOptionValue: string) => void
+  onSelect?: (selectedOptionValue: string) => void
 }
 
-export default function Autocomplete({ autocompleteResults, inputRef, onEnter, onSelect, onReset }: Props) {
-  const [selectedIndex, updateSelected] = useState<number>(-1);
-  const [shouldDisplay, toggleDisplay] = useState<boolean>(true);
-  const answersActions = useAnswersActions();
+export default function Autocomplete({ autocompleteResults, inputRef, onSelect, onOptionClick }: Props) {
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [shouldDisplay, setShouldDisplay] = useState<boolean>(true);
   useEffect(() => {
     const currentRef = inputRef?.current
     if (!currentRef) {
       return;
     }
     function handleKeyDown(evt: KeyboardEvent) {
+      if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
+        evt.preventDefault();
+      }
+
       if (evt.key === 'Enter') {
-        toggleDisplay(false);
-        selectedIndex !== -1 && submitOption(selectedIndex);
-        updateSelected(-1);
-        selectOption(selectedIndex);
-        onEnter();
+        setShouldDisplay(false);
+        setSelectedIndex(-1);
       } else if (evt.key === 'Escape') {
-        toggleDisplay(false);
+        setSelectedIndex(-1);
+        setShouldDisplay(false);
       } else if (evt.key === 'ArrowDown' && selectedIndex < autocompleteResults.length - 1) {
-        updateSelected(selectedIndex + 1);
-        selectOption(selectedIndex + 1);
-        toggleDisplay(true);
+        onSelect && onSelect(autocompleteResults[selectedIndex + 1]?.value || '');
+        setSelectedIndex(selectedIndex + 1);
+        setShouldDisplay(true);
       } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
-        updateSelected(selectedIndex - 1);
-        selectOption(selectedIndex - 1);
-        toggleDisplay(true);
-      } else {
-        toggleDisplay(true);
+        onSelect && onSelect(autocompleteResults[selectedIndex - 1]?.value || '');
+        setSelectedIndex(selectedIndex - 1);
+        setShouldDisplay(true);
       }
     }
-    function toggleOn() {
-      toggleDisplay(true);
+    function toggleDisplayOn() {
+      setShouldDisplay(true);
     }
     function handleDocumentClick(evt: MouseEvent) {
-      if (!evt.target) {
-        toggleDisplay(false);
-        updateSelected(-1);
-      }
       const target = evt.target as HTMLElement;
-      if (target.isSameNode(inputRef.current)) {
-        toggleDisplay(true);
+      if (!target || !target.isSameNode(inputRef.current)) {
+        setSelectedIndex(-1);
+        setShouldDisplay(false);
       } else {
-        toggleDisplay(false);
-        updateSelected(-1);
+        setShouldDisplay(true);
       }
     }
     currentRef.addEventListener('keydown', handleKeyDown);
-    currentRef.addEventListener('change', toggleOn);
+    currentRef.addEventListener('change', toggleDisplayOn);
     document.addEventListener('click', handleDocumentClick);
-    currentRef.addEventListener('focus', toggleOn);
+    currentRef.addEventListener('focus', toggleDisplayOn);
     return () => {
       currentRef.removeEventListener('keydown', handleKeyDown);
-      currentRef.removeEventListener('keydown', toggleOn);
+      currentRef.removeEventListener('keydown', toggleDisplayOn);
       document.removeEventListener('click', handleDocumentClick);
-      currentRef.removeEventListener('focus', toggleOn);
+      currentRef.removeEventListener('focus', toggleDisplayOn);
     };
   });
-
-  function selectOption(index: number) {
-    if (index < 0) {
-      onReset();
-    } else {
-      onSelect(autocompleteResults[index].value);
-    }
-  }
-
-  function submitOption(index: number) {
-    answersActions.setQuery(autocompleteResults[index].value);
-    answersActions.executeVerticalQuery();
-  }
 
   if (!shouldDisplay || !autocompleteResults || autocompleteResults.length === 0) {
     return null;
@@ -93,8 +73,9 @@ export default function Autocomplete({ autocompleteResults, inputRef, onEnter, o
           : 'Autocomplete-option'
         return (
           <div key={result.value} className={className} onClick={() => {
-            submitOption(index);
-            selectOption(index);
+            setSelectedIndex(index);
+            onOptionClick && onOptionClick(autocompleteResults[index].value);
+            setShouldDisplay(false);
           }}>
             {renderWithHighlighting(result)}
           </div>
