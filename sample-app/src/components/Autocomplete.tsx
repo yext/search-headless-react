@@ -1,8 +1,8 @@
 import { AutocompleteResult } from '@yext/answers-core';
 import { MutableRefObject, useEffect, useState } from 'react';
-import '../sass/Autocomplete.scss';
 import classNames from 'classnames';
 import renderWithHighlighting from './utils/renderWithHighlighting';
+import '../sass/Autocomplete.scss';
 
 interface Props {
   autocompleteResults: AutocompleteResult[]
