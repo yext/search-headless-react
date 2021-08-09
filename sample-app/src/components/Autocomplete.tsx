@@ -6,10 +6,12 @@ import '../sass/Autocomplete.scss';
 interface Props {
   autocompleteResults: AutocompleteResult[]
   inputRef: MutableRefObject<HTMLInputElement>
-  onEnter: () => unknown
+  onEnter: () => void
+  onSelect: (selectedOptionValue: string) => unknown
+  onReset: () => void
 }
 
-export default function Autocomplete({ autocompleteResults, inputRef, onEnter }: Props) {
+export default function Autocomplete({ autocompleteResults, inputRef, onEnter, onSelect, onReset }: Props) {
   const [selectedIndex, updateSelected] = useState<number>(-1);
   const [shouldDisplay, toggleDisplay] = useState<boolean>(true);
   const answersActions = useAnswersActions();
@@ -23,13 +25,18 @@ export default function Autocomplete({ autocompleteResults, inputRef, onEnter }:
         toggleDisplay(false);
         selectedIndex !== -1 && submitOption(selectedIndex);
         updateSelected(-1);
+        selectOption(selectedIndex);
         onEnter();
       } else if (evt.key === 'Escape') {
         toggleDisplay(false);
-      } else if (evt.key === 'ArrowDown') {
-        selectedIndex < autocompleteResults.length - 1 && updateSelected(selectedIndex + 1);
+      } else if (evt.key === 'ArrowDown' && selectedIndex < autocompleteResults.length - 1) {
+        updateSelected(selectedIndex + 1);
+        selectOption(selectedIndex + 1);
+        toggleDisplay(true);
       } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
         updateSelected(selectedIndex - 1);
+        selectOption(selectedIndex - 1);
+        toggleDisplay(true);
       } else {
         toggleDisplay(true);
       }
@@ -62,12 +69,16 @@ export default function Autocomplete({ autocompleteResults, inputRef, onEnter }:
     };
   });
 
-  function submitOption(index: number) {
-    if (!inputRef?.current) {
-      return;
+  function selectOption(index: number) {
+    if (index < 0) {
+      onReset();
+    } else {
+      onSelect(autocompleteResults[index].value);
     }
-    inputRef.current.value = autocompleteResults[index].value;
-    answersActions.setQuery(inputRef?.current.value || '');
+  }
+
+  function submitOption(index: number) {
+    answersActions.setQuery(autocompleteResults[index].value);
     answersActions.executeVerticalQuery();
   }
 
@@ -81,7 +92,10 @@ export default function Autocomplete({ autocompleteResults, inputRef, onEnter }:
           ? 'Autocomplete-option Autocomplete-option--selected'
           : 'Autocomplete-option'
         return (
-          <div key={result.value} className={className} onClick={() => submitOption(index)}>
+          <div key={result.value} className={className} onClick={() => {
+            submitOption(index);
+            selectOption(index);
+          }}>
             {renderWithHighlighting(result)}
           </div>
         )}
