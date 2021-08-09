@@ -74,8 +74,8 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
   return (
     <div className='Autocomplete'>
       {autocompleteResults.map((result, index) => {
-        const className = classNames('Autocomplete-option', {
-          'Autocomplete-option--selected': index === selectedIndex
+        const className = classNames('Autocomplete__option', {
+          'Autocomplete__option--selected': index === selectedIndex
         });
         return (
           <div key={result.value} className={className} onClick={() => {
@@ -90,5 +90,3 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
     </div>
   )
 }
-
-

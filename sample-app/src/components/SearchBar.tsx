@@ -34,15 +34,15 @@ function SearchBar() {
   }
   return (
     <div className='SearchBar'>
-      <div className='SearchBar-search'>
+      <div className='SearchBar__inputContainer'>
         <input
-          className='SearchBar-input'
+          className='SearchBar__input'
           ref={inputRef}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           value={displayQuery}
         />
-        <button className='SearchBar-submit' onClick={() => executeSearch(displayQuery)}>
+        <button className='SearchBar__submitButton' onClick={() => executeSearch(displayQuery)}>
           <MagnifyingGlassIcon/>
         </button>
       </div>
