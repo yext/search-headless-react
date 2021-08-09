@@ -1,50 +1,70 @@
+import { useEffect, Fragment, ReactChild, ReactChildren } from 'react';
+import { AnswersActionsProvider, useAnswersActions } from '@yext/answers-headless-react';
+
 import VerticalResults from './components/VerticalResults';
 import SearchBar from './components/SearchBar';
-
-import './sass/App.scss';
-import { AnswersActionsProvider } from '@yext/answers-headless-react';
-// import StaticFilters from './components/StaticFilters';
+import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
 import { StandardCard } from './components/cards/StandardCard';
+import './sass/App.scss';
 
 function App() {
-  // const staticFilterOptions = [
-  //   {
-  //     field: 'c_employeeDepartment',
-  //     value: 'Technology'
-  //   },
-  //   {
-  //     field: 'c_employeeDepartment',
-  //     value: 'Consulting',
-  //   },
-  //   {
-  //     field: 'c_employeeDepartment',
-  //     value: 'Finance',
-  //   }
-  // ]
+  const staticFilterOptions = [
+    {
+      field: 'c_employeeDepartment',
+      value: 'Technology'
+    },
+    {
+      field: 'c_employeeDepartment',
+      value: 'Consulting',
+    },
+    {
+      field: 'c_employeeDepartment',
+      value: 'Finance',
+    }
+  ]
   return (
-    <AnswersActionsProvider
-      apiKey='2d8c550071a64ea23e263118a2b0680b'
-      experienceKey='slanswers'
-      locale='en'
-    >
+    <Provider>
       <div className='left'>
         test
-        {/* <StaticFilters
+        <StaticFilters
           title='~Employee Departments~'
           options={staticFilterOptions}
-        /> */}
+        />
       </div>
       <div className='right'>
-        <SearchBar verticalKey='people' name='main-searchbar'/>
+        <SearchBar />
         <ResultsCount />
         <VerticalResults 
           CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
         />
       </div>
-    </AnswersActionsProvider>
+    </Provider>
   );
+}
+
+interface PropsWithChildren {
+  children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[]
+}
+
+function Provider({ children }: PropsWithChildren) {
+  function SetVerticalKey() {
+    const answersActions = useAnswersActions();
+    useEffect(() => answersActions.setVerticalKey('people'))
+    return <Fragment>{children}</Fragment>;
+  }
+  // Temporary place to set the verticalKey, in the future this should happen in some sort
+  // of router component, which may end up being the Navigation component
+  return (
+    <AnswersActionsProvider
+      apiKey='2d8c550071a64ea23e263118a2b0680b'
+      experienceKey='slanswers'
+      locale='en'
+    >
+      <SetVerticalKey/>
+    </AnswersActionsProvider>
+  )
 }
 
 export default App;

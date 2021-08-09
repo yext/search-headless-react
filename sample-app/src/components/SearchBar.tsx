@@ -1,14 +1,13 @@
 import { useRef, ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
+import { AutocompleteResult } from '@yext/answers-core';
 import { useAnswersActions } from '@yext/answers-headless-react';
-import '../sass/SearchBar.scss';
-import { useEffect } from 'react';
+
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
-import { AutocompleteResult } from '@yext/answers-core';
+import '../sass/SearchBar.scss';
 
-function SearchBar({ verticalKey }: { name: string, verticalKey: string }) {
+function SearchBar() {
   const answersActions = useAnswersActions();
-  useEffect(() => answersActions.setVerticalKey(verticalKey))
   const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
   const [query, setQuery] = useState<string>('');
   const [queryState, setQueryState] = useState<string>('');
