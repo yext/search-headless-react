@@ -7,8 +7,8 @@ type StateMapper<T> = (s: State) => T;
 /**
  * Returns the Answers State returned by the map function
  */
-export function useAnswersState<T>(mapState: StateMapper<T>): T {
-  const [answersState, setState] = useState({} as T);
+export function useAnswersState<T>(mapState: StateMapper<T>): T | undefined {
+  const [stateValue, setState] = useState(undefined as undefined | T);
   const answersActions = useAnswersActions();
 
   useEffect(() => {
@@ -18,5 +18,5 @@ export function useAnswersState<T>(mapState: StateMapper<T>): T {
     });
   });
 
-  return answersState;
+  return stateValue;
 }
