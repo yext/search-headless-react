@@ -29,5 +29,5 @@ export default function renderWithHighlighting ({ value, matchedSubstrings }: Hi
   if (curr < value.length) {
     highlightedJSX.push(<span key={curr}>{value.substring(curr)}</span>)
   }
-  return <Fragment>highlightedJSX</Fragment>;
+  return <Fragment>{highlightedJSX}</Fragment>;
 }
