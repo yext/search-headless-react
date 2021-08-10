@@ -3,7 +3,6 @@ import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './App.css';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
-import StaticFilters from './components/StaticFilters';
 import FilterBox from './components/FilterBox';
 import ResultsCount from './components/ResultsCount';
 
