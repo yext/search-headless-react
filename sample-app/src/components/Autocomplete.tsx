@@ -71,22 +71,25 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
   if (!shouldDisplay || !autocompleteResults || autocompleteResults.length === 0) {
     return null;
   }
+
+  function renderAutocomplete({ value, matchedSubstrings }: AutocompleteResult, index: number) {
+    const className = classNames('Autocomplete__option', {
+      'Autocomplete__option--selected': index === selectedIndex
+    });
+    return (
+      <div key={value} className={className} onClick={() => {
+        setSelectedIndex(index);
+        onOptionClick && onOptionClick(autocompleteResults[index].value);
+        setShouldDisplay(false);
+      }}>
+        {renderWithHighlighting({ value, matchedSubstrings })}
+      </div>
+    )
+  }
+
   return (
     <div className='Autocomplete'>
-      {autocompleteResults.map((result, index) => {
-        const className = classNames('Autocomplete__option', {
-          'Autocomplete__option--selected': index === selectedIndex
-        });
-        return (
-          <div key={result.value} className={className} onClick={() => {
-            setSelectedIndex(index);
-            onOptionClick && onOptionClick(autocompleteResults[index].value);
-            setShouldDisplay(false);
-          }}>
-            {renderWithHighlighting(result)}
-          </div>
-        )}
-      )}
+      {autocompleteResults.map(renderAutocomplete)}
     </div>
   )
 }

@@ -5,10 +5,14 @@ import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 
+interface Props {
+  placeholder?: string
+}
+
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar() {
+export default function SearchBar(props: Props) {
   const answersActions = useAnswersActions();
   const globalQueryState = useAnswersState(state => state.query?.query) || '';
   const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
@@ -43,6 +47,7 @@ export default function SearchBar() {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           value={displayQuery}
+          placeholder={props.placeholder}
         />
         <button className='SearchBar__submitButton' onClick={() => executeSearch(displayQuery)}>
           <MagnifyingGlassIcon/>

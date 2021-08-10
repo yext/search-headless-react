@@ -23,24 +23,34 @@ function App() {
     }
   ]
   return (
-    <Provider>
-      <div className='left'>
-        <SearchBar />
-        test
-        <StaticFilters
-          title='~Employee Departments~'
-          options={staticFilterOptions}
-        />
-      </div>
-      <div className='right'>
-        <SearchBar />
-        <ResultsCount />
-        <VerticalResults 
-          CardComponent={StandardCard}
-          cardConfig={{ showOrdinal: true }}
-        />
-      </div>
-    </Provider>
+    <AnswersActionsProvider
+      apiKey='2d8c550071a64ea23e263118a2b0680b'
+      experienceKey='slanswers'
+      locale='en'
+    >
+      <SetVerticalKey>
+        <div className='left'>
+          <SearchBar
+            placeholder='search me!'
+          />
+          test
+          <StaticFilters
+            title='~Employee Departments~'
+            options={staticFilterOptions}
+          />
+        </div>
+        <div className='right'>
+          <SearchBar
+            placeholder='Search...'
+          />
+          <ResultsCount />
+          <VerticalResults
+            CardComponent={StandardCard}
+            cardConfig={{ showOrdinal: true }}
+          />
+        </div>
+      </SetVerticalKey>
+    </AnswersActionsProvider>
   );
 }
 
@@ -48,23 +58,12 @@ interface PropsWithChildren {
   children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[]
 }
 
-function Provider({ children }: PropsWithChildren) {
-  // Temporary place to set the verticalKey, in the future this should happen in some sort
-  // of router component, which may end up being the Navigation component
-  function SetVerticalKey() {
-    const answersActions = useAnswersActions();
-    useEffect(() => answersActions.setVerticalKey('people'))
-    return <Fragment>{children}</Fragment>;
-  }
-  return (
-    <AnswersActionsProvider
-      apiKey='2d8c550071a64ea23e263118a2b0680b'
-      experienceKey='slanswers'
-      locale='en'
-    >
-      <SetVerticalKey/>
-    </AnswersActionsProvider>
-  )
+// Temporary place to set the verticalKey, in the future this should happen in some sort
+// of router component, which may end up being the Navigation component
+function SetVerticalKey({ children }: PropsWithChildren) {
+  const answersActions = useAnswersActions();
+  useEffect(() => answersActions.setVerticalKey('people'))
+  return <Fragment>{children}</Fragment>;
 }
 
 export default App;
