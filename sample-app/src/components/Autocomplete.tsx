@@ -124,7 +124,6 @@ export default function Autocomplete({
     } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
       const newIndex = selectedIndex - 1;
       dispatch({ type: 'ArrowKey', newIndex })
-      // Go back to the global query state if the new selectedIndex is -1
       const newQuery = newIndex < 0
         ? lastAutocompleteQuery
         : autocompleteResults[newIndex]?.value
