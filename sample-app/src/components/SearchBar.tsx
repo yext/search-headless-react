@@ -7,16 +7,20 @@ import '../sass/SearchBar.scss';
 
 interface Props {
   placeholder?: string
+  initialQuery?: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar(props: Props) {
+export default function SearchBar({
+  placeholder,
+  initialQuery = ''
+}: Props) {
   const answersActions = useAnswersActions();
   const globalQueryState = useAnswersState(state => state.query?.query) || '';
   const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
-  const [displayQuery, setDisplayQuery] = useState<string>('');
+  const [displayQuery, setDisplayQuery] = useState<string>(initialQuery);
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
  
   const executeSearch = (query: string) => {
@@ -47,7 +51,7 @@ export default function SearchBar(props: Props) {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           value={displayQuery}
-          placeholder={props.placeholder}
+          placeholder={placeholder}
         />
         <button className='SearchBar__submitButton' onClick={() => executeSearch(displayQuery)}>
           <MagnifyingGlassIcon/>

@@ -1,10 +1,10 @@
-import { useEffect, Fragment, ReactChild, ReactChildren } from 'react';
-import { AnswersActionsProvider, useAnswersActions } from '@yext/answers-headless-react';
-import VerticalResults from './components/VerticalResults';
-import SearchBar from './components/SearchBar';
-import StaticFilters from './components/StaticFilters';
-import ResultsCount from './components/ResultsCount';
+import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import { StandardCard } from './components/cards/StandardCard';
+import ResultsCount from './components/ResultsCount';
+import SearchBar from './components/SearchBar';
+import SetVerticalKey from './components/SetVerticalKey';
+import StaticFilters from './components/StaticFilters';
+import VerticalResults from './components/VerticalResults';
 import './sass/App.scss';
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
       <SetVerticalKey>
         <div className='left'>
           <SearchBar
-            placeholder='search me!'
+            initialQuery='virginia'
           />
           test
           <StaticFilters
@@ -52,18 +52,6 @@ function App() {
       </SetVerticalKey>
     </AnswersActionsProvider>
   );
-}
-
-interface PropsWithChildren {
-  children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[]
-}
-
-// Temporary place to set the verticalKey, in the future this should happen in some sort
-// of router component, which may end up being the Navigation component
-function SetVerticalKey({ children }: PropsWithChildren) {
-  const answersActions = useAnswersActions();
-  useEffect(() => answersActions.setVerticalKey('people'))
-  return <Fragment>{children}</Fragment>;
 }
 
 export default App;
