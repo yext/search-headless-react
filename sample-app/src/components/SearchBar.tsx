@@ -38,11 +38,6 @@ export default function SearchBar({
     });
   }
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = evt => {
-    if (evt.key === 'Enter') {
-      executeSearch(displayQuery);
-    }
-  }
   const handleChange: ChangeEventHandler<HTMLInputElement> = evt => {
     setDisplayQuery(evt.target.value);
     answersActions.setQuery(evt.target.value);
@@ -55,13 +50,9 @@ export default function SearchBar({
           className='SearchBar__input'
           ref={inputRef}
           onChange={handleChange}
-          onKeyDown={handleKeyDown}
           value={displayQuery}
           placeholder={placeholder}
-          onClick={() => {
-            console.log('click')
-            updateAutocomplete()
-          }}
+          onClick={updateAutocomplete}
         />
         <button className='SearchBar__submitButton' onClick={() => executeSearch(displayQuery)}>
           <MagnifyingGlassIcon/>
@@ -77,6 +68,7 @@ export default function SearchBar({
           setDisplayQuery(query);
           executeSearch(query);
         }}
+        onEnter={() => executeSearch(displayQuery)}
       />
     </div>
   )

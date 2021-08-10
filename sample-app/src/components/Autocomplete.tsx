@@ -9,12 +9,12 @@ interface Props {
   inputRef: MutableRefObject<HTMLInputElement>
   onOptionClick?: (selectedOptionValue: string) => void
   onSelect?: (selectedOptionValue: string) => void
+  onEnter?: () => void
 }
 
-export default function Autocomplete({ autocompleteResults, inputRef, onSelect, onOptionClick }: Props) {
-  console.log('render autocomplete', autocompleteResults, arguments)
+export default function Autocomplete({ autocompleteResults, inputRef, onSelect, onOptionClick, onEnter }: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const [shouldDisplay, setShouldDisplay] = useState<boolean>(true);
+  const [shouldDisplay, setShouldDisplay] = useState<boolean>(false);
 
   function handleKeyDown(evt: KeyboardEvent) {
     if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
@@ -24,6 +24,7 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
     if (evt.key === 'Enter') {
       setShouldDisplay(false);
       setSelectedIndex(-1);
+      onEnter && onEnter();
     } else if (evt.key === 'Escape') {
       setSelectedIndex(-1);
       setShouldDisplay(false);
@@ -63,7 +64,7 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
     currentRef.addEventListener('focus', toggleDisplayOn);
     return () => {
       currentRef.removeEventListener('keydown', handleKeyDown);
-      currentRef.removeEventListener('keydown', toggleDisplayOn);
+      currentRef.removeEventListener('change', toggleDisplayOn);
       document.removeEventListener('click', handleDocumentClick);
       currentRef.removeEventListener('focus', toggleDisplayOn);
     };
