@@ -22,5 +22,5 @@ export default function withVerticalKey(WrappedComponent: ComponentType<any>, ve
   }
   
   SetVerticalKey.contextType = AnswersActionsContext;
-  return SetVerticalKey
+  return SetVerticalKey;
 }
