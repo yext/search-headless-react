@@ -31,7 +31,7 @@ function App() {
       <SetVerticalKey>
         <div className='left'>
           <SearchBar
-            initialQuery='virginia'
+            initialQuery='prompt'
           />
           test
           <StaticFilters

@@ -12,6 +12,7 @@ interface Props {
 }
 
 export default function Autocomplete({ autocompleteResults, inputRef, onSelect, onOptionClick }: Props) {
+  console.log('render autocomplete', autocompleteResults, arguments)
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [shouldDisplay, setShouldDisplay] = useState<boolean>(true);
 
