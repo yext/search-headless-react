@@ -1,6 +1,6 @@
 import { AutocompleteResult } from '@yext/answers-core';
 import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
-import { useEffect, useState, useRef, KeyboardEvent } from 'react';
+import { useEffect, useRef, KeyboardEvent, useReducer } from 'react';
 import classNames from 'classnames';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import '../sass/Autocomplete.scss';
@@ -15,6 +15,46 @@ interface Props {
   placeholder?: string
 }
 
+interface State {
+  selectedIndex: number
+  shouldDisplay: boolean
+  autocompleteResults: AutocompleteResult[]
+  lastAutocompleteQuery: string
+}
+
+type Action = 
+  | { type: 'Show' }
+  | { type: 'Hide' }
+  | { type: 'InputClick' }
+  | { type: 'InputChange' }
+  | { type: 'UpdateAutocomplete', results: AutocompleteResult[], lastAutocompleteQuery: string }
+  | { type: 'ArrowKey', newIndex: number }
+
+function reducer(state: State, action: Action): State {
+  switch(action.type) {
+    case 'Show': 
+      return { ...state, shouldDisplay: true }
+    case 'Hide': 
+      return { ...state, selectedIndex: -1, shouldDisplay: false }
+    case 'InputChange': 
+      return { ...state, selectedIndex: -1, shouldDisplay: true }
+    case 'InputClick': 
+      return { ...state, shouldDisplay: true }
+    case 'UpdateAutocomplete': 
+      return {
+        ...state,
+        autocompleteResults: action.results,
+        lastAutocompleteQuery: action.lastAutocompleteQuery
+      }
+    case 'ArrowKey': 
+      return {
+        ...state,
+        selectedIndex: action.newIndex,
+        shouldDisplay: true
+      }
+  }
+}
+
 export default function Autocomplete({
   query,
   inputClassName,
@@ -25,19 +65,26 @@ export default function Autocomplete({
   placeholder
 }: Props) {
   const answersActions = useAnswersActions();
-  const globalQueryState = useAnswersState(state => state.query?.query) || '';
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const [shouldDisplay, setShouldDisplay] = useState<boolean>(false);
-  const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
+  const [{
+    selectedIndex,
+    shouldDisplay,
+    autocompleteResults,
+    lastAutocompleteQuery
+  }, dispatch] = useReducer(reducer, {
+    selectedIndex: -1,
+    shouldDisplay: false,
+    autocompleteResults: [],
+    lastAutocompleteQuery: ''
+  })
+
   const inputRef = useRef<HTMLInputElement>(document.createElement('input')); 
   
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target || !target.isSameNode(inputRef.current)) {
-      setSelectedIndex(-1);
-      setShouldDisplay(false);
+      dispatch({ type: 'Hide' })
     } else {
-      setShouldDisplay(true);
+      dispatch({ type: 'Show' })
     }
   }
   useEffect(() => {
@@ -45,12 +92,17 @@ export default function Autocomplete({
     return () => document.removeEventListener('click', handleDocumentClick);
   });
 
-  function updateAutocompleteResults() {
-    answersActions.executeVerticalAutoComplete(query).then(autocompleteResponse => {
+  function updateAutocompleteResults(newQuery: string) {
+    answersActions.setQuery(newQuery);
+    answersActions.executeVerticalAutoComplete().then(autocompleteResponse => {
       if (!autocompleteResponse) {
         return;
       }
-      setAutocompleteResults(autocompleteResponse.results)
+      dispatch({
+        type: 'UpdateAutocomplete',
+        results: autocompleteResponse.results,
+        lastAutocompleteQuery: newQuery
+      })
     });
   }
 
@@ -61,26 +113,22 @@ export default function Autocomplete({
 
     if (evt.key === 'Enter') {
       onSubmit(query);
-      setShouldDisplay(false);
-      setSelectedIndex(-1);
+      dispatch({ type: 'Hide' })
     } else if (evt.key === 'Escape') {
-      setSelectedIndex(-1);
-      setShouldDisplay(false);
+      dispatch({ type: 'Hide' })
     } else if (evt.key === 'ArrowDown' && selectedIndex < autocompleteResults.length - 1) {
-      const newSelectedIndex = selectedIndex + 1;
-      const newQuery = autocompleteResults[newSelectedIndex]?.value;
+      const newIndex = selectedIndex + 1;
+      dispatch({ type: 'ArrowKey', newIndex })
+      const newQuery = autocompleteResults[newIndex]?.value;
       onSelectedIndexChange(newQuery);
-      setSelectedIndex(newSelectedIndex);
-      setShouldDisplay(true);
     } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
-      const newSelectedIndex = selectedIndex - 1;
+      const newIndex = selectedIndex - 1;
+      dispatch({ type: 'ArrowKey', newIndex })
       // Go back to the global query state if the new selectedIndex is -1
-      const newQuery = newSelectedIndex < 0
-        ? globalQueryState
-        : autocompleteResults[newSelectedIndex]?.value
-        onSelectedIndexChange(newQuery);
-      setSelectedIndex(newSelectedIndex);
-      setShouldDisplay(true);
+      const newQuery = newIndex < 0
+        ? lastAutocompleteQuery
+        : autocompleteResults[newIndex]?.value
+      onSelectedIndexChange(newQuery);
     }
   }
 
@@ -89,13 +137,12 @@ export default function Autocomplete({
       className={inputClassName}
       placeholder={placeholder}
       onChange={evt => {
-        setShouldDisplay(true);
-        setSelectedIndex(-1);
-        const query = evt.target.value;
-        onTextChange(query);
-        updateAutocompleteResults();
+        dispatch({ type: 'InputChange' })
+        const newQuery = evt.target.value;
+        onTextChange(newQuery);
+        updateAutocompleteResults(newQuery);
       }}
-      onClick={updateAutocompleteResults}
+      onClick={() => updateAutocompleteResults(query)}
       onKeyDown={handleKeyDown}
       value={query}
       ref={inputRef}
@@ -108,9 +155,8 @@ export default function Autocomplete({
     });
     return (
       <div key={value} className={className} onClick={() => {
-        setSelectedIndex(index);
         onSubmit && onSubmit(autocompleteResults[index].value);
-        setShouldDisplay(false);
+        dispatch({ type: 'Hide' })
       }}>
         {renderWithHighlighting({ value, matchedSubstrings })}
       </div>

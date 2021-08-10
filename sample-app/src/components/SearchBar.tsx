@@ -47,7 +47,7 @@ export default function SearchBar({
         placeholder={placeholder}
         query={displayQuery}
         onTextChange={query => {
-          setDisplayQuery(query || '')
+          setDisplayQuery(query)
           answersActions.setQuery(query);
         }}
         onSubmit={query => {
@@ -56,7 +56,7 @@ export default function SearchBar({
           answersActions.executeVerticalQuery();
         }}
         onSelectedIndexChange={query => {
-          setDisplayQuery(query || '')
+          setDisplayQuery(query)
         }}
       />
     </div>
