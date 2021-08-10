@@ -1,10 +1,10 @@
-import { AnswersActionsProvider } from '@yext/answers-headless-react';
+import { Fragment } from 'react';
 import { StandardCard } from './components/cards/StandardCard';
 import ResultsCount from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
-import SetVerticalKey from './components/SetVerticalKey';
 import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
+import withVerticalKey from './components/withVerticalKey';
 import './sass/App.scss';
 
 function App() {
@@ -23,35 +23,29 @@ function App() {
     }
   ]
   return (
-    <AnswersActionsProvider
-      apiKey='2d8c550071a64ea23e263118a2b0680b'
-      experienceKey='slanswers'
-      locale='en'
-    >
-      <SetVerticalKey>
-        <div className='left'>
-          <SearchBar
-            initialQuery='prompt'
-          />
-          test
-          <StaticFilters
-            title='~Employee Departments~'
-            options={staticFilterOptions}
-          />
-        </div>
-        <div className='right'>
-          <SearchBar
-            placeholder='Search...'
-          />
-          <ResultsCount />
-          <VerticalResults
-            CardComponent={StandardCard}
-            cardConfig={{ showOrdinal: true }}
-          />
-        </div>
-      </SetVerticalKey>
-    </AnswersActionsProvider>
+    <Fragment>
+      <div className='left'>
+        <SearchBar
+          initialQuery='prompt'
+        />
+        test
+        <StaticFilters
+          title='~Employee Departments~'
+          options={staticFilterOptions}
+        />
+      </div>
+      <div className='right'>
+        <SearchBar
+          placeholder='Search...'
+        />
+        <ResultsCount />
+        <VerticalResults
+          CardComponent={StandardCard}
+          cardConfig={{ showOrdinal: true }}
+        />
+      </div>
+    </Fragment>
   );
 }
 
-export default App;
+export default withVerticalKey(App, 'people');

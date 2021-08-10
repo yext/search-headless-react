@@ -1,6 +1,5 @@
-import { useRef, ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
-import { AutocompleteResult } from '@yext/answers-core';
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useState, Fragment } from 'react';
+import { useAnswersActions } from '@yext/answers-headless-react';
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
@@ -18,57 +17,47 @@ export default function SearchBar({
   initialQuery = ''
 }: Props) {
   const answersActions = useAnswersActions();
-  const globalQueryState = useAnswersState(state => state.query?.query) || '';
-  const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
   const [displayQuery, setDisplayQuery] = useState<string>(initialQuery);
-  const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
- 
-  function executeSearch(query: string) {
-    answersActions.setQuery(query);
-    answersActions.executeVerticalQuery();
+
+  function renderInputAndDropdown(input: JSX.Element, dropdown: JSX.Element | null) {
+    return (
+      <Fragment>
+        <div className='SearchBar__inputContainer'>
+          {input}
+          <button
+            className='SearchBar__submitButton'
+            onClick={() => {
+              answersActions.setQuery(displayQuery);
+              answersActions.executeVerticalQuery();
+            }}
+          >
+            <MagnifyingGlassIcon/>
+          </button>
+        </div>
+        {dropdown}
+      </Fragment>
+    )
   }
 
-  function updateAutocomplete() {
-    answersActions.setQuery(displayQuery);
-    answersActions.executeVerticalAutoComplete().then(autocompleteResponse => {
-      if (!autocompleteResponse) {
-        return;
-      }
-      setAutocompleteResults(autocompleteResponse.results)
-    });
-  }
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = evt => {
-    setDisplayQuery(evt.target.value);
-    answersActions.setQuery(evt.target.value);
-    updateAutocomplete();
-  }
   return (
     <div className='SearchBar'>
-      <div className='SearchBar__inputContainer'>
-        <input
-          className='SearchBar__input'
-          ref={inputRef}
-          onChange={handleChange}
-          value={displayQuery}
-          placeholder={placeholder}
-          onClick={updateAutocomplete}
-        />
-        <button className='SearchBar__submitButton' onClick={() => executeSearch(displayQuery)}>
-          <MagnifyingGlassIcon/>
-        </button>
-      </div>
       <Autocomplete
-        inputRef={inputRef}
-        autocompleteResults={autocompleteResults}
-        onSelect={query => {
-          setDisplayQuery(query || globalQueryState || '');
+        renderInputAndDropdown={renderInputAndDropdown}
+        inputClassName='SearchBar__input'
+        placeholder={placeholder}
+        query={displayQuery}
+        onTextChange={query => {
+          setDisplayQuery(query || '')
+          answersActions.setQuery(query);
         }}
-        onOptionClick={query => {
+        onSubmit={query => {
           setDisplayQuery(query);
-          executeSearch(query);
+          answersActions.setQuery(query);
+          answersActions.executeVerticalQuery();
         }}
-        onEnter={() => executeSearch(displayQuery)}
+        onSelectedIndexChange={query => {
+          setDisplayQuery(query || '')
+        }}
       />
     </div>
   )

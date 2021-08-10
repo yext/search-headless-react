@@ -1,48 +1,36 @@
 import { AutocompleteResult } from '@yext/answers-core';
-import { MutableRefObject, useEffect, useState } from 'react';
+import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useEffect, useState, useRef, KeyboardEvent } from 'react';
 import classNames from 'classnames';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import '../sass/Autocomplete.scss';
 
 interface Props {
-  autocompleteResults: AutocompleteResult[]
-  inputRef: MutableRefObject<HTMLInputElement>
-  onOptionClick?: (selectedOptionValue: string) => void
-  onSelect?: (selectedOptionValue: string) => void
-  onEnter?: () => void
+  query: string
+  renderInputAndDropdown: (input: JSX.Element, dropdown: JSX.Element | null) => JSX.Element
+  onSelectedIndexChange?: (query: string) => void
+  onTextChange?: (query: string) => void
+  onSubmit?: (query: string) => void
+  inputClassName?: string
+  placeholder?: string
 }
 
-export default function Autocomplete({ autocompleteResults, inputRef, onSelect, onOptionClick, onEnter }: Props) {
+export default function Autocomplete({
+  query,
+  inputClassName,
+  onSelectedIndexChange = () => {},
+  onTextChange = () => {},
+  onSubmit = () => {},
+  renderInputAndDropdown,
+  placeholder
+}: Props) {
+  const answersActions = useAnswersActions();
+  const globalQueryState = useAnswersState(state => state.query?.query) || '';
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [shouldDisplay, setShouldDisplay] = useState<boolean>(false);
-
-  function handleKeyDown(evt: KeyboardEvent) {
-    if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
-      evt.preventDefault();
-    }
-
-    if (evt.key === 'Enter') {
-      setShouldDisplay(false);
-      setSelectedIndex(-1);
-      onEnter && onEnter();
-    } else if (evt.key === 'Escape') {
-      setSelectedIndex(-1);
-      setShouldDisplay(false);
-    } else if (evt.key === 'ArrowDown' && selectedIndex < autocompleteResults.length - 1) {
-      onSelect && onSelect(autocompleteResults[selectedIndex + 1]?.value || '');
-      setSelectedIndex(selectedIndex + 1);
-      setShouldDisplay(true);
-    } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
-      onSelect && onSelect(autocompleteResults[selectedIndex - 1]?.value || '');
-      setSelectedIndex(selectedIndex - 1);
-      setShouldDisplay(true);
-    }
-  }
-
-  function toggleDisplayOn() {
-    setShouldDisplay(true);
-  }
-
+  const [autocompleteResults, setAutocompleteResults] = useState<AutocompleteResult[]>([]);
+  const inputRef = useRef<HTMLInputElement>(document.createElement('input')); 
+  
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target || !target.isSameNode(inputRef.current)) {
@@ -52,27 +40,67 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
       setShouldDisplay(true);
     }
   }
-
   useEffect(() => {
-    const currentRef = inputRef?.current
-    if (!currentRef) {
-      return;
-    }
-    currentRef.addEventListener('keydown', handleKeyDown);
-    currentRef.addEventListener('change', toggleDisplayOn);
-    document.addEventListener('click', handleDocumentClick);
-    currentRef.addEventListener('focus', toggleDisplayOn);
-    return () => {
-      currentRef.removeEventListener('keydown', handleKeyDown);
-      currentRef.removeEventListener('change', toggleDisplayOn);
-      document.removeEventListener('click', handleDocumentClick);
-      currentRef.removeEventListener('focus', toggleDisplayOn);
-    };
+    document.addEventListener('click', handleDocumentClick)
+    return () => document.removeEventListener('click', handleDocumentClick);
   });
 
-  if (!shouldDisplay || !autocompleteResults || autocompleteResults.length === 0) {
-    return null;
+  function updateAutocompleteResults() {
+    answersActions.executeVerticalAutoComplete(query).then(autocompleteResponse => {
+      if (!autocompleteResponse) {
+        return;
+      }
+      setAutocompleteResults(autocompleteResponse.results)
+    });
   }
+
+  function handleKeyDown(evt: KeyboardEvent<HTMLInputElement>) {
+    if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
+      evt.preventDefault();
+    }
+
+    if (evt.key === 'Enter') {
+      onSubmit(query);
+      setShouldDisplay(false);
+      setSelectedIndex(-1);
+    } else if (evt.key === 'Escape') {
+      setSelectedIndex(-1);
+      setShouldDisplay(false);
+    } else if (evt.key === 'ArrowDown' && selectedIndex < autocompleteResults.length - 1) {
+      const newSelectedIndex = selectedIndex + 1;
+      const newQuery = autocompleteResults[newSelectedIndex]?.value;
+      onSelectedIndexChange(newQuery);
+      setSelectedIndex(newSelectedIndex);
+      setShouldDisplay(true);
+    } else if (evt.key === 'ArrowUp' && selectedIndex >= 0) {
+      const newSelectedIndex = selectedIndex - 1;
+      // Go back to the global query state if the new selectedIndex is -1
+      const newQuery = newSelectedIndex < 0
+        ? globalQueryState
+        : autocompleteResults[newSelectedIndex]?.value
+        onSelectedIndexChange(newQuery);
+      setSelectedIndex(newSelectedIndex);
+      setShouldDisplay(true);
+    }
+  }
+
+  const inputJSX = (
+    <input
+      className={inputClassName}
+      placeholder={placeholder}
+      onChange={evt => {
+        setShouldDisplay(true);
+        setSelectedIndex(-1);
+        const query = evt.target.value;
+        onTextChange(query);
+        updateAutocompleteResults();
+      }}
+      onClick={updateAutocompleteResults}
+      onKeyDown={handleKeyDown}
+      value={query}
+      ref={inputRef}
+    />
+  );
 
   function renderAutocomplete({ value, matchedSubstrings }: AutocompleteResult, index: number) {
     const className = classNames('Autocomplete__option', {
@@ -81,7 +109,7 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
     return (
       <div key={value} className={className} onClick={() => {
         setSelectedIndex(index);
-        onOptionClick && onOptionClick(autocompleteResults[index].value);
+        onSubmit && onSubmit(autocompleteResults[index].value);
         setShouldDisplay(false);
       }}>
         {renderWithHighlighting({ value, matchedSubstrings })}
@@ -89,9 +117,12 @@ export default function Autocomplete({ autocompleteResults, inputRef, onSelect, 
     )
   }
 
-  return (
+  const shouldRenderDropdown = shouldDisplay && autocompleteResults && autocompleteResults.length !== 0;
+  const dropdownJSX = shouldRenderDropdown ? (
     <div className='Autocomplete'>
       {autocompleteResults.map(renderAutocomplete)}
     </div>
-  )
+  ) : null;
+
+  return renderInputAndDropdown(inputJSX, dropdownJSX);
 }
