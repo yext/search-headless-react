@@ -1,5 +1,5 @@
 import { AutocompleteResult } from '@yext/answers-core';
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersActions } from '@yext/answers-headless-react';
 import { useEffect, useRef, KeyboardEvent, useReducer } from 'react';
 import classNames from 'classnames';
 import renderWithHighlighting from './utils/renderWithHighlighting';
@@ -75,16 +75,16 @@ export default function Autocomplete({
     shouldDisplay: false,
     autocompleteResults: [],
     lastAutocompleteQuery: ''
-  })
+  });
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input')); 
   
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target || !target.isSameNode(inputRef.current)) {
-      dispatch({ type: 'Hide' })
+      dispatch({ type: 'Hide' });
     } else {
-      dispatch({ type: 'Show' })
+      dispatch({ type: 'Show' });
     }
   }
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function Autocomplete({
         type: 'UpdateAutocomplete',
         results: autocompleteResponse.results,
         lastAutocompleteQuery: newQuery
-      })
+      });
     });
   }
 
@@ -113,9 +113,9 @@ export default function Autocomplete({
 
     if (evt.key === 'Enter') {
       onSubmit(query);
-      dispatch({ type: 'Hide' })
+      dispatch({ type: 'Hide' });
     } else if (evt.key === 'Escape') {
-      dispatch({ type: 'Hide' })
+      dispatch({ type: 'Hide' });
     } else if (evt.key === 'ArrowDown' && selectedIndex < autocompleteResults.length - 1) {
       const newIndex = selectedIndex + 1;
       dispatch({ type: 'ArrowKey', newIndex })
@@ -126,7 +126,7 @@ export default function Autocomplete({
       dispatch({ type: 'ArrowKey', newIndex })
       const newQuery = newIndex < 0
         ? lastAutocompleteQuery
-        : autocompleteResults[newIndex]?.value
+        : autocompleteResults[newIndex]?.value;
       onSelectedIndexChange(newQuery);
     }
   }
@@ -154,7 +154,7 @@ export default function Autocomplete({
     });
     return (
       <div key={value} className={className} onClick={() => {
-        onSubmit && onSubmit(autocompleteResults[index].value);
+        onSubmit(autocompleteResults[index].value);
         dispatch({ type: 'Hide' })
       }}>
         {renderWithHighlighting({ value, matchedSubstrings })}
