@@ -10,29 +10,32 @@ function App() {
   const staticFilterOptions = [
     {
       label: 'canada',
-      field: 'c_employeeCountry',
+      fieldId: 'c_employeeCountry',
       value: 'Canada',
     },
     {
       label: 'remote',
-      field: 'c_employeeCountry',
+      fieldId: 'c_employeeCountry',
       value: 'Remote'
     },
     {
       label: 'usa',
-      field: 'c_employeeCountry',
+      fieldId: 'c_employeeCountry',
       value: 'United States',
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'tech',
+      fieldId: 'c_employeeDepartment',
       value: 'Technology'
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'consult',
+      fieldId: 'c_employeeDepartment',
       value: 'Consulting',
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'fin',
+      fieldId: 'c_employeeDepartment',
       value: 'Finance',
     }
   ]

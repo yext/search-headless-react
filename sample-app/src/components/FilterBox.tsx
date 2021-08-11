@@ -1,231 +1,135 @@
-import React from 'react';
-import { FilterCombinator, Matcher } from '@yext/answers-core';
+import React, { Fragment } from 'react';
+import { Filter, FilterCombinator, Matcher } from '@yext/answers-core';
 import { AnswersActionsContext } from '@yext/answers-headless-react';
 
 interface CheckBoxProps {
-  field: string,
+  fieldId: string,
   value: string,
+  label: string,
   optionHandler: Function
 }
 interface FilterBoxProps {
   options: {
-    field: string,
-    value: string
+    fieldId: string,
+    value: string,
+    label: string
   }[],
   title: string,
 }
 
+interface FiltersState {
+  [fieldId: string]: Filter[]
+}
 interface State {
-  filtersState: {
-    combinator?: FilterCombinator,
-    filters: {
-      combinator?: FilterCombinator,
-      filters: {
-        fieldId: string,
-        matcher: Matcher,
-        value: string
-      }[]
-    }[]
-  }
+  filtersState: FiltersState
 }
 
-function CheckboxFilter({ field, value, optionHandler }: CheckBoxProps) {
+function CheckboxFilter({ fieldId, value, label, optionHandler }: CheckBoxProps) {
   const filterState = {
-    fieldId: field,
-    matcher: '$eq' as Matcher,
+    fieldId: fieldId,
+    matcher: Matcher.Equals,
     value: value
   }
+  const id = fieldId + "_" + value
   return (
-    <input type="checkbox" id={value} onChange={evt => optionHandler(filterState, evt.target.checked)} />
+    <Fragment>
+      <label htmlFor={id}>{label}</label>
+      <input type="checkbox" id={id} onChange={evt => optionHandler(filterState, evt.target.checked)}/>
+    </Fragment>
   );
 }
 
 export default class FilterBox extends React.Component<FilterBoxProps, State> {
   constructor(props: FilterBoxProps) {
     super(props)
-    this.state = {
-      filtersState: {
-        filters: []
-      }
-    };
-  }
-  addNewFilterOption(filterState: { fieldId: string, matcher: Matcher, value: string }) {
-    let fieldIdDoesntExist = true;
-    let filters = this.state.filtersState.filters.map(element => {
-      if (filterState.fieldId === element.filters[0]?.fieldId) {
-        const data = {
-          combinator: FilterCombinator.OR,
-          filters: element.filters.concat(filterState)
-        }
-        fieldIdDoesntExist = false;
-        return data;
-      }
-      else {
-        return element;
-      }
-    }
-    )
-    if (fieldIdDoesntExist) {
-      const newFilterState = {
-        filters: [filterState]
-      }
-      filters = this.state.filtersState.filters.concat(newFilterState);
-    }
-    return filters
-  }
-
-  handleCheckedOption(filterState: { fieldId: string, matcher: Matcher, value: string }) {
-    let filters = this.addNewFilterOption(filterState);
-    if (filters.length > 1) {
-      return {
-        filtersState: {
-          combinator: FilterCombinator.AND,
-          filters: filters
-        }
-      }
-    }
-    else {
-      return {
-        filtersState: {
-          filters: filters
-        }
-      }
-    }
-  }
-
-  formatRemovedFilters(filterRemovedState: { combinator: any; filters: any[]; }[]) {
-    const nullRemovedFilters = filterRemovedState.filter(obj => obj)
-    let removeables: number[] = []
-    const filters = nullRemovedFilters.map((element, index) => {
-      if (element.filters.length === 1) {
-        const data = {
-          filters: element.filters
-        }
-        return data;
-      }
-      else if (element.filters.length < 1) {
-        removeables.push(index)
-        return element
-      }
-      else {
-        return element;
-      }
+    const filtersState: FiltersState = {}
+    props.options.forEach(element => {
+      filtersState[element.fieldId] = []
     })
-    for (var i = 0; i < filters.length; i++) {
-      if (removeables.includes(i)) {
-        filters.splice(i, 1);
-        i--;
-      }
-    }
-    return filters
+    this.state = { filtersState };
   }
 
-  handleUncheckedOption(filterState: { fieldId: string, matcher: Matcher, value: string }) {
-    const filterRemovedState = this.state.filtersState.filters.map(element => {
-      const data = {
-        combinator: FilterCombinator.OR,
-        filters: element.filters.filter(obj => obj.value !== filterState.value)
-      }
-      return data
-    }
-    )
-    let filters = this.formatRemovedFilters(filterRemovedState);
-    if (filters.length > 1) {
-      return {
-        filtersState: {
-          combinator: FilterCombinator.AND,
-          filters: filters
-        }
-      }
-    }
-    else if (filters.length === 1) {
-      return {
-        filtersState: {
-          filters: filters
-        }
-      }
-    }
-    else {
-      return {
-        filtersState: {
-          filters: []
-        }
-      }
-    }
+  handleOptionSelection = (filter: Filter, isChecked: boolean) => {
+    isChecked 
+      ? this.handleCheckedOption(filter)
+      : this.handleUncheckedOption(filter);
   }
 
-  handleOptionSelection = (filterState: { fieldId: string, matcher: Matcher, value: string }, isChecked: boolean) => {
-    let state: {
-      filtersState: any
-    };
-    if (isChecked) {
-      state = this.handleCheckedOption(filterState);
-    }
-    else {
-      state = this.handleUncheckedOption(filterState);
-    }
-    this.setState(state, () => {
-      this.setFilters();
+  handleCheckedOption(filter: Filter) {
+    let filters = this.state.filtersState[filter.fieldId]
+    let filtersState = this.state.filtersState
+    filtersState[filter.fieldId] = [...filters, filter]
+    this.setState({
+      filtersState: filtersState
+    }, () => {
+      this.setFilters()
     })
   }
 
+  handleUncheckedOption(filter: Filter) {
+    let filters = this.state.filtersState[filter.fieldId]
+    let filtersState = this.state.filtersState
+    filtersState[filter.fieldId] = filters.filter(filterOption => filterOption.value !== filter.value)
+    this.setState({
+      filtersState: filtersState
+    }, () => {
+      this.setFilters()
+    })
+  }
+  
   setFilters() {
     const filtersState = this.state.filtersState
-    if (filtersState.combinator === undefined) {
-      if (filtersState.filters.length === 0)
-        this.context.setFilter(null);
-      else if (filtersState.filters.length === 1) {
-        if (filtersState.filters[0].combinator === undefined) {
-          this.context.setFilter(filtersState.filters[0].filters[0])
-        }
-        else {
-          this.context.setFilter(filtersState.filters[0])
-        }
-      }
-    }
-    else {
-      const revisedFilterState = filtersState.filters.map(element => {
-        if (element.combinator === undefined) {
-          return element.filters[0]
-        }
-        else {
-          return element
-        }
-      })
-      const returnedFilterState = {
-        combinator: FilterCombinator.AND,
-        filters: revisedFilterState
-      }
-      this.context.setFilter(returnedFilterState)
-    }
+    this.context.setFilter(formatFilters(filtersState))
     this.context.executeVerticalQuery();
   }
 
-  renderFilters(field: string, value: string) {
-    return (
-      <React.Fragment>
-        {value}
-        <CheckboxFilter
-          field={field}
-          value={value}
-          optionHandler={this.handleOptionSelection}
-        />
-      </React.Fragment>
-    )
-  }
   render() {
     return (
       <fieldset>
         <legend>{this.props.title}</legend>
         <div>
-          {this.props.options.map((value, index) => (
+          {this.props.options.map((option, index) => (
             <div key={index}>
-              {this.renderFilters(value.field, value.value)}
+              <CheckboxFilter
+                fieldId={option.fieldId}
+                value={option.value}
+                label={option.label}
+                optionHandler={this.handleOptionSelection}
+              />
             </div>
           ))}
         </div>
       </fieldset>
     );
+  }
+}
+
+function formatFilters(filtersState: FiltersState) {
+  let keys = Object.keys(filtersState).filter(obj => filtersState[obj].length > 0)
+  let filters = keys.map(key => filtersState[key])
+  if (filters.length === 0) {
+    return null
+  }
+  if (filters.length === 1) {
+    return formatOrFilters(filters[0])
+  }
+  else {
+    return {
+      combinator: FilterCombinator.AND,
+      filters: filters.map(filter => formatOrFilters(filter))
+    }
+  }
+}
+
+function formatOrFilters(filters: Filter[]) {
+  if (filters.length === 1) {
+    return filters[0]
+  }
+  else {
+    return { 
+      combinator: FilterCombinator.OR,
+      filters: filters
+    }
   }
 }
 
