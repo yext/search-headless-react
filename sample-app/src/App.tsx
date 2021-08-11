@@ -5,6 +5,7 @@ import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
+import AppliedFilters from './components/AppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
       <div className='right'>
         <VerticalSearchForm verticalKey='people' />
         <ResultsCount />
+        <AppliedFilters/>
         <VerticalResults 
           CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
