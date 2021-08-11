@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Filter, FilterCombinator, Matcher } from '@yext/answers-core';
+import { Filter, CombinedFilter, FilterCombinator, Matcher } from '@yext/answers-core';
 import { AnswersActionsContext } from '@yext/answers-headless-react';
 
 interface CheckBoxProps {
@@ -25,7 +25,7 @@ interface State {
 }
 
 function CheckboxFilter({ fieldId, value, label, optionHandler }: CheckBoxProps) {
-  const filterState = {
+  const filter = {
     fieldId: fieldId,
     matcher: Matcher.Equals,
     value: value
@@ -34,12 +34,12 @@ function CheckboxFilter({ fieldId, value, label, optionHandler }: CheckBoxProps)
   return (
     <Fragment>
       <label htmlFor={id}>{label}</label>
-      <input type="checkbox" id={id} onChange={evt => optionHandler(filterState, evt.target.checked)}/>
+      <input type="checkbox" id={id} onChange={evt => optionHandler(filter, evt.target.checked)}/>
     </Fragment>
   );
 }
 
-export default class FilterBox extends React.Component<FilterBoxProps, State> {
+export default class StaticFilters extends React.Component<FilterBoxProps, State> {
   constructor(props: FilterBoxProps) {
     super(props)
     const filtersState: FiltersState = {}
@@ -67,8 +67,8 @@ export default class FilterBox extends React.Component<FilterBoxProps, State> {
   }
 
   handleUncheckedOption(filter: Filter) {
-    let filters = this.state.filtersState[filter.fieldId]
-    let filtersState = this.state.filtersState
+    const filtersState = this.state.filtersState
+    const filters = filtersState[filter.fieldId]
     filtersState[filter.fieldId] = filters.filter(filterOption => filterOption.value !== filter.value)
     this.setState({
       filtersState: filtersState
@@ -78,8 +78,8 @@ export default class FilterBox extends React.Component<FilterBoxProps, State> {
   }
   
   setFilters() {
-    const filtersState = this.state.filtersState
-    this.context.setFilter(formatFilters(filtersState))
+    const formattedFilter = formatFilters(this.state.filtersState)
+    this.context.setFilter(formattedFilter)
     this.context.executeVerticalQuery();
   }
 
@@ -104,19 +104,19 @@ export default class FilterBox extends React.Component<FilterBoxProps, State> {
   }
 }
 
-function formatFilters(filtersState: FiltersState) {
-  let keys = Object.keys(filtersState).filter(obj => filtersState[obj].length > 0)
-  let filters = keys.map(key => filtersState[key])
-  if (filters.length === 0) {
+function formatFilters(filtersState: FiltersState): Filter | CombinedFilter | null {
+  let fieldIds = Object.keys(filtersState).filter(fieldId => filtersState[fieldId].length > 0)
+  if (fieldIds.length === 0) {
     return null
   }
-  if (filters.length === 1) {
-    return formatOrFilters(filters[0])
+  let filtersArrays = fieldIds.map(fieldId => filtersState[fieldId])
+  if (filtersArrays.length === 1) {
+    return formatOrFilters(filtersArrays[0])
   }
   else {
     return {
       combinator: FilterCombinator.AND,
-      filters: filters.map(filter => formatOrFilters(filter))
+      filters: filtersArrays.map(filter => formatOrFilters(filter))
     }
   }
 }
@@ -133,4 +133,4 @@ function formatOrFilters(filters: Filter[]) {
   }
 }
 
-FilterBox.contextType = AnswersActionsContext;
+StaticFilters.contextType = AnswersActionsContext;

@@ -3,7 +3,7 @@ import VerticalSearchForm from './components/VerticalSearchForm';
 
 import './App.css';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
-import FilterBox from './components/FilterBox';
+import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
     >
       <div className='left'>
         test
-        <FilterBox
+        <StaticFilters
           title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
