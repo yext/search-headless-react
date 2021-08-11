@@ -9,15 +9,33 @@ import './sass/App.scss';
 function App() {
   const staticFilterOptions = [
     {
-      field: 'c_employeeDepartment',
+      label: 'canada',
+      fieldId: 'c_employeeCountry',
+      value: 'Canada',
+    },
+    {
+      label: 'remote',
+      fieldId: 'c_employeeCountry',
+      value: 'Remote'
+    },
+    {
+      label: 'usa',
+      fieldId: 'c_employeeCountry',
+      value: 'United States',
+    },
+    {
+      label: 'tech',
+      fieldId: 'c_employeeDepartment',
       value: 'Technology'
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'consult',
+      fieldId: 'c_employeeDepartment',
       value: 'Consulting',
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'fin',
+      fieldId: 'c_employeeDepartment',
       value: 'Finance',
     }
   ]
@@ -34,7 +52,7 @@ function App() {
         />
         test
         <StaticFilters
-          title='~Employee Departments~'
+          title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
       </div>
