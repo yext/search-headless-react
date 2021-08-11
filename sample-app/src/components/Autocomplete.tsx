@@ -83,6 +83,7 @@ export default function Autocomplete({
     const target = evt.target as HTMLElement;
     if (!target || !target.isSameNode(inputRef.current)) {
       dispatch({ type: 'Hide' });
+      updateAutocompleteResults(query);
     } else {
       dispatch({ type: 'Show' });
     }
