@@ -43,8 +43,8 @@ export default class StaticFilters extends React.Component<FilterBoxProps, State
   constructor(props: FilterBoxProps) {
     super(props)
     const filtersState: FiltersState = {}
-    props.options.forEach(element => {
-      filtersState[element.fieldId] = []
+    props.options.forEach(option => {
+      filtersState[option.fieldId] = []
     })
     this.state = { filtersState };
   }
