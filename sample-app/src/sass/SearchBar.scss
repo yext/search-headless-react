@@ -1,0 +1,21 @@
+.SearchBar {
+  height: 40px;
+  width: 100%;
+  font-size: 20px;
+  position: relative;
+
+  &__inputContainer {
+    display: flex;
+    flex-grow: 1;
+    font-size: 20px;
+  }
+
+  &__input {
+    flex-grow: 1;
+    font-size: 20px;
+  }
+
+  &__submitButton {
+    font-size: 20px;
+  }
+}

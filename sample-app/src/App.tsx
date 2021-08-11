@@ -3,22 +3,40 @@ import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
 import VerticalResults from './components/VerticalResults';
-import VerticalSearchForm from './components/VerticalSearchForm';
 import SpellCheck from './components/SpellCheck';
 import { StandardCard } from './components/cards/StandardCard';
+import SearchBar from './components/SearchBar';
 
 function App() {
   const staticFilterOptions = [
     {
-      field: 'c_employeeDepartment',
+      label: 'canada',
+      fieldId: 'c_employeeCountry',
+      value: 'Canada',
+    },
+    {
+      label: 'remote',
+      fieldId: 'c_employeeCountry',
+      value: 'Remote'
+    },
+    {
+      label: 'usa',
+      fieldId: 'c_employeeCountry',
+      value: 'United States',
+    },
+    {
+      label: 'tech',
+      fieldId: 'c_employeeDepartment',
       value: 'Technology'
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'consult',
+      fieldId: 'c_employeeDepartment',
       value: 'Consulting',
     },
     {
-      field: 'c_employeeDepartment',
+      label: 'fin',
+      fieldId: 'c_employeeDepartment',
       value: 'Finance',
     }
   ]
@@ -30,11 +48,15 @@ function App() {
       apiKey='2d8c550071a64ea23e263118a2b0680b'
       experienceKey='slanswers'
       locale='en'
+      verticalKey='people'
     >
       <div className='left'>
+        <SearchBar
+          initialQuery='prompt'
+        />
         test
         <StaticFilters
-          title='~Employee Departments~'
+          title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
         <SpellCheck
@@ -42,9 +64,11 @@ function App() {
         />
       </div>
       <div className='right'>
-        <VerticalSearchForm verticalKey='people' />
+        <SearchBar
+          placeholder='Search...'
+        />
         <ResultsCount />
-        <VerticalResults 
+        <VerticalResults
           CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
         />

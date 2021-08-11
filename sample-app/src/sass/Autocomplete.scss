@@ -1,0 +1,18 @@
+.Autocomplete {
+  margin: 0;
+  background: white;
+  padding: 1em 0.5em;
+  border: 1px solid gray;
+
+  &__option {
+    cursor: pointer;
+
+    &--selected {
+      background: aliceblue;
+    }
+
+    &:hover {
+      background: lightgreen;
+    }
+  }
+}

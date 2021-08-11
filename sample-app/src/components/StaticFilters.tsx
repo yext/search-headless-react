@@ -1,67 +1,117 @@
-import { CombinedFilter, Filter, FilterCombinator, Matcher } from '@yext/answers-core';
-import { useEffect, useState } from 'react';
-import { useAnswersActions } from '@yext/answers-headless-react';
+import React, { Fragment } from 'react';
+import { Filter, CombinedFilter, FilterCombinator, Matcher } from '@yext/answers-core';
+import { AnswersActionsContext } from '@yext/answers-headless-react';
 
-interface Props {
+interface CheckBoxProps {
+  fieldId: string,
+  value: string,
+  label: string,
+  optionHandler: Function
+}
+interface FilterBoxProps {
   options: {
-    field: string,
-    value: string
+    fieldId: string,
+    value: string,
+    label: string
   }[],
-  title: string
+  title: string,
 }
 
-export default function StaticFilters({ options, title }: Props) {
-  const [selectedFilters, updateSelectedFilters] = useState<boolean[]>([])
-  const answersActions = useAnswersActions();
-  useEffect(() => {
-    const filtersState = selectedFilters
-      .map((isChecked, index) => {
-        if (!isChecked) return null
-        const { field, value } = options[index];
-        return {
-          fieldId: field,
-          matcher: '$eq' as Matcher,
-          value
-        }
-    }).filter(x => x) as (Filter|CombinedFilter)[]
-    if (!filtersState.length) {
-      answersActions.setFilter(null);
-    } else if (filtersState.length === 1) {
-      answersActions.setFilter(filtersState[0])
-    } else {
-      const filter = {
-        combinator: FilterCombinator.AND,
-        filters: filtersState
-      };
-      answersActions.setFilter(filter)
-    }
-    answersActions.executeVerticalQuery();
-  })
+interface FiltersState {
+  [fieldId: string]: Filter[]
+}
+interface State {
+  filtersState: FiltersState
+}
 
-  const handleOptionSelection = (index: number, isChecked: boolean) => {
-    updateSelectedFilters(prevSelectedFilters => {
-      const selectedFilters = [...prevSelectedFilters]
-      selectedFilters[index] = isChecked
-      return selectedFilters
+function CheckboxFilter({ fieldId, value, label, optionHandler }: CheckBoxProps) {
+  const filter = {
+    fieldId: fieldId,
+    matcher: Matcher.Equals,
+    value: value
+  }
+  const id = fieldId + "_" + value
+  return (
+    <Fragment>
+      <label htmlFor={id}>{label}</label>
+      <input type="checkbox" id={id} onChange={evt => optionHandler(filter, evt.target.checked)}/>
+    </Fragment>
+  );
+}
+
+export default class StaticFilters extends React.Component<FilterBoxProps, State> {
+  constructor(props: FilterBoxProps) {
+    super(props)
+    const filtersState: FiltersState = {}
+    props.options.forEach(option => {
+      filtersState[option.fieldId] = []
+    })
+    this.state = { filtersState };
+  }
+
+  handleOptionSelection = (filter: Filter, isChecked: boolean) => {
+    let filters = this.state.filtersState[filter.fieldId]
+    let filtersState = this.state.filtersState
+    isChecked 
+      ? filtersState[filter.fieldId] = [...filters, filter]
+      : filtersState[filter.fieldId] = filters.filter(filterOption => filterOption.value !== filter.value)
+    this.setState({
+      filtersState: filtersState
+    }, () => {
+      this.setFilters()
     })
   }
 
-  return (
-    <fieldset>
-      <legend>{title}</legend>
-      <div>
-        {options.map(( { value }, index) => (
-          <div key={index}>
-            <input
-              id={value + '-' + index}
-              type='checkbox'
-              value={index}
-              onChange={evt => handleOptionSelection(index, evt.target.checked)}
-            />
-            <label htmlFor={value + '-' + index}>{value}</label>
-          </div>
-        ))}
-      </div>
-    </fieldset>
-  )
+  setFilters() {
+    const formattedFilter = formatFilters(this.state.filtersState)
+    this.context.setFilter(formattedFilter)
+    this.context.executeVerticalQuery();
+  }
+
+  render() {
+    return (
+      <fieldset>
+        <legend>{this.props.title}</legend>
+        <div>
+          {this.props.options.map((option, index) => (
+            <div key={index}>
+              <CheckboxFilter
+                fieldId={option.fieldId}
+                value={option.value}
+                label={option.label}
+                optionHandler={this.handleOptionSelection}
+              />
+            </div>
+          ))}
+        </div>
+      </fieldset>
+    );
+  }
 }
+
+function formatFilters(filtersState: FiltersState): Filter | CombinedFilter | null {
+  let fieldIds = Object.keys(filtersState).filter(fieldId => filtersState[fieldId].length > 0)
+  if (fieldIds.length === 0) {
+    return null
+  }
+  let filtersArrays = fieldIds.map(fieldId => filtersState[fieldId])
+  if (filtersArrays.length === 1) {
+    return formatOrFilters(filtersArrays[0])
+  }
+  return {
+    combinator: FilterCombinator.AND,
+    filters: filtersArrays.map(filter => formatOrFilters(filter))
+  }
+}
+
+function formatOrFilters(filters: Filter[]) {
+  if (filters.length === 1) {
+    return filters[0]
+  }
+  return { 
+    combinator: FilterCombinator.OR,
+    filters: filters
+  }
+}
+
+StaticFilters.contextType = AnswersActionsContext;
