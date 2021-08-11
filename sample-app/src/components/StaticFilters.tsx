@@ -98,11 +98,9 @@ function formatFilters(filtersState: FiltersState): Filter | CombinedFilter | nu
   if (filtersArrays.length === 1) {
     return formatOrFilters(filtersArrays[0])
   }
-  else {
-    return {
-      combinator: FilterCombinator.AND,
-      filters: filtersArrays.map(filter => formatOrFilters(filter))
-    }
+  return {
+    combinator: FilterCombinator.AND,
+    filters: filtersArrays.map(filter => formatOrFilters(filter))
   }
 }
 
@@ -110,11 +108,9 @@ function formatOrFilters(filters: Filter[]) {
   if (filters.length === 1) {
     return filters[0]
   }
-  else {
-    return { 
-      combinator: FilterCombinator.OR,
-      filters: filters
-    }
+  return { 
+    combinator: FilterCombinator.OR,
+    filters: filters
   }
 }
 
