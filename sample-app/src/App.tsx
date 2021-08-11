@@ -1,10 +1,10 @@
-import VerticalResults from './components/VerticalResults';
-import VerticalSearchForm from './components/VerticalSearchForm';
-
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import StaticFilters from './components/StaticFilters';
 import ResultsCount from './components/ResultsCount';
+import VerticalResults from './components/VerticalResults';
+import VerticalSearchForm from './components/VerticalSearchForm';
+import SpellCheck from './components/SpellCheck';
 import { StandardCard } from './components/cards/StandardCard';
 
 function App() {
@@ -22,6 +22,9 @@ function App() {
       value: 'Finance',
     }
   ]
+  function createSpellCheckLink (correctedQuery: string = '') : string {
+    return `./?query=${correctedQuery}`;
+  }
   return (
     <AnswersActionsProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
@@ -33,6 +36,9 @@ function App() {
         <StaticFilters
           title='~Employee Departments~'
           options={staticFilterOptions}
+        />
+        <SpellCheck
+          createLink={createSpellCheckLink}
         />
       </div>
       <div className='right'>
