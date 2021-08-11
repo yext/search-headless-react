@@ -1,12 +1,11 @@
-import VerticalResults from './components/VerticalResults';
-import VerticalSearchForm from './components/VerticalSearchForm';
-
-import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
-import StaticFilters from './components/StaticFilters';
-import ResultsCount from './components/ResultsCount';
 import AppliedFilters from './components/AppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
+import ResultsCount from './components/ResultsCount';
+import SearchBar from './components/SearchBar';
+import StaticFilters from './components/StaticFilters';
+import VerticalResults from './components/VerticalResults';
+import './sass/App.scss';
 
 function App() {
   const staticFilterOptions = [
@@ -28,8 +27,12 @@ function App() {
       apiKey='2d8c550071a64ea23e263118a2b0680b'
       experienceKey='slanswers'
       locale='en'
+      verticalKey='people'
     >
       <div className='left'>
+        <SearchBar
+          initialQuery='prompt'
+        />
         test
         <StaticFilters
           title='~Employee Departments~'
@@ -37,7 +40,9 @@ function App() {
         />
       </div>
       <div className='right'>
-        <VerticalSearchForm verticalKey='people' />
+        <SearchBar
+          placeholder='Search...'
+        />
         <ResultsCount />
         <AppliedFilters/>
         <VerticalResults 

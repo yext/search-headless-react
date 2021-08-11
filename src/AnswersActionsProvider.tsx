@@ -4,12 +4,14 @@ import { AnswersConfig } from '@yext/answers-core';
 import { AnswersActions, AnswersActionsContext } from './AnswersActionsContext';
 
 interface Props extends AnswersConfig {
-  children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[]
+  children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[],
+  verticalKey?: string
 }
 
 export function AnswersActionsProvider(props: Props): JSX.Element {
-  const { children, ...answerConfig } = props;
-  const answersActions: AnswersActions = provideStatefulCore(answerConfig);
+  const { children, verticalKey, ...answersConfig } = props;
+  const answersActions: AnswersActions = provideStatefulCore(answersConfig);
+  verticalKey && answersActions.setVerticalKey(verticalKey);
   return (
     <AnswersActionsContext.Provider value={answersActions}>
       {children}
