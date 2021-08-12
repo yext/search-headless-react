@@ -40,9 +40,6 @@ function App() {
       value: 'Finance',
     }
   ]
-  function createSpellCheckLink (correctedQuery: string = '') : string {
-    return `./?query=${correctedQuery}`;
-  }
   return (
     <AnswersActionsProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
@@ -59,9 +56,7 @@ function App() {
           title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
-        <SpellCheck
-          createLink={createSpellCheckLink}
-        />
+        <SpellCheck/>
       </div>
       <div className='right'>
         <SearchBar

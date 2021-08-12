@@ -1,12 +1,8 @@
 import { useAnswersState } from '@yext/answers-headless-react'
 
-interface Props {
-  createLink: (correctedQuery: string | undefined) => string;
-}
-
-export default function SpellCheck (props: Props) {
+export default function SpellCheck () {
   const correctedQuery = useAnswersState(state => state.spellCheck.correctedQuery);
-  const link = props.createLink(correctedQuery);
+  const link = createLink(correctedQuery);
   if (!correctedQuery) {
     return null;
   }
@@ -16,4 +12,8 @@ export default function SpellCheck (props: Props) {
       <a className='SpellCheck__link' href={link}>{correctedQuery}</a>
     </div>
   )
+
+  function createLink (correctedQuery: string = '') : string {
+    return `./?query=${correctedQuery}`;
+  }
 }
