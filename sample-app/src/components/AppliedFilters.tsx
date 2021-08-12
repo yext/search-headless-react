@@ -1,103 +1,26 @@
-import { AppliedQueryFilter, Filter } from '@yext/answers-core';
-import { useAnswersState } from '@yext/answers-headless-react';
-import { FiltersState } from '@yext/answers-headless/lib/esm/models/slices/filters';
-import { groupArray } from '../utils/arrayutils';
-import { flattenFilters, isDuplicateFilter } from '../utils/filterutils';
 import { DisplayableFilter } from '../models/displayableFilter';
 import { GroupedFilters } from '../models/groupedFilters';
 import '../sass/AppliedFilters.scss';
 
 interface Props {
   showFieldNames?: boolean,
-  hiddenFields?: Array<string>,
   labelText?: string,
-  delimiter?: string
+  delimiter?: string,
+  appliedFilters: Array<GroupedFilters>
 }
-
-/**
- * Returns a new list of nlp filter nodes with duplicates of other filter nodes and 
- * filter on hiddenFields removed from the given nlp filter list.
- */
-function pruneNlpFilters (nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[], 
-  hiddenFields: string[]): AppliedQueryFilter[] {
-  const duplicatesRemoved = nlpFilters.filter(nlpFilter => {
-    const isDuplicate = appliedFilters.find(appliedFilter =>
-      isDuplicateFilter(nlpFilter.filter, appliedFilter)
-    );
-    return !isDuplicate;
-  });
-  return duplicatesRemoved.filter(nlpFilter => {
-    return !hiddenFields.includes(nlpFilter.filter.fieldId);
-  });
-}
-
-/**
- * Returns a new list of applied filter nodes with filter on hiddenFields removed 
- * from the given nlp filter list.
- */
-function pruneAppliedFilters(appliedFilters: Filter[], hiddenFields: string[]): Filter[] {
-  return appliedFilters.filter(filter => {
-    return !hiddenFields.includes(filter.fieldId);
-  });
-}
-
-/**
- * Combine all of the applied filters into a list of GroupedFilters where each contains a label and 
- * list of filters under that same label or category. All filters will convert to DisplayableFilter format
- * where displayValue will be used in the JSX element construction.
- */
-function createGroupedFilters(nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[]): Array<GroupedFilters> {
-  const getFieldName = (filter: Filter) => filter.fieldId;
-  const getNlpFieldName = (filter: AppliedQueryFilter) => filter.displayKey;
-  const getDisplayableAppliedFilter = (filter: Filter) => ({
-    filter: filter,
-    filterGroupLabel: filter.fieldId,
-    filterLabel: filter.value
-  });
-  const getDisplayableNlpFilter = (filter: AppliedQueryFilter, index: number) => ({
-    filter: filter.filter,
-    filterGroupLabel: filter.displayKey,
-    filterLabel: filter.displayValue
-  });
-  
-  let groupedFilters = groupArray(appliedFilters, getFieldName, getDisplayableAppliedFilter);
-  groupedFilters = groupArray(nlpFilters, getNlpFieldName, getDisplayableNlpFilter, groupedFilters);
-  return Object.keys(groupedFilters).map(label => ({
-    label: label,
-    filters: groupedFilters[label]
-  }));
-}
-
-/**
- * Restructure and combine static filters from given FiltersState into a list of Filter objects
- */
-function getAppliedFilters(appliedFiltersState: FiltersState | undefined): Array<Filter> {
-  const appliedStaticFilters = flattenFilters(appliedFiltersState?.static);
-  return appliedStaticFilters;
-}
-
 
 /**
  * Renders AppliedFilters component
  */
-export default function AppliedFilters({showFieldNames, hiddenFields = [], labelText, delimiter}: Props): JSX.Element {
-
-  let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
-  appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
-
-  let nlpFilters = useAnswersState(state => state.vertical.results?.verticalResults.appliedQueryFilters) || [];
-  nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
-
-  const appliedFiltersArray: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
-
+export default function AppliedFilters({showFieldNames, labelText, delimiter, appliedFilters}: Props): JSX.Element {
   return (
     <div className="AppliedFilters" aria-label={labelText}>
-      {appliedFiltersArray.map((filterGroup: GroupedFilters, index: number) => {
+      {appliedFilters.map((filterGroup: GroupedFilters, index: number) => {
         return (
           <div className="AppliedFilters__filterGroup" key={filterGroup.label}>
             {showFieldNames && renderFilterLabel(filterGroup.label)}
             {renderAppliedFilters(filterGroup.filters)}
-            {index < appliedFiltersArray.length - 1 && <div className="AppliedFilters__filterSeparator">{delimiter}</div>}
+            {index < appliedFilters.length - 1 && <div className="AppliedFilters__filterSeparator">{delimiter}</div>}
           </div>
         );
       })}

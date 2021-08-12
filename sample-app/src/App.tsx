@@ -1,5 +1,5 @@
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
-import AppliedFilters from './components/AppliedFilters';
+import DecoratedAppliedFilters from './components/DecoratedAppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
 import ResultsCount from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
@@ -45,7 +45,7 @@ function App() {
         />
         <div>
           <ResultsCount />
-          <AppliedFilters 
+          <DecoratedAppliedFilters 
             showFieldNames={true}
             hiddenFields={['builtin.entityType']}
             delimiter='|'
