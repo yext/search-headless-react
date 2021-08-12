@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * HOC for AppliedFilters component
+ * Container component for AppliedFilters
  */
 export default function DecoratedAppliedFilters({showFieldNames, hiddenFields = [], labelText, delimiter} : Props): JSX.Element {
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));

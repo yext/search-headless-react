@@ -26,7 +26,3 @@ export function mapArrayToObject (
     return groups;
   }, initial);
 }
-
-//put up the pr for AppliedFilters Component
-//investigate the missing pin maps on arabic sites, since the components and their style
-//the issue for puppeteer
