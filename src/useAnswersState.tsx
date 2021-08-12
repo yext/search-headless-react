@@ -2,7 +2,7 @@ import { useEffect, useState} from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { useAnswersActions } from './useAnswersActions';
 
-type StateMapper<T> = (s: State) => T;
+export type StateMapper<T> = (s: State) => T;
 
 /**
  * Returns the Answers State returned by the map function

@@ -1,5 +1,6 @@
 import AppliedFilters from "./AppliedFilters";
-import { useAnswersState } from '@yext/answers-headless-react';
+import { AppliedQueryFilter } from "@yext/answers-core";
+import { StateMapper, useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
 import { 
   getAppliedFilters,
@@ -12,17 +13,18 @@ interface Props {
   showFieldNames?: boolean,
   hiddenFields?: Array<string>,
   labelText?: string,
-  delimiter?: string
+  delimiter?: string,
+  mapStateToAppliedQueryFilters: StateMapper<AppliedQueryFilter[] | undefined>
 }
 
 /**
  * Container component for AppliedFilters
  */
 export default function DecoratedAppliedFilters(props : Props): JSX.Element {
-  const {hiddenFields = [], ...otherProps} = props;
+  const {hiddenFields = [], mapStateToAppliedQueryFilters, ...otherProps} = props;
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
   appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
-  let nlpFilters = useAnswersState(state => state.vertical.results?.verticalResults.appliedQueryFilters) || [];
+  let nlpFilters = useAnswersState(mapStateToAppliedQueryFilters) || [];
   nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
   const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
   
