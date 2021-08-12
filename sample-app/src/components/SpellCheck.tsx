@@ -1,4 +1,5 @@
 import { useAnswersState } from '@yext/answers-headless-react'
+import '../sass/SpellCheck.scss';
 
 export default function SpellCheck () {
   const correctedQuery = useAnswersState(state => state.spellCheck.correctedQuery);
