@@ -9,7 +9,7 @@
  * @param {Object} intitial the initial object to add to, defaulting to {}
  * @returns {Object}
  */
-export function groupArray (
+export function mapArrayToObject (
   arr: Array<any>, 
   keyMap: Function = (key: any) => key,
   valueMap: Function = (value: any) => value,

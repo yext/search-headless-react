@@ -1,6 +1,6 @@
 import { AppliedQueryFilter, CombinedFilter, Filter } from '@yext/answers-core';
 import { FiltersState } from '@yext/answers-headless/lib/esm/models/slices/filters';
-import { groupArray } from '../utils/arrayutils';
+import { mapArrayToObject } from '../utils/arrayutils';
 import { GroupedFilters } from '../models/groupedFilters';
 
 /**
@@ -90,8 +90,8 @@ export function createGroupedFilters(nlpFilters: AppliedQueryFilter[], appliedFi
     filterLabel: filter.displayValue
   });
   
-  let groupedFilters = groupArray(appliedFilters, getFieldName, getDisplayableAppliedFilter);
-  groupedFilters = groupArray(nlpFilters, getNlpFieldName, getDisplayableNlpFilter, groupedFilters);
+  let groupedFilters = mapArrayToObject(appliedFilters, getFieldName, getDisplayableAppliedFilter);
+  groupedFilters = mapArrayToObject(nlpFilters, getNlpFieldName, getDisplayableNlpFilter, groupedFilters);
   return Object.keys(groupedFilters).map(label => ({
     label: label,
     filters: groupedFilters[label]
