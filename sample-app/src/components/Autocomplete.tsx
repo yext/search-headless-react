@@ -23,7 +23,6 @@ interface State {
 }
 
 type Action = 
-  | { type: 'Show' }
   | { type: 'Hide' }
   | { type: 'InputClick' }
   | { type: 'InputChange' }
@@ -32,10 +31,13 @@ type Action =
 
 function reducer(state: State, action: Action): State {
   switch(action.type) {
-    case 'Show': 
-      return { ...state, shouldDisplay: true }
     case 'Hide': 
-      return { ...state, selectedIndex: -1, shouldDisplay: false }
+      return {
+        ...state,
+        selectedIndex: -1,
+        shouldDisplay: false,
+        autocompleteResults: []
+      }
     case 'InputChange': 
       return { ...state, selectedIndex: -1, shouldDisplay: true }
     case 'InputClick': 
@@ -43,6 +45,7 @@ function reducer(state: State, action: Action): State {
     case 'UpdateAutocomplete': 
       return {
         ...state,
+        shouldDisplay: true,
         autocompleteResults: action.results,
         lastAutocompleteQuery: action.lastAutocompleteQuery
       }
@@ -83,9 +86,8 @@ export default function Autocomplete({
     const target = evt.target as HTMLElement;
     if (!target || !target.isSameNode(inputRef.current)) {
       dispatch({ type: 'Hide' });
-      updateAutocompleteResults(query);
     } else {
-      dispatch({ type: 'Show' });
+      updateAutocompleteResults(query);
     }
   }
   useEffect(() => {
