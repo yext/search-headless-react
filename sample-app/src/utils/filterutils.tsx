@@ -45,8 +45,8 @@ export function isDuplicateFilter(thisFilter: Filter, otherFilter: Filter): bool
 }
 
 /**
- * Returns a new list of nlp filter nodes with duplicates of other filter nodes and 
- * filter on hiddenFields removed from the given nlp filter list.
+ * Returns a new list of nlp filters with duplicates of other filters and 
+ * filter listed in hiddenFields removed from the given nlp filter list.
  */
 export function pruneNlpFilters (nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[], 
   hiddenFields: string[]): AppliedQueryFilter[] {
@@ -62,7 +62,7 @@ export function pruneNlpFilters (nlpFilters: AppliedQueryFilter[], appliedFilter
 }
 
 /**
- * Returns a new list of applied filter nodes with filter on hiddenFields removed 
+ * Returns a new list of applied filters with filter on hiddenFields removed 
  * from the given nlp filter list.
  */
 export function pruneAppliedFilters(appliedFilters: Filter[], hiddenFields: string[]): Filter[] {
