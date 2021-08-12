@@ -50,8 +50,8 @@ export default class StaticFilters extends React.Component<FilterBoxProps, State
   }
 
   handleOptionSelection = (filter: Filter, isChecked: boolean) => {
-    let filters = this.state.filtersState[filter.fieldId]
-    let filtersState = this.state.filtersState
+    const filters = this.state.filtersState[filter.fieldId]
+    const filtersState = this.state.filtersState
     isChecked 
       ? filtersState[filter.fieldId] = [...filters, filter]
       : filtersState[filter.fieldId] = filters.filter(filterOption => filterOption.value !== filter.value)
@@ -64,6 +64,7 @@ export default class StaticFilters extends React.Component<FilterBoxProps, State
 
   setFilters() {
     const formattedFilter = formatFilters(this.state.filtersState)
+    console.log(formattedFilter)
     this.context.setFilter(formattedFilter)
     this.context.executeVerticalQuery();
   }
