@@ -18,16 +18,14 @@ interface Props {
 /**
  * Container component for AppliedFilters
  */
-export default function DecoratedAppliedFilters({showFieldNames, hiddenFields = [], labelText, delimiter} : Props): JSX.Element {
+export default function DecoratedAppliedFilters(props : Props): JSX.Element {
+  const {hiddenFields = [], ...otherProps} = props;
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
   appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
-
   let nlpFilters = useAnswersState(state => state.vertical.results?.verticalResults.appliedQueryFilters) || [];
   nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
   const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
   
-  return (
-    <AppliedFilters showFieldNames={showFieldNames} labelText={labelText} delimiter= {delimiter} appliedFilters={groupedFilters}/>
-  );
+  return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 

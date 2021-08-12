@@ -6,7 +6,7 @@ import { GroupedFilters } from '../models/groupedFilters';
 /**
  * Check if the object follows CombinedFilter interface
  */
-export function isCombinedFilter(obj: any): obj is CombinedFilter {
+export function isCombinedFilter(obj: Filter | CombinedFilter): obj is CombinedFilter {
   return 'filters' in obj && 'combinator' in obj;
 }
 
