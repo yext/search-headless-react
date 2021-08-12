@@ -29,7 +29,7 @@ function App() {
       locale='en'
       verticalKey='people'
     >
-      <div className='left'>
+      <div className='start'>
         <SearchBar
           initialQuery='prompt'
         />
@@ -39,16 +39,22 @@ function App() {
           options={staticFilterOptions}
         />
       </div>
-      <div className='right'>
+      <div className='end'>
         <SearchBar
           placeholder='Search...'
         />
-        <ResultsCount />
-        <AppliedFilters/>
-        <VerticalResults 
-          CardComponent={StandardCard}
-          cardConfig={{ showOrdinal: true }}
-        />
+        <div>
+          <ResultsCount />
+          <AppliedFilters 
+            showFieldNames={true}
+            hiddenFields={['builtin.entityType']}
+            delimiter='|'
+          />
+          <VerticalResults 
+            CardComponent={StandardCard}
+            cardConfig={{ showOrdinal: true }}
+          />
+        </div>
       </div>
     </AnswersActionsProvider>
   );

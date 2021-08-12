@@ -2,7 +2,9 @@ import { AppliedQueryFilter, Filter } from '@yext/answers-core';
 import { useAnswersState } from '@yext/answers-headless-react';
 import { FiltersState } from '@yext/answers-headless/lib/esm/models/slices/filters';
 import { groupArray } from '../utils/arrayutils';
-import {flattenFilterNodes, isDuplicateFilter} from '../utils/filterutils';
+import { flattenFilters, isDuplicateFilter } from '../utils/filterutils';
+import { DisplayableFilter } from '../models/displayableFilter';
+import { GroupedFilters } from '../models/groupedFilters';
 import '../sass/AppliedFilters.scss';
 
 interface Props {
@@ -12,37 +14,12 @@ interface Props {
   delimiter?: string
 }
 
-const DEFAULT_CONFIG = {
-  showFieldNames: true,
-  hiddenFields: ['builtin.entityType'],
-  labelText: 'Filters applied to this search:',
-  delimiter: '|'
-}
-
-interface AppliedFilterLabelProps {
-  label: string
-}
-
-interface AppliedFilterListProps {
-  filters: Array<FilterNode>
-}
-
-interface GroupedFilters {
-  label: string,
-  filterDataArray: Array<FilterNode>
-}
-
-interface FilterNode {
-  filter: Filter,
-  filterGroupLabel: string,
-  filterLabel: string
-}
-
 /**
  * Returns a new list of nlp filter nodes with duplicates of other filter nodes and 
  * filter on hiddenFields removed from the given nlp filter list.
  */
-function pruneNlpFilters (nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[], hiddenFields: string[]): AppliedQueryFilter[] {
+function pruneNlpFilters (nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[], 
+  hiddenFields: string[]): AppliedQueryFilter[] {
   const duplicatesRemoved = nlpFilters.filter(nlpFilter => {
     const isDuplicate = appliedFilters.find(appliedFilter =>
       isDuplicateFilter(nlpFilter.filter, appliedFilter)
@@ -66,29 +43,29 @@ function pruneAppliedFilters(appliedFilters: Filter[], hiddenFields: string[]): 
 
 /**
  * Combine all of the applied filters into a list of GroupedFilters where each contains a label and 
- * list of filters under that same label or category. All filters will convert to FilterNode format
+ * list of filters under that same label or category. All filters will convert to DisplayableFilter format
  * where displayValue will be used in the JSX element construction.
  */
-function createGroupedFilterNodes(nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[]): Array<GroupedFilters> {
+function createGroupedFilters(nlpFilters: AppliedQueryFilter[], appliedFilters: Filter[]): Array<GroupedFilters> {
   const getFieldName = (filter: Filter) => filter.fieldId;
   const getNlpFieldName = (filter: AppliedQueryFilter) => filter.displayKey;
-  const transformAppliedFilter = (filter: Filter) => ({
+  const getDisplayableAppliedFilter = (filter: Filter) => ({
     filter: filter,
     filterGroupLabel: filter.fieldId,
     filterLabel: filter.value
-  } as FilterNode);
-  const transformNlpFilter = (filter: AppliedQueryFilter, index: number) => ({
+  });
+  const getDisplayableNlpFilter = (filter: AppliedQueryFilter, index: number) => ({
     filter: filter.filter,
     filterGroupLabel: filter.displayKey,
     filterLabel: filter.displayValue
-  } as FilterNode);
+  });
   
-  let groupedFilters = groupArray(appliedFilters, getFieldName, transformAppliedFilter, {});
-  groupArray(nlpFilters, getNlpFieldName, transformNlpFilter, groupedFilters);
+  let groupedFilters = groupArray(appliedFilters, getFieldName, getDisplayableAppliedFilter);
+  groupedFilters = groupArray(nlpFilters, getNlpFieldName, getDisplayableNlpFilter, groupedFilters);
   return Object.keys(groupedFilters).map(label => ({
     label: label,
-    filterDataArray: groupedFilters[label]
-  }) as GroupedFilters);
+    filters: groupedFilters[label]
+  }));
 }
 
 /**
@@ -96,7 +73,7 @@ function createGroupedFilterNodes(nlpFilters: AppliedQueryFilter[], appliedFilte
  * FiltersState into a list of Filter objects
  */
 function getAppliedFilters(appliedFiltersState: FiltersState | undefined): Array<Filter> {
-  const appliedStaticFilters = flattenFilterNodes(appliedFiltersState?.static, []);
+  const appliedStaticFilters = flattenFilters(appliedFiltersState?.static);
   const appliedFacets = appliedFiltersState?.facets || [];
   
   let appliedFacetFilters: Filter[] = [];
@@ -106,7 +83,7 @@ function getAppliedFilters(appliedFiltersState: FiltersState | undefined): Array
         fieldId: facet.fieldId,
         matcher: option.matcher,
         value: option.value
-      } as Filter;
+      };
       appliedFacetFilters.push(filter);
     });
   });
@@ -117,25 +94,24 @@ function getAppliedFilters(appliedFiltersState: FiltersState | undefined): Array
 /**
  * Renders AppliedFilters component
  */
-export default function AppliedFilters(props: Props): JSX.Element {
-  const config = {...DEFAULT_CONFIG, ...props};
+export default function AppliedFilters({showFieldNames, hiddenFields = [], labelText, delimiter}: Props): JSX.Element {
 
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
-  appliedFilters = pruneAppliedFilters(appliedFilters, config.hiddenFields);
+  appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
 
   let nlpFilters = useAnswersState(state => state.vertical.results?.verticalResults.appliedQueryFilters) || [];
-  nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, config.hiddenFields);
+  nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
 
-  const appliedFiltersArray: Array<GroupedFilters> = createGroupedFilterNodes(nlpFilters, appliedFilters);
+  const appliedFiltersArray: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
 
   return (
-    <div className="AppliedFilters" aria-label={config.labelText}>
+    <div className="AppliedFilters" aria-label={labelText}>
       {appliedFiltersArray.map((filterGroup: GroupedFilters, index: number) => {
         return (
-          <div className="AppliedFilters__filterGroup" key={index}>
-            {config.showFieldNames && <AppliedFilterLabel label={filterGroup.label}/>}
-            <AppliedFilterList filters={filterGroup.filterDataArray}/>
-            {index !== appliedFiltersArray.length - 1 && <div className="AppliedFilters__filterSeparator">{config.delimiter}</div>}
+          <div className="AppliedFilters__filterGroup" key={filterGroup.label}>
+            {showFieldNames && renderFilterLabel(filterGroup.label)}
+            {renderAppliedFilters(filterGroup.filters)}
+            {index < appliedFiltersArray.length - 1 && <div className="AppliedFilters__filterSeparator">{delimiter}</div>}
           </div>
         );
       })}
@@ -143,21 +119,23 @@ export default function AppliedFilters(props: Props): JSX.Element {
   )
 }
 
-function AppliedFilterLabel(props: AppliedFilterLabelProps): JSX.Element {
+function renderFilterLabel(label: string): JSX.Element {
   return(
-    <div className="AppliedFilters__filterLabel" key="-1">
-      <span className="AppliedFilters__filterLabelText">{props.label}</span>
+    <div className="AppliedFilters__filterLabel" key={label}>
+      <span className="AppliedFilters__filterLabelText">{label}</span>
       <span className="AppliedFilters__filterLabelColon">:</span>
     </div>
   );
 }
 
-function AppliedFilterList(props: AppliedFilterListProps): JSX.Element {
-  const filterElems = props.filters.map((filterNode: FilterNode, index: number) => {
-    return (<div className="AppliedFilters__filterValue" key={index}>
-      <span className="AppliedFilters__filterValueText">{filterNode.filterLabel}</span>
-      {index !== props.filters.length - 1 && <span className="AppliedFilters__filterValueComma">,</span>}
-    </div>)
+function renderAppliedFilters(filters: Array<DisplayableFilter>): JSX.Element {
+  const filterElems = filters.map((filter: DisplayableFilter, index: number) => {
+    return (
+      <div className="AppliedFilters__filterValue" key={filter.filterLabel}>
+        <span className="AppliedFilters__filterValueText">{filter.filterLabel}</span>
+        {index < filters.length - 1 && <span className="AppliedFilters__filterValueComma">,</span>}
+      </div>
+    );
   });
   return <>{filterElems}</>;
 }
