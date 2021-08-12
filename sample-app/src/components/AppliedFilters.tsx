@@ -69,25 +69,11 @@ function createGroupedFilters(nlpFilters: AppliedQueryFilter[], appliedFilters: 
 }
 
 /**
- * Restructure and combine all static filters and facets from given
- * FiltersState into a list of Filter objects
+ * Restructure and combine static filters from given FiltersState into a list of Filter objects
  */
 function getAppliedFilters(appliedFiltersState: FiltersState | undefined): Array<Filter> {
   const appliedStaticFilters = flattenFilters(appliedFiltersState?.static);
-  const appliedFacets = appliedFiltersState?.facets || [];
-  
-  let appliedFacetFilters: Filter[] = [];
-  appliedFacets.forEach((facet) => {
-    facet.options.forEach((option) => {
-      const filter = {
-        fieldId: facet.fieldId,
-        matcher: option.matcher,
-        value: option.value
-      };
-      appliedFacetFilters.push(filter);
-    });
-  });
-  return [...appliedStaticFilters, ...appliedFacetFilters];
+  return appliedStaticFilters;
 }
 
 
