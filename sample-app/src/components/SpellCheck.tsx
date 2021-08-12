@@ -11,7 +11,7 @@ export default function SpellCheck () {
       <span className='SpellCheck__helpText'>Did you mean: </span>
       <a className='SpellCheck__link' href={link}>{correctedQuery}</a>
     </div>
-  )
+  );
 
   function createLink (correctedQuery: string = '') : string {
     return `./?query=${correctedQuery}`;
