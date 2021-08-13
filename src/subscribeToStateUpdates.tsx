@@ -14,8 +14,6 @@ type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => HOC;
 /**
  * Generates a HOC that updates a given Component's props based on the current
  * answers-headless state and a given mapping function.
- *
- * TODO(SLAP-1482): Add hook version
  */
 export function subscribeToStateUpdates(mapStateToProps: StateMappingFunc): SubscriberGenerator {
   const generateSubscriberHOC: SubscriberGenerator = WrappedComponent => {
