@@ -14,7 +14,6 @@ interface Props {
   onSubmit?: (query: string) => void
   inputClassName?: string
   placeholder?: string
-  isVertical: boolean
   executeAutocomplete: () => void
 }
 

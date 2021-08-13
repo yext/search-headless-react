@@ -48,7 +48,6 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
         inputClassName='SearchBar__input'
         placeholder={placeholder}
         query={query}
-        isVertical={isVertical}
         executeAutocomplete={() => { 
           isVertical 
           ? answersActions.executeVerticalAutoComplete()
