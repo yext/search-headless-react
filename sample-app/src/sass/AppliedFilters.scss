@@ -1,0 +1,20 @@
+.AppliedFilters
+{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  
+  &__filterGroup {
+    display: flex;
+  }
+
+  &__filterSeparator {
+    margin: 0 10px;
+  }
+
+  &__filterValueText,
+  &__filterValueComma {
+    font-style: italic;
+  }
+}
+

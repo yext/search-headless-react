@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
@@ -21,7 +21,7 @@ export default function SearchBar({
 
   function renderInputAndDropdown(input: JSX.Element, dropdown: JSX.Element | null) {
     return (
-      <Fragment>
+      <>
         <div className='SearchBar__inputContainer'>
           {input}
           <button
@@ -35,7 +35,7 @@ export default function SearchBar({
           </button>
         </div>
         {dropdown}
-      </Fragment>
+      </>
     )
   }
 
