@@ -1,5 +1,5 @@
-import { useState, Fragment } from 'react';
-import { useAnswersActions } from '@yext/answers-headless-react';
+import { Fragment } from 'react';
+import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
@@ -7,17 +7,15 @@ import '../sass/SearchBar.scss';
 interface Props {
   placeholder?: string
   initialQuery?: string
+  isVertical: boolean
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar({
-  placeholder,
-  initialQuery = ''
-}: Props) {
+export default function SearchBar({ placeholder, isVertical }: Props) {
   const answersActions = useAnswersActions();
-  const [displayQuery, setDisplayQuery] = useState<string>(initialQuery);
+  const query = useAnswersState(state => state.query.query);
 
   function renderInputAndDropdown(input: JSX.Element, dropdown: JSX.Element | null) {
     return (
@@ -27,7 +25,6 @@ export default function SearchBar({
           <button
             className='SearchBar__submitButton'
             onClick={() => {
-              answersActions.setQuery(displayQuery);
               answersActions.executeVerticalQuery();
             }}
           >
@@ -45,18 +42,17 @@ export default function SearchBar({
         renderInputAndDropdown={renderInputAndDropdown}
         inputClassName='SearchBar__input'
         placeholder={placeholder}
-        query={displayQuery}
+        query={query}
+        isVertical={isVertical}
         onTextChange={query => {
-          setDisplayQuery(query)
           answersActions.setQuery(query);
         }}
         onSubmit={query => {
-          setDisplayQuery(query);
           answersActions.setQuery(query);
           answersActions.executeVerticalQuery();
         }}
         onSelectedIndexChange={query => {
-          setDisplayQuery(query)
+          answersActions.setQuery(query);
         }}
       />
     </div>

@@ -1,24 +1,24 @@
 import { AutocompleteResult } from '@yext/answers-core';
-import { useAnswersActions } from '@yext/answers-headless-react';
+import { useAnswersActions, StateMapper, useAnswersState } from '@yext/answers-headless-react';
 import { useEffect, useRef, KeyboardEvent, useReducer } from 'react';
 import classNames from 'classnames';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import '../sass/Autocomplete.scss';
 
 interface Props {
-  query: string
+  query?: string
   renderInputAndDropdown: (input: JSX.Element, dropdown: JSX.Element | null) => JSX.Element
   onSelectedIndexChange?: (query: string) => void
   onTextChange?: (query: string) => void
   onSubmit?: (query: string) => void
   inputClassName?: string
   placeholder?: string
+  isVertical: boolean
 }
 
 interface State {
   selectedIndex: number
   shouldDisplay: boolean
-  autocompleteResults: AutocompleteResult[]
   lastAutocompleteQuery: string
 }
 
@@ -27,7 +27,6 @@ type Action =
   | { type: 'Hide' }
   | { type: 'InputClick' }
   | { type: 'InputChange' }
-  | { type: 'UpdateAutocomplete', results: AutocompleteResult[], lastAutocompleteQuery: string }
   | { type: 'ArrowKey', newIndex: number }
 
 function reducer(state: State, action: Action): State {
@@ -40,12 +39,6 @@ function reducer(state: State, action: Action): State {
       return { ...state, selectedIndex: -1, shouldDisplay: true }
     case 'InputClick': 
       return { ...state, shouldDisplay: true }
-    case 'UpdateAutocomplete': 
-      return {
-        ...state,
-        autocompleteResults: action.results,
-        lastAutocompleteQuery: action.lastAutocompleteQuery
-      }
     case 'ArrowKey': 
       return {
         ...state,
@@ -56,24 +49,27 @@ function reducer(state: State, action: Action): State {
 }
 
 export default function Autocomplete({
-  query,
+  query = '',
   inputClassName,
+  isVertical,
   onSelectedIndexChange = () => {},
   onTextChange = () => {},
   onSubmit = () => {},
   renderInputAndDropdown,
   placeholder
 }: Props) {
+  const mapStateToAutocompleteResults: StateMapper<AutocompleteResult[] | undefined> = isVertical
+    ? state => state.vertical.autoComplete?.results
+    : state => state.universal.autoComplete?.results;
+  const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
   const answersActions = useAnswersActions();
   const [{
     selectedIndex,
     shouldDisplay,
-    autocompleteResults,
     lastAutocompleteQuery
   }, dispatch] = useReducer(reducer, {
     selectedIndex: -1,
     shouldDisplay: false,
-    autocompleteResults: [],
     lastAutocompleteQuery: ''
   });
 
@@ -83,7 +79,6 @@ export default function Autocomplete({
     const target = evt.target as HTMLElement;
     if (!target || !target.isSameNode(inputRef.current)) {
       dispatch({ type: 'Hide' });
-      updateAutocompleteResults(query);
     } else {
       dispatch({ type: 'Show' });
     }
@@ -93,18 +88,11 @@ export default function Autocomplete({
     return () => document.removeEventListener('click', handleDocumentClick);
   });
 
-  function updateAutocompleteResults(newQuery: string) {
+  function executeAutocompleteRequest(newQuery: string) {
     answersActions.setQuery(newQuery);
-    answersActions.executeVerticalAutoComplete().then(autocompleteResponse => {
-      if (!autocompleteResponse) {
-        return;
-      }
-      dispatch({
-        type: 'UpdateAutocomplete',
-        results: autocompleteResponse.results,
-        lastAutocompleteQuery: newQuery
-      });
-    });
+    isVertical
+      ? answersActions.executeVerticalAutoComplete()
+      : answersActions.executeUniversalAutoComplete()
   }
 
   function handleKeyDown(evt: KeyboardEvent<HTMLInputElement>) {
@@ -140,9 +128,9 @@ export default function Autocomplete({
         dispatch({ type: 'InputChange' })
         const newQuery = evt.target.value;
         onTextChange(newQuery);
-        updateAutocompleteResults(newQuery);
+        executeAutocompleteRequest(newQuery);
       }}
-      onClick={() => updateAutocompleteResults(query)}
+      onClick={() => executeAutocompleteRequest(query)}
       onKeyDown={handleKeyDown}
       value={query}
       ref={inputRef}

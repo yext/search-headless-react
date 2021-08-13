@@ -48,19 +48,19 @@ function App() {
       verticalKey='people'
     >
       <div className='left'>
-        <SearchBar
-          initialQuery='prompt'
-        />
         test
         <StaticFilters
           title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
-        <SpellCheck/>
+        <SpellCheck
+          isVertical={true}
+        />
       </div>
       <div className='right'>
         <SearchBar
           placeholder='Search...'
+          isVertical={true}
         />
         <ResultsCount />
         <VerticalResults

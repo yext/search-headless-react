@@ -1,9 +1,13 @@
 import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react'
 import '../sass/SpellCheck.scss';
 
-export default function SpellCheck (): JSX.Element | null {
+interface Props {
+  isVertical: boolean
+}
+
+export default function SpellCheck (props: Props): JSX.Element | null {
   const correctedQuery = useAnswersState(state => state.spellCheck.correctedQuery);
-  const actions = useAnswersActions();
+  const answersActions = useAnswersActions();
   if (!correctedQuery) {
     return null;
   }
@@ -11,8 +15,10 @@ export default function SpellCheck (): JSX.Element | null {
     <div className='SpellCheck'>
       <span className='SpellCheck__helpText'>Did you mean: </span>
       <button className='SpellCheck__link' onClick={() => {
-        actions.setQuery(correctedQuery);
-        actions.executeVerticalQuery({ skipSpellCheck: true });
+        answersActions.setQuery(correctedQuery);
+        props.isVertical
+          ? answersActions.executeVerticalQuery({ skipSpellCheck: true })
+          : answersActions.executeUniversalQuery({ skipSpellCheck: true })
       }}>{correctedQuery}</button>
     </div>
   );
