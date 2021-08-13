@@ -1,7 +1,7 @@
 import { useAnswersState } from '@yext/answers-headless-react'
 import '../sass/SpellCheck.scss';
 
-export default function SpellCheck () {
+export default function SpellCheck (): JSX.Element | null {
   const correctedQuery = useAnswersState(state => state.spellCheck.correctedQuery);
   const link = createLink(correctedQuery);
   if (!correctedQuery) {
