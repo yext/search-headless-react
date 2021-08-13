@@ -1,0 +1,58 @@
+$color-brand-primary: #333;
+$color-brand-white: #fff;
+$font-size-xlg: 20px;
+$font-size-md-lg: 18px;
+$base-spacing: 20px;
+
+.AlternativeVerticals {
+  &__noResultsInfo {
+    background-color: #{$color-brand-primary};
+    color: #{$color-brand-white};
+    font-size: #{$font-size-xlg};
+    padding: .625rem 1.25rem;
+
+    &--emphasized {
+      font-weight: 500;
+    }
+  }
+
+  &__suggestionsWrapper {
+    padding: #{$base-spacing};
+  }
+
+  &__details {
+    font-size: #{$font-size-md-lg};
+  }
+
+  &__detailsQuery {
+
+  }
+
+  &__suggestion {
+
+  }
+
+  &__suggestionLink {
+
+  }
+
+  &__verticalIconWrapper {
+
+  }
+
+  &__suggestionVerticalLabel {
+
+  }
+
+  &__suggestionNumResults {
+
+  }
+
+  &__chevronIconWrapper {
+
+  }
+
+  &__universalDetails {
+
+  }
+}

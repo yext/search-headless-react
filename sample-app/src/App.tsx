@@ -1,4 +1,5 @@
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
+import AlternativeVerticals from './components/AlternativeVerticals';
 import { StandardCard } from './components/cards/StandardCard';
 import ResultsCount from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
@@ -64,6 +65,12 @@ function App() {
         <VerticalResults
           CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
+        />
+        <AlternativeVerticals
+          currentVerticalLabel='People'
+          isShowingResults={true}
+          universalUrl='/index.html'
+          verticalSuggestions={[{url: '/locations.html', label: 'Locations'}]}
         />
       </div>
     </AnswersActionsProvider>
