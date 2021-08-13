@@ -47,6 +47,9 @@ function App() {
       verticalKey='people'
     >
       <div className='left'>
+        <SearchBar
+          initialQuery='prompt'
+        />
         test
         <StaticFilters
           title='~Country and Employee Departments~'
