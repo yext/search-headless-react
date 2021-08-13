@@ -50,8 +50,9 @@ export default class StaticFilters extends React.Component<FilterBoxProps, State
   }
 
   handleOptionSelection = (filter: Filter, isChecked: boolean) => {
-    let filters = this.state.filtersState[filter.fieldId]
-    let filtersState = this.state.filtersState
+    const filtersState = this.state.filtersState
+    const filters = filtersState[filter.fieldId]
+    
     isChecked 
       ? filtersState[filter.fieldId] = [...filters, filter]
       : filtersState[filter.fieldId] = filters.filter(filterOption => filterOption.value !== filter.value)

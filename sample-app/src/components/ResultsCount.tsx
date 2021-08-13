@@ -1,9 +1,13 @@
 import { useAnswersState } from '@yext/answers-headless-react'
 
 export default function ResultsCount() {
-  const count = useAnswersState(state => state.vertical.results?.verticalResults.resultsCount);
+  const resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount) || 0
+  let resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length) || 0
+  const offset = useAnswersState(state => state.vertical?.offset) || 0
+
+  const results = ((resultsLength === 0) ? "" : `${offset + 1}-${offset + resultsLength} of ${resultsCount}`)
 
   return (
-    <div> #Results - {count || 0} </div>
+    <div> {results} </div>
   )
 }

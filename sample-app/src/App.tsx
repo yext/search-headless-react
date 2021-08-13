@@ -1,11 +1,12 @@
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
-import StaticFilters from './components/StaticFilters';
+import DecoratedAppliedFilters from './components/DecoratedAppliedFilters';
+import { StandardCard } from './components/cards/StandardCard';
 import ResultsCount from './components/ResultsCount';
+import SearchBar from './components/SearchBar';
+import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
-import { StandardCard } from './components/cards/StandardCard';
-import SearchBar from './components/SearchBar';
 
 function App() {
   const staticFilterOptions = [
@@ -47,7 +48,7 @@ function App() {
       locale='en'
       verticalKey='people'
     >
-      <div className='left'>
+      <div className='start'>
         test
         <StaticFilters
           title='~Country and Employee Departments~'
@@ -57,16 +58,24 @@ function App() {
           isVertical={true}
         />
       </div>
-      <div className='right'>
+      <div className='end'>
         <SearchBar
           placeholder='Search...'
           isVertical={true}
         />
-        <ResultsCount />
-        <VerticalResults
-          CardComponent={StandardCard}
-          cardConfig={{ showOrdinal: true }}
-        />
+        <div>
+          <ResultsCount />
+          <DecoratedAppliedFilters 
+            showFieldNames={true}
+            hiddenFields={['builtin.entityType']}
+            delimiter='|'
+            mapStateToAppliedQueryFilters={state => state.vertical.results?.verticalResults.appliedQueryFilters}
+          />
+          <VerticalResults 
+            CardComponent={StandardCard}
+            cardConfig={{ showOrdinal: true }}
+          />
+        </div>
       </div>
     </AnswersActionsProvider>
   );
