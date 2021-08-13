@@ -1,11 +1,12 @@
+import { useAnswersActions } from '@yext/answers-headless-react';
 import { AutocompleteResult } from '@yext/answers-core';
-import { useAnswersActions, StateMapper, useAnswersState } from '@yext/answers-headless-react';
 import { useEffect, useRef, KeyboardEvent, useReducer } from 'react';
 import classNames from 'classnames';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import '../sass/Autocomplete.scss';
 
 interface Props {
+  autocompleteResults: AutocompleteResult[]
   query?: string
   renderInputAndDropdown: (input: JSX.Element, dropdown: JSX.Element | null) => JSX.Element
   onSelectedIndexChange?: (query: string) => void
@@ -14,6 +15,7 @@ interface Props {
   inputClassName?: string
   placeholder?: string
   isVertical: boolean
+  executeAutocomplete: () => void
 }
 
 interface State {
@@ -50,19 +52,16 @@ function reducer(state: State, action: Action): State {
 }
 
 export default function Autocomplete({
+  autocompleteResults,
   query = '',
   inputClassName,
-  isVertical,
+  executeAutocomplete,
   onSelectedIndexChange = () => {},
   onTextChange = () => {},
   onSubmit = () => {},
   renderInputAndDropdown,
   placeholder
 }: Props) {
-  const mapStateToAutocompleteResults: StateMapper<AutocompleteResult[] | undefined> = isVertical
-    ? state => state.vertical.autoComplete?.results
-    : state => state.universal.autoComplete?.results;
-  const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
   const answersActions = useAnswersActions();
   const [{
     selectedIndex,
@@ -91,9 +90,7 @@ export default function Autocomplete({
 
   function executeAutocompleteRequest(newQuery: string) {
     answersActions.setQuery(newQuery);
-    isVertical
-      ? answersActions.executeVerticalAutoComplete()
-      : answersActions.executeUniversalAutoComplete()
+    executeAutocomplete();
   }
 
   function handleKeyDown(evt: KeyboardEvent<HTMLInputElement>) {

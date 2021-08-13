@@ -1,4 +1,5 @@
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState, StateMapper } from '@yext/answers-headless-react';
+import { AutocompleteResult } from '@yext/answers-core';
 import Autocomplete from './Autocomplete';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
@@ -15,6 +16,10 @@ interface Props {
 export default function SearchBar({ placeholder, isVertical }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.query);
+  const mapStateToAutocompleteResults: StateMapper<AutocompleteResult[] | undefined> = isVertical
+    ? state => state.vertical.autoComplete?.results
+    : state => state.universal.autoComplete?.results;
+  const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
 
   function renderInputAndDropdown(input: JSX.Element, dropdown: JSX.Element | null) {
     return (
@@ -38,11 +43,17 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   return (
     <div className='SearchBar'>
       <Autocomplete
+        autocompleteResults={autocompleteResults}
         renderInputAndDropdown={renderInputAndDropdown}
         inputClassName='SearchBar__input'
         placeholder={placeholder}
         query={query}
         isVertical={isVertical}
+        executeAutocomplete={() => { 
+          isVertical 
+          ? answersActions.executeVerticalAutoComplete()
+          : answersActions.executeUniversalAutoComplete()
+        }}
         onTextChange={query => {
           answersActions.setQuery(query);
         }}
