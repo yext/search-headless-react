@@ -16,9 +16,11 @@ export default function SpellCheck (props: Props): JSX.Element | null {
       <span className='SpellCheck__helpText'>Did you mean: </span>
       <button className='SpellCheck__link' onClick={() => {
         answersActions.setQuery(correctedQuery);
+        answersActions.setSpellCheckEnabled(false);
         props.isVertical
-          ? answersActions.executeVerticalQuery({ skipSpellCheck: true })
-          : answersActions.executeUniversalQuery({ skipSpellCheck: true })
+          ? answersActions.executeVerticalQuery()
+          : answersActions.executeUniversalQuery() 
+        answersActions.setSpellCheckEnabled(true);
       }}>{correctedQuery}</button>
     </div>
   );
