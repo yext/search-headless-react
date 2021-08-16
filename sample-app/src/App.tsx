@@ -1,3 +1,4 @@
+import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import AlternativeVerticals from './components/AlternativeVerticals';
 import DecoratedAppliedFilters from './components/DecoratedAppliedFilters';
@@ -6,7 +7,7 @@ import ResultsCount from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
-import './sass/App.scss';
+import SpellCheck from './components/SpellCheck';
 
 function App() {
   const staticFilterOptions = [
@@ -49,18 +50,19 @@ function App() {
       verticalKey='people'
     >
       <div className='start'>
-        <SearchBar
-          initialQuery='prompt'
-        />
         test
         <StaticFilters
           title='~Country and Employee Departments~'
           options={staticFilterOptions}
         />
+        <SpellCheck
+          isVertical={true}
+        />
       </div>
       <div className='end'>
         <SearchBar
           placeholder='Search...'
+          isVertical={true}
         />
         <div>
           <ResultsCount />
