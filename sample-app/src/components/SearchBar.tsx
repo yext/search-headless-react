@@ -6,7 +6,6 @@ import '../sass/SearchBar.scss';
 
 interface Props {
   placeholder?: string
-  initialQuery?: string
   isVertical: boolean
 }
 
