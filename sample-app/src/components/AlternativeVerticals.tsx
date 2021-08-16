@@ -16,11 +16,11 @@ interface VerticalSuggestion extends VerticalConfig {
 interface Props {
   currentVerticalLabel: string,
   verticalsConfig: VerticalConfig[],
-  displayAllResults: boolean;
+  displayAllResults?: boolean;
 }
 
 export default function AlternativeVerticals (props: Props): JSX.Element | null {
-  const { currentVerticalLabel, verticalsConfig } = props;
+  const { currentVerticalLabel, verticalsConfig, displayAllResults = true } = props;
 
   const alternativeVerticals = useAnswersState(state => state.vertical.alternativeVerticals) || [];
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
@@ -28,7 +28,7 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
   const actions = useAnswersActions();
 
   const verticalSuggestions = buildVerticalSuggestions(verticalsConfig, alternativeVerticals);
-  const isShowingAllResults = props.displayAllResults && allResultsForVertical.length > 0;
+  const isShowingAllResults = displayAllResults && allResultsForVertical.length > 0;
 
   function buildVerticalSuggestions(
     verticalsConfig: VerticalConfig[],
@@ -80,6 +80,7 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
                 <li className="AlternativeVerticals__suggestion">
                   <button className='AlternativeVerticals__suggestionLink AlternativeVerticals__button'
                     onClick={() => {
+                      // TODO: Clear vertical results so that they disappear right after clicking the link
                       actions.setAlternativeVerticals([]);
                       actions.setVerticalKey(suggestion.verticalKey);
                       actions.executeVerticalQuery();

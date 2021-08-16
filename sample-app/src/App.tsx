@@ -72,7 +72,6 @@ function App() {
           />
           <AlternativeVerticals
             currentVerticalLabel='People'
-            displayAllResults={true}
             verticalsConfig={[
               {label: 'Locations', verticalKey: 'KM'},
               {label: 'FAQs', verticalKey: 'faq'}

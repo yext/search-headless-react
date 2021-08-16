@@ -5,6 +5,7 @@ import { Result } from '@yext/answers-core';
 interface Props {
   CardComponent: CardComponent,
   cardConfig: CardConfigTypes,
+  displayAllResults?: boolean;
 }
 
 /**
@@ -13,9 +14,19 @@ interface Props {
  * @param props - The props for the Component, including the results and the card type
  *                to be used.
  */
-export default function VerticalResults(props: Props): JSX.Element {
-  const { CardComponent, cardConfig } = props;
-  const results = useAnswersState(state => state.vertical.results?.verticalResults.results);
+export default function VerticalResults(props: Props): JSX.Element | null {
+  const { CardComponent, cardConfig, displayAllResults = true } = props;
+
+  const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
+  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
+  
+  const results = verticalResults.length === 0 && displayAllResults
+    ? allResultsForVertical
+    : verticalResults
+
+  if (results.length === 0) {
+    return null;
+  }
 
   return (
     <section className='yxt-Results'>
