@@ -32,8 +32,7 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
 
   function buildVerticalSuggestions(
     verticalsConfig: VerticalConfig[],
-    alternativeVerticals: VerticalResults[])
-  : VerticalSuggestion[] {
+    alternativeVerticals: VerticalResults[]) : VerticalSuggestion[] {
     return alternativeVerticals.reduce((verticalSuggestions: VerticalSuggestion[], alternativeVerticalResults: VerticalResults) => {
       const matchingVerticalConfig = verticalsConfig.find(config => {
         return config.verticalKey === alternativeVerticalResults.verticalKey;
@@ -55,6 +54,20 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
 
   return  (
     <div className='AlternativeVerticals'>
+      {renderNoResultsInfo()}
+      {verticalSuggestions &&
+        <div className='AlternativeVerticals__suggestionsWrapper'>
+          <ul>
+            {verticalSuggestions.map(renderSuggestion)}
+          </ul>
+          {renderUniversalDetails()}
+        </div>
+      }
+    </div>
+  );
+
+  function renderNoResultsInfo() {
+    return (
       <div className='AlternativeVerticals__noResultsInfo'>
         <em className='AlternativeVerticals__noResultsInfo--emphasized'>No results found</em><span> in {currentVerticalLabel}. </span>
         {isShowingAllResults && <>
@@ -63,43 +76,34 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
           <span> instead.</span>
         </>}
       </div>
-      {verticalSuggestions &&
-        <div className='AlternativeVerticals__suggestionsWrapper'>
-          <div className='AlternativeVerticals__details'>
-            <span>{processTranslation({
-                phrase: 'The following search category yielded results for ',
-                pluralForm: 'The following search categories yielded results for ',
-                count: verticalSuggestions.length
-              })}
-            </span>
-            <span className='AlternativeVerticals__detailsQuery'>"{query}":</span>
-          </div>
-          <ul>
-            {verticalSuggestions.map(suggestion => {
-              return (
-                <li className="AlternativeVerticals__suggestion">
-                  <button className='AlternativeVerticals__suggestionLink AlternativeVerticals__button'
-                    onClick={() => {
-                      // TODO: Clear vertical results so that they disappear right after clicking the link
-                      actions.setAlternativeVerticals([]);
-                      actions.setVerticalKey(suggestion.verticalKey);
-                      actions.executeVerticalQuery();
-                    }}>
-                    <div className='AlternativeVerticals__verticalIconWrapper'></div>
-                    <span className='AlternativeVerticals__suggestionVerticalLabel'>{suggestion.label}</span>
-                    <span className='AlternativeVerticals__suggestionNumResults'> ({suggestion.resultsCount} results)</span>
-                    <div className='AlternativeVerticals__chevronIconWrapper'><Chevron/></div>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-            <div className='AlternativeVerticals__universalDetails'>
-              <span>Alternatively you can </span>
-              <button className='AlternativeVerticals__button' onClick={() => { actions.executeUniversalQuery(); }}>view results across all search categories</button>
-            </div>
-        </div>
-      }
-    </div>
-  );
+    );
+  }
+
+  function renderSuggestion(suggestion: VerticalSuggestion) {
+    return (
+      <li key={suggestion.verticalKey} className="AlternativeVerticals__suggestion">
+        <button className='AlternativeVerticals__suggestionLink AlternativeVerticals__button'
+          onClick={() => {
+            actions.setVerticalKey(suggestion.verticalKey);
+            actions.executeVerticalQuery();
+          }}>
+          <div className='AlternativeVerticals__verticalIconWrapper'></div>
+          <span className='AlternativeVerticals__suggestionVerticalLabel'>{suggestion.label}</span>
+          <span className='AlternativeVerticals__suggestionNumResults'> ({suggestion.resultsCount} results)</span>
+          <div className='AlternativeVerticals__chevronIconWrapper'><Chevron/></div>
+        </button>
+      </li>
+    );
+  }
+
+  function renderUniversalDetails() {
+    return (
+      <div className='AlternativeVerticals__universalDetails'>
+        <span>Alternatively you can </span>
+        <button className='AlternativeVerticals__button' onClick={actions.executeUniversalQuery}>
+          <span>view results across all search categories</span>
+        </button>
+      </div>
+    );
+  }
 }
