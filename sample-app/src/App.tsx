@@ -72,9 +72,11 @@ function App() {
           />
           <AlternativeVerticals
             currentVerticalLabel='People'
-            isShowingResults={true}
-            universalUrl='/index.html'
-            verticalSuggestions={[{url: '/locations.html', label: 'Locations'}]}
+            displayAllResults={true}
+            verticalsConfig={[
+              {label: 'Locations', verticalKey: 'KM'},
+              {label: 'FAQs', verticalKey: 'faq'}
+            ]}
           />
           <VerticalResults 
             CardComponent={StandardCard}

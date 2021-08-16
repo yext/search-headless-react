@@ -25,34 +25,36 @@ $base-spacing: 20px;
   }
 
   &__detailsQuery {
-
+    font-weight: 500;
   }
 
   &__suggestion {
-
-  }
-
-  &__suggestionLink {
-
-  }
-
-  &__verticalIconWrapper {
-
-  }
-
-  &__suggestionVerticalLabel {
-
+    margin: $base-spacing * 0.75;
   }
 
   &__suggestionNumResults {
-
+    margin-inline-end: 0.3125rem;
   }
 
   &__chevronIconWrapper {
-
+    width: .5625rem;
+    display: inline-block;
   }
 
   &__universalDetails {
+    font-size: #{$font-size-md-lg};
+  }
 
+  &__button {
+    border: none;
+    color: #5387d7;
+    cursor: pointer;
+    background-color: white;
+    font-size: 18px;
+    padding: 1px 3px;
+  }
+
+  &__button:hover, &__button:focus {
+    text-decoration: underline;
   }
 }
