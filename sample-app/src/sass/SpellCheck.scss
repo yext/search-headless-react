@@ -1,0 +1,17 @@
+.SpellCheck {
+  font-size: 18px;
+  margin: 10px;
+
+  &__link {
+    border: none;
+    color: #5387d7;
+    cursor: pointer;
+    background-color: white;
+    font-size: 18px;
+    padding: 1px 3px;
+  }
+
+  &__link:hover, &__link:focus {
+    text-decoration: underline;
+  }
+}
