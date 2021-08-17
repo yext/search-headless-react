@@ -28,8 +28,24 @@ $base-spacing: 20px;
     font-weight: 500;
   }
 
+  &__suggestionList {
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
   &__suggestion {
     margin: $base-spacing * 0.75;
+    padding-inline-start: 0;
+    margin-inline-start: 0;
+  }
+
+  &__suggestionLink {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__suggestionVerticalLabel {
+    margin-inline-end: .3125rem;
   }
 
   &__suggestionNumResults {
@@ -37,8 +53,15 @@ $base-spacing: 20px;
   }
 
   &__chevronIconWrapper {
+    display: flex;
     width: .5625rem;
-    display: inline-block;
+  }
+
+  &__verticalIconWrapper {
+    display: flex;
+    align-items: center;
+    width: 1em;
+    margin-inline-end: .3125rem;
   }
 
   &__universalDetails {
@@ -51,6 +74,10 @@ $base-spacing: 20px;
     cursor: pointer;
     background-color: white;
     font-size: 18px;
+    padding: 0px;
+  }
+
+  &__universalDetailsButton {
     padding: 1px 3px;
   }
 

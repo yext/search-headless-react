@@ -1,5 +1,6 @@
 import { processTranslation } from './utils/processTranslation';
 import { ReactComponent as Chevron } from '../icons/chevron.svg';
+import { ReactComponent as Star } from '../icons/star.svg';
 import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react';
 import { VerticalResults } from '@yext/answers-core';
 import '../sass/AlternativeVerticals.scss';
@@ -33,19 +34,24 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
   function buildVerticalSuggestions(
     verticalsConfig: VerticalConfig[],
     alternativeVerticals: VerticalResults[]) : VerticalSuggestion[] {
-    return alternativeVerticals.reduce((verticalSuggestions: VerticalSuggestion[], alternativeVerticalResults: VerticalResults) => {
-      const matchingVerticalConfig = verticalsConfig.find(config => {
-        return config.verticalKey === alternativeVerticalResults.verticalKey;
-      });
-      if (!matchingVerticalConfig || alternativeVerticalResults.resultsCount < 1) {
-        return verticalSuggestions;
-      }
-      verticalSuggestions.push({
-        ...matchingVerticalConfig,
-        resultsCount: alternativeVerticalResults.resultsCount
-      });
-      return verticalSuggestions;
-    }, []);
+    const emptyVerticalSuggestion = {
+      label: '',
+      verticalKey: '',
+      resultsCount: 0
+    };
+    return alternativeVerticals
+      .map((alternativeResults: VerticalResults) => {
+        const matchingVerticalConfig = verticalsConfig.find(config => {
+          return config.verticalKey === alternativeResults.verticalKey;
+        });
+
+        return matchingVerticalConfig
+          ? {
+            ...matchingVerticalConfig,
+            resultsCount: alternativeResults.resultsCount
+          }
+          : emptyVerticalSuggestion;
+      }).filter(verticalSuggestion => verticalSuggestion.resultsCount > 0);
   }
 
   if (verticalSuggestions.length <= 0) {
@@ -66,7 +72,7 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
             </span>
             <span className='AlternativeVerticals__detailsQuery'>"{query}":</span>
           </div>
-          <ul>
+          <ul className='AlternativeVerticals__suggestionList'>
             {verticalSuggestions.map(renderSuggestion)}
           </ul>
           {renderUniversalDetails()}
@@ -96,9 +102,9 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
             actions.setVerticalKey(suggestion.verticalKey);
             actions.executeVerticalQuery();
           }}>
-          <div className='AlternativeVerticals__verticalIconWrapper'></div>
+          <div className='AlternativeVerticals__verticalIconWrapper'><Star/></div>
           <span className='AlternativeVerticals__suggestionVerticalLabel'>{suggestion.label}</span>
-          <span className='AlternativeVerticals__suggestionNumResults'> ({suggestion.resultsCount} results)</span>
+          <span className='AlternativeVerticals__suggestionNumResults'>({suggestion.resultsCount} results)</span>
           <div className='AlternativeVerticals__chevronIconWrapper'><Chevron/></div>
         </button>
       </li>
@@ -109,7 +115,8 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
     return (
       <div className='AlternativeVerticals__universalDetails'>
         <span>Alternatively you can </span>
-        <button className='AlternativeVerticals__button' onClick={actions.executeUniversalQuery}>
+        <button className='AlternativeVerticals__button AlternativeVerticals__universalDetailsButton' 
+          onClick={actions.executeUniversalQuery}>
           <span>view results across all search categories</span>
         </button>
       </div>
