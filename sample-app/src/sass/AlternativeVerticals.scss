@@ -1,0 +1,87 @@
+$color-brand-primary: #333;
+$color-brand-white: #fff;
+$font-size-xlg: 20px;
+$font-size-md-lg: 18px;
+$base-spacing: 20px;
+
+.AlternativeVerticals {
+  &__noResultsInfo {
+    background-color: #{$color-brand-primary};
+    color: #{$color-brand-white};
+    font-size: #{$font-size-xlg};
+    padding: .625rem 1.25rem;
+
+    &--emphasized {
+      font-weight: 500;
+    }
+  }
+
+  &__suggestionsWrapper {
+    padding: #{$base-spacing};
+  }
+
+  &__details {
+    font-size: #{$font-size-md-lg};
+  }
+
+  &__detailsQuery {
+    font-weight: 500;
+  }
+
+  &__suggestionList {
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
+  &__suggestion {
+    margin: $base-spacing * 0.75;
+    padding-inline-start: 0;
+    margin-inline-start: 0;
+  }
+
+  &__suggestionLink {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__suggestionVerticalLabel {
+    margin-inline-end: .3125rem;
+  }
+
+  &__suggestionNumResults {
+    margin-inline-end: 0.3125rem;
+  }
+
+  &__chevronIconWrapper {
+    display: flex;
+    width: .5625rem;
+  }
+
+  &__verticalIconWrapper {
+    display: flex;
+    align-items: center;
+    width: 1em;
+    margin-inline-end: .3125rem;
+  }
+
+  &__universalDetails {
+    font-size: #{$font-size-md-lg};
+  }
+
+  &__button {
+    border: none;
+    color: #5387d7;
+    cursor: pointer;
+    background-color: white;
+    font-size: 18px;
+    padding: 0px;
+  }
+
+  &__universalDetailsButton {
+    padding: 1px 3px;
+  }
+
+  &__button:hover, &__button:focus {
+    text-decoration: underline;
+  }
+}
