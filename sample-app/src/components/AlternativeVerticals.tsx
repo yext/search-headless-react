@@ -14,6 +14,10 @@ interface VerticalSuggestion extends VerticalConfig {
   resultsCount: number;
 }
 
+function isVerticalSuggestion (suggestion: VerticalSuggestion | null): suggestion is VerticalSuggestion {
+  return suggestion?.resultsCount !== undefined;
+}
+
 interface Props {
   currentVerticalLabel: string,
   verticalsConfig: VerticalConfig[],
@@ -34,11 +38,7 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
   function buildVerticalSuggestions(
     verticalsConfig: VerticalConfig[],
     alternativeVerticals: VerticalResults[]) : VerticalSuggestion[] {
-    const emptyVerticalSuggestion = {
-      label: '',
-      verticalKey: '',
-      resultsCount: 0
-    };
+    
     return alternativeVerticals
       .map((alternativeResults: VerticalResults) => {
         const matchingVerticalConfig = verticalsConfig.find(config => {
@@ -50,8 +50,10 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
             ...matchingVerticalConfig,
             resultsCount: alternativeResults.resultsCount
           }
-          : emptyVerticalSuggestion;
-      }).filter(verticalSuggestion => verticalSuggestion.resultsCount > 0);
+          : null;
+      })
+      .filter(isVerticalSuggestion)
+      .filter(verticalSuggestion => verticalSuggestion.resultsCount > 0);
   }
 
   if (verticalSuggestions.length <= 0) {
