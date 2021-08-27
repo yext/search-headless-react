@@ -18,7 +18,7 @@ interface Props {
   cssClasses: {
     optionContainer: string,
     option: string
-    selectedOption: string
+    focusedOption: string
     inputElement: string,
     inputContainer: string
   }
@@ -131,7 +131,7 @@ export default function Dropdown({
         <div className={cssClasses.optionContainer}>
         {options.map((option, index) => {
           const className = classNames(cssClasses.option, {
-            [cssClasses.selectedOption]: index === focusedOptionIndex
+            [cssClasses.focusedOption]: index === focusedOptionIndex
           })
           return <div key={option.value} className={className} onClick={() => { 
             onSubmit(option.value)

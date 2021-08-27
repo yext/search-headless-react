@@ -68,7 +68,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
         cssClasses={{
           optionContainer: 'Autocomplete',
           option: 'Autocomplete__option',
-          selectedOption: 'Autocomplete__option--selected',
+          focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer'
         }}
