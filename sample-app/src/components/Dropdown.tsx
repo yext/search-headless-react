@@ -45,7 +45,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export default function Dropdown ({
+export default function Dropdown({
   inputValue = '',
   placeholder,
   options,
@@ -112,12 +112,15 @@ export default function Dropdown ({
           className={cssClasses.inputElement}
           placeholder={placeholder}
           onChange={evt => {
-            dispatch({ type: 'ShowOptions' })
+            dispatch({ type: 'ShowOptions' });
             const inputValue = evt.target.value;
             setLatestInputValue(inputValue);
             onInputValueChange(inputValue);
           }}
-          onClick={() => onInputClick()}
+          onClick={() => {
+            dispatch({ type: 'ShowOptions' });
+            onInputClick()
+          }}
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
