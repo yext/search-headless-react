@@ -1,8 +1,10 @@
 import { useAnswersActions, useAnswersState, StateMapper } from '@yext/answers-headless-react';
 import { AutocompleteResult } from '@yext/answers-core';
-import Autocomplete from './Autocomplete';
+import Dropdown from './Dropdown';
+import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
+import '../sass/Autocomplete.scss';
 
 interface Props {
   placeholder?: string
@@ -20,47 +22,55 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
 
-  function renderInputAndDropdown(input: JSX.Element, dropdown: JSX.Element | null) {
+  function executeAutocomplete () {
+    isVertical 
+      ? answersActions.executeVerticalAutoComplete()
+      : answersActions.executeUniversalAutoComplete()
+  }
+
+  function renderSearchButton () {
     return (
-      <>
-        <div className='SearchBar__inputContainer'>
-          {input}
-          <button
-            className='SearchBar__submitButton'
-            onClick={() => {
-              answersActions.executeVerticalQuery();
-            }}
-          >
-            <MagnifyingGlassIcon/>
-          </button>
-        </div>
-        {dropdown}
-      </>
+      <button
+        className='SearchBar__submitButton'
+        onClick={() => {
+          answersActions.executeVerticalQuery();
+        }}
+      >
+        <MagnifyingGlassIcon/>
+      </button>
     )
   }
 
   return (
     <div className='SearchBar'>
-      <Autocomplete
-        autocompleteResults={autocompleteResults}
-        renderInputAndDropdown={renderInputAndDropdown}
-        inputClassName='SearchBar__input'
+      <Dropdown
+        inputValue={query}
         placeholder={placeholder}
-        query={query}
-        executeAutocomplete={() => { 
-          isVertical 
-          ? answersActions.executeVerticalAutoComplete()
-          : answersActions.executeUniversalAutoComplete()
-        }}
-        onTextChange={query => {
+        options={autocompleteResults.map(result => {
+          return {
+            value: result.value,
+            render: () => renderWithHighlighting(result)
+          }
+        })}
+        onInputValueChange={query => {
           answersActions.setQuery(query);
+          executeAutocomplete();
         }}
+        onInputClick={executeAutocomplete}
         onSubmit={query => {
           answersActions.setQuery(query);
           answersActions.executeVerticalQuery();
         }}
-        onSelectedIndexChange={query => {
+        onFocusedOptionChange={query => {
           answersActions.setQuery(query);
+        }}
+        renderWithinInputContainer={renderSearchButton}
+        cssClasses={{
+          optionContainer: 'Autocomplete',
+          option: 'Autocomplete__option',
+          selectedOption: 'Autocomplete__option--selected',
+          inputElement: 'SearchBar__input',
+          inputContainer: 'SearchBar__inputContainer'
         }}
       />
     </div>
