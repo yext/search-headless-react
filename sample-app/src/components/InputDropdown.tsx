@@ -2,7 +2,6 @@ import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Input from './Input';
 import Dropdown, { Option } from './Dropdown';
 
-
 interface Props {
   inputValue?: string
   placeholder?: string
