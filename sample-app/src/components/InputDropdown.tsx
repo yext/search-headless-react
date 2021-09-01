@@ -87,8 +87,6 @@ export default function InputDropdown({
     const isFirstOptionFocused = focusedOptionIndex === 0;
     const isLastOptionFocused = focusedOptionIndex === options.length - 1;
 
-    console.log(evt.key + ' focusedOptionIndex: ' + focusedOptionIndex);
-
     if (evt.key === 'Enter') {
       onSubmit(inputValue);
       dispatch({ type: 'HideOptions' });
