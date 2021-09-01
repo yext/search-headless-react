@@ -1,6 +1,6 @@
 import { useAnswersActions, useAnswersState, StateMapper } from '@yext/answers-headless-react';
 import { AutocompleteResult } from '@yext/answers-core';
-import Dropdown from './Dropdown';
+import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
@@ -43,7 +43,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
 
   return (
     <div className='SearchBar'>
-      <Dropdown
+      <InputDropdown
         inputValue={query}
         placeholder={placeholder}
         options={autocompleteResults.map(result => {
@@ -64,7 +64,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
         onFocusedOptionChange={query => {
           answersActions.setQuery(query);
         }}
-        renderWithinInputContainer={renderSearchButton}
+        renderButtons={renderSearchButton}
         cssClasses={{
           optionContainer: 'Autocomplete',
           option: 'Autocomplete__option',
