@@ -1,15 +1,13 @@
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
-import Input from './Input';
 import Dropdown, { Option } from './Dropdown';
 
 interface Props {
   inputValue?: string
   placeholder?: string
   options: Option[]
-  onInputValueChange: (inputValue: string) => void
-  onInputClick?: () => void
   onSubmit?: (value: string) => void
-  onFocusedOptionChange?: (optionIndex: string) => void
+  updateInputValue: (value: string) => void
+  updateDropdown: () => void
   renderButtons?: () => JSX.Element | null
   cssClasses: {
     optionContainer: string,
@@ -42,16 +40,15 @@ function reducer(state: State, action: Action): State {
 }
 
 /**
- * Manages the interactions for the combination of the Input and Dropdown components
+ * A controlled input component with an attached dropdown.
  */
 export default function InputDropdown({
   inputValue = '',
   placeholder,
   options,
-  onInputValueChange,
-  onInputClick = () => {},
   onSubmit = () => {},
-  onFocusedOptionChange = () => {},
+  updateInputValue,
+  updateDropdown,
   renderButtons = () => null,
   cssClasses
 }: Props): JSX.Element | null {
@@ -88,48 +85,55 @@ export default function InputDropdown({
     const isLastOptionFocused = focusedOptionIndex === options.length - 1;
 
     if (evt.key === 'Enter') {
+      updateInputValue(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideOptions' });
     } else if (evt.key === 'Escape') {
       dispatch({ type: 'HideOptions' });
-    } else if (evt.key === 'ArrowDown' && !isLastOptionFocused) {
+    } else if (evt.key === 'ArrowDown' && options.length > 0 && !isLastOptionFocused) {
       const newIndex = focusedOptionIndex !== undefined ? focusedOptionIndex + 1 : 0;
+      console.log('new index: ' + newIndex);
       dispatch({ type: 'FocusOption', newIndex });
       const newValue = options[newIndex]?.value;
-      onFocusedOptionChange(newValue);
+      updateInputValue(newValue);
     } else if (evt.key === 'ArrowUp' && focusedOptionIndex !== undefined) {
       const newIndex = isFirstOptionFocused ? undefined : focusedOptionIndex - 1;
       dispatch({ type: 'FocusOption', newIndex });
       const newValue = newIndex !== undefined
         ? options[newIndex]?.value
         : latestUserInput;
-      onFocusedOptionChange(newValue);
+      updateInputValue(newValue);
     }
   }
 
   return (
     <>
-      <Input
-        inputValue={inputValue}
-        placeholder={placeholder}
-        onChange={value => {
-          dispatch({ type: 'ShowOptions' });
-          setLatestUserInput(value);
-          onInputValueChange(value);
-        }}
-        onClick={() => {
-          dispatch({ type: 'ShowOptions' });
-          onInputClick()
-        }}
-        onKeyDown={onKeyDown}
-        renderButtons={renderButtons}
-        cssClasses={cssClasses}
-        ref={inputRef}
-      />
+      <div className={cssClasses.inputContainer}>
+        <input
+          className={cssClasses.inputElement}
+          placeholder={placeholder}
+          onChange={evt => {
+            const value = evt.target.value;
+            dispatch({ type: 'ShowOptions' });
+            setLatestUserInput(value);
+            updateInputValue(value);
+            updateDropdown();
+          }}
+          onClick={() => {
+            dispatch({ type: 'ShowOptions' });
+            updateDropdown();
+          }}
+          onKeyDown={onKeyDown}
+          value={inputValue}
+          ref={inputRef}
+        />
+        {renderButtons()}
+      </div>
       {shouldDisplayDropdown &&
         <Dropdown
           options={options}
           onClickOption={option => {
+            updateInputValue(option.value);
             onSubmit(option.value)
             dispatch({ type: 'HideOptions' })
           }}

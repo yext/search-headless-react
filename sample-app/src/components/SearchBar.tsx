@@ -52,17 +52,14 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
             render: () => renderWithHighlighting(result)
           }
         })}
-        onInputValueChange={query => {
-          answersActions.setQuery(query);
-          executeAutocomplete();
-        }}
-        onInputClick={executeAutocomplete}
-        onSubmit={query => {
-          answersActions.setQuery(query);
+        onSubmit={() => {
           answersActions.executeVerticalQuery();
         }}
-        onFocusedOptionChange={query => {
-          answersActions.setQuery(query);
+        updateInputValue={value => {
+          answersActions.setQuery(value);
+        }}
+        updateDropdown={() => {
+          executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
