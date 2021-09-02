@@ -92,7 +92,6 @@ export default function InputDropdown({
       dispatch({ type: 'HideOptions' });
     } else if (evt.key === 'ArrowDown' && options.length > 0 && !isLastOptionFocused) {
       const newIndex = focusedOptionIndex !== undefined ? focusedOptionIndex + 1 : 0;
-      console.log('new index: ' + newIndex);
       dispatch({ type: 'FocusOption', newIndex });
       const newValue = options[newIndex]?.value;
       updateInputValue(newValue);
