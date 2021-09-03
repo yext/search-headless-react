@@ -3,7 +3,7 @@ import { AutocompleteResult } from '@yext/answers-core';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
-import '../sass/SearchBar.scss';
+// import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 
 interface Props {
@@ -31,7 +31,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   function renderSearchButton () {
     return (
       <button
-        className='SearchBar__submitButton'
+        className='text-lg'
         onClick={() => {
           answersActions.executeVerticalQuery();
         }}
@@ -42,7 +42,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   }
 
   return (
-    <div className='SearchBar'>
+    <div className='h-10 w-full text-lg relative'>
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
@@ -66,8 +66,8 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
           optionContainer: 'Autocomplete',
           option: 'Autocomplete__option',
           focusedOption: 'Autocomplete__option--focused',
-          inputElement: 'SearchBar__input',
-          inputContainer: 'SearchBar__inputContainer'
+          inputElement: 'flex-grow text-lg',
+          inputContainer: 'flex flex-grow text-lg'
         }}
       />
     </div>
