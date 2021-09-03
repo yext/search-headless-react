@@ -3,8 +3,8 @@ import { AutocompleteResult } from '@yext/answers-core';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
-import '../sass/SearchBar.scss';
-import '../sass/Autocomplete.scss';
+import styles from '../sass/SearchBar.module.scss';
+import autocompleteStyles from '../sass/Autocomplete.module.scss';
 
 interface Props {
   placeholder?: string
@@ -63,11 +63,11 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
-          optionContainer: 'Autocomplete',
-          option: 'Autocomplete__option',
-          focusedOption: 'Autocomplete__option--focused',
-          inputElement: 'SearchBar__input',
-          inputContainer: 'SearchBar__inputContainer'
+          optionContainer: autocompleteStyles.Autocomplete,
+          option: autocompleteStyles.Autocomplete__option,
+          focusedOption: autocompleteStyles.Autocomplete__option___focused,
+          inputElement: styles.SearchBar__input,
+          inputContainer: styles.SearchBar__inputContainer
         }}
       />
     </div>
