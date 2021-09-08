@@ -8,6 +8,7 @@ import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
+import Navigation from './components/Navigation';
 
 function App() {
   const staticFilterOptions = [
@@ -65,6 +66,17 @@ function App() {
           isVertical={true}
         />
         <div>
+          <Navigation 
+            links={[
+              {label: "All Results", active: true},
+              {label: "Products", url: "/products"},
+              {label: "People", url: "/people"},
+              {label: "Articles", url: "/articles"},
+              {label: "FAQs", url: "/faqs"},
+              {label: "Community Posts", url: "/posts"},
+              {label: "Locations", url: "/locations"},
+            ]}
+          />
           <ResultsCount />
           <DecoratedAppliedFilters 
             showFieldNames={true}

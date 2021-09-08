@@ -1,0 +1,32 @@
+.Navigation {
+	display: flex;
+	align-items: center;
+	
+	&__list {
+		display: flex;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	&__item {
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+		white-space: nowrap;
+	}
+
+	&__overflowToggle {
+		display: flex;
+	}
+
+	&__overflowWrapper {
+		position: relative;
+	}
+
+	&__overflowList {
+		position: absolute;
+		right: 0;
+		display: flex;
+		flex-direction: column;
+	}
+}
