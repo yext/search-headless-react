@@ -28,13 +28,17 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
       : answersActions.executeUniversalAutoComplete()
   }
 
+  function executeQuery () {
+    isVertical 
+      ? answersActions.executeVerticalQuery()
+      : answersActions.executeUniversalQuery();
+  }
+
   function renderSearchButton () {
     return (
       <button
         className='SearchBar__submitButton'
-        onClick={() => {
-          answersActions.executeVerticalQuery();
-        }}
+        onClick={executeQuery}
       >
         <MagnifyingGlassIcon/>
       </button>
@@ -52,9 +56,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
             render: () => renderWithHighlighting(result)
           }
         })}
-        onSubmit={() => {
-          answersActions.executeVerticalQuery();
-        }}
+        onSubmit={executeQuery}
         updateInputValue={value => {
           answersActions.setQuery(value);
         }}
