@@ -15,13 +15,13 @@ type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any
  * Generates a HOC that updates a given Component's props based on the current
  * answers-headless state and a given mapping function.
  */
-export function subscribeToStateUpdates(mapStateToProps: (s: State) => Record<string, any>): SubscriberGenerator {
+export function subscribeToStateUpdates(mapStateToProps: (s: State) => Record<string, unknown>): SubscriberGenerator {
   const generateSubscriberHOC: SubscriberGenerator = WrappedComponent => {
     // Keep manual track of the mappedState instead of storing it in the component's state.
     // This avoids react's batching of state updates, which can result in mappedState not updating immediately.
     // This can, in turn, result in extra stateful-core listener invocations.
     let mappedState = {};
-    return function StatefulCoreSubscriber(props: Record<string, any>) {
+    return function StatefulCoreSubscriber(props: Record<string, unknown>) {
       const statefulCore = useContext(AnswersActionsContext);
       const answersActions = useAnswersActions();
       const [mergedProps, dispatch] = useReducer(() => {

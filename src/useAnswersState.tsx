@@ -6,8 +6,7 @@ import isShallowEqual from './utils/isShallowEqual';
 
 export type StateMapper<T> = (s: State) => T;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isObj(obj: any): obj is Record<string, any> {
+function isObj(obj: any): obj is Record<string, unknown> {
   return obj && typeof obj === 'object';
 }
 
