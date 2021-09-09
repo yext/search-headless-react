@@ -7,6 +7,7 @@ import { ComponentType, useReducer, useEffect, useContext } from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { useAnswersActions } from './useAnswersActions';
 import { AnswersActionsContext } from '.';
+import isShallowEqual from './utils/isShallowEqual';
 
 type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any) => JSX.Element;
 
@@ -30,29 +31,15 @@ export function subscribeToStateUpdates(mapStateToProps: (s: State) => Record<st
         };
       }, { ...props, ...mapStateToProps(statefulCore.state) });
 
-      const statefulCoreListener = newMappedState => {
-        const dispatchMappedState = () => {
-          mappedState = newMappedState;
-          dispatch();
-        };
-        const newStatePropKeys = Object.keys(newMappedState);
-        if (newStatePropKeys.length !== Object.keys(newStatePropKeys).length) {
-          dispatchMappedState();
-          return;
-        }
-        for (const key of newStatePropKeys) {
-          const isNewProp = !(key in mappedState);
-          const isUpdatedProp = mappedState[key] !== newMappedState[key];
-          if (isNewProp || isUpdatedProp) {
-            dispatchMappedState();
-            return;
-          }
-        }
-      };
       useEffect(() => {
         return answersActions.addListener({
           valueAccessor: (state: State) => mapStateToProps(state),
-          callback: statefulCoreListener
+          callback: newMappedState => {
+            if (!isShallowEqual(mappedState, newMappedState)) {
+              mappedState = newMappedState;
+              dispatch();
+            }
+          }
         });
       });
       return <WrappedComponent {...mergedProps}/>;
