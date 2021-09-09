@@ -1,8 +1,9 @@
-import { useAnswersActions } from './useAnswersActions';
+import { useAnswersActions, AnswersActions } from './useAnswersActions';
 import { useAnswersState, StateMapper } from './useAnswersState';
 import { subscribeToStateUpdates } from './subscribeToStateUpdates';
 import { AnswersActionsProvider } from './AnswersActionsProvider';
-import { AnswersActions, AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersActionsContext } from './AnswersActionsContext';
+
 export {
   AnswersActionsContext,
   subscribeToStateUpdates,
