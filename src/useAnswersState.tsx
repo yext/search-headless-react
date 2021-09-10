@@ -26,12 +26,9 @@ export function useAnswersState<T>(mapState: StateMapper<T>): T | undefined {
       valueAccessor: mapState,
       callback: (newStateValue: T) => {
         const hasObjState = isObj(newStateValue) && isObj(previousStateValue);
-        if (!hasObjState) {
-          previousStateValue = newStateValue;
-          setState(newStateValue);
-        } else if (!isShallowEqual(
-          previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>)
-        ) {
+        if (!hasObjState || !isShallowEqual(
+          previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>))
+        {
           previousStateValue = newStateValue;
           setState(newStateValue);
         }
