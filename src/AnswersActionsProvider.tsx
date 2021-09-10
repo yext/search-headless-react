@@ -1,7 +1,7 @@
 import { ReactChild, ReactChildren } from 'react';
-import { provideStatefulCore } from '@yext/answers-headless';
+import { provideStatefulCore, StatefulCore } from '@yext/answers-headless';
 import { AnswersConfig } from '@yext/answers-core';
-import { AnswersActions, AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersActionsContext } from './AnswersActionsContext';
 
 interface Props extends AnswersConfig {
   children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[],
@@ -10,10 +10,10 @@ interface Props extends AnswersConfig {
 
 export function AnswersActionsProvider(props: Props): JSX.Element {
   const { children, verticalKey, ...answersConfig } = props;
-  const answersActions: AnswersActions = provideStatefulCore(answersConfig);
-  verticalKey && answersActions.setVerticalKey(verticalKey);
+  const statefulCore: StatefulCore = provideStatefulCore(answersConfig);
+  verticalKey && statefulCore.setVerticalKey(verticalKey);
   return (
-    <AnswersActionsContext.Provider value={answersActions}>
+    <AnswersActionsContext.Provider value={statefulCore}>
       {children}
     </AnswersActionsContext.Provider>
   );
