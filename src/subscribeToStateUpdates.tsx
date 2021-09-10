@@ -5,7 +5,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, useReducer, useEffect, useContext } from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
-import { useAnswersActions } from './useAnswersActions';
 import { AnswersActionsContext } from '.';
 import isShallowEqual from './utils/isShallowEqual';
 
@@ -23,7 +22,6 @@ export function subscribeToStateUpdates(mapStateToProps: (s: State) => Record<st
     let mappedState = {};
     return function StatefulCoreSubscriber(props: Record<string, unknown>) {
       const statefulCore = useContext(AnswersActionsContext);
-      const answersActions = useAnswersActions();
       const [mergedProps, dispatch] = useReducer(() => {
         return {
           ...props,
@@ -32,7 +30,7 @@ export function subscribeToStateUpdates(mapStateToProps: (s: State) => Record<st
       }, { ...props, ...mapStateToProps(statefulCore.state) });
 
       useEffect(() => {
-        return answersActions.addListener({
+        return statefulCore.addListener({
           valueAccessor: (state: State) => mapStateToProps(state),
           callback: newMappedState => {
             if (!isShallowEqual(mappedState, newMappedState)) {
