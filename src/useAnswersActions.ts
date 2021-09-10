@@ -1,6 +1,6 @@
 import { StatefulCore } from '@yext/answers-headless';
 import { useContext } from 'react';
-import { AnswersActionsContext } from '.';
+import { AnswersActionsContext } from './AnswersActionsContext';
 
 export type AnswersActions = Omit<StatefulCore, 'state'>;
 

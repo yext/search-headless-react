@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState} from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
-import { useAnswersActions } from './useAnswersActions';
-import { AnswersActionsContext } from '.';
+import { AnswersActionsContext } from './AnswersActionsContext';
 import isShallowEqual from './utils/isShallowEqual';
 
 export type StateMapper<T> = (s: State) => T;
 
-function isObj(obj: any): obj is Record<string, unknown> {
-  return obj && typeof obj === 'object';
+function isObj(obj: unknown): obj is Record<string, unknown> {
+  return !!obj && typeof obj === 'object';
 }
 
 /**

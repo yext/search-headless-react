@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, useReducer, useEffect, useContext } from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
-import { AnswersActionsContext } from '.';
+import { AnswersActionsContext } from './AnswersActionsContext';
 import isShallowEqual from './utils/isShallowEqual';
 
 type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any) => JSX.Element;
@@ -16,25 +16,25 @@ type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any
  */
 export function subscribeToStateUpdates(mapStateToProps: (s: State) => Record<string, unknown>): SubscriberGenerator {
   const generateSubscriberHOC: SubscriberGenerator = WrappedComponent => {
-    // Keep manual track of the mappedState instead of storing it in the component's state.
+    // Keep manual track of the props mapped from state instead of storing it in the StatefulCoreSubscriber's state.
     // This avoids react's batching of state updates, which can result in mappedState not updating immediately.
     // This can, in turn, result in extra stateful-core listener invocations.
-    let mappedState = {};
+    let previousPropsFromState = {};
     return function StatefulCoreSubscriber(props: Record<string, unknown>) {
       const statefulCore = useContext(AnswersActionsContext);
       const [mergedProps, dispatch] = useReducer(() => {
         return {
           ...props,
-          ...mappedState
+          ...previousPropsFromState
         };
       }, { ...props, ...mapStateToProps(statefulCore.state) });
 
       useEffect(() => {
         return statefulCore.addListener({
           valueAccessor: (state: State) => mapStateToProps(state),
-          callback: newMappedState => {
-            if (!isShallowEqual(mappedState, newMappedState)) {
-              mappedState = newMappedState;
+          callback: newPropsFromState => {
+            if (!isShallowEqual(previousPropsFromState, newPropsFromState)) {
+              previousPropsFromState = newPropsFromState;
               dispatch();
             }
           }
