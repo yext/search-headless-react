@@ -16,14 +16,13 @@ function isObj(obj: any): obj is Record<string, unknown> {
 export function useAnswersState<T>(mapState: StateMapper<T>): T | undefined {
   const statefulCore = useContext(AnswersActionsContext);
   const [stateValue, setState] = useState(mapState(statefulCore.state));
-  const answersActions = useAnswersActions();
 
   useEffect(() => {
     // Store the previous state manually, as a work around for react batching state updates.
     // A batched state update will not update immediately, causing additional the listener callback
     // to run additional times.
     let previousStateValue = stateValue;
-    return answersActions.addListener({
+    return statefulCore.addListener({
       valueAccessor: mapState,
       callback: (newStateValue: T) => {
         const hasObjState = isObj(newStateValue) && isObj(previousStateValue);
@@ -31,7 +30,8 @@ export function useAnswersState<T>(mapState: StateMapper<T>): T | undefined {
           previousStateValue = newStateValue;
           setState(newStateValue);
         } else if (!isShallowEqual(
-          previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>)) {
+          previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>)
+        ) {
           previousStateValue = newStateValue;
           setState(newStateValue);
         }

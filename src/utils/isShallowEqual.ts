@@ -11,12 +11,9 @@ export default function isShallowEqual(
   if (newKeys.length !== Object.keys(newKeys).length) {
     return false;
   }
-  for (const key of newKeys) {
+  return newKeys.every(key => {
     const isNewProp = !(key in originalObj);
     const isUpdatedProp = originalObj[key] !== newObj[key];
-    if (isNewProp || isUpdatedProp) {
-      return false;
-    }
-  }
-  return true;
+    return !isNewProp && !isUpdatedProp;
+  });
 }
