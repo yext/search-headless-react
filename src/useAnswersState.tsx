@@ -12,7 +12,7 @@ function isObj(obj: unknown): obj is Record<string, unknown> {
 /**
  * Returns the Answers State returned by the map function
  */
-export function useAnswersState<T>(mapState: StateMapper<T>): T | undefined {
+export function useAnswersState<T>(mapState: StateMapper<T>): T {
   const statefulCore = useContext(AnswersActionsContext);
   const [stateValue, setState] = useState(mapState(statefulCore.state));
 
