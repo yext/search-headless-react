@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState} from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { AnswersActionsContext } from './AnswersActionsContext';
-import isShallowEqual from './utils/isShallowEqual';
+import isEqual from 'lodash.isequal';
 
 export type StateMapper<T> = (s: State) => T;
 
@@ -25,11 +25,13 @@ export function useAnswersState<T>(mapState: StateMapper<T>): T {
       valueAccessor: mapState,
       callback: (newStateValue: T) => {
         const hasObjState = isObj(newStateValue) && isObj(previousStateValue);
-        if (!hasObjState || !isShallowEqual(
+        if (!hasObjState || !isEqual(
           previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>))
         {
-          previousStateValue = newStateValue;
-          setState(newStateValue);
+          if (hasObjState || (!hasObjState && previousStateValue !== newStateValue)) {
+            previousStateValue = newStateValue;
+            setState(newStateValue);
+          }
         }
       }
     });
