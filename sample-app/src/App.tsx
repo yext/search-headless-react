@@ -8,6 +8,7 @@ import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
+import LocationBias from './components/LocationBias';
 
 function App() {
   const staticFilterOptions = [
@@ -83,6 +84,7 @@ function App() {
             CardComponent={StandardCard}
             cardConfig={{ showOrdinal: true }}
           />
+          <LocationBias isVertical={false} />
         </div>
       </div>
     </AnswersActionsProvider>
