@@ -12,7 +12,8 @@
     "start": "cd sample-app && npm start",
     "watch": "tsc --watch",
     "install-sample-app": "cd sample-app && npm install",
-    "test": "eslint . && jest"
+    "test": "eslint . && jest",
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.1",
