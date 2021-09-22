@@ -60,7 +60,7 @@ it('does not perform extra renders or stateful-core listener registrations', asy
     userEvent.click(screen.getByText('Search'));
     await pendingVerticalQuery;
   });
-  // Check only a single addListener call is made for the conditionally rendered Child
+  // Check that only a single addListener call is made for the conditionally rendered Child
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
   expect(parentStateUpdates).toHaveLength(2);
   expect(childStateUpdates).toHaveLength(1);
