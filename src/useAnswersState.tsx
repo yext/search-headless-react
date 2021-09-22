@@ -23,7 +23,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
     return latestSelectedState.current;
   }
 
-  const [, triggerRender] = useState<T>();
+  const [, triggerRender] = useState<T>(latestSelectedState.current);
   useLayoutEffect(() => {
     latestSelector.current = stateSelector;
     latestStoreState.current = statefulCore.state;
