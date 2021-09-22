@@ -9,7 +9,6 @@ export type StateSelector<T> = (s: State) => T;
  * Very similar to useSelector in react-redux.
  */
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
-  console.log('nice');
   const statefulCore = useContext(AnswersActionsContext);
 
   const latestStoreState = useRef<State>(statefulCore.state);
