@@ -1,6 +1,6 @@
 import AppliedFilters from "./AppliedFilters";
 import { AppliedQueryFilter } from "@yext/answers-core";
-import { StateMapper, useAnswersState } from '@yext/answers-headless-react';
+import { StateSelector, useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
 import { 
   getAppliedFilters,
@@ -14,7 +14,7 @@ interface Props {
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
-  mapStateToAppliedQueryFilters: StateMapper<AppliedQueryFilter[] | undefined>
+  mapStateToAppliedQueryFilters: StateSelector<AppliedQueryFilter[] | undefined>
 }
 
 /**

@@ -1,39 +1,46 @@
-import { useContext, useEffect, useState} from 'react';
+import { useContext, useLayoutEffect, useRef, useState} from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { AnswersActionsContext } from './AnswersActionsContext';
-import isShallowEqual from './utils/isShallowEqual';
 
-export type StateMapper<T> = (s: State) => T;
-
-function isObj(obj: unknown): obj is Record<string, unknown> {
-  return !!obj && typeof obj === 'object';
-}
+export type StateSelector<T> = (s: State) => T;
 
 /**
- * Returns the Answers State returned by the map function
+ * Returns the Answers State returned by the map function.
+ * Very similar to useSelector in react-redux.
  */
-export function useAnswersState<T>(mapState: StateMapper<T>): T {
+export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const statefulCore = useContext(AnswersActionsContext);
-  const [stateValue, setState] = useState(mapState(statefulCore.state));
 
-  useEffect(() => {
-    // Store the previous state manually, as a work around for react batching state updates.
-    // A batched state update will not update immediately, causing additional the listener callback
-    // to run additional times.
-    let previousStateValue = stateValue;
+  const latestStoreState = useRef<State>(statefulCore.state);
+  const latestSelector = useRef<StateSelector<T>>(stateSelector);
+  const latestSelectedState = useRef<T>(stateSelector(statefulCore.state));
+  const selectedState = getSelectedState();
+
+  function getSelectedState() {
+    if (latestStoreState.current !== statefulCore.state || latestSelector.current !== stateSelector) {
+      return stateSelector(statefulCore.state);
+    }
+    return latestSelectedState.current;
+  }
+
+  const [, triggerRender] = useState<T>();
+  useLayoutEffect(() => {
+    latestSelector.current = stateSelector;
+    latestStoreState.current = statefulCore.state;
+    latestSelectedState.current = selectedState;
+  });
+
+  useLayoutEffect(() => {
     return statefulCore.addListener({
-      valueAccessor: mapState,
-      callback: (newStateValue: T) => {
-        const hasObjState = isObj(newStateValue) && isObj(previousStateValue);
-        if (!hasObjState || !isShallowEqual(
-          previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>))
-        {
-          previousStateValue = newStateValue;
-          setState(newStateValue);
+      valueAccessor: latestSelector.current,
+      callback: (selectedState: T) => {
+        if (latestSelectedState.current !== selectedState) {
+          latestSelectedState.current = selectedState;
+          triggerRender(selectedState);
         }
       }
     });
-  });
+  }, [statefulCore]);
 
-  return stateValue;
+  return selectedState;
 }

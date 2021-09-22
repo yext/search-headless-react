@@ -14,6 +14,17 @@ export default function isShallowEqual(
   }
   return newKeys.every(key => {
     const existsInOriginalObj = key in originalObj;
-    return existsInOriginalObj && originalObj[key] === newObj[key];
+    if (!existsInOriginalObj) {
+      return false;
+    }
+    const originalVal = originalObj[key];
+    const newVal = newObj[key];
+
+    if (Array.isArray(originalVal) && Array.isArray(newVal)) {
+      if (originalVal.length === 0 && newVal.length === 0) {
+        return true;
+      }
+    }
+    return originalVal === newVal;
   });
 }
