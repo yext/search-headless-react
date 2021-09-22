@@ -1,5 +1,6 @@
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
+import { ThemeProvider } from './providers/ThemeProvider';
 import AlternativeVerticals from './components/AlternativeVerticals';
 import DecoratedAppliedFilters from './components/DecoratedAppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
@@ -49,42 +50,44 @@ function App() {
       locale='en'
       verticalKey='people'
     >
-      <div className='start'>
-        test
-        <StaticFilters
-          title='~Country and Employee Departments~'
-          options={staticFilterOptions}
-        />
-        <SpellCheck
-          isVertical={true}
-        />
-      </div>
-      <div className='end'>
-        <SearchBar
-          placeholder='Search...'
-          isVertical={true}
-        />
-        <div>
-          <ResultsCount />
-          <DecoratedAppliedFilters 
-            showFieldNames={true}
-            hiddenFields={['builtin.entityType']}
-            delimiter='|'
-            mapStateToAppliedQueryFilters={state => state.vertical.results?.verticalResults.appliedQueryFilters}
+      <ThemeProvider>
+        <div className='start'>
+          test
+          <StaticFilters
+            title='~Country and Employee Departments~'
+            options={staticFilterOptions}
           />
-          <AlternativeVerticals
-            currentVerticalLabel='People'
-            verticalsConfig={[
-              {label: 'Locations', verticalKey: 'KM'},
-              {label: 'FAQs', verticalKey: 'faq'}
-            ]}
-          />
-          <VerticalResults 
-            CardComponent={StandardCard}
-            cardConfig={{ showOrdinal: true }}
+          <SpellCheck
+            isVertical={true}
           />
         </div>
-      </div>
+        <div className='end'>
+          <SearchBar
+            placeholder='Search...'
+            isVertical={true}
+          />
+          <div>
+            <ResultsCount />
+            <DecoratedAppliedFilters 
+              showFieldNames={true}
+              hiddenFields={['builtin.entityType']}
+              delimiter='|'
+              mapStateToAppliedQueryFilters={state => state.vertical.results?.verticalResults.appliedQueryFilters}
+            />
+            <AlternativeVerticals
+              currentVerticalLabel='People'
+              verticalsConfig={[
+                {label: 'Locations', verticalKey: 'KM'},
+                {label: 'FAQs', verticalKey: 'faq'}
+              ]}
+            />
+            <VerticalResults 
+              CardComponent={StandardCard}
+              cardConfig={{ showOrdinal: true }}
+            />
+          </div>
+        </div>
+      </ThemeProvider>
     </AnswersActionsProvider>
   );
 }

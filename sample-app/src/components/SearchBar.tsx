@@ -3,8 +3,9 @@ import { AutocompleteResult } from '@yext/answers-core';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
-import styles from '../sass/SearchBar.module.scss';
 import autocompleteStyles from '../sass/Autocomplete.module.scss';
+import { ThemeContext } from '../providers/ThemeProvider';
+import { useContext } from 'react';
 
 interface Props {
   placeholder?: string
@@ -15,6 +16,7 @@ interface Props {
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
 export default function SearchBar({ placeholder, isVertical }: Props) {
+  const theme = useContext(ThemeContext);
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.query);
   const mapStateToAutocompleteResults: StateMapper<AutocompleteResult[] | undefined> = isVertical
@@ -42,7 +44,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   }
 
   return (
-    <div className='SearchBar'>
+    <div className={theme.SearchBar}>
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
@@ -66,8 +68,8 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
           optionContainer: autocompleteStyles.Autocomplete,
           option: autocompleteStyles.Autocomplete__option,
           focusedOption: autocompleteStyles.Autocomplete__option___focused,
-          inputElement: styles.SearchBar__input,
-          inputContainer: styles.SearchBar__inputContainer
+          inputElement: theme.SearchBar__input,
+          inputContainer: theme.SearchBar__inputContainer
         }}
       />
     </div>
