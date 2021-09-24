@@ -78,10 +78,10 @@ function Facet(props: { facet: DisplayableFacet, collapsible: boolean, defaultEx
 	return (
     <div className="Facet">
       <fieldset className={"Facet__fieldSet"}>
-        <button className={"Facet__legend"} {...(collapsible && getToggleProps())}>
+        <button className={"Facet__legend"} {...(collapsible ? getToggleProps() : {})}>
           {config.label || facet.displayName} 
         </button>
-        <div className="Facet__optionsContainer" {...(collapsible && getCollapseProps())}>
+        <div className="Facet__optionsContainer" {...(collapsible ? getCollapseProps() : {})}>
           {config.searchable 
             && <input className="Facet__search" 
                 type="text" 
