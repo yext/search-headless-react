@@ -9,6 +9,7 @@ import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
 import LocationBias from './components/LocationBias';
+import Facets from './components/Facets';
 
 function App() {
   const staticFilterOptions = [
@@ -43,6 +44,13 @@ function App() {
       value: 'Finance',
     }
   ]
+
+  const facetOptions = {
+    c_employeeDepartment: {
+      searchable: true
+    }
+  }
+
   return (
     <AnswersActionsProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
@@ -55,6 +63,12 @@ function App() {
         <StaticFilters
           title='~Country and Employee Departments~'
           options={staticFilterOptions}
+        />
+        <Facets 
+          searchOnChange={true}
+          collapsible={true}
+          defaultExpanded={true}
+          fieldConfig={facetOptions}
         />
         <SpellCheck
           isVertical={true}
