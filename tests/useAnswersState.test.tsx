@@ -138,16 +138,16 @@ describe('uses the most recent selector',() => {
     act(() => {
       let numSelectorCalls = 0;
       selector = () => {
-        return numSelectorCalls++;
+        return ++numSelectorCalls;
       };
       userEvent.click(screen.getByText('rerender'));
     });
-    expect(stateUpdates).toEqual(['initial value', 0]);
+    expect(stateUpdates).toEqual(['initial value', 1]);
 
     act(() => {
       statefulCore.setContext('trigger a state update that would not update the initial selector');
     });
-    expect(stateUpdates).toEqual(['initial value', 0, 2]);
+    expect(stateUpdates).toEqual(['initial value', 1, 3]);
   });
 });
 
