@@ -11,36 +11,46 @@ export type StateSelector<T> = (s: State) => T;
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const statefulCore = useContext(AnswersActionsContext);
 
-  const latestStoreState = useRef<State>(statefulCore.state);
-  const latestSelector = useRef<StateSelector<T>>(stateSelector);
-  const latestSelectedState = useRef<T>(stateSelector(statefulCore.state));
-  const selectedState = getSelectedState();
-
-  function getSelectedState() {
-    if (latestStoreState.current !== statefulCore.state || latestSelector.current !== stateSelector) {
-      return stateSelector(statefulCore.state);
-    }
-    return latestSelectedState.current;
+  // useRef stores values across renders without triggering additional ones
+  const storedStoreState = useRef<State>(statefulCore.state);
+  const storedSelector = useRef<StateSelector<T>>(stateSelector);
+  const storedSelectedState = useRef<T>();
+  // lazy initialize storeSelectedState, instead of putting the initial value in useRef's constructor
+  // this way the selector is only called here on the first render
+  if (!storedSelectedState.current) {
+    storedSelectedState.current = stateSelector(statefulCore.state);
   }
 
-  const [, triggerRender] = useState<T>(latestSelectedState.current);
+  /**
+   * The currently selected state - this is the value returned by the hook.
+   * Tries to use {@link storedSelectedState} when possible.
+   */
+  const selectedStateToReturn: T = (() => {
+    if (storedStoreState.current !== statefulCore.state || storedSelector.current !== stateSelector) {
+      return stateSelector(statefulCore.state);
+    }
+    return storedSelectedState.current;
+  })();
+
+  const [, triggerRender] = useState<T>(storedSelectedState.current);
   useLayoutEffect(() => {
-    latestSelector.current = stateSelector;
-    latestStoreState.current = statefulCore.state;
-    latestSelectedState.current = selectedState;
+    storedSelector.current = stateSelector;
+    storedStoreState.current = statefulCore.state;
+    storedSelectedState.current = selectedStateToReturn;
   });
 
   useLayoutEffect(() => {
     return statefulCore.addListener({
-      valueAccessor: latestSelector.current,
-      callback: (selectedState: T) => {
-        if (latestSelectedState.current !== selectedState) {
-          latestSelectedState.current = selectedState;
-          triggerRender(selectedState);
+      valueAccessor: state => state,
+      callback: (state: State) => {
+        const currentSelectedState = storedSelector.current(state);
+        if (storedSelectedState.current !== currentSelectedState) {
+          storedSelectedState.current = currentSelectedState;
+          triggerRender(currentSelectedState);
         }
       }
     });
   }, [statefulCore]);
 
-  return selectedState;
+  return selectedStateToReturn;
 }

@@ -2,10 +2,11 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Result } from '@yext/answers-core';
 import { provideStatefulCore } from '@yext/answers-headless';
-import React, { useCallback } from 'react';
+import { State } from '@yext/answers-headless/lib/esm/models/state';
+import React, { useCallback, useReducer } from 'react';
 import { AnswersActionsContext, useAnswersActions, useAnswersState } from '../src';
 
-it('does not perform extra renders or stateful-core listener registrations', async () => {
+it('does not perform extra renders/listener registrations for nested components', async () => {
   const parentStateUpdates: Result[][] = [];
   const childStateUpdates: string[] = [];
   let pendingVerticalQuery;
@@ -69,11 +70,85 @@ it('does not perform extra renders or stateful-core listener registrations', asy
     userEvent.click(screen.getByText('Search'));
     await pendingVerticalQuery;
   });
-  await pendingVerticalQuery;
   // Check that additional addListener calls are not made
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
   expect(parentStateUpdates).toHaveLength(3);
   expect(childStateUpdates).toHaveLength(2);
+});
+
+describe('uses the most recent selector',() => {
+  it('for determining the hook\'s return value', () => {
+    let selector = () => 'initial selector';
+
+    function Test() {
+      const selectedState: string = useAnswersState(selector);
+      const [, triggerRender] = useReducer(s => s + 1, 0);
+
+      return (
+        <>
+          <button onClick={triggerRender}>rerender</button>
+          <span data-testid='selected-state'>{selectedState}</span>
+        </>
+      );
+    }
+
+    const statefulCore = createStatefulCore();
+    render(
+      <AnswersActionsContext.Provider value={statefulCore}>
+        <Test />
+      </AnswersActionsContext.Provider>
+    );
+    expect(screen.getByTestId('selected-state')).toHaveTextContent('initial selector');
+
+    selector = () => 'new selector';
+    act(() => userEvent.click(screen.getByText('rerender')));
+    expect(screen.getByTestId('selected-state')).toHaveTextContent('new selector');
+  });
+
+  it('for determining whether to trigger a rerender', () => {
+    type Selector = (state: State) => string | number | undefined;
+    let selector: Selector = state => {
+      return state.query.query;
+    };
+    const stateUpdates: (string | undefined | number)[] = [];
+
+    function Test() {
+      const selectedState: string | undefined | number = useAnswersState(selector);
+      const [, triggerRender] = useReducer(s => s + 1, 0);
+      stateUpdates.push(selectedState);
+
+      return (
+        <>
+          <button onClick={triggerRender}>rerender</button>
+          <span data-testid='selected-state'>{selectedState}</span>
+        </>
+      );
+    }
+
+    const statefulCore = createStatefulCore();
+    statefulCore.setQuery('initial value');
+    expect(stateUpdates).toHaveLength(0);
+    render(
+      <AnswersActionsContext.Provider value={statefulCore}>
+        <Test />
+      </AnswersActionsContext.Provider>
+    );
+    expect(stateUpdates).toEqual(['initial value']);
+
+    act(() => {
+      let numSelectorCalls = 0;
+      selector = () => {
+        return numSelectorCalls++;
+      };
+      userEvent.click(screen.getByText('rerender'));
+    });
+    expect(stateUpdates).toEqual(['initial value', 0]);
+
+    act(() => {
+      statefulCore.setContext('trigger a state update that would not update the initial selector');
+    });
+    expect(stateUpdates).toEqual(['initial value', 0, 2]);
+  });
 });
 
 function createStatefulCore() {
