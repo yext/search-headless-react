@@ -15,8 +15,10 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const storedStoreState = useRef<State>(statefulCore.state);
   const storedSelector = useRef<StateSelector<T>>(stateSelector);
   const storedSelectedState = useRef<T>();
-  // lazy initialize storeSelectedState, instead of putting the initial value in useRef's constructor
-  // this way the selector is only called here on the first render
+  /**
+   * Guard execution of {@link stateSelector} for initializing storedSelectedState.
+   * Otherwise it is run here every single render, even if storedSelectedState is already initialized.
+   */
   if (!storedSelectedState.current) {
     storedSelectedState.current = stateSelector(statefulCore.state);
   }
