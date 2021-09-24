@@ -17,7 +17,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const storedSelectedState = useRef<T>();
   /**
    * Guard execution of {@link stateSelector} for initializing storedSelectedState.
-   * Otherwise it is run an additional time every render, even when storedSelectedState is already initialized.
+   * Otherwise it's run an additional time every render, even when storedSelectedState is already initialized.
    */
   if (storedSelectedState.current === undefined) {
     storedSelectedState.current = stateSelector(statefulCore.state);
