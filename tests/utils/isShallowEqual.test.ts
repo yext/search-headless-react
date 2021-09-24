@@ -86,5 +86,5 @@ it('handles objects with empty arrays that have different references', () => {
   const newObj = {
     test: []
   };
-  expect(isShallowEqual(originalObj, newObj)).toBeTruthy();
+  expect(isShallowEqual(originalObj, newObj)).toBeFalsy();
 });
