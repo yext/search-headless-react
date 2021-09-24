@@ -99,7 +99,7 @@ function Facet(props: { facet: DisplayableFacet, collapsible: boolean, defaultEx
   )
 }
 
-function FacetOption(props: { fieldId: string, option: DisplayableFacetOption, onChange: any }): JSX.Element {
+function FacetOption(props: { fieldId: string, option: DisplayableFacetOption, onChange: Function }): JSX.Element {
   const { fieldId, onChange, option } = props;
   return (
     <div>
