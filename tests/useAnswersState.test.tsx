@@ -136,9 +136,9 @@ describe('uses the most recent selector',() => {
     expect(stateUpdates).toEqual(['initial value']);
 
     act(() => {
-      let numSelectorCalls = 0;
+      let numNewSelectorCalls = 0;
       selector = () => {
-        return ++numSelectorCalls;
+        return ++numNewSelectorCalls;
       };
       userEvent.click(screen.getByText('rerender'));
     });
