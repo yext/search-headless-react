@@ -1,10 +1,10 @@
 .Facets {
-	&__buttons {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-top: 16px;
-	}
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+  }
 
   &__controls {
     display: flex;
@@ -22,26 +22,26 @@
 }
 
 .Facet {
-	&__legend {
-		width: 100%;
-		display: flex;
-		justify-content: space-between;
-		padding-top: 12px;
-		padding-bottom: 12px;
-	}
+  &__legend {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
 
-	&__search {
+  &__search {
     box-sizing: border-box;
-		width: 100%;
-		margin-bottom: 12px;
-	}
+    width: 100%;
+    margin-bottom: 12px;
+  }
 
-	&__options {
-		padding-bottom: 16px;
-	}
+  &__options {
+    padding-bottom: 16px;
+  }
 
-	&__label {
-		cursor: pointer;
-		margin-left: 12px;
-	}
+  &__label {
+    cursor: pointer;
+    margin-left: 12px;
+  }
 }
