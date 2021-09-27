@@ -1,4 +1,4 @@
-import { useAnswersActions, useAnswersState, StateMapper } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState, StateSelector } from '@yext/answers-headless-react';
 import { AutocompleteResult } from '@yext/answers-core';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
@@ -17,7 +17,7 @@ interface Props {
 export default function SearchBar({ placeholder, isVertical }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.query);
-  const mapStateToAutocompleteResults: StateMapper<AutocompleteResult[] | undefined> = isVertical
+  const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
     ? state => state.vertical.autoComplete?.results
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
