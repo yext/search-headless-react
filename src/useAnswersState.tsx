@@ -1,39 +1,58 @@
-import { useContext, useEffect, useState} from 'react';
+import { useContext, useLayoutEffect, useRef, useState} from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { AnswersActionsContext } from './AnswersActionsContext';
-import isShallowEqual from './utils/isShallowEqual';
 
-export type StateMapper<T> = (s: State) => T;
-
-function isObj(obj: unknown): obj is Record<string, unknown> {
-  return !!obj && typeof obj === 'object';
-}
+export type StateSelector<T> = (s: State) => T;
 
 /**
- * Returns the Answers State returned by the map function
+ * Returns the Answers State returned by the map function.
+ * Very similar to useSelector in react-redux.
  */
-export function useAnswersState<T>(mapState: StateMapper<T>): T {
+export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const statefulCore = useContext(AnswersActionsContext);
-  const [stateValue, setState] = useState(mapState(statefulCore.state));
 
-  useEffect(() => {
-    // Store the previous state manually, as a work around for react batching state updates.
-    // A batched state update will not update immediately, causing additional the listener callback
-    // to run additional times.
-    let previousStateValue = stateValue;
+  // useRef stores values across renders without triggering additional ones
+  const storedStoreState = useRef<State>(statefulCore.state);
+  const storedSelector = useRef<StateSelector<T>>(stateSelector);
+  const storedSelectedState = useRef<T>();
+  /**
+   * Guard execution of {@link stateSelector} for initializing storedSelectedState.
+   * Otherwise it's run an additional time every render, even when storedSelectedState is already initialized.
+   */
+  if (storedSelectedState.current === undefined) {
+    storedSelectedState.current = stateSelector(statefulCore.state);
+  }
+
+  /**
+   * The currently selected state - this is the value returned by the hook.
+   * Tries to use {@link storedSelectedState} when possible.
+   */
+  const selectedStateToReturn: T = (() => {
+    if (storedStoreState.current !== statefulCore.state || storedSelector.current !== stateSelector) {
+      return stateSelector(statefulCore.state);
+    }
+    return storedSelectedState.current;
+  })();
+
+  const [, triggerRender] = useState<T>(storedSelectedState.current);
+  useLayoutEffect(() => {
+    storedSelector.current = stateSelector;
+    storedStoreState.current = statefulCore.state;
+    storedSelectedState.current = selectedStateToReturn;
+  });
+
+  useLayoutEffect(() => {
     return statefulCore.addListener({
-      valueAccessor: mapState,
-      callback: (newStateValue: T) => {
-        const hasObjState = isObj(newStateValue) && isObj(previousStateValue);
-        if (!hasObjState || !isShallowEqual(
-          previousStateValue as Record<string, unknown>, newStateValue as Record<string, unknown>))
-        {
-          previousStateValue = newStateValue;
-          setState(newStateValue);
+      valueAccessor: state => state,
+      callback: (state: State) => {
+        const currentSelectedState = storedSelector.current(state);
+        if (storedSelectedState.current !== currentSelectedState) {
+          storedSelectedState.current = currentSelectedState;
+          triggerRender(currentSelectedState);
         }
       }
     });
-  });
+  }, [statefulCore]);
 
-  return stateValue;
+  return selectedStateToReturn;
 }

@@ -1,10 +1,11 @@
 module.exports = {
-  extends: ['react-app', 'plugin:@typescript-eslint/recommended'],
-  ignorePatterns: ['sample-app', 'lib'],
+  extends: ['react-app', 'plugin:@typescript-eslint/recommended', 'plugin:react-perf/recommended'],
+  plugins: ['react-perf'],
+  ignorePatterns: ['sample-app', 'lib', 'tests/setup/responses'],
   rules: {
     indent: ['error', 2],
-    'no-trailing-spaces' : ['error'],
-    'no-multi-spaces' : ['error'],
+    'no-trailing-spaces': ['error'],
+    'no-multi-spaces': ['error'],
     quotes: ['error', 'single'],
     'space-before-function-paren': ['error', {
       named: 'never',

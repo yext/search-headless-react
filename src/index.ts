@@ -1,5 +1,5 @@
 import { useAnswersActions, AnswersActions } from './useAnswersActions';
-import { useAnswersState, StateMapper } from './useAnswersState';
+import { useAnswersState, StateSelector } from './useAnswersState';
 import { subscribeToStateUpdates } from './subscribeToStateUpdates';
 import { AnswersActionsProvider } from './AnswersActionsProvider';
 import { AnswersActionsContext } from './AnswersActionsContext';
@@ -11,5 +11,5 @@ export {
   useAnswersState,
   AnswersActionsProvider,
   AnswersActions,
-  StateMapper
+  StateSelector
 };

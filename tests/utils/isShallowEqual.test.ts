@@ -78,3 +78,13 @@ it('handles objects with different numbers of keys', () => {
   };
   expect(isShallowEqual(originalObj, newObj)).toBeFalsy();
 });
+
+it('handles objects with empty arrays that have different references', () => {
+  const originalObj = {
+    test: []
+  };
+  const newObj = {
+    test: []
+  };
+  expect(isShallowEqual(originalObj, newObj)).toBeFalsy();
+});
