@@ -30,8 +30,11 @@ export default function UniversalResults({
     <div className={`UniversalResults ${isLoading ? 'isLoading' : ''}`}>
       {/* TODO: add direct answer component <DirectAnswer /> */}
       {allVerticalResults
-        .filter(verticalResults => verticalResults.verticalKey in verticalConfigs && verticalResults.results)
         .map((verticalResults, index) => {
+          if( !(verticalResults.verticalKey in verticalConfigs) || !verticalResults.results) {
+            return null;
+          }
+
           const verticalKey = verticalResults.verticalKey;
           const verticalConfig = verticalConfigs[verticalKey];
 
@@ -56,7 +59,9 @@ export default function UniversalResults({
               key={verticalKey}
             />
           );
-        })}
+        })
+        .filter(component => component)
+      }
     </div>
   );
 }
