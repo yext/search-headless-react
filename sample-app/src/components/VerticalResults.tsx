@@ -5,7 +5,8 @@ import { Result } from '@yext/answers-core';
 interface Props {
   CardComponent: CardComponent,
   cardConfig: CardConfigTypes,
-  displayAllResults?: boolean;
+  displayAllResults?: boolean,
+  results?: Result[]
 }
 
 /**
@@ -20,17 +21,20 @@ export default function VerticalResults(props: Props): JSX.Element | null {
   const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
   
-  const results = verticalResults.length === 0 && displayAllResults
+  let results = props.results;
+  if(!results) {
+    results = verticalResults.length === 0 && displayAllResults
     ? allResultsForVertical
     : verticalResults
+  }
 
   if (results.length === 0) {
     return null;
   }
 
   return (
-    <section className='yxt-Results'>
-      <div className='yxt-Results-items'>
+    <section className='VerticalResults'>
+      <div className='VerticalResults__results'>
         {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
       </div>
     </section>
@@ -45,5 +49,5 @@ export default function VerticalResults(props: Props): JSX.Element | null {
  * @param result - The result to render.
  */
 function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes, result: Result): JSX.Element {
-  return <CardComponent result={result} configuration={cardConfig} key={result.id}/>;
+  return <CardComponent result={result} configuration={cardConfig} key={result.id || result.index}/>;
 }

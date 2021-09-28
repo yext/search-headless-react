@@ -9,7 +9,7 @@ import {
   createGroupedFilters 
 } from '../utils/filterutils';
 
-interface Props {
+export interface DecoratedAppliedFiltersConfig {
   showFieldNames?: boolean,
   hiddenFields?: Array<string>,
   labelText?: string,
@@ -20,7 +20,7 @@ interface Props {
 /**
  * Container component for AppliedFilters
  */
-export default function DecoratedAppliedFilters(props : Props): JSX.Element {
+export default function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): JSX.Element {
   const {hiddenFields = [], mapStateToAppliedQueryFilters, ...otherProps} = props;
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
   appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
