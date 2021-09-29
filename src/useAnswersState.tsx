@@ -42,12 +42,12 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   });
 
   useLayoutEffect(() => {
-    let unsubbed = false;
+    let unsubscribed = false;
     const unSubscribe = statefulCore.addListener({
       valueAccessor: state => state,
       callback: (state: State) => {
         // prevent React state update on an unmounted component
-        if (unsubbed) {
+        if (unsubscribed) {
           return;
         }
         const currentSelectedState = storedSelector.current(state);
@@ -58,7 +58,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
       }
     });
     return () => {
-      unsubbed = true;
+      unsubscribed = true;
       unSubscribe();
     };
   }, [statefulCore]);
