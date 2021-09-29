@@ -20,14 +20,13 @@ export default function UniversalResults({
   appliedFiltersConfig
 }: UniversalResultsProps): JSX.Element | null {
   const allVerticalResults = useAnswersState(state => state?.universal?.results?.verticalResults) || [];
-  const isLoading = useAnswersState(state => state.universal.searchLoading);
 
   if (allVerticalResults.length === 0) {
     return null;
   }
 
   return (
-    <div className={`UniversalResults ${isLoading ? 'isLoading' : ''}`}>
+    <div className="UniversalResults">
       {renderVerticalSections({allVerticalResults, appliedFiltersConfig, verticalConfigs})}
     </div>
   );
