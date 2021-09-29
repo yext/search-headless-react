@@ -18,9 +18,9 @@ export default function StandardSection(props: SectionTemplateConfig): JSX.Eleme
   const cardComponent = CardRegistry[cardType];
   
   return (
-    <section className={"UniversalResults__section"}>
-      <div className={"UniversalResults__sectionHead"}>
-        <h2 className={"UniversalResults__sectionLabel"}>{verticalConfig.label}</h2>
+    <section className={'StandardSection'}>
+      <div className={'StandardSection__sectionHead'}>
+        <h2 className={'StandardSection__sectionLabel'}>{verticalConfig.label}</h2>
         <ResultsCount resultsLength={verticalConfig.limit? verticalConfig.limit: results.length} 
           resultsCount={resultsCount} />
         {appliedFilters && <DecoratedAppliedFilters {...appliedFilters}/>}
@@ -31,7 +31,7 @@ export default function StandardSection(props: SectionTemplateConfig): JSX.Eleme
         cardConfig={verticalConfig.cardConfig || {}}
       />
       {verticalConfig.viewMore && 
-        <Link className="UniversalResults__sectionLink" to={`/${verticalKey}?query=${latestQuery}`}>
+        <Link className='StandardSection__sectionLink' to={`/${verticalKey}?query=${latestQuery}`}>
           View all
         </Link>}
     </section>

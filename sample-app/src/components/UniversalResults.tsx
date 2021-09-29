@@ -26,7 +26,7 @@ export default function UniversalResults({
   }
 
   return (
-    <div className="UniversalResults">
+    <div className='UniversalResults'>
       {renderVerticalSections({allVerticalResults, appliedFiltersConfig, verticalConfigs})}
     </div>
   );
