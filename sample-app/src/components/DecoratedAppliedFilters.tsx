@@ -17,6 +17,14 @@ export interface DecoratedAppliedFiltersConfig {
   mapStateToAppliedQueryFilters: StateSelector<AppliedQueryFilter[] | undefined>
 }
 
+export interface UniversalAppliedFiltersConfig {
+  showFieldNames?: boolean,
+  hiddenFields?: Array<string>,
+  labelText?: string,
+  delimiter?: string,
+  filters: AppliedQueryFilter[] | undefined
+}
+
 /**
  * Container component for AppliedFilters
  */
@@ -31,3 +39,16 @@ export default function DecoratedAppliedFilters(props : DecoratedAppliedFiltersC
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
+/**
+ * Container component for AppliedFilters for universal results
+ */
+ export function UniversalAppliedFilters(props : UniversalAppliedFiltersConfig): JSX.Element {
+  const {hiddenFields = [], filters, ...otherProps} = props;
+  let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
+  appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
+  let nlpFilters = filters || [];
+  nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
+  const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
+
+  return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
+}

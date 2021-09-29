@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { SectionTemplateConfig } from "./SectionTemplateRegistry";
 import { useAnswersState } from "@yext/answers-headless-react";
 import { CardRegistry } from "../components/cards/CardRegistry";
-import DecoratedAppliedFilters from "../components/DecoratedAppliedFilters";
+import { UniversalAppliedFilters } from "../components/DecoratedAppliedFilters";
 
 export default function StandardSection(props: SectionTemplateConfig): JSX.Element | null {
   const { results, verticalKey, verticalConfig, appliedFilters } = props;
@@ -20,9 +20,8 @@ export default function StandardSection(props: SectionTemplateConfig): JSX.Eleme
     <section className={"UniversalResults__section"}>
       <div className={"UniversalResults__sectionHead"}>
         <h2 className={"UniversalResults__sectionLabel"}>{verticalConfig.label}</h2>
-        {appliedFilters && <DecoratedAppliedFilters {...appliedFilters}/>}
+        {appliedFilters && <UniversalAppliedFilters {...appliedFilters}/>}
       </div>
-      {/* TODO: add map rendering ability*/}
       <VerticalResults
         results={results}
         CardComponent={cardComponent}

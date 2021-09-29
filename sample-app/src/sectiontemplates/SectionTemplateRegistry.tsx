@@ -1,7 +1,7 @@
 import StandardSection from "./StandardSection";
 import { Result } from "@yext/answers-core";
 import { CardConfig } from '../models/cardComponent';
-import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
+import { UniversalAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
 
 export interface VerticalConfig {
   sectionTemplate?: string,
@@ -9,16 +9,15 @@ export interface VerticalConfig {
   label?: string,
   limit?: number,
   viewMore?: boolean
-  //TODO: add (mapConfig?: MapConfig)
 }
 
 export interface SectionTemplateConfig {
-  // TODO: add (includeMap?: boolean)
   results: Result[],
   verticalKey: string,
   verticalConfig: VerticalConfig,
-  appliedFilters?: DecoratedAppliedFiltersConfig,
+  appliedFilters?: UniversalAppliedFiltersConfig,
 }
+
 /**
  * A functional component that can be used to render a section template for vertical results.
  */

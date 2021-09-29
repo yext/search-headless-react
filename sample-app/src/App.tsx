@@ -112,7 +112,7 @@ function App() {
               />
               <div>
                 <UniversalResults
-                  appliedFilters={universalResultsFilterConfig}
+                  appliedFiltersConfig={universalResultsFilterConfig}
                   verticalConfigs={universalResultsConfig}
                 />
               </div>
