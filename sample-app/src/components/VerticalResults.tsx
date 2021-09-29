@@ -22,10 +22,10 @@ export default function VerticalResults(props: Props): JSX.Element | null {
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
   
   let results = props.results;
-  if(!results) {
+  if (!results) {
     results = verticalResults.length === 0 && displayAllResults
-    ? allResultsForVertical
-    : verticalResults
+      ? allResultsForVertical
+      : verticalResults
   }
 
   if (results.length === 0) {
