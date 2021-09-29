@@ -203,39 +203,9 @@ export const universalQueryResponseWithFilters = {
                 longitude: -77.103339
               },
               firstName: "Bob",
-              photoGallery: [
-                {
-                  image: {
-                    url: "https://a.mktgcdn.com/p/rH7u6enn8thbrCVgI5a9ydxcGhcY3LIlu35nd1prLHs/310x310.jpg",
-                    alternateText: "Photo of a doctor",
-                    width: 310,
-                    height: 310,
-                    thumbnails: [
-                      {
-                        url: "https://a.mktgcdn.com/p/rH7u6enn8thbrCVgI5a9ydxcGhcY3LIlu35nd1prLHs/310x310.jpg",
-                        width: 310,
-                        height: 310
-                      }
-                    ]
-                  }
-                }
-              ],
               geocodedCoordinate: {
                 latitude: 38.895467,
                 longitude: -77.069889
-              },
-              headshot: {
-                url: "https://a.mktgcdn.com/p/rH7u6enn8thbrCVgI5a9ydxcGhcY3LIlu35nd1prLHs/310x310.jpg",
-                alternateText: "Photo of a doctor",
-                width: 310,
-                height: 310,
-                thumbnails: [
-                  {
-                    url: "https://a.mktgcdn.com/p/rH7u6enn8thbrCVgI5a9ydxcGhcY3LIlu35nd1prLHs/310x310.jpg",
-                    width: 310,
-                    height: 310
-                  }
-                ]
               },
               isoRegionCode: "VA",
               lastName: "Cellini",
@@ -328,7 +298,7 @@ export const universalQueryResponse = {
                 postalCode: "22102",
                 countryCode: "US"
               },
-              description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tristique senectus et netus et malesuada fames ac turpis. Porttitor eget dolor morbi non arcu risus quis. Tempor orci dapibus ultrices in iaculis. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus est. Eleifend donec pretium vulputate sapien nec. Ornare suspendisse sed nisi lacus sed viverra tellus in hac. Morbi tristique senectus et netus et malesuada. Vel pharetra vel turpis nunc eget lorem dolor sed viverra. Sapien nec sagittis aliquam malesuada.\n\nAt lectus urna duis convallis convallis tellus. Luctus venenatis lectus magna fringilla urna porttitor rhoncus. Blandit volutpat maecenas volutpat blandit aliquam etiam erat velit. Amet dictum sit amet justo donec enim diam vulputate ut. Ultrices in iaculis nunc sed augue lacus viverra. Feugiat sed lectus vestibulum mattis ullamcorper velit. Euismod quis viverra nibh cras pulvinar mattis nunc sed blandit. In hac habitasse platea dictumst quisque. In aliquam sem fringilla ut morbi tincidunt augue interdum velit. At erat pellentesque adipiscing commodo elit at.\n\nNunc aliquet bibendum enim facilisis gravida neque. Libero id faucibus nisl tincidunt eget nullam. Ullamcorper dignissim cras tincidunt lobortis. Condimentum id venenatis a condimentum. Sit amet dictum sit amet justo. Ac placerat vestibulum lectus mauris ultrices eros in. Cras sed felis eget velit aliquet sagittis id consectetur purus. Auctor urna nunc id cursus. Arcu non odio euismod lacinia at. Neque convallis a cras semper auctor neque vitae. Adipiscing elit pellentesque habitant morbi tristique. Commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend. Scelerisque eu ultrices vitae auctor eu augue ut lectus. In vitae turpis massa sed elementum. Nibh sit amet commodo nulla facilisi nullam vehicula ipsum a. Vitae suscipit tellus mauris a diam maecenas sed enim. Volutpat blandit aliquam etiam erat velit scelerisque.",
+              description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
               name: "Tom Meyer",
               cityCoordinate: {
                 latitude: 38.936519622802734,
@@ -358,12 +328,6 @@ export const universalQueryResponse = {
               geocodedCoordinate: {
                 latitude: 38.924654,
                 longitude: -77.216891
-              },
-              headshot: {
-                url: "https://a.mktgcdn.com/p/cb9jR0A19ADuKc7ExlWmHaDchPW_61IR5TZ5G7NApjY/139x140.jpg",
-                width: 139,
-                height: 140,
-                sourceUrl: "https://a.mktgcdn.com/p/cb9jR0A19ADuKc7ExlWmHaDchPW_61IR5TZ5G7NApjY/139x140.jpg"
               },
               lastName: "Meyer",
               routableCoordinate: {
@@ -405,16 +369,16 @@ export const universalQueryResponse = {
         encodedState: "tom",
         results: [
           {
-            htmlTitle: "Men\\u0026#39;s Skechers \\u003cb\\u003eTom\\u003c/b\\u003e Cats Oxford | Shoes.com",
+            htmlTitle: "Men\\u0026#39;s Skechers Cats Oxford | Shoes.com",
             link: "https://www.shoes.com/mens-skechers-tom-cats-oxford/P-3296.html",
             displayLink: "www.shoes.com",
-            htmlSnippet: "Go on the prowl in the Skechers \\u003cb\\u003eTom\\u003c/b\\u003e Cats Oxford. This lace-up plain-toe shoe features a padded collar and tongue, memory foam, and shock-absorbing EVA ..."
+            htmlSnippet: "Go on the prowl in the Skechers Cats Oxford."
           },
           {
             htmlTitle: "\\u003cb\\u003eToms\\u003c/b\\u003e | Shoes.com",
             link: "https://www.shoes.com/brands/toms/",
             displayLink: "www.shoes.com",
-            htmlSnippet: "Shop \\u003cb\\u003eToms\\u003c/b\\u003e at Shoes.com Enjoy free US shipping on all orders."
+            htmlSnippet: "Shop at Shoes.com Enjoy free US shipping on all orders."
           }
         ],
         appliedQueryFilters: [],
