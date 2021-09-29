@@ -45,7 +45,7 @@ function App() {
     }
   ]
 
-  const facetOptions = {
+  const facetConfigs = {
     c_employeeDepartment: {
       searchable: true
     }
@@ -68,7 +68,7 @@ function App() {
           searchOnChange={true}
           collapsible={true}
           defaultExpanded={true}
-          fieldConfig={facetOptions}
+          facetConfigs={facetConfigs}
         />
         <SpellCheck
           isVertical={true}

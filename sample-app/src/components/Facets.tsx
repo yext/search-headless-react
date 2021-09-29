@@ -1,31 +1,21 @@
 import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react'
 import { DisplayableFacet, DisplayableFacetOption } from "@yext/answers-core";
-import { useState } from 'react';
-import useCollapse from 'react-collapsed';
+import Facet, { FacetConfig, onFacetChangeFn } from './Facet';
 import '../sass/Facets.scss';
 
-interface FacetConfig {
-  searchable?: boolean
-  placeholderText?: string
-  label?: string
-}
-interface Props {
+interface FacetsProps {
   searchOnChange?: boolean
   collapsible?: boolean
   defaultExpanded?: boolean
-  applyLabel?: string
-  resetFacetLabel?: string
-  fieldConfig?: Record<string, FacetConfig>
+  facetConfigs?: Record<string, FacetConfig>
 }
 
-export default function Facets (props: Props): JSX.Element {
-  const { searchOnChange } = props;
-  const collapsible = !!props.collapsible;
-  const defaultExpanded = !!props.defaultExpanded;
+export default function Facets (props: FacetsProps): JSX.Element {
+  const { searchOnChange, collapsible, defaultExpanded, facetConfigs } = props;
   const facets = useAnswersState(state => state.filters?.facets) || [];
   const answersActions = useAnswersActions();
 
-  const handleApplyFacets = () => answersActions.executeVerticalQuery();
+  const executeSearch = () => answersActions.executeVerticalQuery();
 
   const handleResetFacets = () => {
     facets.forEach(facet => {
@@ -49,62 +39,35 @@ export default function Facets (props: Props): JSX.Element {
   return (
     <div className='Facets'>
       <div className='Facets__options'>
-        {facets.filter((facet: DisplayableFacet) => {
-            return facet.options?.length > 0
-          }).map((facet: DisplayableFacet) => {
-          const config = props.fieldConfig?.[facet.fieldId] ?? {};
-          return <Facet key={facet.fieldId} collapsible={collapsible} defaultExpanded={defaultExpanded} facet={facet} 
-            config={config} onChange={handleFacetOptionChange} />
-        })}
+        {renderFacets({facets, facetConfigs, collapsible, defaultExpanded, handleFacetOptionChange})}
       </div>
       <div className='Facets__controls'>
-        <button className={`Facets__button`} onClick={handleApplyFacets}>{props.applyLabel || 'Apply'}</button>
-        <button className={`Facets__link`} onClick={handleResetFacets}>{props.resetFacetLabel || 'Reset all'}</button>
+        {!searchOnChange && <button className={`Facets__button`} onClick={executeSearch}>Apply</button>}
+        <button className={`Facets__link`} onClick={handleResetFacets}>Reset all</button>
       </div>
     </div>
   )
 }
 
-function Facet(props: { facet: DisplayableFacet, collapsible: boolean, defaultExpanded: boolean, onChange: Function, config: FacetConfig }): JSX.Element {
-  const { facet, onChange, config, collapsible, defaultExpanded } = props;
-  const answersActions = useAnswersActions();
-  const hasSelectedFacet = !!facet.options.find(o => o.selected);
-  const shouldExpand = collapsible && (defaultExpanded || hasSelectedFacet);
-  const [ filterValue, setFilterValue ] = useState('');
-  const { getCollapseProps, getToggleProps } = useCollapse({
-    defaultExpanded: shouldExpand
-  });
-
-	return (
-    <div className="Facet">
-      <fieldset className={"Facet__fieldSet"}>
-        <button className={"Facet__legend"} {...(collapsible ? getToggleProps() : {})}>
-          {config.label || facet.displayName} 
-        </button>
-        <div className="Facet__optionsContainer" {...(collapsible ? getCollapseProps() : {})}>
-          {config.searchable 
-            && <input className="Facet__search" 
-                type="text" 
-                placeholder={config.placeholderText || "Search here..."} 
-                value={filterValue} 
-                onChange={(e) => setFilterValue(e.target.value)}/>}
-          <div className="Facet__options">
-            {answersActions.searchThroughFacet(facet, filterValue).options.map((option) =>
-              <FacetOption key={option.displayName} fieldId={facet.fieldId} option={option} onChange={onChange} />
-            )}
-          </div>
-        </div>
-      </fieldset>
-    </div>
-  )
+interface RenderFacetsProps extends FacetsProps {
+  facets: DisplayableFacet[]
+  handleFacetOptionChange: onFacetChangeFn
 }
 
-function FacetOption(props: { fieldId: string, option: DisplayableFacetOption, onChange: Function }): JSX.Element {
-  const { fieldId, onChange, option } = props;
-  return (
-    <div>
-      <input onChange={() => onChange(fieldId, option)} checked={option.selected} type="checkbox" id={option.displayName} />
-      <label className={"Facet__label"} htmlFor={option.displayName}>{option.displayName} ({option.count})</label>
-    </div>
-  )
+function renderFacets(props: RenderFacetsProps): JSX.Element {
+  const { facets, facetConfigs, collapsible, defaultExpanded, handleFacetOptionChange } = props;
+  return <>
+    {facets
+      .filter(facet => facet.options?.length > 0)
+      .map(facet => {
+        const config = facetConfigs?.[facet.fieldId] ?? {};
+        return <Facet key={facet.fieldId}
+        collapsible={collapsible}
+        defaultExpanded={defaultExpanded}
+        facet={facet}
+        config={config}
+        onChange={handleFacetOptionChange} />
+      })
+    }
+  </>
 }
