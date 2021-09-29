@@ -1,7 +1,7 @@
 import StandardSection from "./StandardSection";
 import { Result } from "@yext/answers-core";
 import { CardConfig } from '../models/cardComponent';
-import { UniversalAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
+import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
 
 export interface VerticalConfig {
   sectionTemplate?: string,
@@ -13,9 +13,10 @@ export interface VerticalConfig {
 
 export interface SectionTemplateConfig {
   results: Result[],
+  resultsCount: number,
   verticalKey: string,
   verticalConfig: VerticalConfig,
-  appliedFilters?: UniversalAppliedFiltersConfig,
+  appliedFilters?: DecoratedAppliedFiltersConfig,
 }
 
 /**

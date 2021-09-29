@@ -14,41 +14,29 @@ export interface DecoratedAppliedFiltersConfig {
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
-  mapStateToAppliedQueryFilters: StateSelector<AppliedQueryFilter[] | undefined>
+  appliedQueryFilters?: AppliedQueryFilter[] | undefined
+  mapStateToAppliedQueryFilters?: StateSelector<AppliedQueryFilter[] | undefined>
 }
 
-export interface UniversalAppliedFiltersConfig {
-  showFieldNames?: boolean,
-  hiddenFields?: Array<string>,
-  labelText?: string,
-  delimiter?: string,
-  filters: AppliedQueryFilter[] | undefined
-}
 
 /**
  * Container component for AppliedFilters
  */
 export default function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): JSX.Element {
-  const {hiddenFields = [], mapStateToAppliedQueryFilters, ...otherProps} = props;
+  const { 
+    hiddenFields = [],
+    appliedQueryFilters,
+    mapStateToAppliedQueryFilters = state => state.vertical?.results?.verticalResults.appliedQueryFilters, 
+    ...otherProps
+  } = props;
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
   appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
   let nlpFilters = useAnswersState(mapStateToAppliedQueryFilters) || [];
+  if (appliedQueryFilters) {
+    nlpFilters = appliedQueryFilters || [];
+  }
   nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
   const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
   
-  return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
-}
-
-/**
- * Container component for AppliedFilters for universal results
- */
- export function UniversalAppliedFilters(props : UniversalAppliedFiltersConfig): JSX.Element {
-  const {hiddenFields = [], filters, ...otherProps} = props;
-  let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
-  appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
-  let nlpFilters = filters || [];
-  nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
-  const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
-
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }

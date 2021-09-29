@@ -149,7 +149,6 @@ function App() {
                   showFieldNames={true}
                   hiddenFields={['builtin.entityType']}
                   delimiter='|'
-                  mapStateToAppliedQueryFilters={state => state.vertical.results?.verticalResults.appliedQueryFilters}
                 />
                 <AlternativeVerticals
                   currentVerticalLabel='People'
