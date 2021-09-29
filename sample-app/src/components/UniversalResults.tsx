@@ -1,5 +1,5 @@
 import { useAnswersState } from "@yext/answers-headless-react";
-import { VerticalConfig, SectionTemplateRegistry } from '../sectiontemplates/SectionTemplateRegistry'
+import { VerticalConfig, SectionRegistry } from '../sectiontemplates/SectionRegistry'
 import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
 import { VerticalResults } from "@yext/answers-core";
 
@@ -53,7 +53,7 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
       const label = verticalConfig.label ?? verticalKey;
       const results = limit ? verticalResults.results.slice(0, limit) : verticalResults.results; 
       
-      const SectionComponent = SectionTemplateRegistry[verticalConfig.sectionTemplate || 'StandardSection'];
+      const SectionComponent = SectionRegistry[verticalConfig.sectionTemplate || 'StandardSection'];
 
       let appliedFilters;
       if (appliedFiltersConfig && appliedFiltersConfig.show) {

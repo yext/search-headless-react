@@ -11,7 +11,7 @@ export interface VerticalConfig {
   viewMore?: boolean
 }
 
-export interface SectionTemplateConfig {
+export interface SectionConfig {
   results: Result[],
   resultsCount: number,
   verticalKey: string,
@@ -20,10 +20,10 @@ export interface SectionTemplateConfig {
 }
 
 /**
- * A functional component that can be used to render a section template for vertical results.
+ * A component that can be used to render a section template for vertical results.
  */
-type SectionComponent = (props: SectionTemplateConfig) => JSX.Element | null;
+type SectionComponent = (props: SectionConfig) => JSX.Element | null;
 
-export const SectionTemplateRegistry: Record<string, SectionComponent> = {
+export const SectionRegistry: Record<string, SectionComponent> = {
   StandardSection
 }

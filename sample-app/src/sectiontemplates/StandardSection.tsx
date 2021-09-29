@@ -1,16 +1,16 @@
 import VerticalResults from "../components/VerticalResults";
 import { Link } from "react-router-dom";
-import { SectionTemplateConfig } from "./SectionTemplateRegistry";
+import { SectionConfig } from "./SectionRegistry";
 import { useAnswersState } from "@yext/answers-headless-react";
 import { CardRegistry } from "../components/cards/CardRegistry";
 import DecoratedAppliedFilters from "../components/DecoratedAppliedFilters";
 import ResultsCount from "../components/ResultsCount";
 
-export default function StandardSection(props: SectionTemplateConfig): JSX.Element | null {
+export default function StandardSection(props: SectionConfig): JSX.Element | null {
   const { results, verticalKey, verticalConfig, appliedFilters, resultsCount } = props;
   const latestQuery = useAnswersState(state => state.query.latest);
   
-  if(results.length === 0) {
+  if (results.length === 0) {
     return null;
   }
 
