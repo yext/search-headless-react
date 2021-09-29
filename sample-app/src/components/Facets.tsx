@@ -23,7 +23,9 @@ export default function Facets (props: FacetsProps): JSX.Element {
         answersActions.unselectFacetOption(facet.fieldId, option)
       });
     });
-    answersActions.executeVerticalQuery()
+    if (searchOnChange) { 
+      answersActions.executeVerticalQuery();
+    }
   }
 
   const handleFacetOptionChange = (fieldId: string, option: DisplayableFacetOption) => {
@@ -32,7 +34,7 @@ export default function Facets (props: FacetsProps): JSX.Element {
       :  answersActions.selectFacetOption(fieldId, option);
     
     if (searchOnChange) { 
-      answersActions.executeVerticalQuery()
+      answersActions.executeVerticalQuery();
     }
   }
 
