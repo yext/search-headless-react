@@ -13,7 +13,7 @@ module.exports = {
     }],
     'quote-props': ['error', 'as-needed'],
     'max-len': ['error', {
-      code: 125,
+      code: 110,
       ignorePattern: '^import\\s.+\\sfrom\\s.+;$'
     }],
     '@typescript-eslint/semi': ['error'],
