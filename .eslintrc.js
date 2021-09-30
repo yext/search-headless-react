@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['react-perf'],
   ignorePatterns: ['sample-app', 'lib', 'tests/setup/responses'],
   rules: {
-    indent: ['error', 2],
+    indent: ['error', 2, { SwitchCase: 1 }],
     'no-trailing-spaces': ['error'],
     'no-multi-spaces': ['error'],
     quotes: ['error', 'single'],

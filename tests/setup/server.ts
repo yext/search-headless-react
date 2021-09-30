@@ -13,14 +13,14 @@ const handlers = [
   rest.get(/answers\/query/, (req, res, ctx) => {
     const input = req.url.searchParams.get('input');
     switch(input) {
-    case 'resultsWithFilter':
-      return res(
-        ctx.json(universalQueryResponseWithFilters),
-      );
-    default:
-      return res(
-        ctx.json(universalQueryResponse),
-      );
+      case 'resultsWithFilter':
+        return res(
+          ctx.json(universalQueryResponseWithFilters),
+        );
+      default:
+        return res(
+          ctx.json(universalQueryResponse),
+        );
     }
   })
 ];
