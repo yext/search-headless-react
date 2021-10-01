@@ -31,7 +31,7 @@ export default function Dropdown({
     })
     return (
       <div key={option.value} className={className} onClick={() => onClickOption(option)}>
-      {option.render()}
+        {option.render()}
       </div>)
   }
 

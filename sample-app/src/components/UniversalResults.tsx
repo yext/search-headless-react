@@ -3,7 +3,7 @@ import { VerticalConfig, SectionRegistry } from '../sectiontemplates/SectionRegi
 import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
 import { VerticalResults } from "@yext/answers-core";
 
-interface AppliedFiltersConfig extends DecoratedAppliedFiltersConfig {
+interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean
 }
 
@@ -27,7 +27,7 @@ export default function UniversalResults({
 
   return (
     <div className='UniversalResults'>
-      {renderVerticalSections({allVerticalResults, appliedFiltersConfig, verticalConfigs})}
+      {renderVerticalSections({ allVerticalResults, appliedFiltersConfig, verticalConfigs })}
     </div>
   );
 }
@@ -41,35 +41,36 @@ interface VerticalSectionsProps extends UniversalResultsProps {
  * including specifing what section template to use.
  */
 function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
-  const {allVerticalResults , appliedFiltersConfig, verticalConfigs} = props;
+  const { allVerticalResults , appliedFiltersConfig, verticalConfigs } = props;
   return <>
-  {allVerticalResults
-    .filter(verticalResults => verticalResults.verticalKey in verticalConfigs && verticalResults.results)
-    .map(verticalResults => {
-      const verticalKey = verticalResults.verticalKey;
-      const verticalConfig = verticalConfigs[verticalKey];
+    {allVerticalResults
+      .filter(verticalResults => verticalResults.verticalKey in verticalConfigs && verticalResults.results)
+      .map(verticalResults => {
+        const verticalKey = verticalResults.verticalKey;
+        const verticalConfig = verticalConfigs[verticalKey];
 
-      const limit = verticalConfig.limit;
-      const label = verticalConfig.label ?? verticalKey;
-      const results = limit ? verticalResults.results.slice(0, limit) : verticalResults.results; 
-      
-      const SectionComponent = SectionRegistry[verticalConfig.sectionTemplate || 'StandardSection'];
+        const limit = verticalConfig.limit;
+        const label = verticalConfig.label ?? verticalKey;
+        const results = limit ? verticalResults.results.slice(0, limit) : verticalResults.results; 
+        
+        const SectionComponent = SectionRegistry[verticalConfig.sectionTemplate || 'StandardSection'];
 
-      let appliedFilters;
-      if (appliedFiltersConfig && appliedFiltersConfig.show) {
-        const { show, ...filterConfigs } = appliedFiltersConfig;
-        const appliedQueryFilters = verticalResults.appliedQueryFilters;
-        appliedFilters = { ...filterConfigs, appliedQueryFilters }
-      }
+        let appliedFilters;
+        if (appliedFiltersConfig && appliedFiltersConfig.show) {
+          const { show, ...filterConfigs } = appliedFiltersConfig;
+          const appliedQueryFilters = verticalResults.appliedQueryFilters;
+          appliedFilters = { ...filterConfigs, appliedQueryFilters }
+        }
 
-      return <SectionComponent
-        results={results}
-        resultsCount={verticalResults.resultsCount}
-        verticalKey={verticalKey}
-        verticalConfig={{...verticalConfig, label}}
-        {...(appliedFilters && { appliedFilters })}
-        key={verticalKey}
-      />
-    })}
+        return <SectionComponent
+          results={results}
+          resultsCount={verticalResults.resultsCount}
+          verticalKey={verticalKey}
+          verticalConfig={{ ...verticalConfig, label }}
+          {...(appliedFilters && { appliedFilters })}
+          key={verticalKey}
+        />
+      })
+    }
   </>;
 }

@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect, useRef, useState} from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import { AnswersActionsContext } from './AnswersActionsContext';
 

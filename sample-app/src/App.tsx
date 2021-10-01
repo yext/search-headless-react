@@ -1,7 +1,7 @@
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import AlternativeVerticals from './components/AlternativeVerticals';
-import DecoratedAppliedFilters from './components/DecoratedAppliedFilters';
+import { DecoratedAppliedFiltersWithMapping } from './components/DecoratedAppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
 import ResultsCount from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
@@ -145,16 +145,17 @@ function App() {
               />
               <div>
                 <ResultsCount />
-                <DecoratedAppliedFilters
+                <DecoratedAppliedFiltersWithMapping
                   showFieldNames={true}
                   hiddenFields={['builtin.entityType']}
-                  delimiter='|'
+                  delimiter='|' 
+                  mapStateToAppliedQueryFilters={state => state.vertical?.results?.verticalResults.appliedQueryFilters}                  
                 />
                 <AlternativeVerticals
                   currentVerticalLabel='People'
                   verticalsConfig={[
-                    {label: 'Locations', verticalKey: 'KM'},
-                    {label: 'FAQs', verticalKey: 'faq'}
+                    { label: 'Locations', verticalKey: 'KM' },
+                    { label: 'FAQs', verticalKey: 'faq' }
                   ]}
                 />
                 <VerticalResults

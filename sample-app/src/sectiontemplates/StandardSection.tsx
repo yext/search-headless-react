@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { SectionConfig } from "./SectionRegistry";
 import { useAnswersState } from "@yext/answers-headless-react";
 import { CardRegistry } from "../components/cards/CardRegistry";
-import DecoratedAppliedFilters from "../components/DecoratedAppliedFilters";
+import { DecoratedAppliedFilters } from "../components/DecoratedAppliedFilters";
 import ResultsCount from "../components/ResultsCount";
 
 export default function StandardSection(props: SectionConfig): JSX.Element | null {
