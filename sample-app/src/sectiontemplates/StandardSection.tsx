@@ -4,7 +4,7 @@ import { SectionConfig } from "./SectionRegistry";
 import { useAnswersState } from "@yext/answers-headless-react";
 import { CardRegistry } from "../components/cards/CardRegistry";
 import { DecoratedAppliedFilters } from "../components/DecoratedAppliedFilters";
-import ResultsCount from "../components/ResultsCount";
+import { ResultsCount } from "../components/ResultsCount";
 
 export default function StandardSection(props: SectionConfig): JSX.Element | null {
   const { results, verticalKey, verticalConfig, appliedFilters, resultsCount } = props;
@@ -15,14 +15,16 @@ export default function StandardSection(props: SectionConfig): JSX.Element | nul
   }
 
   const cardType = verticalConfig.cardConfig?.cardType || 'StandardCard'
+  const resultsLength = verticalConfig.limit 
+    ? Math.min(verticalConfig.limit, results.length) 
+    : results.length;
   const cardComponent = CardRegistry[cardType];
   
   return (
-    <section className={'StandardSection'}>
-      <div className={'StandardSection__sectionHead'}>
-        <h2 className={'StandardSection__sectionLabel'}>{verticalConfig.label}</h2>
-        <ResultsCount resultsLength={verticalConfig.limit? verticalConfig.limit: results.length} 
-          resultsCount={resultsCount} />
+    <section className='StandardSection'>
+      <div className='StandardSection__sectionHead'>
+        <h2 className='StandardSection__sectionLabel'>{verticalConfig.label}</h2>
+        <ResultsCount resultsLength={resultsLength} resultsCount={resultsCount} />
         {appliedFilters && <DecoratedAppliedFilters {...appliedFilters}/>}
       </div>
       <VerticalResults

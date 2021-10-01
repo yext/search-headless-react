@@ -3,7 +3,7 @@ import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import AlternativeVerticals from './components/AlternativeVerticals';
 import { DecoratedAppliedFiltersWithMapping } from './components/DecoratedAppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
-import ResultsCount from './components/ResultsCount';
+import { VerticalResultsCount } from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
@@ -53,7 +53,8 @@ function App() {
       cardConfig: {
         cardType: "StandardCard",
         showOrdinal: true
-      }
+      },
+      limit: 10
     },
     events: {
       label: "events",
@@ -144,7 +145,7 @@ function App() {
                 isVertical={true}
               />
               <div>
-                <ResultsCount />
+                <VerticalResultsCount />
                 <DecoratedAppliedFiltersWithMapping
                   showFieldNames={true}
                   hiddenFields={['builtin.entityType']}
