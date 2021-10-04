@@ -25,8 +25,6 @@ interface DecoratedAppliedFiltersConfigWithMapping {
   mapStateToAppliedQueryFilters: StateSelector<AppliedQueryFilter[] | undefined>
 }
 
-//= state => state.vertical?.results?.verticalResults.appliedQueryFilters
-
 /**
  * Container component for AppliedFilters
  */
@@ -45,12 +43,7 @@ export function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): 
  * Container component for AppliedFilters with mapping in props
  */
 export function DecoratedAppliedFiltersWithMapping(props : DecoratedAppliedFiltersConfigWithMapping): JSX.Element {
-  const { hiddenFields = [], mapStateToAppliedQueryFilters, ...otherProps } = props;
-  let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
-  appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
+  const { mapStateToAppliedQueryFilters, ...otherProps } = props;
   let nlpFilters = useAnswersState(mapStateToAppliedQueryFilters) || [];
-  nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
-  const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
-  
-  return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
+  return <DecoratedAppliedFilters appliedQueryFilters={nlpFilters} {...otherProps}/>
 }
