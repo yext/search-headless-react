@@ -6,7 +6,7 @@ import { StandardCard } from './components/cards/StandardCard';
 import { VerticalResultsCount } from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
-import VerticalResults from './components/VerticalResults';
+import { VerticalResultsWithMapping } from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
 import LocationBias from './components/LocationBias';
 import UniversalResults from './components/UniversalResults';
@@ -156,7 +156,7 @@ function App() {
                     { label: 'FAQs', verticalKey: 'faq' }
                   ]}
                 />
-                <VerticalResults
+                <VerticalResultsWithMapping
                   CardComponent={StandardCard}
                   cardConfig={{ showOrdinal: true }}
                 />

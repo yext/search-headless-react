@@ -2,11 +2,14 @@ import { useAnswersState } from '@yext/answers-headless-react';
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
 
-interface Props {
+interface VerticalResultsProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
-  displayAllResults?: boolean,
-  results?: Result[]
+  results: Result[]
+}
+
+interface VerticalResultsWithMappingProps extends Omit<VerticalResultsProps, 'results'> {
+  displayAllResults?: boolean
 }
 
 /**
@@ -15,18 +18,8 @@ interface Props {
  * @param props - The props for the Component, including the results and the card type
  *                to be used.
  */
-export default function VerticalResults(props: Props): JSX.Element | null {
-  const { CardComponent, cardConfig = {}, displayAllResults = true } = props;
-
-  const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
-  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-  
-  let results = props.results;
-  if (!results) {
-    results = verticalResults.length === 0 && displayAllResults
-      ? allResultsForVertical
-      : verticalResults
-  }
+export function VerticalResults(props: VerticalResultsProps): JSX.Element | null {
+  const { CardComponent, results, cardConfig = {} } = props;
 
   if (results.length === 0) {
     return null;
@@ -39,6 +32,19 @@ export default function VerticalResults(props: Props): JSX.Element | null {
       </div>
     </section>
   )
+}
+
+export function VerticalResultsWithMapping(props: VerticalResultsWithMappingProps): JSX.Element | null {
+  const { displayAllResults = true, ...otherProps } = props;
+
+  const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
+  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
+  
+  const results = verticalResults.length === 0 && displayAllResults
+    ? allResultsForVertical
+    : verticalResults
+
+  return <VerticalResults results={results} {...otherProps}/>
 }
 
 /**

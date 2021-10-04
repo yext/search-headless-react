@@ -1,4 +1,4 @@
-import VerticalResults from "../components/VerticalResults";
+import { VerticalResults } from "../components/VerticalResults";
 import { Link } from "react-router-dom";
 import { useAnswersState } from "@yext/answers-headless-react";
 import { DecoratedAppliedFilters } from "../components/DecoratedAppliedFilters";
