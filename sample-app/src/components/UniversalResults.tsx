@@ -45,10 +45,10 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
   const { allVerticalResults , appliedFiltersConfig, verticalConfigs } = props;
   return <>
     {allVerticalResults
-      .filter(verticalResults => verticalResults.verticalKey in verticalConfigs && verticalResults.results)
+      .filter(verticalResults => verticalResults.results)
       .map(verticalResults => {
         const verticalKey = verticalResults.verticalKey;
-        const verticalConfig = verticalConfigs[verticalKey];
+        const verticalConfig = verticalConfigs[verticalKey] || {};
 
         const limit = verticalConfig.limit;
         const label = verticalConfig.label ?? verticalKey;

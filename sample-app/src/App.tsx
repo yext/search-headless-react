@@ -73,9 +73,6 @@ function App() {
       },
       limit: 3
     },
-    faq: {
-      label: "FAQs",
-    },
     financial_professionals: {
       label: "Financial Professionals",
     },
