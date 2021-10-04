@@ -66,10 +66,13 @@ function App() {
         />
         <Facets 
           searchOnChange={true}
+          searchable={true}
           collapsible={true}
           defaultExpanded={true}
           facetConfigs={facetConfigs}
         />
+        {console.log('here')}
+        {console.log(facetConfigs)}
         <SpellCheck
           isVertical={true}
         />
@@ -81,7 +84,7 @@ function App() {
         />
         <div>
           <ResultsCount />
-          <DecoratedAppliedFilters 
+          <DecoratedAppliedFilters
             showFieldNames={true}
             hiddenFields={['builtin.entityType']}
             delimiter='|'
@@ -94,7 +97,7 @@ function App() {
               {label: 'FAQs', verticalKey: 'faq'}
             ]}
           />
-          <VerticalResults 
+          <VerticalResults
             CardComponent={StandardCard}
             cardConfig={{ showOrdinal: true }}
           />

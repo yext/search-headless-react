@@ -4,25 +4,25 @@ import Facet, { FacetConfig, onFacetChangeFn } from './Facet';
 import '../sass/Facets.scss';
 
 interface FacetsProps {
-  searchOnChange?: boolean
+  searchOnChange?: boolean,
+  searchable?: boolean,
   collapsible?: boolean
   defaultExpanded?: boolean
   facetConfigs?: Record<string, FacetConfig>
 }
 
 export default function Facets (props: FacetsProps): JSX.Element {
-  const { searchOnChange, collapsible, defaultExpanded, facetConfigs } = props;
+  const { searchOnChange, searchable, collapsible, defaultExpanded, facetConfigs = {} } = props;
   const facets = useAnswersState(state => state.filters?.facets) || [];
-  const answersActions = useAnswersActions();
+  if(searchable) {
+    facets.forEach(facet => facetConfigs[facet.fieldId] = Object.assign({ searchable }, facetConfigs[facet.fieldId]));
+  }
 
+  const answersActions = useAnswersActions();
   const executeSearch = () => answersActions.executeVerticalQuery();
 
   const handleResetFacets = () => {
-    facets.forEach(facet => {
-      facet.options?.forEach(option => { 
-        answersActions.unselectFacetOption(facet.fieldId, option)
-      });
-    });
+    answersActions.resetFacets();
     if (searchOnChange) { 
       answersActions.executeVerticalQuery();
     }
@@ -63,12 +63,13 @@ function renderFacets(props: RenderFacetsProps): JSX.Element {
       .filter(facet => facet.options?.length > 0)
       .map(facet => {
         const config = facetConfigs?.[facet.fieldId] ?? {};
-        return <Facet key={facet.fieldId}
+        return <Facet
+        key={facet.fieldId}
         collapsible={collapsible}
         defaultExpanded={defaultExpanded}
         facet={facet}
         config={config}
-        onChange={handleFacetOptionChange} />
+        onToggle={handleFacetOptionChange} />
       })
     }
   </>
