@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['react-perf'],
   ignorePatterns: ['sample-app', 'lib', 'tests/setup/responses'],
   rules: {
-    indent: ['error', 2],
+    indent: ['error', 2, { SwitchCase: 1 }],
     'no-trailing-spaces': ['error'],
     'no-multi-spaces': ['error'],
     quotes: ['error', 'single'],
@@ -13,7 +13,7 @@ module.exports = {
     }],
     'quote-props': ['error', 'as-needed'],
     'max-len': ['error', {
-      code: 125,
+      code: 110,
       ignorePattern: '^import\\s.+\\sfrom\\s.+;$'
     }],
     '@typescript-eslint/semi': ['error'],
