@@ -5,6 +5,7 @@ import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
+import LoadingIndicator from './LoadingIndicator';
 
 interface Props {
   placeholder?: string
@@ -21,6 +22,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
     ? state => state.vertical.autoComplete?.results
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
+  const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
 
   function executeAutocomplete () {
     isVertical 
@@ -40,7 +42,9 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
         className='SearchBar__submitButton'
         onClick={executeQuery}
       >
-        <MagnifyingGlassIcon/>
+        {isLoading
+          ? <LoadingIndicator />
+          : <MagnifyingGlassIcon />}
       </button>
     )
   }

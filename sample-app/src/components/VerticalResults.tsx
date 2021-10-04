@@ -1,6 +1,8 @@
 import { useAnswersState } from '@yext/answers-headless-react';
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
+import classNames from 'classnames';
+import '../sass/VerticalResults.scss';
 
 interface Props {
   CardComponent: CardComponent,
@@ -19,7 +21,9 @@ export default function VerticalResults(props: Props): JSX.Element | null {
 
   const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-  
+
+  const isLoading = useAnswersState(state => state.vertical.searchLoading)
+
   const results = verticalResults.length === 0 && displayAllResults
     ? allResultsForVertical
     : verticalResults
@@ -28,9 +32,13 @@ export default function VerticalResults(props: Props): JSX.Element | null {
     return null;
   }
 
+  const resultsClasses = classNames("VerticalResults__results", {
+    "VerticalResults__results--loading": isLoading,
+  })
+
   return (
-    <section className='yxt-Results'>
-      <div className='yxt-Results-items'>
+    <section className='VerticalResults'>
+      <div className={resultsClasses}>
         {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
       </div>
     </section>

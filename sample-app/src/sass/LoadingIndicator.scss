@@ -1,0 +1,36 @@
+.LoadingIndicator
+{
+  display: flex;
+  animation: rotate 1.4s linear infinite;
+  margin-bottom: 5px;
+  
+  @keyframes rotate
+  {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  &__animatedIcon 
+  {
+    stroke-dasharray: 208;
+    transform-origin: 50% 50%;
+    animation: dash 1.4s ease-in-out infinite;
+  }
+  
+  @keyframes dash 
+  {
+    0% {
+      stroke-dashoffset: 204;
+      transform: rotate(0deg);
+    }
+    50% {
+      stroke-dashoffset: 52;
+      transform: rotate(45deg);
+    }
+    100% {
+      stroke-dashoffset: 204;
+      transform: rotate(360deg);
+    }
+  }
+}
