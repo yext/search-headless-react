@@ -20,21 +20,21 @@ export default function UniversalResults({
   verticalConfigs,
   appliedFiltersConfig
 }: UniversalResultsProps): JSX.Element | null {
-  const allVerticalResults = useAnswersState(state => state?.universal?.results?.verticalResults) || [];
+  const resultsFromAllVerticals = useAnswersState(state => state?.universal?.results?.verticalResults) || [];
 
-  if (allVerticalResults.length === 0) {
+  if (resultsFromAllVerticals.length === 0) {
     return null;
   }
 
   return (
     <div className='UniversalResults'>
-      {renderVerticalSections({ allVerticalResults, appliedFiltersConfig, verticalConfigs })}
+      {renderVerticalSections({ resultsFromAllVerticals, appliedFiltersConfig, verticalConfigs })}
     </div>
   );
 }
 
 interface VerticalSectionsProps extends UniversalResultsProps {
-  allVerticalResults: VerticalResults[]
+  resultsFromAllVerticals: VerticalResults[]
 }
 
 /**
@@ -42,9 +42,9 @@ interface VerticalSectionsProps extends UniversalResultsProps {
  * including specifing what section template to use.
  */
 function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
-  const { allVerticalResults , appliedFiltersConfig, verticalConfigs } = props;
+  const { resultsFromAllVerticals , appliedFiltersConfig, verticalConfigs } = props;
   return <>
-    {allVerticalResults
+    {resultsFromAllVerticals
       .filter(verticalResults => verticalResults.results)
       .map(verticalResults => {
         const verticalKey = verticalResults.verticalKey;
