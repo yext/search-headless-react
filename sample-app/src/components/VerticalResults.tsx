@@ -23,7 +23,7 @@ export default function VerticalResults(props: Props): JSX.Element | null {
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
 
   const isLoading = useAnswersState(state => state.vertical.searchLoading)
-  
+
   const results = verticalResults.length === 0 && displayAllResults
     ? allResultsForVertical
     : verticalResults
@@ -32,14 +32,13 @@ export default function VerticalResults(props: Props): JSX.Element | null {
     return null;
   }
 
-  const cs = classNames({
-		"yxt-Results-items": true,
-		"is-loading": isLoading,
-	})
+  const resultsClasses = classNames("VerticalResults__results", {
+    "VerticalResults__results--loading": isLoading,
+  })
 
   return (
-    <section className='yxt-Results'>
-      <div className={cs}>
+    <section className='VerticalResults'>
+      <div className={resultsClasses}>
         {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
       </div>
     </section>

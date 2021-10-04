@@ -22,10 +22,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
     ? state => state.vertical.autoComplete?.results
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
-  const loadingStateSelector: StateSelector<boolean | undefined> = isVertical
-    ? (state => state.vertical.searchLoading)
-    : (state => state.universal.searchLoading);
-  const isLoading = useAnswersState(loadingStateSelector);
+  const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
 
   function executeAutocomplete () {
     isVertical 

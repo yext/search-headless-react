@@ -1,5 +1,7 @@
-.yxt-Results {
-  &-items.is-loading {
-    opacity: 0.5;
+.VerticalResults {
+  &__results {
+    &--loading {
+      opacity: 0.5;
+    }
   }
 }
