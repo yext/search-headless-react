@@ -47,7 +47,7 @@ function App() {
 
   const facetConfigs = {
     c_employeeDepartment: {
-      searchable: true
+      searchable: false
     }
   }
 

@@ -6,22 +6,24 @@ import '../sass/Facet.scss';
 
 export type onFacetChangeFn = (fieldId: string, option: DisplayableFacetOption) => void
 
-export interface FacetConfig {
-  searchable?: boolean
+export interface FacetTextConfig {
   placeholderText?: string
   label?: string
 }
 
-interface FacetProps {
-  facet: DisplayableFacet,
+export interface FacetBehaviorConfig {
+  searchable?: boolean
   collapsible?: boolean,
   defaultExpanded?: boolean,
-  onToggle: onFacetChangeFn,
-  config: FacetConfig
+  onToggle: onFacetChangeFn
+}
+
+interface FacetProps extends FacetTextConfig, FacetBehaviorConfig {
+  facet: DisplayableFacet
 }
 
 export default function Facet(props: FacetProps): JSX.Element {
-  const { facet, onToggle, config, collapsible, defaultExpanded } = props;
+  const { facet, onToggle, searchable, collapsible, defaultExpanded, placeholderText, label } = props;
   const answersActions = useAnswersActions();
   const hasSelectedFacet = !!facet.options.find(o => o.selected);
   const shouldExpand = defaultExpanded || hasSelectedFacet;
@@ -30,7 +32,7 @@ export default function Facet(props: FacetProps): JSX.Element {
     defaultExpanded: shouldExpand
   });
 
-  const facetOptions = config.searchable
+  const facetOptions = searchable
     ? answersActions.searchThroughFacet(facet, filterValue).options
     : facet.options;
 
@@ -38,13 +40,13 @@ export default function Facet(props: FacetProps): JSX.Element {
     <div className="Facet">
       <fieldset className="Facet__fieldSet">
         <button className="Facet__legend" {...(collapsible ? getToggleProps() : {})}>
-          {config.label || facet.displayName} 
+          {label || facet.displayName} 
         </button>
         <div className="Facet__optionsContainer" {...(collapsible ? getCollapseProps() : {})}>
-          {config.searchable 
+          {searchable 
             && <input className="Facet__search" 
                 type="text" 
-                placeholder={config.placeholderText || "Search here..."} 
+                placeholder={placeholderText || "Search here..."} 
                 value={filterValue} 
                 onChange={e => setFilterValue(e.target.value)}/>}
           <div className="Facet__options">
