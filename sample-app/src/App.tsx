@@ -51,7 +51,7 @@ function App() {
       label: "People",
       viewMore: true,
       cardConfig: {
-        cardType: "StandardCard",
+        CardComponent: StandardCard,
         showOrdinal: true
       },
       limit: 10
@@ -59,7 +59,7 @@ function App() {
     events: {
       label: "events",
       cardConfig: {
-        cardType: "StandardCard",
+        CardComponent: StandardCard,
         showOrdinal: true
       },
       limit: 8
@@ -68,7 +68,7 @@ function App() {
       label: "links",
       viewMore: true,
       cardConfig: {
-        cardType: "StandardCard",
+        CardComponent: StandardCard,
         showOrdinal: true
       },
       limit: 3

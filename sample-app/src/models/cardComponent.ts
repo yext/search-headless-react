@@ -7,10 +7,10 @@ import { StandardCardConfig } from '../components/cards/StandardCard';
 export type CardConfigTypes = StandardCardConfig;
 
 /**
- * Name of card type and the corresponding config options
+ * CardComponent and the corresponding config options
  */
 export interface CardConfig extends CardConfigTypes {
-  cardType: string
+  CardComponent: CardComponent
 }
 
 /**

@@ -1,7 +1,8 @@
 import { useAnswersState } from "@yext/answers-headless-react";
-import { VerticalConfig, SectionRegistry } from '../sectiontemplates/SectionRegistry'
 import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
+import { VerticalConfig } from "../models/sectionComponent";
 import { VerticalResults } from "@yext/answers-core";
+import StandardSection from "../sectiontemplates/StandardSection";
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean
@@ -53,7 +54,7 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
         const label = verticalConfig.label ?? verticalKey;
         const results = limit ? verticalResults.results.slice(0, limit) : verticalResults.results; 
         
-        const SectionComponent = SectionRegistry[verticalConfig.sectionTemplate || 'StandardSection'];
+        const SectionComponent = verticalConfig.SectionComponent || StandardSection;
 
         let appliedFilters;
         if (appliedFiltersConfig && appliedFiltersConfig.show) {
