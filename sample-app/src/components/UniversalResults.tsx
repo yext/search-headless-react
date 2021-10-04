@@ -56,12 +56,11 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
         
         const SectionComponent = verticalConfig.SectionComponent || StandardSection;
 
-        let appliedFilters;
-        if (appliedFiltersConfig && appliedFiltersConfig.show) {
-          const { show, ...filterConfigs } = appliedFiltersConfig;
-          const appliedQueryFilters = verticalResults.appliedQueryFilters;
-          appliedFilters = { ...filterConfigs, appliedQueryFilters }
-        }
+        const { show, ...filterconfig } = appliedFiltersConfig || {};
+        const appliedFilters = show
+          ? { ...filterconfig, appliedQueryFilters: verticalResults.appliedQueryFilters }
+          : undefined;
+
 
         return <SectionComponent
           results={results}
