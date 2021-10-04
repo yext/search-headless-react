@@ -17,7 +17,8 @@ export default function StandardSection(props: SectionConfig): JSX.Element | nul
   const resultsLength = verticalConfig.limit
     ? Math.min(verticalConfig.limit, results.length)
     : results.length;
-  const cardComponent = verticalConfig.cardConfig?.CardComponent || StandardCard;
+  const cardConfig = verticalConfig.cardConfig;
+  const cardComponent = cardConfig?.CardComponent || StandardCard;
   
   return (
     <section className='StandardSection'>
@@ -29,7 +30,7 @@ export default function StandardSection(props: SectionConfig): JSX.Element | nul
       <VerticalResults
         results={results}
         CardComponent={cardComponent}
-        cardConfig={verticalConfig.cardConfig || {} }
+        {...(cardConfig && { cardConfig })}
       />
       {verticalConfig.viewMore && 
         <Link className='StandardSection__sectionLink' to={`/${verticalKey}?query=${latestQuery}`}>

@@ -4,7 +4,7 @@ import { Result } from '@yext/answers-core';
 
 interface Props {
   CardComponent: CardComponent,
-  cardConfig: CardConfigTypes,
+  cardConfig?: CardConfigTypes,
   displayAllResults?: boolean,
   results?: Result[]
 }
@@ -16,7 +16,7 @@ interface Props {
  *                to be used.
  */
 export default function VerticalResults(props: Props): JSX.Element | null {
-  const { CardComponent, cardConfig, displayAllResults = true } = props;
+  const { CardComponent, cardConfig = {}, displayAllResults = true } = props;
 
   const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
