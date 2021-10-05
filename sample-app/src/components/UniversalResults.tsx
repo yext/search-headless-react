@@ -2,8 +2,8 @@ import { useAnswersState } from "@yext/answers-headless-react";
 import { VerticalConfig } from "../models/sectionComponent";
 import { VerticalResults } from "@yext/answers-core";
 import StandardSection from "../sections/StandardSection";
-import { ResultsCount, ResultsCountConfig } from '../components/ResultsCount';
-import { DecoratedAppliedFilters, DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
+import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
+import SectionHeader from "../sections/SectionHeader";
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean
@@ -69,27 +69,12 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
         return <SectionComponent
           results={results}
           verticalKey={verticalKey}
-          header={renderSectionHeader({ label, resultsCountConfig, appliedFiltersConfig })}
+          header={<SectionHeader {...{ label, resultsCountConfig, appliedFiltersConfig }}/>}
           cardConfig={verticalConfig.cardConfig}
           viewMore={verticalConfig.viewMore}
           key={verticalKey}
         />
       })
     }
-  </>;
-}
-
-interface SectionHeaderConfig {
-  label: string,
-  resultsCountConfig: ResultsCountConfig,
-  appliedFiltersConfig: DecoratedAppliedFiltersConfig | undefined
-}
-
-function renderSectionHeader(props: SectionHeaderConfig): JSX.Element {
-  const { label, resultsCountConfig, appliedFiltersConfig } = props;
-  return <>
-    <h2>{label}</h2>
-    <ResultsCount resultsLength={resultsCountConfig.resultsLength} resultsCount={resultsCountConfig.resultsCount} />
-    {appliedFiltersConfig && <DecoratedAppliedFilters {...appliedFiltersConfig}/>}
   </>;
 }
