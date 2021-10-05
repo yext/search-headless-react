@@ -1,7 +1,5 @@
 import { StateSelector, useAnswersState } from '@yext/answers-headless-react'
 
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-
 type GenericComponent<T> = (props: T) => JSX.Element | null;
 
 type PropsMapping<T> = {
@@ -25,8 +23,8 @@ export default function withPropsMapping<T>(
   Component: GenericComponent<T>,
   propsMapping: Partial<PropsMapping<T>>,
   transformProps?: (x: T) => void
-): GenericComponent<Optional<T, keyof typeof propsMapping>> {
-  return (props: Optional<T, keyof typeof propsMapping>) => {
+): GenericComponent<Partial<T>> {
+  return (props: Partial<T>) => {
     const mappedProps : Record<string, any> = {}
     Object.entries(propsMapping).forEach(([key, val]) => {
       const mappedVal = useAnswersState(val as StateSelector<T>);
