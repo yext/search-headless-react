@@ -27,7 +27,7 @@ export default function withPropsMapping<T>(
   return (props: Partial<T>) => {
     const mappedProps : Record<string, any> = {}
     Object.entries(propsMapping).forEach(([key, val]) => {
-      const mappedVal = useAnswersState(val as StateSelector<T>);
+      const mappedVal = useAnswersState(val as StateSelector<T[keyof T]>);
       mappedProps[key] = mappedVal;
     });
 
