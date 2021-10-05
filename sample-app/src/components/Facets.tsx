@@ -7,8 +7,8 @@ import '../sass/Facets.scss';
 interface FacetsProps {
   searchOnChange?: boolean,
   searchable?: boolean,
-  collapsible?: boolean
-  defaultExpanded?: boolean
+  collapsible?: boolean,
+  defaultExpanded?: boolean,
   facetConfigs?: Record<string, FacetTextConfig>
 }
 
@@ -39,7 +39,7 @@ export default function Facets (props: FacetsProps): JSX.Element {
   return (
     <div className='Facets'>
       <div className='Facets__options'>
-        {renderFacets({facets, facetConfigs, searchable, collapsible, defaultExpanded, handleFacetOptionChange})}
+        {renderFacets({ facets, facetConfigs, searchable, collapsible, defaultExpanded, handleFacetOptionChange })}
       </div>
       <div className='Facets__controls'>
         {!searchOnChange && <button className='Facets__button' onClick={executeSearch}>Apply</button>}
@@ -50,7 +50,7 @@ export default function Facets (props: FacetsProps): JSX.Element {
 }
 
 interface RenderFacetsProps extends FacetsProps {
-  facets: DisplayableFacet[]
+  facets: DisplayableFacet[],
   handleFacetOptionChange: onFacetChangeFn
 }
 
@@ -62,13 +62,13 @@ function renderFacets(props: RenderFacetsProps): JSX.Element {
       .map(facet => {
         const config = facetConfigs?.[facet.fieldId] ?? {};
         return <Facet
-        key={facet.fieldId}
-        facet={facet}
-        {...config}
-        searchable={searchable}
-        collapsible={collapsible}
-        defaultExpanded={defaultExpanded}
-        onToggle={handleFacetOptionChange} />
+          key={facet.fieldId}
+          facet={facet}
+          {...config}
+          searchable={searchable}
+          collapsible={collapsible}
+          defaultExpanded={defaultExpanded}
+          onToggle={handleFacetOptionChange} />
       })
     }
   </>

@@ -7,7 +7,7 @@ import '../sass/Facet.scss';
 export type onFacetChangeFn = (fieldId: string, option: DisplayableFacetOption) => void
 
 export interface FacetTextConfig {
-  placeholderText?: string
+  placeholderText?: string,
   label?: string
 }
 
@@ -41,12 +41,12 @@ export default function Facet(props: FacetProps): JSX.Element {
         </button>
         <div className='Facet__optionsContainer' {...(collapsible ? getCollapseProps() : {})}>
           {searchable 
-            && <input 
-                className='Facet__search' 
-                type='text' 
-                placeholder={placeholderText || 'Search here...'} 
-                value={filterValue} 
-                onChange={e => setFilterValue(e.target.value)}/>}
+            && <input
+              className='Facet__search' 
+              type='text' 
+              placeholder={placeholderText || 'Search here...'} 
+              value={filterValue} 
+              onChange={e => setFilterValue(e.target.value)}/>}
           <div className='Facet__options'>
             {facetOptions.map(option => 
               <FacetOption key={option.displayName} fieldId={facet.fieldId} option={option} onToggle={onToggle} />
