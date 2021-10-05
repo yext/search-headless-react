@@ -11,6 +11,7 @@ import SpellCheck from './components/SpellCheck';
 import LocationBias from './components/LocationBias';
 import UniversalResults from './components/UniversalResults';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Facets from './components/Facets';
 
 function App() {
   const staticFilterOptions = [
@@ -82,6 +83,12 @@ function App() {
     show: true
   };
 
+  const facetConfigs = {
+    c_employeeDepartment: {
+      label: 'Employee Department!'
+    }
+  }
+
   return (
     <AnswersActionsProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
@@ -128,6 +135,13 @@ function App() {
               <StaticFilters
                 title='~Country and Employee Departments~'
                 options={staticFilterOptions}
+              />
+              <Facets 
+                searchOnChange={true}
+                searchable={true}
+                collapsible={true}
+                defaultExpanded={true}
+                facetConfigs={facetConfigs}
               />
               <SpellCheck
                 isVertical={true}
