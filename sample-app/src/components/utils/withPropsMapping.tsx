@@ -17,14 +17,14 @@ type PropsMapping<T> = {
  * @param propsMapping a mapping of wrapped component's props' field and the corresponding
  *                     state selector for HOC to invoke useAnswersState and get the actual
  *                     data required by the wrapped component
- * @param transform a function that can provide modification to the props before it's pass into
+ * @param transformProps a function that can provide modification to the props before it's pass into
  *                  the wrapped component 
  * @returns a new component that uses the given component internally
  */
 export default function withPropsMapping<T>(
   Component: GenericComponent<T>,
   propsMapping: Partial<PropsMapping<T>>,
-  transform?: (x: T) => void
+  transformProps?: (x: T) => void
 ): GenericComponent<Optional<T, keyof typeof propsMapping>> {
   return (props: Optional<T, keyof typeof propsMapping>) => {
     const mappedProps : Record<string, any> = {}
@@ -34,7 +34,7 @@ export default function withPropsMapping<T>(
     });
 
     let combinedProps = { ...props, ...mappedProps } as T;
-    transform && transform(combinedProps);
+    transformProps && transformProps(combinedProps);
     return <Component {...combinedProps}/>
   }
 }
