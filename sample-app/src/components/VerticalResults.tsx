@@ -1,6 +1,6 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
-import withMapping from './utils/withMapping';
+import withPropsMapping from './utils/withPropsMapping';
 import classNames from 'classnames';
 import '../sass/VerticalResults.scss';
 import { useAnswersState } from '@yext/answers-headless-react'
@@ -55,7 +55,7 @@ function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes,
 }
 
 
-export const MappedVerticalResults = withMapping<VerticalResultsWithMapping>(
+export const MappedVerticalResults = withPropsMapping<VerticalResultsWithMapping>(
   VerticalResults, {
     results: state => state.vertical.results?.verticalResults.results || [],
     allResultsForVertical: state => state.vertical.results?.allResultsForVertical?.verticalResults.results || []

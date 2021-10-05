@@ -2,7 +2,7 @@ import AppliedFilters from "./AppliedFilters";
 import { AppliedQueryFilter } from "@yext/answers-core";
 import { useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
-import withMapping from "./utils/withMapping";
+import withPropsMapping from "./utils/withPropsMapping";
 import { 
   getAppliedFilters,
   pruneAppliedFilters, 
@@ -32,6 +32,6 @@ export function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): 
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
-export const MappedDecoratedAppliedFilters = withMapping(DecoratedAppliedFilters, {
+export const MappedDecoratedAppliedFilters = withPropsMapping(DecoratedAppliedFilters, {
   appliedQueryFilters: state => state.vertical?.results?.verticalResults.appliedQueryFilters
 });

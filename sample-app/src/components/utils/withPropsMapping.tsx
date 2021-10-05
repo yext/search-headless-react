@@ -21,7 +21,7 @@ type PropsMapping<T> = {
  *                  the wrapped component 
  * @returns a new component that uses the given component internally
  */
-export default function withMapping<T>(
+export default function withPropsMapping<T>(
   Component: GenericComponent<T>,
   propsMapping: Partial<PropsMapping<T>>,
   transform?: (x: T) => void

@@ -1,4 +1,4 @@
-import withMapping from "./utils/withMapping";
+import withPropsMapping from "./utils/withPropsMapping";
 
 export interface ResultsCountConfig {
   resultsCount?: number,
@@ -17,7 +17,7 @@ export function ResultsCount(props: ResultsCountConfig) {
   )
 }
 
-export const MappedResultsCount = withMapping(ResultsCount, {
+export const MappedResultsCount = withPropsMapping(ResultsCount, {
   resultsCount: state => state.vertical?.results?.verticalResults.resultsCount,
   resultsLength: state => state.vertical?.results?.verticalResults.results.length,
   offset: state => state.vertical?.offset
