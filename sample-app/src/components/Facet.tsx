@@ -23,10 +23,9 @@ export default function Facet(props: FacetProps): JSX.Element {
   const { facet, onToggle, searchable, collapsible, defaultExpanded, placeholderText, label } = props;
   const answersActions = useAnswersActions();
   const hasSelectedFacet = !!facet.options.find(o => o.selected);
-  const shouldExpand = defaultExpanded || hasSelectedFacet;
   const [ filterValue, setFilterValue ] = useState('');
   const { getCollapseProps, getToggleProps } = useCollapse({
-    defaultExpanded: shouldExpand
+    defaultExpanded: hasSelectedFacet || defaultExpanded
   });
 
   const facetOptions = searchable
