@@ -1,7 +1,9 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
 import withMapping from './utils/withMapping';
-
+import classNames from 'classnames';
+import '../sass/VerticalResults.scss';
+import { useAnswersState } from '@yext/answers-headless-react'
 interface VerticalResultsProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
@@ -21,14 +23,20 @@ interface VerticalResultsWithMapping extends VerticalResultsProps {
  */
 export function VerticalResults(props: VerticalResultsProps): JSX.Element | null {
   const { CardComponent, results, cardConfig = {} } = props;
+  const isLoading = useAnswersState(state => state.vertical.searchLoading);
 
   if (results.length === 0) {
     return null;
   }
 
+  
+  const resultsClasses = classNames("VerticalResults__results", {
+    "VerticalResults__results--loading": isLoading,
+  })
+
   return (
     <section className='VerticalResults'>
-      <div className='VerticalResults__results'>
+      <div className={resultsClasses}>
         {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
       </div>
     </section>

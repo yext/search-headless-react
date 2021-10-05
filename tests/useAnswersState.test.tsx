@@ -76,6 +76,34 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(2);
 });
 
+it('does not trigger render on unmounted component', async () => {
+  const consoleSpy = jest.spyOn(console, 'error');
+  function ParentComponent() {
+    const results = useAnswersState(state => state.universal?.results?.verticalResults) || [];
+    return <div>{results.map((_, index) => <ChildComponent key={index}/>)}</div>;
+  }
+
+  function ChildComponent() {
+    useAnswersState(state => state);
+    return <div>child component</div>;
+  }
+
+  const statefulCore = createStatefulCore();
+  render(
+    <AnswersActionsContext.Provider value={statefulCore}>
+      <ParentComponent/>
+    </AnswersActionsContext.Provider>
+  );
+  act(() => statefulCore.setQuery('resultsWithFilter'));
+  await act( () => statefulCore.executeUniversalQuery());
+  act(() => statefulCore.setQuery('default'));
+  await act( () => statefulCore.executeUniversalQuery());
+  expect(consoleSpy).not.toHaveBeenCalledWith(
+    expect.stringMatching('Can\'t perform a React state update on an unmounted component'),
+    expect.anything(),
+    expect.stringMatching('ChildComponent'));
+});
+
 describe('uses the most recent selector',() => {
   it('for determining the hook\'s return value', () => {
     let selector = () => 'initial selector';

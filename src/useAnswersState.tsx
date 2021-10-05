@@ -42,9 +42,14 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   });
 
   useLayoutEffect(() => {
-    return statefulCore.addListener({
+    let unsubscribed = false;
+    const unsubscribe = statefulCore.addListener({
       valueAccessor: state => state,
       callback: (state: State) => {
+        // prevent React state update on an unmounted component
+        if (unsubscribed) {
+          return;
+        }
         const currentSelectedState = storedSelector.current(state);
         if (storedSelectedState.current !== currentSelectedState) {
           storedSelectedState.current = currentSelectedState;
@@ -52,6 +57,10 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
         }
       }
     });
+    return () => {
+      unsubscribed = true;
+      unsubscribe();
+    };
   }, [statefulCore]);
 
   return selectedStateToReturn;
