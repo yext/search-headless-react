@@ -15,9 +15,6 @@ interface FacetsProps {
 export default function Facets (props: FacetsProps): JSX.Element {
   const { searchOnChange, searchable, collapsible, defaultExpanded, facetConfigs = {} } = props;
   const facets = useAnswersState(state => state.filters?.facets) || [];
-  if(searchable) {
-    facets.forEach(facet => facetConfigs[facet.fieldId] = Object.assign({ searchable }, facetConfigs[facet.fieldId]));
-  }
 
   const answersActions = useAnswersActions();
   const executeSearch = () => answersActions.executeVerticalQuery();
@@ -42,7 +39,7 @@ export default function Facets (props: FacetsProps): JSX.Element {
   return (
     <div className='Facets'>
       <div className='Facets__options'>
-        {renderFacets({facets, facetConfigs, collapsible, defaultExpanded, handleFacetOptionChange})}
+        {renderFacets({facets, facetConfigs, searchable, collapsible, defaultExpanded, handleFacetOptionChange})}
       </div>
       <div className='Facets__controls'>
         {!searchOnChange && <button className={`Facets__button`} onClick={executeSearch}>Apply</button>}
@@ -58,7 +55,7 @@ interface RenderFacetsProps extends FacetsProps {
 }
 
 function renderFacets(props: RenderFacetsProps): JSX.Element {
-  const { facets, facetConfigs, collapsible, defaultExpanded, handleFacetOptionChange } = props;
+  const { facets, facetConfigs, searchable, collapsible, defaultExpanded, handleFacetOptionChange } = props;
   return <>
     {facets
       .filter(facet => facet.options?.length > 0)
@@ -68,6 +65,7 @@ function renderFacets(props: RenderFacetsProps): JSX.Element {
         key={facet.fieldId}
         facet={facet}
         {...config}
+        searchable={searchable}
         collapsible={collapsible}
         defaultExpanded={defaultExpanded}
         onToggle={handleFacetOptionChange} />
