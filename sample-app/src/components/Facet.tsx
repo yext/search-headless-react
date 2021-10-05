@@ -11,15 +11,12 @@ export interface FacetTextConfig {
   label?: string
 }
 
-export interface FacetBehaviorConfig {
-  searchable?: boolean
+interface FacetProps extends FacetTextConfig {
+  facet: DisplayableFacet,
+  searchable?: boolean,
   collapsible?: boolean,
   defaultExpanded?: boolean,
   onToggle: onFacetChangeFn
-}
-
-interface FacetProps extends FacetTextConfig, FacetBehaviorConfig {
-  facet: DisplayableFacet
 }
 
 export default function Facet(props: FacetProps): JSX.Element {

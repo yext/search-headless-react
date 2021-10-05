@@ -1,17 +1,15 @@
 import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react'
 import { DisplayableFacet, DisplayableFacetOption } from "@yext/answers-core";
-import Facet, { FacetTextConfig, FacetBehaviorConfig, onFacetChangeFn } from './Facet';
+import Facet, { FacetTextConfig, onFacetChangeFn } from './Facet';
 import '../sass/Facets.scss';
 
-
-type FacetFieldConfig = FacetTextConfig & Pick<FacetBehaviorConfig, 'searchable'>;
 
 interface FacetsProps {
   searchOnChange?: boolean,
   searchable?: boolean,
   collapsible?: boolean
   defaultExpanded?: boolean
-  facetConfigs?: Record<string, FacetFieldConfig>
+  facetConfigs?: Record<string, FacetTextConfig>
 }
 
 export default function Facets (props: FacetsProps): JSX.Element {

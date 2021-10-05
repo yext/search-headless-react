@@ -47,7 +47,7 @@ function App() {
 
   const facetConfigs = {
     c_employeeDepartment: {
-      searchable: false
+      label: 'Employee Department!'
     }
   }
 
@@ -71,8 +71,6 @@ function App() {
           defaultExpanded={true}
           facetConfigs={facetConfigs}
         />
-        {console.log('here')}
-        {console.log(facetConfigs)}
         <SpellCheck
           isVertical={true}
         />
