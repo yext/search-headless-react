@@ -1,13 +1,12 @@
-import { useAnswersState } from '@yext/answers-headless-react'
+import withMapping from "./utils/withMapping";
 
-
-interface Props {
+export interface ResultsCountConfig {
   resultsCount?: number,
   resultsLength?: number,
   offset?: number
 }
 
-export function ResultsCount(props: Props) {
+export function ResultsCount(props: ResultsCountConfig) {
   const resultsCount = props.resultsCount || 0;
   const resultsLength = props.resultsLength || 0;
   const offset = props.offset || 0;
@@ -18,9 +17,8 @@ export function ResultsCount(props: Props) {
   )
 }
 
-export function VerticalResultsCount() {
-  const resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount) || 0;
-  const resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length) || 0;
-  const offset = useAnswersState(state => state.vertical?.offset) || 0;
-  return <ResultsCount resultsCount={resultsCount} resultsLength={resultsLength} offset={offset}/>;
-}
+export const MappedResultsCount = withMapping(ResultsCount, {
+  resultsCount: state => state.vertical?.results?.verticalResults.resultsCount,
+  resultsLength: state => state.vertical?.results?.verticalResults.results.length,
+  offset: state => state.vertical?.offset
+});

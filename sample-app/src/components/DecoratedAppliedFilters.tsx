@@ -1,7 +1,8 @@
 import AppliedFilters from "./AppliedFilters";
 import { AppliedQueryFilter } from "@yext/answers-core";
-import { StateSelector, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
+import withMapping from "./utils/withMapping";
 import { 
   getAppliedFilters,
   pruneAppliedFilters, 
@@ -15,14 +16,6 @@ export interface DecoratedAppliedFiltersConfig {
   labelText?: string,
   delimiter?: string,
   appliedQueryFilters: AppliedQueryFilter[] | undefined
-}
-
-interface DecoratedAppliedFiltersConfigWithMapping {
-  showFieldNames?: boolean,
-  hiddenFields?: Array<string>,
-  labelText?: string,
-  delimiter?: string,
-  mapStateToAppliedQueryFilters: StateSelector<AppliedQueryFilter[] | undefined>
 }
 
 /**
@@ -39,11 +32,6 @@ export function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): 
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
-/**
- * Container component for AppliedFilters with mapping in props
- */
-export function DecoratedAppliedFiltersWithMapping(props : DecoratedAppliedFiltersConfigWithMapping): JSX.Element {
-  const { mapStateToAppliedQueryFilters, ...otherProps } = props;
-  let nlpFilters = useAnswersState(mapStateToAppliedQueryFilters) || [];
-  return <DecoratedAppliedFilters appliedQueryFilters={nlpFilters} {...otherProps}/>
-}
+export const MappedDecoratedAppliedFilters = withMapping(DecoratedAppliedFilters, {
+  appliedQueryFilters: state => state.vertical?.results?.verticalResults.appliedQueryFilters
+});

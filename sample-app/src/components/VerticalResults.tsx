@@ -1,6 +1,6 @@
-import { useAnswersState } from '@yext/answers-headless-react';
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
+import withMapping from './utils/withMapping';
 
 interface VerticalResultsProps {
   CardComponent: CardComponent,
@@ -8,7 +8,8 @@ interface VerticalResultsProps {
   results: Result[]
 }
 
-interface VerticalResultsWithMappingProps extends Omit<VerticalResultsProps, 'results'> {
+interface VerticalResultsWithMapping extends VerticalResultsProps {
+  allResultsForVertical: Result[],
   displayAllResults?: boolean
 }
 
@@ -34,19 +35,6 @@ export function VerticalResults(props: VerticalResultsProps): JSX.Element | null
   )
 }
 
-export function VerticalResultsWithMapping(props: VerticalResultsWithMappingProps): JSX.Element | null {
-  const { displayAllResults = true, ...otherProps } = props;
-
-  const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
-  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-  
-  const results = verticalResults.length === 0 && displayAllResults
-    ? allResultsForVertical
-    : verticalResults
-
-  return <VerticalResults results={results} {...otherProps}/>
-}
-
 /**
  * Renders a single result using the specified card type and configuration.
  * 
@@ -57,3 +45,16 @@ export function VerticalResultsWithMapping(props: VerticalResultsWithMappingProp
 function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes, result: Result): JSX.Element {
   return <CardComponent result={result} configuration={cardConfig} key={result.id || result.index}/>;
 }
+
+
+export const MappedVerticalResults = withMapping<VerticalResultsWithMapping>(
+  VerticalResults, {
+    results: state => state.vertical.results?.verticalResults.results || [],
+    allResultsForVertical: state => state.vertical.results?.allResultsForVertical?.verticalResults.results || []
+  },
+  props => {
+    props.results = props.results?.length === 0 && props.displayAllResults
+      ? props.allResultsForVertical
+      : props.results
+  }
+);

@@ -1,12 +1,12 @@
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import AlternativeVerticals from './components/AlternativeVerticals';
-import { DecoratedAppliedFiltersWithMapping } from './components/DecoratedAppliedFilters';
+import { MappedDecoratedAppliedFilters } from './components/DecoratedAppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
-import { VerticalResultsCount } from './components/ResultsCount';
+import { MappedResultsCount } from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
-import { VerticalResultsWithMapping } from './components/VerticalResults';
+import { MappedVerticalResults } from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
 import LocationBias from './components/LocationBias';
 import UniversalResults from './components/UniversalResults';
@@ -53,16 +53,14 @@ function App() {
       cardConfig: {
         CardComponent: StandardCard,
         showOrdinal: true
-      },
-      limit: 10
+      }
     },
     events: {
       label: "events",
       cardConfig: {
         CardComponent: StandardCard,
         showOrdinal: true
-      },
-      limit: 8
+      }
     },
     links: {
       label: "links",
@@ -70,8 +68,7 @@ function App() {
       cardConfig: {
         CardComponent: StandardCard,
         showOrdinal: true
-      },
-      limit: 3
+      }
     },
     financial_professionals: {
       label: "Financial Professionals",
@@ -142,12 +139,11 @@ function App() {
                 isVertical={true}
               />
               <div>
-                <VerticalResultsCount />
-                <DecoratedAppliedFiltersWithMapping
+                <MappedResultsCount />
+                <MappedDecoratedAppliedFilters
                   showFieldNames={true}
                   hiddenFields={['builtin.entityType']}
-                  delimiter='|' 
-                  mapStateToAppliedQueryFilters={state => state.vertical?.results?.verticalResults.appliedQueryFilters}                  
+                  delimiter='|'
                 />
                 <AlternativeVerticals
                   currentVerticalLabel='People'
@@ -156,9 +152,10 @@ function App() {
                     { label: 'FAQs', verticalKey: 'faq' }
                   ]}
                 />
-                <VerticalResultsWithMapping
+                <MappedVerticalResults
                   CardComponent={StandardCard}
                   cardConfig={{ showOrdinal: true }}
+                  displayAllResults={true}
                 />
                 <LocationBias isVertical={false} />
               </div>

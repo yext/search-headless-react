@@ -1,8 +1,9 @@
 import { useAnswersState } from "@yext/answers-headless-react";
-import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
 import { VerticalConfig } from "../models/sectionComponent";
 import { VerticalResults } from "@yext/answers-core";
-import StandardSection from "../sectiontemplates/StandardSection";
+import StandardSection from "../sections/StandardSection";
+import { ResultsCount, ResultsCountConfig } from '../components/ResultsCount';
+import { DecoratedAppliedFilters, DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean
@@ -42,7 +43,7 @@ interface VerticalSectionsProps extends UniversalResultsProps {
  * including specifing what section template to use.
  */
 function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
-  const { resultsFromAllVerticals , appliedFiltersConfig, verticalConfigs } = props;
+  const { resultsFromAllVerticals, verticalConfigs } = props;
   return <>
     {resultsFromAllVerticals
       .filter(verticalResults => verticalResults.results)
@@ -50,27 +51,45 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
         const verticalKey = verticalResults.verticalKey;
         const verticalConfig = verticalConfigs[verticalKey] || {};
 
-        const limit = verticalConfig.limit;
         const label = verticalConfig.label ?? verticalKey;
-        const results = limit ? verticalResults.results.slice(0, limit) : verticalResults.results; 
+        const results = verticalResults.results; 
         
         const SectionComponent = verticalConfig.SectionComponent || StandardSection;
 
-        const { show, ...filterconfig } = appliedFiltersConfig || {};
-        const appliedFilters = show
+        const { show, ...filterconfig } = props.appliedFiltersConfig || {};
+        const appliedFiltersConfig = show
           ? { ...filterconfig, appliedQueryFilters: verticalResults.appliedQueryFilters }
           : undefined;
 
+        const resultsCountConfig = { 
+          resultsCount: verticalResults.resultsCount,
+          resultsLength: results.length
+        };
 
         return <SectionComponent
           results={results}
-          resultsCount={verticalResults.resultsCount}
           verticalKey={verticalKey}
-          verticalConfig={{ ...verticalConfig, label }}
-          {...(appliedFilters && { appliedFilters })}
+          header={renderSectionHeader({ label, resultsCountConfig, appliedFiltersConfig })}
+          cardConfig={verticalConfig.cardConfig}
+          viewMore={verticalConfig.viewMore}
           key={verticalKey}
         />
       })
     }
+  </>;
+}
+
+interface SectionHeaderConfig {
+  label: string,
+  resultsCountConfig: ResultsCountConfig,
+  appliedFiltersConfig: DecoratedAppliedFiltersConfig | undefined
+}
+
+function renderSectionHeader(props: SectionHeaderConfig): JSX.Element {
+  const { label, resultsCountConfig, appliedFiltersConfig } = props;
+  return <>
+    <h2>{label}</h2>
+    <ResultsCount resultsLength={resultsCountConfig.resultsLength} resultsCount={resultsCountConfig.resultsCount} />
+    {appliedFiltersConfig && <DecoratedAppliedFilters {...appliedFiltersConfig}/>}
   </>;
 }

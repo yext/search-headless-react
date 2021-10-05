@@ -1,21 +1,19 @@
 import { Result } from "@yext/answers-core";
 import { CardConfig } from './cardComponent';
-import { DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
 
 export interface VerticalConfig {
   SectionComponent?: SectionComponent,
   cardConfig?: CardConfig,
   label?: string,
-  limit?: number,
   viewMore?: boolean
 }
 
 export interface SectionConfig {
   results: Result[],
-  resultsCount: number,
   verticalKey: string,
-  verticalConfig: VerticalConfig,
-  appliedFilters?: DecoratedAppliedFiltersConfig,
+  header?: JSX.Element,
+  cardConfig?: CardConfig,
+  viewMore?: boolean
 }
 
 /**
