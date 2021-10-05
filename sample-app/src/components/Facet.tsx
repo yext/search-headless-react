@@ -1,5 +1,5 @@
 import { useAnswersActions } from '@yext/answers-headless-react'
-import { DisplayableFacet, DisplayableFacetOption } from "@yext/answers-core";
+import { DisplayableFacet, DisplayableFacetOption } from '@yext/answers-core';
 import { useState } from 'react';
 import useCollapse from 'react-collapsed';
 import '../sass/Facet.scss';
@@ -34,19 +34,20 @@ export default function Facet(props: FacetProps): JSX.Element {
     : facet.options;
 
   return (
-    <div className="Facet">
-      <fieldset className="Facet__fieldSet">
-        <button className="Facet__legend" {...(collapsible ? getToggleProps() : {})}>
+    <div className='Facet'>
+      <fieldset className='Facet__fieldSet'>
+        <button className='Facet__legend' {...(collapsible ? getToggleProps() : {})}>
           {label || facet.displayName} 
         </button>
-        <div className="Facet__optionsContainer" {...(collapsible ? getCollapseProps() : {})}>
+        <div className='Facet__optionsContainer' {...(collapsible ? getCollapseProps() : {})}>
           {searchable 
-            && <input className="Facet__search" 
-                type="text" 
-                placeholder={placeholderText || "Search here..."} 
+            && <input 
+                className='Facet__search' 
+                type='text' 
+                placeholder={placeholderText || 'Search here...'} 
                 value={filterValue} 
                 onChange={e => setFilterValue(e.target.value)}/>}
-          <div className="Facet__options">
+          <div className='Facet__options'>
             {facetOptions.map(option => 
               <FacetOption key={option.displayName} fieldId={facet.fieldId} option={option} onToggle={onToggle} />
             )}
@@ -67,8 +68,8 @@ function FacetOption(props: FacetOptionProps): JSX.Element {
   const { fieldId, onToggle, option } = props;
   return (
     <div>
-      <input onChange={() => onToggle(fieldId, option)} checked={option.selected} type="checkbox" id={option.displayName} />
-      <label className="Facet__label" htmlFor={option.displayName}>{option.displayName} ({option.count})</label>
+      <input onChange={() => onToggle(fieldId, option)} checked={option.selected} type='checkbox' id={option.displayName} />
+      <label className='Facet__label' htmlFor={option.displayName}>{option.displayName} ({option.count})</label>
     </div>
   )
 }

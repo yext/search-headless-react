@@ -42,8 +42,8 @@ export default function Facets (props: FacetsProps): JSX.Element {
         {renderFacets({facets, facetConfigs, searchable, collapsible, defaultExpanded, handleFacetOptionChange})}
       </div>
       <div className='Facets__controls'>
-        {!searchOnChange && <button className={`Facets__button`} onClick={executeSearch}>Apply</button>}
-        <button className={`Facets__link`} onClick={handleResetFacets}>Reset all</button>
+        {!searchOnChange && <button className='Facets__button' onClick={executeSearch}>Apply</button>}
+        <button className='Facets__link' onClick={handleResetFacets}>Reset all</button>
       </div>
     </div>
   )
