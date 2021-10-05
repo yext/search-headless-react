@@ -1,4 +1,4 @@
-import { VerticalResults } from "../components/VerticalResults";
+import { VerticalResultsDisplay } from "../components/VerticalResults";
 import { Link } from "react-router-dom";
 import { useAnswersState } from "@yext/answers-headless-react";
 import { SectionComponent, SectionConfig } from "../models/sectionComponent";
@@ -17,7 +17,7 @@ const StandardSection: SectionComponent = function (props: SectionConfig): JSX.E
       <div className='StandardSection__sectionHead'>
         {header}
       </div>
-      <VerticalResults
+      <VerticalResultsDisplay
         results={results}
         CardComponent={cardComponent}
         {...(cardConfig && { cardConfig })}

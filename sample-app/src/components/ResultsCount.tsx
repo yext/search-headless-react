@@ -6,7 +6,7 @@ export interface ResultsCountConfig {
   offset?: number
 }
 
-export function ResultsCount(props: ResultsCountConfig) {
+export function ResultsCountDisplay(props: ResultsCountConfig) {
   const resultsCount = props.resultsCount || 0;
   const resultsLength = props.resultsLength || 0;
   const offset = props.offset || 0;
@@ -17,7 +17,7 @@ export function ResultsCount(props: ResultsCountConfig) {
   )
 }
 
-export const MappedResultsCount = withPropsMapping(ResultsCount, {
+export default withPropsMapping(ResultsCountDisplay, {
   resultsCount: state => state.vertical?.results?.verticalResults.resultsCount,
   resultsLength: state => state.vertical?.results?.verticalResults.results.length,
   offset: state => state.vertical?.offset

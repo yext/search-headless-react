@@ -1,5 +1,5 @@
-import { DecoratedAppliedFilters, DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
-import { ResultsCount, ResultsCountConfig } from "../components/ResultsCount";
+import { DecoratedAppliedFiltersDisplay, DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
+import { ResultsCountDisplay, ResultsCountConfig } from "../components/ResultsCount";
 
 interface SectionHeaderConfig {
   label: string,
@@ -12,8 +12,8 @@ export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {
   return <>
     <h2>{label}</h2>
     {resultsCountConfig &&
-      <ResultsCount resultsLength={resultsCountConfig.resultsLength} resultsCount={resultsCountConfig.resultsCount} />}
+      <ResultsCountDisplay resultsLength={resultsCountConfig.resultsLength} resultsCount={resultsCountConfig.resultsCount} />}
     {appliedFiltersConfig && 
-      <DecoratedAppliedFilters {...appliedFiltersConfig}/>}
+      <DecoratedAppliedFiltersDisplay {...appliedFiltersConfig}/>}
   </>;
 }

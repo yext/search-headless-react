@@ -1,12 +1,12 @@
 import './sass/App.scss';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import AlternativeVerticals from './components/AlternativeVerticals';
-import { MappedDecoratedAppliedFilters } from './components/DecoratedAppliedFilters';
+import DecoratedAppliedFilters from './components/DecoratedAppliedFilters';
 import { StandardCard } from './components/cards/StandardCard';
-import { MappedResultsCount } from './components/ResultsCount';
+import ResultsCount from './components/ResultsCount';
 import SearchBar from './components/SearchBar';
 import StaticFilters from './components/StaticFilters';
-import { MappedVerticalResults } from './components/VerticalResults';
+import VerticalResults from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
 import LocationBias from './components/LocationBias';
 import UniversalResults from './components/UniversalResults';
@@ -153,8 +153,8 @@ function App() {
                 isVertical={true}
               />
               <div>
-                <MappedResultsCount />
-                <MappedDecoratedAppliedFilters
+                <ResultsCount />
+                <DecoratedAppliedFilters
                   showFieldNames={true}
                   hiddenFields={['builtin.entityType']}
                   delimiter='|'
@@ -166,7 +166,7 @@ function App() {
                     { label: 'FAQs', verticalKey: 'faq' }
                   ]}
                 />
-                <MappedVerticalResults
+                <VerticalResults
                   CardComponent={StandardCard}
                   cardConfig={{ showOrdinal: true }}
                   displayAllResults={true}

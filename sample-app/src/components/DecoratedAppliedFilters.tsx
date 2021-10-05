@@ -21,7 +21,7 @@ export interface DecoratedAppliedFiltersConfig {
 /**
  * Container component for AppliedFilters
  */
-export function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): JSX.Element {
+export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersConfig): JSX.Element {
   const { hiddenFields = [], appliedQueryFilters, ...otherProps } = props;
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
   appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
@@ -32,6 +32,6 @@ export function DecoratedAppliedFilters(props : DecoratedAppliedFiltersConfig): 
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
-export const MappedDecoratedAppliedFilters = withPropsMapping(DecoratedAppliedFilters, {
+export default  withPropsMapping(DecoratedAppliedFiltersDisplay, {
   appliedQueryFilters: state => state.vertical?.results?.verticalResults.appliedQueryFilters
 });

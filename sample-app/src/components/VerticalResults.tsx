@@ -21,7 +21,7 @@ interface VerticalResultsWithMapping extends VerticalResultsProps {
  * @param props - The props for the Component, including the results and the card type
  *                to be used.
  */
-export function VerticalResults(props: VerticalResultsProps): JSX.Element | null {
+export function VerticalResultsDisplay(props: VerticalResultsProps): JSX.Element | null {
   const { CardComponent, results, cardConfig = {} } = props;
   const isLoading = useAnswersState(state => state.vertical.searchLoading);
 
@@ -55,8 +55,8 @@ function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes,
 }
 
 
-export const MappedVerticalResults = withPropsMapping<VerticalResultsWithMapping>(
-  VerticalResults, {
+export default withPropsMapping<VerticalResultsWithMapping>(
+  VerticalResultsDisplay, {
     results: state => state.vertical.results?.verticalResults.results || [],
     allResultsForVertical: state => state.vertical.results?.allResultsForVertical?.verticalResults.results || []
   },
