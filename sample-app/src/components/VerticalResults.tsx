@@ -1,12 +1,11 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
-import classNames from 'classnames';
-import '../sass/VerticalResults.scss';
 import { useAnswersState } from '@yext/answers-headless-react';
 
 interface VerticalResultsDisplayProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
+  isLoading?: boolean,
   results: Result[]
 }
 
@@ -17,24 +16,16 @@ interface VerticalResultsDisplayProps {
  *                to be used.
  */
 export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.Element | null {
-  const { CardComponent, results, cardConfig = {} } = props;
-  const isLoading = useAnswersState(state => state.vertical.searchLoading);
+  const { CardComponent, results, cardConfig = {}, isLoading = false } = props;
 
   if (results.length === 0) {
     return null;
   }
 
-  
-  const resultsClasses = classNames("VerticalResults__results", {
-    "VerticalResults__results--loading": isLoading,
-  })
-
   return (
-    <section className='VerticalResults'>
-      <div className={resultsClasses}>
-        {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
-      </div>
-    </section>
+    <div className={`VerticalResults ${isLoading ? 'loading-state' : ''}`}>
+      {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
+    </div>
   )
 }
 
@@ -60,10 +51,11 @@ export default function VerticalResults(props: VerticalResultsProps): JSX.Elemen
 
   const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
   const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
+  const isLoading = useAnswersState(state => state.vertical.searchLoading);
 
   const results = verticalResults.length === 0 && displayAllResults
     ? allResultsForVertical
     : verticalResults
 
-  return <VerticalResultsDisplay results={results} {...otherProps}/>
+  return <VerticalResultsDisplay results={results} isLoading={isLoading} {...otherProps}/>
 }
