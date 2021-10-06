@@ -14,7 +14,7 @@ export interface DecoratedAppliedFiltersConfig {
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
-  appliedQueryFilters: AppliedQueryFilter[] | undefined
+  appliedQueryFilters: AppliedQueryFilter[]
 }
 
 /**
