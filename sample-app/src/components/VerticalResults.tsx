@@ -1,18 +1,14 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
-import withPropsMapping from './utils/withPropsMapping';
 import classNames from 'classnames';
 import '../sass/VerticalResults.scss';
-import { useAnswersState } from '@yext/answers-headless-react'
+import { useAnswersState } from '@yext/answers-headless-react';
+import subscribeToAnswersUpdates from './utils/subscribeToAnswersUpdates';
+
 interface VerticalResultsProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
   results: Result[]
-}
-
-interface VerticalResultsWithMapping extends VerticalResultsProps {
-  allResultsForVertical: Result[],
-  displayAllResults?: boolean
 }
 
 /**
@@ -55,14 +51,16 @@ function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes,
 }
 
 
-export default withPropsMapping<VerticalResultsWithMapping>(
-  VerticalResultsDisplay, {
-    results: state => state.vertical.results?.verticalResults.results || [],
-    allResultsForVertical: state => state.vertical.results?.allResultsForVertical?.verticalResults.results || []
-  },
+export default subscribeToAnswersUpdates<VerticalResultsProps, { displayAllResults?: boolean }>(
+  VerticalResultsDisplay,
   props => {
-    props.results = props.results?.length === 0 && props.displayAllResults
-      ? props.allResultsForVertical
-      : props.results
+    const { displayAllResults, ...modifiedProps } = props;
+    const results = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
+    const allResultsForVertical = 
+      useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
+    modifiedProps.results = results?.length === 0 && displayAllResults
+      ? allResultsForVertical
+      : results
+    return modifiedProps as VerticalResultsProps;
   }
 );

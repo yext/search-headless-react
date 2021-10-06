@@ -1,4 +1,5 @@
-import withPropsMapping from "./utils/withPropsMapping";
+import { useAnswersState } from '@yext/answers-headless-react';
+import subscribeToAnswersUpdates from './utils/subscribeToAnswersUpdates';
 
 export interface ResultsCountConfig {
   resultsCount?: number,
@@ -17,8 +18,10 @@ export function ResultsCountDisplay(props: ResultsCountConfig) {
   )
 }
 
-export default withPropsMapping(ResultsCountDisplay, {
-  resultsCount: state => state.vertical?.results?.verticalResults.resultsCount,
-  resultsLength: state => state.vertical?.results?.verticalResults.results.length,
-  offset: state => state.vertical?.offset
+export default subscribeToAnswersUpdates(ResultsCountDisplay, props => {
+  const { ...modifiedProps } = props;
+  modifiedProps.resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount);
+  modifiedProps.resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length);
+  modifiedProps.offset = useAnswersState(state => state.vertical?.offset);
+  return modifiedProps;
 });
