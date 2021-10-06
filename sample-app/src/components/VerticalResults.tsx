@@ -3,7 +3,6 @@ import { Result } from '@yext/answers-core';
 import classNames from 'classnames';
 import '../sass/VerticalResults.scss';
 import { useAnswersState } from '@yext/answers-headless-react';
-import subscribeToAnswersUpdates from './utils/subscribeToAnswersUpdates';
 
 interface VerticalResultsDisplayProps {
   CardComponent: CardComponent,
@@ -56,15 +55,15 @@ interface VerticalResultsProps {
   displayAllResults?: boolean
 }
 
-export default subscribeToAnswersUpdates<VerticalResultsDisplayProps, VerticalResultsProps>(
-  VerticalResultsDisplay,
-  props => {
-    const { displayAllResults, ...otherProps } = props;
-    let results = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
-    const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-    results = results?.length === 0 && displayAllResults
-      ? allResultsForVertical
-      : results
-    return { ...otherProps, results };
-  }
-);
+export default function VerticalResults(props: VerticalResultsProps): JSX.Element | null {
+  const { displayAllResults = true, ...otherProps } = props;
+
+  const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
+  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
+
+  const results = verticalResults.length === 0 && displayAllResults
+    ? allResultsForVertical
+    : verticalResults
+
+  return <VerticalResultsDisplay results={results} {...otherProps}/>
+}
