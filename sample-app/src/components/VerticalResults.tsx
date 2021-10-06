@@ -5,7 +5,7 @@ import '../sass/VerticalResults.scss';
 import { useAnswersState } from '@yext/answers-headless-react';
 import subscribeToAnswersUpdates from './utils/subscribeToAnswersUpdates';
 
-interface VerticalResultsProps {
+interface VerticalResultsDisplayProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
   results: Result[]
@@ -17,7 +17,7 @@ interface VerticalResultsProps {
  * @param props - The props for the Component, including the results and the card type
  *                to be used.
  */
-export function VerticalResultsDisplay(props: VerticalResultsProps): JSX.Element | null {
+export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.Element | null {
   const { CardComponent, results, cardConfig = {} } = props;
   const isLoading = useAnswersState(state => state.vertical.searchLoading);
 
@@ -50,17 +50,21 @@ function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes,
   return <CardComponent result={result} configuration={cardConfig} key={result.id || result.index}/>;
 }
 
+interface VerticalResultsProps {
+  CardComponent: CardComponent,
+  cardConfig?: CardConfigTypes,
+  displayAllResults?: boolean
+}
 
-export default subscribeToAnswersUpdates<VerticalResultsProps, { displayAllResults?: boolean }>(
+export default subscribeToAnswersUpdates<VerticalResultsDisplayProps, VerticalResultsProps>(
   VerticalResultsDisplay,
   props => {
-    const { displayAllResults, ...modifiedProps } = props;
-    const results = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
-    const allResultsForVertical = 
-      useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-    modifiedProps.results = results?.length === 0 && displayAllResults
+    const { displayAllResults, ...otherProps } = props;
+    let results = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
+    const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
+    results = results?.length === 0 && displayAllResults
       ? allResultsForVertical
       : results
-    return modifiedProps as VerticalResultsProps;
+    return { ...otherProps, results };
   }
 );

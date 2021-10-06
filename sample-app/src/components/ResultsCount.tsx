@@ -18,10 +18,13 @@ export function ResultsCountDisplay(props: ResultsCountConfig) {
   )
 }
 
-export default subscribeToAnswersUpdates(ResultsCountDisplay, props => {
-  const { ...modifiedProps } = props;
-  modifiedProps.resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount);
-  modifiedProps.resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length);
-  modifiedProps.offset = useAnswersState(state => state.vertical?.offset);
-  return modifiedProps;
-});
+export default subscribeToAnswersUpdates(
+  ResultsCountDisplay, 
+  props => {
+    const { ...modifiedProps } = props;
+    modifiedProps.resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount);
+    modifiedProps.resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length);
+    modifiedProps.offset = useAnswersState(state => state.vertical?.offset);
+    return modifiedProps;
+  }
+);

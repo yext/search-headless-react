@@ -32,8 +32,10 @@ export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersCo
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
-export default subscribeToAnswersUpdates(DecoratedAppliedFiltersDisplay, props => {
-  const { ...modifiedProps } = props;
-  modifiedProps.appliedQueryFilters = useAnswersState(state => state.vertical?.results?.verticalResults.appliedQueryFilters);
-  return modifiedProps as DecoratedAppliedFiltersConfig;
-});
+export default subscribeToAnswersUpdates<DecoratedAppliedFiltersConfig, Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'>>(
+  DecoratedAppliedFiltersDisplay, 
+  props => {
+    const appliedQueryFilters = useAnswersState(state => state.vertical?.results?.verticalResults.appliedQueryFilters);
+    return { ...props, appliedQueryFilters };
+  }
+);
