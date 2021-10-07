@@ -5,6 +5,7 @@ import StandardSection from "../sections/StandardSection";
 import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
 import SectionHeader from "../sections/SectionHeader";
 import classNames from "classnames";
+import '../sass/UniversalResults.scss';
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean
@@ -29,7 +30,7 @@ export default function UniversalResults({
     return null;
   }
 
-  const resultsClassNames = classNames('UniversalResults', { 'loading-state': isLoading });
+  const resultsClassNames = classNames('UniversalResults', { 'UniversalResults--loadingState': isLoading });
 
   return (
     <div className={resultsClassNames}>
