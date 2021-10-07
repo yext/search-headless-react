@@ -29,7 +29,7 @@ export default function UniversalResults({
     return null;
   }
 
-  const resultsClassNames = classNames('VertUniversalResultsicalResults', { 'loading-state': isLoading });
+  const resultsClassNames = classNames('UniversalResults', { 'loading-state': isLoading });
 
   return (
     <div className={resultsClassNames}>
