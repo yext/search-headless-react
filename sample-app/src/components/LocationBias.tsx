@@ -24,10 +24,10 @@ const defaultGeolocationOptions = {
 };
 
 const defaultCSSClasses = {
-    container: 'LocationBias',
-    location: 'LocationBias__location',
-    source: 'LocationBias__source',
-    button: 'LocationBias__button',
+  container: 'LocationBias',
+  location: 'LocationBias__location',
+  source: 'LocationBias__source',
+  button: 'LocationBias__button',
 };
 
 export default function LocationBias(props: Props) {
@@ -40,8 +40,8 @@ export default function LocationBias(props: Props) {
 
   const attributionMessage = 
       locationBias?.method === LocationBiasMethod.Ip ? '(based on your internet address)'
-    : locationBias?.method === LocationBiasMethod.Device ? '(based on your device)'
-    : '';
+        : locationBias?.method === LocationBiasMethod.Device ? '(based on your device)'
+          : '';
 
   function handleGeolocationClick() {
     if ('geolocation' in navigator) {

@@ -4,7 +4,14 @@ import { StandardCardConfig } from '../components/cards/StandardCard';
 /**
  * The config types for each supported card.
  */
- export type CardConfigTypes = StandardCardConfig;
+export type CardConfigTypes = StandardCardConfig;
+
+/**
+ * CardComponent and the corresponding config options
+ */
+export interface CardConfig extends CardConfigTypes {
+  CardComponent: CardComponent
+}
 
 /**
  * The props provided to every {@link CardComponent).

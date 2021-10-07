@@ -14,6 +14,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.3.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "@yext/answers-core": "^1.2.0",
@@ -63,6 +64,7 @@
     "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.2",
     "react-refresh": "^0.8.3",
+    "react-router-dom": "^5.3.0",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
     "sass": "^1.37.5",
@@ -85,7 +87,11 @@
     "postinstall": "./scripts/link-modules.sh"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "object-curly-spacing": ["error", "always"],
+      "indent": ["error", 2, { "SwitchCase": 1, "ignoreComments": true }]
+    }
   },
   "browserslist": {
     "production": [

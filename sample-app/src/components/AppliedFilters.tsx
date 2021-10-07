@@ -12,7 +12,7 @@ interface Props {
 /**
  * Renders AppliedFilters component
  */
-export default function AppliedFilters({showFieldNames, labelText, delimiter, appliedFilters}: Props): JSX.Element {
+export default function AppliedFilters({ showFieldNames, labelText, delimiter, appliedFilters }: Props): JSX.Element {
   return (
     <div className="AppliedFilters" aria-label={labelText}>
       {appliedFilters.map((filterGroup: GroupedFilters, index: number) => {

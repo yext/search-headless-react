@@ -17,9 +17,9 @@ export function StandardCard(props: StandardCardProps): JSX.Element {
   const { configuration, result } = props;
 
   return (
-    <div className='yxt-StandardCard'>
+    <div className='StandardCard'>
       {configuration.showOrdinal && result.index && renderOrdinal(result.index)}
-      <div className='yxt-StandardCard-contentWrapper'>
+      <div className='StandardCard__contentWrapper'>
         {result.name && renderTitle(result.name)}
       </div>
     </div>
@@ -28,8 +28,8 @@ export function StandardCard(props: StandardCardProps): JSX.Element {
 
 function renderOrdinal(ordinal: number) {
   return (
-    <div className='yxt-StandardCard-ordinalWrapper'>
-      <div className='yxt-StandardCard-ordinal'>
+    <div className='StandardCard__ordinalWrapper'>
+      <div className='StandardCard__ordinal'>
         {ordinal}
       </div>
     </div>
@@ -37,5 +37,5 @@ function renderOrdinal(ordinal: number) {
 }
 
 function renderTitle(title: string) {
-  return <div className='yxt-StandardCard-title'>{title}</div>
+  return <div className='StandardCard__title'>{title}</div>
 }

@@ -66,7 +66,8 @@ export default function AlternativeVerticals (props: Props): JSX.Element | null 
       {verticalSuggestions &&
         <div className='AlternativeVerticals__suggestionsWrapper'>
           <div className='AlternativeVerticals__details'>
-            <span>{processTranslation({
+            <span>
+              {processTranslation({
                 phrase: 'The following search category yielded results for ',
                 pluralForm: 'The following search categories yielded results for ',
                 count: verticalSuggestions.length

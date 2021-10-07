@@ -1,6 +1,6 @@
 import AppliedFilters from "./AppliedFilters";
 import { AppliedQueryFilter } from "@yext/answers-core";
-import { StateSelector, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
 import { 
   getAppliedFilters,
@@ -9,25 +9,31 @@ import {
   createGroupedFilters 
 } from '../utils/filterutils';
 
-interface Props {
+export interface DecoratedAppliedFiltersConfig {
   showFieldNames?: boolean,
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
-  mapStateToAppliedQueryFilters: StateSelector<AppliedQueryFilter[] | undefined>
+  appliedQueryFilters?: AppliedQueryFilter[]
 }
 
 /**
  * Container component for AppliedFilters
  */
-export default function DecoratedAppliedFilters(props : Props): JSX.Element {
-  const {hiddenFields = [], mapStateToAppliedQueryFilters, ...otherProps} = props;
+export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersConfig): JSX.Element {
+  const { hiddenFields = [], appliedQueryFilters, ...otherProps } = props;
   let appliedFilters = getAppliedFilters(useAnswersState(state => state.filters));
   appliedFilters = pruneAppliedFilters(appliedFilters, hiddenFields);
-  let nlpFilters = useAnswersState(mapStateToAppliedQueryFilters) || [];
+  let nlpFilters = appliedQueryFilters || [];
   nlpFilters = pruneNlpFilters(nlpFilters, appliedFilters, hiddenFields);
   const groupedFilters: Array<GroupedFilters> = createGroupedFilters(nlpFilters, appliedFilters);
   
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
+export default function DecoratedAppliedFilters(
+  props : Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'>
+): JSX.Element {
+  const nlpFilters = useAnswersState(state => state.vertical?.results?.verticalResults.appliedQueryFilters) || [];  
+  return <DecoratedAppliedFiltersDisplay appliedQueryFilters={nlpFilters} {...props}/>
+};

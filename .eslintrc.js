@@ -11,6 +11,7 @@ module.exports = {
       named: 'never',
       anonymous: 'never'
     }],
+    'object-curly-spacing': ['error', 'always'],
     'quote-props': ['error', 'as-needed'],
     'max-len': ['error', {
       code: 110,

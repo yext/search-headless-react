@@ -9,6 +9,8 @@ import StaticFilters from './components/StaticFilters';
 import VerticalResults from './components/VerticalResults';
 import SpellCheck from './components/SpellCheck';
 import LocationBias from './components/LocationBias';
+import UniversalResults from './components/UniversalResults';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Facets from './components/Facets';
 
 function App() {
@@ -45,6 +47,42 @@ function App() {
     }
   ]
 
+  const universalResultsConfig = {
+    people: {
+      label: "People",
+      viewMore: true,
+      cardConfig: {
+        CardComponent: StandardCard,
+        showOrdinal: true
+      }
+    },
+    events: {
+      label: "events",
+      cardConfig: {
+        CardComponent: StandardCard,
+        showOrdinal: true
+      }
+    },
+    links: {
+      label: "links",
+      viewMore: true,
+      cardConfig: {
+        CardComponent: StandardCard,
+        showOrdinal: true
+      }
+    },
+    financial_professionals: {
+      label: "Financial Professionals",
+    },
+    healthcare_professionals: {
+      label: "Healthcare Professionals",
+    }
+  }
+
+  const universalResultsFilterConfig = {
+    show: true
+  };
+
   const facetConfigs = {
     c_employeeDepartment: {
       label: 'Employee Department!'
@@ -58,50 +96,87 @@ function App() {
       locale='en'
       verticalKey='people'
     >
-      <div className='start'>
-        test
-        <StaticFilters
-          title='~Country and Employee Departments~'
-          options={staticFilterOptions}
-        />
-        <Facets 
-          searchOnChange={true}
-          searchable={true}
-          collapsible={true}
-          defaultExpanded={true}
-          facetConfigs={facetConfigs}
-        />
-        <SpellCheck
-          isVertical={true}
-        />
-      </div>
-      <div className='end'>
-        <SearchBar
-          placeholder='Search...'
-          isVertical={true}
-        />
-        <div>
-          <ResultsCount />
-          <DecoratedAppliedFilters
-            showFieldNames={true}
-            hiddenFields={['builtin.entityType']}
-            delimiter='|'
-            mapStateToAppliedQueryFilters={state => state.vertical.results?.verticalResults.appliedQueryFilters}
-          />
-          <AlternativeVerticals
-            currentVerticalLabel='People'
-            verticalsConfig={[
-              {label: 'Locations', verticalKey: 'KM'},
-              {label: 'FAQs', verticalKey: 'faq'}
-            ]}
-          />
-          <VerticalResults
-            CardComponent={StandardCard}
-            cardConfig={{ showOrdinal: true }}
-          />
-          <LocationBias isVertical={false} />
-        </div>
-      </div>
+      {/* 
+      TODO: use Navigation component for routing when that's added to repo.
+      current setup is for testing purposes. 
+      */}
+      <Router>
+        <Switch>
+          {/* universal search */}
+          <Route exact path='/'>
+            <div className='start'>
+              test
+            </div>
+            <div className='end'>
+              <SearchBar
+                placeholder='Search...'
+                isVertical={false}
+              />
+              <div>
+                <UniversalResults
+                  appliedFiltersConfig={universalResultsFilterConfig}
+                  verticalConfigs={universalResultsConfig}
+                />
+              </div>
+            </div>
+          </Route>
+
+          {/* vertical page */}
+          <Route path={Object.keys(universalResultsConfig).map(key => `/${key}`)}>
+            <div>
+              A VERTICAL PAGE!
+            </div>
+          </Route>
+
+          {/* vertical search */}
+          <Route exact path='/vertical'>
+            <div className='start'>
+              test
+              <StaticFilters
+                title='~Country and Employee Departments~'
+                options={staticFilterOptions}
+              />
+              <Facets 
+                searchOnChange={true}
+                searchable={true}
+                collapsible={true}
+                defaultExpanded={true}
+                facetConfigs={facetConfigs}
+              />
+              <SpellCheck
+                isVertical={true}
+              />
+            </div>
+            <div className='end'>
+              <SearchBar
+                placeholder='Search...'
+                isVertical={true}
+              />
+              <div>
+                <ResultsCount />
+                <DecoratedAppliedFilters
+                  showFieldNames={true}
+                  hiddenFields={['builtin.entityType']}
+                  delimiter='|'
+                />
+                <AlternativeVerticals
+                  currentVerticalLabel='People'
+                  verticalsConfig={[
+                    { label: 'Locations', verticalKey: 'KM' },
+                    { label: 'FAQs', verticalKey: 'faq' }
+                  ]}
+                />
+                <VerticalResults
+                  CardComponent={StandardCard}
+                  cardConfig={{ showOrdinal: true }}
+                  displayAllResults={true}
+                />
+                <LocationBias isVertical={false} />
+              </div>
+            </div>
+          </Route>
+        </Switch>
+      </Router>
     </AnswersActionsProvider>
   );
 }
