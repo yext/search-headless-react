@@ -1,4 +1,4 @@
-import { subscribeToStateUpdates } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/answers-headless-react';
 export interface ResultsCountConfig {
   resultsCount?: number,
   resultsLength?: number,
@@ -16,10 +16,10 @@ export function ResultsCountDisplay(props: ResultsCountConfig): JSX.Element {
   )
 }
 
-export default subscribeToStateUpdates(state => {
-  return {
-    resultsCount: state.vertical?.results?.verticalResults.resultsCount,
-    resultsLength: state.vertical?.results?.verticalResults.results.length,
-    offset: state.vertical?.offset
-  };
-})(ResultsCountDisplay)
+
+export default function ResultsCount() {
+  const resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount) || 0;
+  const resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length) || 0;
+  const offset = useAnswersState(state => state.vertical?.offset) || 0;
+  return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset}/>;
+}

@@ -1,13 +1,6 @@
 import { Result } from "@yext/answers-core";
 import { CardConfig } from './cardComponent';
 
-export interface VerticalConfig {
-  SectionComponent?: SectionComponent,
-  cardConfig?: CardConfig,
-  label?: string,
-  viewMore?: boolean
-}
-
 export interface SectionConfig {
   results: Result[],
   verticalKey: string,

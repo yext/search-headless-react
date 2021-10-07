@@ -1,11 +1,19 @@
 import { useAnswersState } from "@yext/answers-headless-react";
-import { VerticalConfig } from "../models/sectionComponent";
 import { VerticalResults } from "@yext/answers-core";
 import StandardSection from "../sections/StandardSection";
 import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
 import SectionHeader from "../sections/SectionHeader";
+import { SectionComponent } from "../models/sectionComponent";
+import { CardConfig } from '../models/cardComponent';
 import classNames from "classnames";
 import '../sass/UniversalResults.scss';
+
+interface VerticalConfig {
+  SectionComponent?: SectionComponent,
+  cardConfig?: CardConfig,
+  label?: string,
+  viewMore?: boolean
+}
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean

@@ -1,6 +1,6 @@
 import AppliedFilters from "./AppliedFilters";
 import { AppliedQueryFilter } from "@yext/answers-core";
-import { subscribeToStateUpdates, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
 import { 
   getAppliedFilters,
@@ -31,9 +31,9 @@ export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersCo
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 
-
-export default subscribeToStateUpdates(state => {
-  return {
-    appliedQueryFilters: state.vertical?.results?.verticalResults.appliedQueryFilters,
-  };
-})(DecoratedAppliedFiltersDisplay);
+export default function DecoratedAppliedFilters(
+  props : Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'>
+): JSX.Element {
+  const nlpFilters = useAnswersState(state => state.vertical?.results?.verticalResults.appliedQueryFilters) || [];  
+  return <DecoratedAppliedFiltersDisplay appliedQueryFilters={nlpFilters} {...props}/>
+};
