@@ -4,6 +4,7 @@ import { VerticalResults } from "@yext/answers-core";
 import StandardSection from "../sections/StandardSection";
 import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
 import SectionHeader from "../sections/SectionHeader";
+import classNames from "classnames";
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
   show: boolean
@@ -28,8 +29,10 @@ export default function UniversalResults({
     return null;
   }
 
+  const resultsClassNames = classNames('VertUniversalResultsicalResults', { 'loading-state': isLoading });
+
   return (
-    <div className={`UniversalResults ${isLoading ? 'loading-state' : ''}`}>
+    <div className={resultsClassNames}>
       {renderVerticalSections({ resultsFromAllVerticals, appliedFiltersConfig, verticalConfigs })}
     </div>
   );

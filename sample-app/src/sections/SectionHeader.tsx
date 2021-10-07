@@ -4,7 +4,7 @@ import { ResultsCountDisplay, ResultsCountConfig } from "../components/ResultsCo
 interface SectionHeaderConfig {
   label: string,
   resultsCountConfig?: ResultsCountConfig,
-  appliedFiltersConfig?: DecoratedAppliedFiltersConfig | undefined
+  appliedFiltersConfig?: DecoratedAppliedFiltersConfig
 }
 
 export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {

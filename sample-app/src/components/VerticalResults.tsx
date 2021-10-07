@@ -1,6 +1,7 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { Result } from '@yext/answers-core';
 import { useAnswersState } from '@yext/answers-headless-react';
+import classNames from 'classnames';
 
 interface VerticalResultsDisplayProps {
   CardComponent: CardComponent,
@@ -22,8 +23,10 @@ export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.
     return null;
   }
 
+  const resultsClassNames = classNames('VerticalResults', { 'loading-state': isLoading });
+
   return (
-    <div className={`VerticalResults ${isLoading ? 'loading-state' : ''}`}>
+    <div className={resultsClassNames}>
       {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
     </div>
   )
