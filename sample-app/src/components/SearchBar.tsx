@@ -17,6 +17,8 @@ interface Props {
  */
 export default function SearchBar({ placeholder, isVertical }: Props) {
   const answersActions = useAnswersActions();
+  //@ts-ignore
+  const store = answersActions.reduxStateManager.store;
   const query = useAnswersState(state => state.query.query);
   const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
     ? state => state.vertical.autoComplete?.results
@@ -25,6 +27,13 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
 
   function executeAutocomplete () {
+    answersActions.executeFilterSearch(false, [
+      {
+        fieldApiName: 'builtin.location',
+        entityType: 'ce_person',
+        fetchEntities: false
+      }
+    ]).then(r => console.log(r))
     isVertical 
       ? answersActions.executeVerticalAutoComplete()
       : answersActions.executeUniversalAutoComplete()
