@@ -30,7 +30,7 @@ export default function UniversalResults({
     return null;
   }
 
-  const resultsClassNames = classNames('UniversalResults', { 'UniversalResults--loadingState': isLoading });
+  const resultsClassNames = classNames('UniversalResults', { 'UniversalResults--loading': isLoading });
 
   return (
     <div className={resultsClassNames}>

@@ -24,7 +24,7 @@ export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.
     return null;
   }
 
-  const resultsClassNames = classNames('VerticalResults', { 'VerticalResults--loadingState': isLoading });
+  const resultsClassNames = classNames('VerticalResults', { 'VerticalResults--loading': isLoading });
 
   return (
     <div className={resultsClassNames}>
