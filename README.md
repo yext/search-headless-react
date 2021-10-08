@@ -10,6 +10,9 @@ It lets your React components read data from a answers-headless, and dispatch ac
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" alt="License"/>
   </a>
+  <a href='https://coveralls.io/github/yext/answers-headless-react?branch=main'>
+    <img src='https://coveralls.io/repos/github/yext/answers-headless-react/badge.svg?branch=main' alt='Coverage Status' />
+  </a>
 </div>
 <br>
 

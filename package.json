@@ -53,6 +53,9 @@
   "jest": {
     "bail": 0,
     "verbose": true,
+    "collectCoverageFrom": [
+      "src/*.ts(x)?"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/tests/setup/setup-env.ts"
     ],
