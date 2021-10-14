@@ -16,9 +16,9 @@
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.6.1",
+    "@reduxjs/toolkit": "^1.6.2",
     "@types/react": "^17.0.15",
-    "@yext/answers-headless": "^0.0.4",
+    "@yext/answers-headless": "^0.0.5",
     "typescript": "^4.3.5"
   },
   "devDependencies": {
