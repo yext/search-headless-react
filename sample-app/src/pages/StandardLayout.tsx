@@ -1,8 +1,8 @@
-import Navigation from './components/Navigation';
-import SearchBar from './components/SearchBar';
+import Navigation from '../components/Navigation';
+import SearchBar from '../components/SearchBar';
 import { useAnswersState } from '@yext/answers-headless-react';
-import { universalResultsConfig } from './universalResultsConfig';
-import { LayoutComponent } from './PageRouter';
+import { universalResultsConfig } from '../universalResultsConfig';
+import { LayoutComponent } from '../PageRouter';
 
 const navLinks = [
   {
@@ -18,7 +18,7 @@ const navLinks = [
 /**
  * A LayoutComponent that provides a SearchBar and Navigation tabs to a given page.
  */
-const Layout: LayoutComponent = ({ page }) => {
+const StandardLayout: LayoutComponent = ({ page }) => {
   const isVertical = useAnswersState(state => !!state.vertical.key);
   return (
     <>
@@ -31,4 +31,4 @@ const Layout: LayoutComponent = ({ page }) => {
     </>
   )
 }
-export default Layout;
+export default StandardLayout;

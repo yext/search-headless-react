@@ -2,7 +2,7 @@ import './sass/App.scss';
 import VerticalSearchPage from './pages/VerticalSearchPage';
 import UniversalSearchPage from './pages/UniversalSearchPage';
 import PageRouter from './PageRouter';
-import Layout from './Layout';
+import StandardLayout from './pages/StandardLayout';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
 
@@ -30,7 +30,7 @@ export default function App() {
     >
       <div className='App'>
         <PageRouter
-          Layout={Layout}
+          Layout={StandardLayout}
           routes={routes}
         />
       </div>
