@@ -15,12 +15,12 @@ const navLinks = [
 ]
 
 export default function Layout({ page }: { page: JSX.Element }) {
-  const verticalKey = useAnswersState(state => state.vertical.key);
+  const isVertical = useAnswersState(state => !!state.vertical.key);
   return (
     <div className='App'>
       <SearchBar
         placeholder='Search...'
-        isVertical={!!verticalKey}
+        isVertical={isVertical}
       />
       <Navigation links={navLinks} />
       {page}
