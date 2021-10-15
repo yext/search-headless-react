@@ -1,13 +1,14 @@
-import UniversalResults, { VerticalConfig } from '../components/UniversalResults';
+import UniversalResults from '../components/UniversalResults';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import '../sass/UniversalSearchPage.scss';
+import { UniversalResultsConfig } from '../universalResultsConfig';
 
 const universalResultsFilterConfig = {
   show: true
 };
 
-export default function UniversalSearchPage(props: { universalResultsConfig: Record<string, VerticalConfig>}) {
+export default function UniversalSearchPage(props: { universalResultsConfig: UniversalResultsConfig}) {
   const { universalResultsConfig } = props;
   const answersActions = useAnswersActions();
   useLayoutEffect(() => {

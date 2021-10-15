@@ -9,7 +9,7 @@ interface RouteData {
 
 interface PageProps {
   Layout?: ComponentType<{ page: JSX.Element }>
-  routes: (RouteData | null)[]
+  routes: RouteData[]
 }
 
 export default function BaseRouter({ Layout, routes }: PageProps) {

@@ -1,6 +1,9 @@
 import { StandardCard } from './components/cards/StandardCard';
+import { VerticalConfig } from './components/UniversalResults';
 
-export const universalResultsConfig = {
+export type UniversalResultsConfig = Record<string, VerticalConfig>;
+
+export const universalResultsConfig: UniversalResultsConfig = {
   people: {
     label: 'People',
     viewMore: true,

@@ -10,7 +10,7 @@ const navLinks = [
   },
   ...Object.entries(universalResultsConfig).map(([verticalKey, config]) => ({
     to: verticalKey,
-    label: config.label
+    label: config.label || verticalKey
   }))
 ]
 
