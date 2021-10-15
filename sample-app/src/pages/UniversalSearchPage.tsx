@@ -19,6 +19,7 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
     answersActions.setVerticalKey('');
     answersActions.executeUniversalQuery();
   }, [answersActions]);
+
   return (
     <div className='UniversalSearchPage'>
       <UniversalResults
@@ -26,5 +27,5 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
         verticalConfigs={universalResultsConfig}
       />
     </div>
-  )
+  );
 }
