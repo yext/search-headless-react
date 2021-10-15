@@ -55,6 +55,10 @@ export default function VerticalSearchPage(props: {
 }) {
   const answersActions = useAnswersActions();
   useLayoutEffect(() => {
+    answersActions.setState({
+      ...answersActions.state,
+      universal: {}
+    });
     answersActions.setVerticalKey(props.verticalKey);
     answersActions.executeVerticalQuery();
   }, [answersActions, props.verticalKey]);

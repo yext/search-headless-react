@@ -10,6 +10,10 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Rec
   const { universalResultsConfig } = props;
   const answersActions = useAnswersActions();
   useLayoutEffect(() => {
+    answersActions.setState({
+      ...answersActions.state,
+      vertical: {}
+    })
     answersActions.setVerticalKey('');
     answersActions.executeUniversalQuery();
   }, [answersActions]);

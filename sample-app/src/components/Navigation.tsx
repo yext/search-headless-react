@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import '../sass/Navigation.scss';
-
+import { NavLink, useLocation } from 'react-router-dom';
+import { useDOMSize } from '../hooks/useDOMSize';
 import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
+import '../sass/Navigation.scss';
 
 interface LinkData {
   to: string
@@ -17,6 +17,12 @@ export default function Navigation(props: NavigationProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const { search } = useLocation();
   const navigationRef = useRef<HTMLDivElement>(null);
+  const size = useDOMSize<HTMLDivElement>(navigationRef);
+  console.log(size);
+
+  useLayoutEffect(() => {
+
+  }, [])
 
   const handleDocumentClick = () => {
     setMenuOpen(false);
@@ -26,10 +32,6 @@ export default function Navigation(props: NavigationProps) {
     document.addEventListener('click', handleDocumentClick)
     return () => document.removeEventListener('click', handleDocumentClick);
   }, []);
-
-  // useLayoutEffect(() => {
-
-  // });
 
   // const handleOverflow = () => {
   //   const isOverflowing = containerRef.current?.offsetWidth !== containerRef.current?.scrollWidth
@@ -53,7 +55,6 @@ export default function Navigation(props: NavigationProps) {
 }
 
 function renderLink(linkData: LinkData, search: string) {
-  console.log(linkData, search)
   const { to, label } = linkData;
   return (
     <NavLink

@@ -1,26 +1,31 @@
 import { ComponentType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+interface RouteData {
+  path: string
+  page: JSX.Element
+  exact?: boolean
+}
+
 interface PageProps {
   Layout?: ComponentType<{ page: JSX.Element }>
-  routes: {
-    path: string
-    page: JSX.Element
-    exact?: boolean
-  }[]
+  routes: (RouteData | null)[]
 }
 
 export default function BaseRouter({ Layout, routes }: PageProps) {
   const pages = routes.map(routeData => {
+    if (!routeData) {
+      return null;
+    }
     const { path, page, exact } = routeData;
     if (Layout) {
       return (
-        <Route path={path} exact={exact}>
+        <Route key={path} path={path} exact={exact}>
           <Layout page={page}/>
         </Route>
       );
     }
-    return <Route path={path} exact={exact}>{page}</Route>;
+    return <Route key={path} path={path} exact={exact}>{page}</Route>;
   });
 
   return (
