@@ -14,9 +14,6 @@ interface PageProps {
 
 export default function BaseRouter({ Layout, routes }: PageProps) {
   const pages = routes.map(routeData => {
-    if (!routeData) {
-      return null;
-    }
     const { path, page, exact } = routeData;
     if (Layout) {
       return (
