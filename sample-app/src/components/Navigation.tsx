@@ -83,14 +83,14 @@ export default function Navigation({ links }: NavigationProps) {
   )
 }
 
-function renderLink(linkData: LinkData, search: string) {
+function renderLink(linkData: LinkData, queryParams: string) {
   const { to, label } = linkData;
   return (
     <NavLink
       key={to}
       className='Navigation__link'
       activeClassName='Navigation__link--currentRoute'
-      to={`${to}${search}`}
+      to={`${to}${queryParams}`}
       exact={true}
     >
       {label}
