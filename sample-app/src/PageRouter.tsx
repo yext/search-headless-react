@@ -7,12 +7,18 @@ interface RouteData {
   exact?: boolean
 }
 
+export type LayoutComponent = ComponentType<{ page: JSX.Element }>
+
 interface PageProps {
-  Layout?: ComponentType<{ page: JSX.Element }>
+  Layout?: LayoutComponent
   routes: RouteData[]
 }
 
-export default function BaseRouter({ Layout, routes }: PageProps) {
+/**
+ * PageRouter abstracts away logic surrounding react-router, and provides an easy way
+ * to specify a {@link LayoutComponent} for a page.
+ */
+export default function PageRouter({ Layout, routes }: PageProps) {
   const pages = routes.map(routeData => {
     const { path, page, exact } = routeData;
     if (Layout) {

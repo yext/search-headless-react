@@ -2,6 +2,7 @@ import Navigation from './components/Navigation';
 import SearchBar from './components/SearchBar';
 import { useAnswersState } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
+import { LayoutComponent } from './PageRouter';
 
 const navLinks = [
   {
@@ -14,16 +15,20 @@ const navLinks = [
   }))
 ]
 
-export default function Layout({ page }: { page: JSX.Element }) {
+/**
+ * A LayoutComponent that renders a page with a SearchBar and Navigation tabs.
+ */
+const Layout: LayoutComponent = ({ page }) => {
   const isVertical = useAnswersState(state => !!state.vertical.key);
   return (
-    <div className='App'>
+    <>
       <SearchBar
         placeholder='Search...'
         isVertical={isVertical}
       />
       <Navigation links={navLinks} />
       {page}
-    </div>
+    </>
   )
 }
+export default Layout;

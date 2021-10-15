@@ -1,7 +1,7 @@
 import './sass/App.scss';
 import VerticalSearchPage from './pages/VerticalSearchPage';
 import UniversalSearchPage from './pages/UniversalSearchPage';
-import BaseRouter from './BaseRouter';
+import PageRouter from './PageRouter';
 import Layout from './Layout';
 import { AnswersActionsProvider } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
@@ -18,9 +18,9 @@ const routes = [
       page: <VerticalSearchPage verticalKey={key} />
     }
   })
-]
+];
 
-function App() {
+export default function App() {
   return (
     <AnswersActionsProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
@@ -28,12 +28,12 @@ function App() {
       locale='en'
       verticalKey='people'
     >
-      <BaseRouter
-        Layout={Layout}
-        routes={routes}
-      />
+      <div className='App'>
+        <PageRouter
+          Layout={Layout}
+          routes={routes}
+        />
+      </div>
     </AnswersActionsProvider>
   );
 }
-
-export default App;
