@@ -1,6 +1,7 @@
 import UniversalResults, { VerticalConfig } from '../components/UniversalResults';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
+import '../sass/UniversalSearchPage.scss';
 
 const universalResultsFilterConfig = {
   show: true

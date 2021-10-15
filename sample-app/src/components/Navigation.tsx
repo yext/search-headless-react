@@ -1,6 +1,5 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useDOMSize } from '../hooks/useDOMSize';
 import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
 import '../sass/Navigation.scss';
 
@@ -13,44 +12,70 @@ interface NavigationProps {
   links: LinkData[]
 }
 
-export default function Navigation(props: NavigationProps) {
+export default function Navigation({ links }: NavigationProps) {
+  // Close the menu when clicking the document
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const { search } = useLocation();
-  const navigationRef = useRef<HTMLDivElement>(null);
-  const size = useDOMSize<HTMLDivElement>(navigationRef);
-  console.log(size);
-
-  useLayoutEffect(() => {
-
-  }, [])
-
-  const handleDocumentClick = () => {
-    setMenuOpen(false);
+  const menuRef = useRef<HTMLButtonElement>(null);
+  const handleDocumentClick = (e: MouseEvent) => {
+    if (e.target !== menuRef.current) {
+      setMenuOpen(false);
+    }
   };
-
   useLayoutEffect(() => {
     document.addEventListener('click', handleDocumentClick)
     return () => document.removeEventListener('click', handleDocumentClick);
   }, []);
 
-  // const handleOverflow = () => {
-  //   const isOverflowing = containerRef.current?.offsetWidth !== containerRef.current?.scrollWidth
-  //   const currentOverflowLength = overflowLinks.length;
+  // Responsive tabs
+  const [numOverflowLinks, setNumOverflowLinks] = useState<number>(0);
+  const navigationRef = useRef<HTMLDivElement>(null);
+  const handleResize = useCallback(() => {
+    const navEl = navigationRef.current;
+    if (!navEl) {
+      return;
+    }
+    const isOverflowing = navEl.scrollWidth > navEl.offsetWidth;
+    if (isOverflowing && numOverflowLinks < links.length) {
+      setNumOverflowLinks(numOverflowLinks + 1);
+    }
+  }, [links.length, numOverflowLinks])
+  useLayoutEffect(handleResize, [handleResize]);
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    function resizeListener() {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setNumOverflowLinks(0);
+        handleResize()
+      }, 50)
+    };
+    window.addEventListener('resize', resizeListener);
+    return () => window.removeEventListener('resize', resizeListener);
+  }, [handleResize]);
 
-  //   if (!isOverflowing || currentOverflowLength === links.length) return;
-
-  //   const newOverflowLinks = links.slice(Math.max(0, links.length - currentOverflowLength - 1));
-  //   setOverflowLinks(newOverflowLinks);
-  // }
-
-  const { links } = props;
+  const { search } = useLocation();
+  const visibleLinks = links.slice(0, links.length - numOverflowLinks);
+  const overflowLinks = links.slice(-numOverflowLinks);
   return (
-    <div className='Navigation' ref={navigationRef}>
-      {links.map(l => renderLink(l, search))}
-      <div className='Navigation__moreButton'>
-        <KebabIcon/> More
+    <nav className='Navigation' ref={navigationRef}>
+      <div className='Navigation__links'>
+        {visibleLinks.map(l => renderLink(l, search))}
       </div>
-    </div>
+      {numOverflowLinks > 0 &&
+        <div className='Navigation__menuWrapper'>
+          <button
+            className='Navigation__menuButton'
+            ref={menuRef}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <KebabIcon /> More
+          </button>
+          <div className='Navigation__menuLinks'>
+            {menuOpen && overflowLinks.map(l => renderLink(l, search))}
+          </div>
+        </div>
+      }
+    </nav>
   )
 }
 

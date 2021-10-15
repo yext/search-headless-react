@@ -1,4 +1,3 @@
-
 import { StandardCard } from './components/cards/StandardCard';
 
 export const universalResultsConfig = {

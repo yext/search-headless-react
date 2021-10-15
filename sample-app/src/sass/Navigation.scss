@@ -3,16 +3,15 @@
   border-bottom: solid #dcdcdc 1px;
   margin-bottom: 16px;
   font-size: 18px;
+  white-space: nowrap;
+  justify-content: center;
+  align-items: center;
 
   &__link {
-    padding-bottom: 4px;
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-top: 4px;
+    padding: 0px 4px 0px 4px;
+    margin: 4px 8px 4px 8px;
     color: black;
     text-decoration: none;
-    padding-left: 4px;
-    padding-right: 4px;
 
     &:active {
       opacity: 0.3;
@@ -23,10 +22,27 @@
     }
   }
 
-  &__moreButton {
+  &__menuButton {
     cursor: pointer;
+    font-size: inherit;
+    border: none;
+    background: inherit;
     display: flex;
     padding: 4px 8px 4px 4px;
     align-items: center;
+  }
+
+  &__menuWrapper {
+    flex-direction: column;
+    position: relative;
+  }
+
+  &__menuLinks {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    right: 0;
+    border: 1px solid #dcdcdc;
   }
 }
