@@ -16,7 +16,7 @@ const navLinks = [
 ]
 
 /**
- * A LayoutComponent that renders a page with a SearchBar and Navigation tabs.
+ * A LayoutComponent that provides a SearchBar and Navigation tabs to a given page.
  */
 const Layout: LayoutComponent = ({ page }) => {
   const isVertical = useAnswersState(state => !!state.vertical.key);
