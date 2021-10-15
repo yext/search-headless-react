@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
@@ -56,6 +57,9 @@ export default function Navigation({ links }: NavigationProps) {
   const { search } = useLocation();
   const visibleLinks = links.slice(0, links.length - numOverflowLinks);
   const overflowLinks = links.slice(-numOverflowLinks);
+  const menuButtonClassNames = classNames('Navigation__menuButton', {
+    'Navigation__menuButton--open': menuOpen
+  });
   return (
     <nav className='Navigation' ref={navigationRef}>
       <div className='Navigation__links'>
@@ -64,7 +68,7 @@ export default function Navigation({ links }: NavigationProps) {
       {numOverflowLinks > 0 &&
         <div className='Navigation__menuWrapper'>
           <button
-            className='Navigation__menuButton'
+            className={menuButtonClassNames}
             ref={menuRef}
             onClick={() => setMenuOpen(!menuOpen)}
           >
