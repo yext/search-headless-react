@@ -8,7 +8,7 @@ import { CardConfig } from '../models/cardComponent';
 import classNames from "classnames";
 import '../sass/UniversalResults.scss';
 
-interface VerticalConfig {
+export interface VerticalConfig {
   SectionComponent?: SectionComponent,
   cardConfig?: CardConfig,
   label?: string,

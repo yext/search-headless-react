@@ -1,12 +1,7 @@
 .App {
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-}
-
-#root {
-  display: flex;
+  flex-grow: 1;
 }
 
 .start {
