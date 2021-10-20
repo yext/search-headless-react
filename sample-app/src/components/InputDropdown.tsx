@@ -109,7 +109,7 @@ export default function InputDropdown({
     <>
       <div className={cssClasses.inputContainer}>
         <input
-          className={cssClasses.inputElement}
+          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
@@ -125,6 +125,7 @@ export default function InputDropdown({
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
+          type="text"
         />
         {renderButtons()}
       </div>

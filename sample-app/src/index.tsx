@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './sass/index.scss';
+//import './sass/index.scss';
+import "./tailwind.css";
 import App from './App';
 
 ReactDOM.render(
@@ -9,4 +10,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-

@@ -50,7 +50,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   }
 
   return (
-    <div className='SearchBar'>
+    <div className='SearchBar mt-4 mb-4 pl-4 pr-4'>
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
@@ -73,7 +73,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
           option: 'Autocomplete__option',
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
-          inputContainer: 'SearchBar__inputContainer'
+          inputContainer: 'SearchBar__inputContainer mt-1'
         }}
       />
     </div>
