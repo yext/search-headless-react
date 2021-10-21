@@ -40,8 +40,8 @@ function renderFilterLabel(label: string): JSX.Element {
 function renderAppliedFilters(filters: Array<DisplayableFilter>): JSX.Element {
   const filterElems = filters.map((filter: DisplayableFilter, index: number) => {
     return (
-      <div className="AppliedFilters__filterValue" key={filter.filterLabel}>
-        <span className="AppliedFilters__filterValueText">{filter.filterLabel}</span>
+      <div className="AppliedFilters__filterValue" key={filter.label}>
+        <span className="AppliedFilters__filterValueText">{filter.label}</span>
         {index < filters.length - 1 && <span className="AppliedFilters__filterValueComma">,</span>}
       </div>
     );
