@@ -9,10 +9,10 @@ interface Props {
   updateInputValue: (value: string) => void
   updateDropdown: () => void
   renderButtons?: () => JSX.Element | null
-  cssClasses: {
+  theme: {
     optionContainer: string,
     option: string
-    focusedOption: string
+    option__focused: string
     inputElement: string,
     inputContainer: string
   }
@@ -50,7 +50,7 @@ export default function InputDropdown({
   updateInputValue,
   updateDropdown,
   renderButtons = () => null,
-  cssClasses
+  theme
 }: Props): JSX.Element | null {
   const [{
     focusedOptionIndex,
@@ -107,9 +107,9 @@ export default function InputDropdown({
 
   return (
     <>
-      <div className={cssClasses.inputContainer}>
+      <div className={theme.inputContainer}>
         <input
-          className={cssClasses.inputElement}
+          className={theme.inputElement}
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
@@ -137,7 +137,7 @@ export default function InputDropdown({
             dispatch({ type: 'HideOptions' })
           }}
           focusedOptionIndex={focusedOptionIndex}
-          cssClasses={cssClasses}
+          theme={theme}
         />
       }
     </>

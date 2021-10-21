@@ -14,6 +14,8 @@
     "install-sample-app": "cd sample-app && npm install"
   },
   "dependencies": {
+    "@css-modules-theme/core": "^2.3.0",
+    "@css-modules-theme/react": "^2.3.0",
     "@reduxjs/toolkit": "^1.6.1",
     "@types/react": "^17.0.15",
     "@yext/answers-headless": "0.0.3-beta.5",

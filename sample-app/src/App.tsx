@@ -63,6 +63,10 @@ function App() {
         <SearchBar
           placeholder='Search...'
           isVertical={true}
+          theme={{
+            root: 'h-12',
+            submitButton: 'bg-red-500'
+          }}
         />
         <div>
           <ResultsCount />

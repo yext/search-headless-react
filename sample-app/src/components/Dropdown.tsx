@@ -9,10 +9,10 @@ interface Props {
   options: Option[]
   onClickOption?: (option: Option) => void,
   focusedOptionIndex: number | undefined;
-  cssClasses: {
+  theme: {
     optionContainer: string,
     option: string
-    focusedOption: string
+    option__focused: string
   }
 }
 
@@ -23,11 +23,11 @@ export default function Dropdown({
   options,
   onClickOption = () => {},
   focusedOptionIndex,
-  cssClasses
+  theme
 }: Props): JSX.Element | null {
   function renderOption(option: Option, index: number) {
-    const className = classNames(cssClasses.option, {
-      [cssClasses.focusedOption]: index === focusedOptionIndex
+    const className = classNames(theme.option, {
+      [theme.option__focused]: index === focusedOptionIndex
     })
     return (
       <div key={option.value} className={className} onClick={() => onClickOption(option)}>
@@ -40,7 +40,7 @@ export default function Dropdown({
   }
 
   return (
-    <div className={cssClasses.optionContainer}>
+    <div className={theme.optionContainer}>
       {options.map(renderOption)}
     </div>
   );
