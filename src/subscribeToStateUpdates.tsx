@@ -20,22 +20,22 @@ export function subscribeToStateUpdates(
   const generateSubscriberHOC: SubscriberGenerator = WrappedComponent => {
     /**
      * Keep manual track of the props mapped from state instead of storing
-     * it in the StatefulCoreSubscriber's state. This avoids react's batching
+     * it in the AnswersHeadlessSubscriber's state. This avoids react's batching
      * of state updates, which can result in mappedState not updating immediately.
-     * This can, in turn, result in extra stateful-core listener invocations.
+     * This can, in turn, result in extra answers-headless listener invocations.
      */
     let previousPropsFromState = {};
-    return function StatefulCoreSubscriber(props: Record<string, unknown>) {
-      const statefulCore = useContext(AnswersActionsContext);
+    return function AnswersHeadlessSubscriber(props: Record<string, unknown>) {
+      const answers = useContext(AnswersActionsContext);
       const [mergedProps, dispatch] = useReducer(() => {
         return {
           ...props,
           ...previousPropsFromState
         };
-      }, { ...props, ...mapStateToProps(statefulCore.state) });
+      }, { ...props, ...mapStateToProps(answers.state) });
 
       useEffect(() => {
-        return statefulCore.addListener({
+        return answers.addListener({
           valueAccessor: (state: State) => mapStateToProps(state),
           callback: newPropsFromState => {
             if (!isShallowEqual(previousPropsFromState, newPropsFromState)) {

@@ -1,5 +1,5 @@
 import { ReactChild, ReactChildren } from 'react';
-import { provideStatefulCore, StatefulCore } from '@yext/answers-headless';
+import { provideAnswersHeadless, AnswersHeadless } from '@yext/answers-headless';
 import { AnswersConfig } from '@yext/answers-core';
 import { AnswersActionsContext } from './AnswersActionsContext';
 
@@ -10,10 +10,10 @@ interface Props extends AnswersConfig {
 
 export function AnswersActionsProvider(props: Props): JSX.Element {
   const { children, verticalKey, ...answersConfig } = props;
-  const statefulCore: StatefulCore = provideStatefulCore(answersConfig);
-  verticalKey && statefulCore.setVerticalKey(verticalKey);
+  const answers: AnswersHeadless = provideAnswersHeadless(answersConfig);
+  verticalKey && answers.setVerticalKey(verticalKey);
   return (
-    <AnswersActionsContext.Provider value={statefulCore}>
+    <AnswersActionsContext.Provider value={answers}>
       {children}
     </AnswersActionsContext.Provider>
   );
