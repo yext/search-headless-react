@@ -1,27 +1,6 @@
-import { AppliedQueryFilter, Filter, DisplayableFacet, NearFilterValue } from '@yext/answers-core';
+import { AppliedQueryFilter, Filter, DisplayableFacet } from '@yext/answers-core';
 import { DisplayableFilter } from '../models/displayableFilter';
-
-/**
- * Check if the object follows NearFilterValue interface
- */
-function isNearFilterValue(obj: Object): obj is NearFilterValue {
-  return 'radius' in obj && 'lat' in obj && 'long' in obj;
-}
-
-/**
- * get a filter's display value or label in string format
- */
-function getFilterDisplayValue(filter: Filter): string {
-  const value = filter.value;
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-    return value.toString();
-  }
-  if (isNearFilterValue(value)) {
-    return `within ${value.radius}m radius`;
-  }
-  throw Error('unrecognized filter value type');
-}
-
+import { getFilterDisplayValue } from './filterutils';
 
 /**
  * convert a list of facets to DisplayableFilter format with only selected facets returned.

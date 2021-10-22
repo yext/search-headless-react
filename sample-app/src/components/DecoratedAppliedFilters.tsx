@@ -2,7 +2,7 @@ import AppliedFilters from "./AppliedFilters";
 import { AppliedQueryFilter } from "@yext/answers-core";
 import { useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
-import { getGroupedAppliedFilters } from '../utils/filterutils';
+import { getGroupedAppliedFilters } from '../utils/appliedfilterutils';
 
 export interface DecoratedAppliedFiltersConfig {
   showFieldNames?: boolean,
