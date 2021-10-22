@@ -7,7 +7,7 @@ import {
   getDisplayableAppliedFacets,
   getDisplayableStaticFilters,
   getDisplayableNlpFilters
-} from './createdisplayablefilter';
+} from './getdisplayablefilterutils';
 
 /**
  * Check if the object follows CombinedFilter interface
