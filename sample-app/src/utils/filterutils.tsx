@@ -114,7 +114,7 @@ function getFilterDisplayValue(filter: Filter): string {
 /**
  * convert a list of facets to DisplayableFilter format with only selected facets returned.
  */
-function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefined) {
+function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefined): DisplayableFilter[] {
   let appliedFacets: DisplayableFilter[] = [];
   facets?.forEach(facet => {
     facet.options.forEach(option => {
@@ -138,7 +138,7 @@ function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefined) {
 /**
  * convert a list of static filters to DisplayableFilter format.
  */
-function getDisplayableStaticFilters(filters: Filter[]) {
+function getDisplayableStaticFilters(filters: Filter[]): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
   filters?.forEach(filter => {
     appliedStaticFilters.push({
@@ -154,7 +154,7 @@ function getDisplayableStaticFilters(filters: Filter[]) {
 /**
  * convert a list of nlp filters to DisplayableFilter format.
  */
-function getDisplayableNlpFilters(filters: AppliedQueryFilter[]) {
+function getDisplayableNlpFilters(filters: AppliedQueryFilter[]): DisplayableFilter[] {
   let appliedNlpFilters: DisplayableFilter[] = [];
   filters?.forEach(filter => {
     appliedNlpFilters.push({
@@ -175,7 +175,7 @@ export function getGroupedAppliedFilters(
   appliedFiltersState: FiltersState,
   nlpFilters: AppliedQueryFilter[],
   hiddenFields: string[]
-) {
+): Array<GroupedFilters>  {
   const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static));
   const displayableFacets = getDisplayableAppliedFacets(appliedFiltersState?.facets);
   const displayableNlpFilters = getDisplayableNlpFilters(nlpFilters);
