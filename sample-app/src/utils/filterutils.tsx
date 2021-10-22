@@ -36,9 +36,9 @@ function flattenFilters(filter: Filter | CombinedFilter | null | undefined): Arr
 }
 
 /**
- * Returns true if the two given DisplayableAppliedFilters are the same
+ * Returns true if the two given filters are the same
  */
-export function isDuplicateFilter(thisFilter: DisplayableAppliedFilter, otherFilter: DisplayableAppliedFilter): boolean {
+export function isDuplicateFilter(thisFilter: Filter, otherFilter: Filter): boolean {
   if (thisFilter.fieldId !== otherFilter.fieldId) {
     return false;
   }
@@ -55,11 +55,14 @@ export function isDuplicateFilter(thisFilter: DisplayableAppliedFilter, otherFil
  * Returns a new list of nlp filters with duplicates of other filters and 
  * filter listed in hiddenFields removed from the given nlp filter list.
  */
-function pruneNlpFilters (nlpFilters: DisplayableAppliedFilter[], appliedFilters: DisplayableAppliedFilter[], 
-  hiddenFields: string[]): DisplayableAppliedFilter[] {
+function pruneNlpFilters (
+  nlpFilters: DisplayableAppliedFilter[], 
+  appliedFilters: DisplayableAppliedFilter[], 
+  hiddenFields: string[]
+): DisplayableAppliedFilter[] {
   const duplicatesRemoved = nlpFilters.filter(nlpFilter => {
     const isDuplicate = appliedFilters.find(appliedFilter =>
-      isDuplicateFilter(nlpFilter, appliedFilter)
+      isDuplicateFilter(nlpFilter.filter, appliedFilter.filter)
     );
     return !isDuplicate;
   });
@@ -70,9 +73,10 @@ function pruneNlpFilters (nlpFilters: DisplayableAppliedFilter[], appliedFilters
  * Returns a new list of applied filters with filter on hiddenFields removed 
  * from the given applied filter list.
  */
-function pruneAppliedFilters(appliedFilters: DisplayableAppliedFilter[], hiddenFields: string[]): DisplayableAppliedFilter[] {
-  return appliedFilters.filter(filter => {
-    return !hiddenFields.includes(filter.fieldId);
+function pruneAppliedFilters(
+  appliedFilters: DisplayableAppliedFilter[], hiddenFields: string[]): DisplayableAppliedFilter[] {
+  return appliedFilters.filter(appliedFilter => {
+    return !hiddenFields.includes(appliedFilter.filter.fieldId);
   });
 }
 
@@ -80,7 +84,10 @@ function pruneAppliedFilters(appliedFilters: DisplayableAppliedFilter[], hiddenF
  * Combine all of the applied filters into a list of GroupedFilters where each contains a label and 
  * list of filters under that same label or category.
  */
-function createGroupedFilters(appliedFilters: DisplayableAppliedFilter[], nlpFilters: DisplayableAppliedFilter[]): Array<GroupedFilters> {
+function createGroupedFilters(
+  appliedFilters: DisplayableAppliedFilter[],
+  nlpFilters: DisplayableAppliedFilter[]
+): Array<GroupedFilters> {
   const getGroupLabel = (filter: DisplayableAppliedFilter) => filter.groupLabel;
   const allFilters = appliedFilters.concat(nlpFilters);
   const groupedFilters: Record<string, DisplayableAppliedFilter[]> = mapArrayToObject(allFilters, getGroupLabel);
@@ -114,9 +121,11 @@ function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefined) {
       if(option.selected) {
         appliedFacets.push({
           filterType: 'FACET',
-          fieldId: facet.fieldId,
-          matcher: option.matcher,
-          value: option.value,
+          filter: {
+            fieldId: facet.fieldId,
+            matcher: option.matcher,
+            value: option.value
+          },
           groupLabel: facet.displayName,
           label: option.displayName
         });
@@ -134,9 +143,7 @@ function getDisplayableStaticFilters(filters: Filter[]) {
   filters?.forEach(filter => {
     appliedStaticFilters.push({
       filterType: 'STATIC_FILTER',
-      fieldId: filter.fieldId,
-      matcher: filter.matcher,
-      value: filter.value,
+      filter: filter,
       groupLabel: filter.fieldId,
       label: getFilterDisplayValue(filter),
     });
@@ -152,9 +159,7 @@ function getDisplayableNlpFilters(filters: AppliedQueryFilter[]) {
   filters?.forEach(filter => {
     appliedNplFilters.push({
       filterType: 'NLP_FILTER',
-      fieldId: filter.filter.fieldId,
-      matcher: filter.filter.matcher,
-      value: filter.filter.value,
+      filter: filter.filter,
       groupLabel: filter.displayKey,
       label: filter.displayValue,
     });
@@ -166,7 +171,11 @@ function getDisplayableNlpFilters(filters: AppliedQueryFilter[]) {
  * Process all applied filter types (facets, static filters, and nlp filters) by removing 
  * duplicates and specified hidden fields, and grouped the applied filters into categories.
  */
-export function getGroupedAppliedFilters(appliedFiltersState: FiltersState, nlpFilters: AppliedQueryFilter[], hiddenFields: string[]) {
+export function getGroupedAppliedFilters(
+  appliedFiltersState: FiltersState,
+  nlpFilters: AppliedQueryFilter[],
+  hiddenFields: string[]
+) {
   const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static));
   const displayableFacets = getDisplayableAppliedFacets(appliedFiltersState?.facets);
   const displayableNlpFilters = getDisplayableNlpFilters(nlpFilters);
@@ -176,5 +185,4 @@ export function getGroupedAppliedFilters(appliedFiltersState: FiltersState, nlpF
   const prunedNlpFilters = pruneNlpFilters (displayableNlpFilters, prunedAppliedFilters, hiddenFields);
 
   return createGroupedFilters(appliedFilters, prunedNlpFilters);
-
 }
