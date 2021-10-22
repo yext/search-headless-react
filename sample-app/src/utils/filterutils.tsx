@@ -8,7 +8,7 @@ export function isNearFilterValue(obj: Object): obj is NearFilterValue {
 }
 
 /**
- * get a filter's display value or label in string format
+ * Get a filter's display value or label in string format
  */
 export function getFilterDisplayValue(filter: Filter): string {
   const value = filter.value;

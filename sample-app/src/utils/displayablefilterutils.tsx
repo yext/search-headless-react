@@ -3,7 +3,7 @@ import { DisplayableFilter } from '../models/displayableFilter';
 import { getFilterDisplayValue } from './filterutils';
 
 /**
- * convert a list of facets to DisplayableFilter format with only selected facets returned.
+ * Convert a list of facets to DisplayableFilter format with only selected facets returned.
  */
 export function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefined): DisplayableFilter[] {
   let appliedFacets: DisplayableFilter[] = [];
@@ -27,7 +27,7 @@ export function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefin
 }
 
 /**
- * convert a list of static filters to DisplayableFilter format.
+ * Convert a list of static filters to DisplayableFilter format.
  */
 export function getDisplayableStaticFilters(filters: Filter[]): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
@@ -43,7 +43,7 @@ export function getDisplayableStaticFilters(filters: Filter[]): DisplayableFilte
 }
 
 /**
- * convert a list of nlp filters to DisplayableFilter format.
+ * Convert a list of nlp filters to DisplayableFilter format.
  */
 export function getDisplayableNlpFilters(filters: AppliedQueryFilter[]): DisplayableFilter[] {
   let appliedNlpFilters: DisplayableFilter[] = [];
