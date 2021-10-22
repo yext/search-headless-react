@@ -9,6 +9,7 @@ export interface DecoratedAppliedFiltersConfig {
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
+  removable?: boolean,
   appliedQueryFilters?: AppliedQueryFilter[]
 }
 
