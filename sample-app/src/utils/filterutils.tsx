@@ -155,16 +155,16 @@ function getDisplayableStaticFilters(filters: Filter[]) {
  * convert a list of nlp filters to DisplayableFilter format.
  */
 function getDisplayableNlpFilters(filters: AppliedQueryFilter[]) {
-  let appliedNplFilters: DisplayableFilter[] = [];
+  let appliedNlpFilters: DisplayableFilter[] = [];
   filters?.forEach(filter => {
-    appliedNplFilters.push({
+    appliedNlpFilters.push({
       filterType: 'NLP_FILTER',
       filter: filter.filter,
       groupLabel: filter.displayKey,
       label: filter.displayValue,
     });
   });
-  return appliedNplFilters;
+  return appliedNlpFilters;
 }
 
 /**
