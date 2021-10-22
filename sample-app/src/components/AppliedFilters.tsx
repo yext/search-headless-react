@@ -1,4 +1,4 @@
-import { DisplayableFilter } from '../models/displayableFilter';
+import { DisplayableAppliedFilter } from '../models/displayableFilter';
 import { GroupedFilters } from '../models/groupedFilters';
 import '../sass/AppliedFilters.scss';
 
@@ -37,8 +37,8 @@ function renderFilterLabel(label: string): JSX.Element {
   );
 }
 
-function renderAppliedFilters(filters: Array<DisplayableFilter>): JSX.Element {
-  const filterElems = filters.map((filter: DisplayableFilter, index: number) => {
+function renderAppliedFilters(filters: Array<DisplayableAppliedFilter>): JSX.Element {
+  const filterElems = filters.map((filter: DisplayableAppliedFilter, index: number) => {
     return (
       <div className="AppliedFilters__filterValue" key={filter.label}>
         <span className="AppliedFilters__filterValueText">{filter.label}</span>
