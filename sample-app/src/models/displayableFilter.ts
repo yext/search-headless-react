@@ -1,7 +1,8 @@
 import { Filter } from '@yext/answers-core';
 
 export interface DisplayableFilter {
+  filterType: 'NLP_FILTER' | 'STATIC_FILTER' | 'FACET',
   filter: Filter,
-  filterGroupLabel: string,
-  filterLabel: string
+  groupLabel: string,
+  label: string
 }
