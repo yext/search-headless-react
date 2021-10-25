@@ -4,5 +4,5 @@ import App from './App';
 test('renders learn react link', () => {
   const { getByText } = render(<App />);
 
-  expect(getByText(/Stateful Core React Test/i)).toBeInTheDocument();
+  expect(getByText(/Answers Headless React Test/i)).toBeInTheDocument();
 });

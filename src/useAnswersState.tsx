@@ -9,10 +9,10 @@ export type StateSelector<T> = (s: State) => T;
  * Very similar to useSelector in react-redux.
  */
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
-  const statefulCore = useContext(AnswersActionsContext);
+  const answers = useContext(AnswersActionsContext);
 
   // useRef stores values across renders without triggering additional ones
-  const storedStoreState = useRef<State>(statefulCore.state);
+  const storedStoreState = useRef<State>(answers.state);
   const storedSelector = useRef<StateSelector<T>>(stateSelector);
   const storedSelectedState = useRef<T>();
   /**
@@ -20,7 +20,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
    * Otherwise it's run an additional time every render, even when storedSelectedState is already initialized.
    */
   if (storedSelectedState.current === undefined) {
-    storedSelectedState.current = stateSelector(statefulCore.state);
+    storedSelectedState.current = stateSelector(answers.state);
   }
 
   /**
@@ -28,8 +28,8 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
    * Tries to use {@link storedSelectedState} when possible.
    */
   const selectedStateToReturn: T = (() => {
-    if (storedStoreState.current !== statefulCore.state || storedSelector.current !== stateSelector) {
-      return stateSelector(statefulCore.state);
+    if (storedStoreState.current !== answers.state || storedSelector.current !== stateSelector) {
+      return stateSelector(answers.state);
     }
     return storedSelectedState.current;
   })();
@@ -37,13 +37,13 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const [, triggerRender] = useState<T>(storedSelectedState.current);
   useLayoutEffect(() => {
     storedSelector.current = stateSelector;
-    storedStoreState.current = statefulCore.state;
+    storedStoreState.current = answers.state;
     storedSelectedState.current = selectedStateToReturn;
   });
 
   useLayoutEffect(() => {
     let unsubscribed = false;
-    const unsubscribe = statefulCore.addListener({
+    const unsubscribe = answers.addListener({
       valueAccessor: state => state,
       callback: (state: State) => {
         // prevent React state update on an unmounted component
@@ -61,7 +61,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
       unsubscribed = true;
       unsubscribe();
     };
-  }, [statefulCore]);
+  }, [answers]);
 
   return selectedStateToReturn;
 }
