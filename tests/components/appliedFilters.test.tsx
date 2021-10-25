@@ -1,5 +1,5 @@
 import { act, render } from '@testing-library/react';
-import { provideStatefulCore } from '@yext/answers-headless';
+import { provideAnswersHeadless } from '@yext/answers-headless';
 import { AnswersActionsContext } from '../../src/index';
 import DecoratedAppliedFilters from '../../sample-app/src/components/DecoratedAppliedFilters';
 import { Matcher } from '@yext/answers-core';
@@ -9,7 +9,7 @@ import { verticalQueryResponseWithNlpFilters } from '../setup/responses/vertical
 describe('AppliedFilters component work as expected', () => {
 
   it('see that selected static filters appears and is removable', async () => {
-    const statefulCore = createStatefulCore();
+    const answers = createAnswersHeadless();
     const mockedFilter = {
       fieldId: 'c_employeeCountry',
       matcher: Matcher.Equals,
@@ -18,13 +18,13 @@ describe('AppliedFilters component work as expected', () => {
 
     const MockedStaticFilter = () => {
       const onChange = useCallback(() => {
-        statefulCore.setFilter(null);
+        answers.setFilter(null);
       }, []);
       return <button id='c_employeeCountry_United States' onClick={onChange}></button>;
     };
-    statefulCore.setFilter(mockedFilter);
+    answers.setFilter(mockedFilter);
     const { container } = render(
-      <AnswersActionsContext.Provider value={statefulCore}>\
+      <AnswersActionsContext.Provider value={answers}>\
         <MockedStaticFilter />
         <DecoratedAppliedFilters
           showFieldNames={true}
@@ -47,7 +47,7 @@ describe('AppliedFilters component work as expected', () => {
   });
 
   it('see that selected facet appears and is removable', async () => {
-    const statefulCore = createStatefulCore();
+    const answers = createAnswersHeadless();
     const mockedFacets = [
       {
         fieldId: 'c_employeeDepartment',
@@ -61,9 +61,9 @@ describe('AppliedFilters component work as expected', () => {
         }]
       }
     ];
-    statefulCore.setFacets(mockedFacets);
+    answers.setFacets(mockedFacets);
     const { container } = render(
-      <AnswersActionsContext.Provider value={statefulCore}>\
+      <AnswersActionsContext.Provider value={answers}>\
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
@@ -85,9 +85,9 @@ describe('AppliedFilters component work as expected', () => {
   });
 
   it('see that nlp filters appears and is not removable', async () => {
-    const statefulCore = createStatefulCore();
+    const answers = createAnswersHeadless();
     const { container } = render(
-      <AnswersActionsContext.Provider value={statefulCore}>\
+      <AnswersActionsContext.Provider value={answers}>\
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
@@ -96,8 +96,8 @@ describe('AppliedFilters component work as expected', () => {
       </AnswersActionsContext.Provider>
     );
 
-    act(() => statefulCore.setQuery('resultsWithNlpFilter'));
-    await act( () => statefulCore.executeVerticalQuery());
+    act(() => answers.setQuery('resultsWithNlpFilter'));
+    await act( () => answers.executeVerticalQuery());
 
     const nlpFilterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
     expect(nlpFilterLabels.length).toBe(1);
@@ -110,12 +110,12 @@ describe('AppliedFilters component work as expected', () => {
 
 });
 
-function createStatefulCore() {
-  const statefulCore = provideStatefulCore({
+function createAnswersHeadless() {
+  const answers = provideAnswersHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
     locale: 'en',
   });
-  statefulCore.setVerticalKey('fakeVerticalKey');
-  return statefulCore;
+  answers.setVerticalKey('fakeVerticalKey');
+  return answers;
 }
