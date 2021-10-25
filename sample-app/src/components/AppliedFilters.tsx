@@ -79,7 +79,7 @@ function RemovableFilter({ filter }: {filter: DisplayableFilter }): JSX.Element 
     document.getElementById(`${filter.filter.fieldId + "_" + filter.filter.value}`)?.click();
   }
 
-  let onRemoveFilter = filter.filterType === 'FACET' ? onRemoveFacetOption : onRemoveStaticFilterOption;
+  const onRemoveFilter = filter.filterType === 'FACET' ? onRemoveFacetOption : onRemoveStaticFilterOption;
 
   return (
     <div className="AppliedFilters__filterValue AppliedFilters__removableFilter">
