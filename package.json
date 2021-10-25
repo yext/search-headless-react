@@ -73,6 +73,11 @@
     "testEnvironment": "jsdom",
     "testMatch": [
       "<rootDir>/tests/**/*.(test).ts(x)?"
-    ]
+    ],
+    "moduleNameMapper": {
+      "@yext/answers-headless-react": "<rootDir>/src",
+      "\\.svg$": "<rootDir>/__mocks__/svgMock.tsx",
+      "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.ts"
+    }
   }
 }
