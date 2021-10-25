@@ -1,6 +1,6 @@
 import { act, render } from '@testing-library/react';
 import { provideAnswersHeadless } from '@yext/answers-headless';
-import { AnswersActionsContext } from '../../src/index';
+import { AnswersActionsContext } from '../../src/AnswersActionsContext';
 import DecoratedAppliedFilters from '../../sample-app/src/components/DecoratedAppliedFilters';
 import { Matcher } from '@yext/answers-core';
 import { useCallback } from 'react';
