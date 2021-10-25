@@ -8,7 +8,7 @@ interface Props extends AnswersConfig {
   verticalKey?: string
 }
 
-export function AnswersActionsProvider(props: Props): JSX.Element {
+export function AnswersHeadlessProvider(props: Props): JSX.Element {
   const { children, verticalKey, ...answersConfig } = props;
   const answers: AnswersHeadless = provideAnswersHeadless(answersConfig);
   verticalKey && answers.setVerticalKey(verticalKey);
