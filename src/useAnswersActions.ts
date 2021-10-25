@@ -1,8 +1,8 @@
-import { StatefulCore } from '@yext/answers-headless';
+import { AnswersHeadless } from '@yext/answers-headless';
 import { useContext } from 'react';
 import { AnswersActionsContext } from './AnswersActionsContext';
 
-export type AnswersActions = StatefulCore;
+export type AnswersActions = AnswersHeadless;
 
 export function useAnswersActions(): AnswersActions {
   return useContext(AnswersActionsContext);

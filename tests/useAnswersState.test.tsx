@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Result } from '@yext/answers-core';
-import { provideStatefulCore } from '@yext/answers-headless';
+import { provideAnswersHeadless } from '@yext/answers-headless';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import React, { useCallback, useReducer } from 'react';
 import { AnswersActionsContext, useAnswersActions, useAnswersState } from '../src';
@@ -43,13 +43,13 @@ it('does not perform extra renders/listener registrations for nested components'
     );
   }
 
-  const statefulCore = createStatefulCore();
-  const addListenerSpy = jest.spyOn(statefulCore, 'addListener');
+  const answers = createAnswersHeadless();
+  const addListenerSpy = jest.spyOn(answers, 'addListener');
   expect(addListenerSpy).toHaveBeenCalledTimes(0);
   expect(parentStateUpdates).toHaveLength(0);
   expect(childStateUpdates).toHaveLength(0);
   render(
-    <AnswersActionsContext.Provider value={statefulCore}>
+    <AnswersActionsContext.Provider value={answers}>
       <Test />
     </AnswersActionsContext.Provider>
   );
@@ -88,16 +88,16 @@ it('does not trigger render on unmounted component', async () => {
     return <div>child component</div>;
   }
 
-  const statefulCore = createStatefulCore();
+  const answers = createAnswersHeadless();
   render(
-    <AnswersActionsContext.Provider value={statefulCore}>
+    <AnswersActionsContext.Provider value={answers}>
       <ParentComponent/>
     </AnswersActionsContext.Provider>
   );
-  act(() => statefulCore.setQuery('resultsWithFilter'));
-  await act( () => statefulCore.executeUniversalQuery());
-  act(() => statefulCore.setQuery('default'));
-  await act( () => statefulCore.executeUniversalQuery());
+  act(() => answers.setQuery('resultsWithFilter'));
+  await act( () => answers.executeUniversalQuery());
+  act(() => answers.setQuery('default'));
+  await act( () => answers.executeUniversalQuery());
   expect(consoleSpy).not.toHaveBeenCalledWith(
     expect.stringMatching('Can\'t perform a React state update on an unmounted component'),
     expect.anything(),
@@ -120,9 +120,9 @@ describe('uses the most recent selector',() => {
       );
     }
 
-    const statefulCore = createStatefulCore();
+    const answers = createAnswersHeadless();
     render(
-      <AnswersActionsContext.Provider value={statefulCore}>
+      <AnswersActionsContext.Provider value={answers}>
         <Test />
       </AnswersActionsContext.Provider>
     );
@@ -153,11 +153,11 @@ describe('uses the most recent selector',() => {
       );
     }
 
-    const statefulCore = createStatefulCore();
-    statefulCore.setQuery('initial value');
+    const answers = createAnswersHeadless();
+    answers.setQuery('initial value');
     expect(stateUpdates).toHaveLength(0);
     render(
-      <AnswersActionsContext.Provider value={statefulCore}>
+      <AnswersActionsContext.Provider value={answers}>
         <Test />
       </AnswersActionsContext.Provider>
     );
@@ -173,18 +173,18 @@ describe('uses the most recent selector',() => {
     expect(stateUpdates).toEqual(['initial value', 1]);
 
     act(() => {
-      statefulCore.setContext('trigger a state update that would not update the initial selector');
+      answers.setContext('trigger a state update that would not update the initial selector');
     });
     expect(stateUpdates).toEqual(['initial value', 1, 3]);
   });
 });
 
-function createStatefulCore() {
-  const statefulCore = provideStatefulCore({
+function createAnswersHeadless() {
+  const answers = provideAnswersHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
     locale: 'en',
   });
-  statefulCore.setVerticalKey('fakeVerticalKey');
-  return statefulCore;
+  answers.setVerticalKey('fakeVerticalKey');
+  return answers;
 }
