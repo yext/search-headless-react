@@ -4,7 +4,7 @@ import { Result } from '@yext/answers-core';
 import { provideAnswersHeadless } from '@yext/answers-headless';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import React, { useCallback, useReducer } from 'react';
-import { AnswersActionsContext, useAnswersActions, useAnswersState } from '../src';
+import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
 
 it('does not perform extra renders/listener registrations for nested components', async () => {
   const parentStateUpdates: Result[][] = [];
@@ -49,9 +49,9 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(parentStateUpdates).toHaveLength(0);
   expect(childStateUpdates).toHaveLength(0);
   render(
-    <AnswersActionsContext.Provider value={answers}>
+    <AnswersHeadlessContext.Provider value={answers}>
       <Test />
-    </AnswersActionsContext.Provider>
+    </AnswersHeadlessContext.Provider>
   );
   expect(addListenerSpy).toHaveBeenCalledTimes(1);
   expect(parentStateUpdates).toHaveLength(1);
@@ -90,9 +90,9 @@ it('does not trigger render on unmounted component', async () => {
 
   const answers = createAnswersHeadless();
   render(
-    <AnswersActionsContext.Provider value={answers}>
+    <AnswersHeadlessContext.Provider value={answers}>
       <ParentComponent/>
-    </AnswersActionsContext.Provider>
+    </AnswersHeadlessContext.Provider>
   );
   act(() => answers.setQuery('resultsWithFilter'));
   await act( () => answers.executeUniversalQuery());
@@ -122,9 +122,9 @@ describe('uses the most recent selector',() => {
 
     const answers = createAnswersHeadless();
     render(
-      <AnswersActionsContext.Provider value={answers}>
+      <AnswersHeadlessContext.Provider value={answers}>
         <Test />
-      </AnswersActionsContext.Provider>
+      </AnswersHeadlessContext.Provider>
     );
     expect(screen.getByTestId('selected-state')).toHaveTextContent('initial selector');
 
@@ -157,9 +157,9 @@ describe('uses the most recent selector',() => {
     answers.setQuery('initial value');
     expect(stateUpdates).toHaveLength(0);
     render(
-      <AnswersActionsContext.Provider value={answers}>
+      <AnswersHeadlessContext.Provider value={answers}>
         <Test />
-      </AnswersActionsContext.Provider>
+      </AnswersHeadlessContext.Provider>
     );
     expect(stateUpdates).toEqual(['initial value']);
 

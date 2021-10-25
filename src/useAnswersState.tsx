@@ -1,6 +1,6 @@
 import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
-import { AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 export type StateSelector<T> = (s: State) => T;
 
@@ -9,7 +9,7 @@ export type StateSelector<T> = (s: State) => T;
  * Very similar to useSelector in react-redux.
  */
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
-  const answers = useContext(AnswersActionsContext);
+  const answers = useContext(AnswersHeadlessContext);
 
   // useRef stores values across renders without triggering additional ones
   const storedStoreState = useRef<State>(answers.state);

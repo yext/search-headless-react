@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, useReducer, useEffect, useContext } from 'react';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
-import { AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import isShallowEqual from './utils/isShallowEqual';
 
 type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any) => JSX.Element;
@@ -26,7 +26,7 @@ export function subscribeToStateUpdates(
      */
     let previousPropsFromState = {};
     return function AnswersHeadlessSubscriber(props: Record<string, unknown>) {
-      const answers = useContext(AnswersActionsContext);
+      const answers = useContext(AnswersHeadlessContext);
       const [mergedProps, dispatch] = useReducer(() => {
         return {
           ...props,

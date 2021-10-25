@@ -3,10 +3,10 @@ import { useAnswersState, StateSelector } from './useAnswersState';
 import { useAnswersUtilities, AnswersUtilities } from './useAnswersUtilities';
 import { subscribeToStateUpdates } from './subscribeToStateUpdates';
 import { AnswersActionsProvider } from './AnswersActionsProvider';
-import { AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 export {
-  AnswersActionsContext,
+  AnswersHeadlessContext,
   subscribeToStateUpdates,
   useAnswersActions,
   useAnswersState,
