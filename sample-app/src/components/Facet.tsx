@@ -29,7 +29,7 @@ export default function Facet(props: FacetProps): JSX.Element {
   });
 
   const facetOptions = searchable
-    ? answersActions.searchThroughFacet(facet, filterValue).options
+    ? answersActions.utilities.searchThroughFacet(facet, filterValue).options
     : facet.options;
 
   return (
