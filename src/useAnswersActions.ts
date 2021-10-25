@@ -1,9 +1,9 @@
 import { AnswersHeadless } from '@yext/answers-headless';
 import { useContext } from 'react';
-import { AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 export type AnswersActions = AnswersHeadless;
 
 export function useAnswersActions(): AnswersActions {
-  return useContext(AnswersActionsContext);
+  return useContext(AnswersHeadlessContext);
 }

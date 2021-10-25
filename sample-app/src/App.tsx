@@ -3,7 +3,7 @@ import VerticalSearchPage from './pages/VerticalSearchPage';
 import UniversalSearchPage from './pages/UniversalSearchPage';
 import PageRouter from './PageRouter';
 import StandardLayout from './pages/StandardLayout';
-import { AnswersActionsProvider } from '@yext/answers-headless-react';
+import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
 
 const routes = [
@@ -22,7 +22,7 @@ const routes = [
 
 export default function App() {
   return (
-    <AnswersActionsProvider
+    <AnswersHeadlessProvider
       apiKey='2d8c550071a64ea23e263118a2b0680b'
       experienceKey='slanswers'
       locale='en'
@@ -34,6 +34,6 @@ export default function App() {
           routes={routes}
         />
       </div>
-    </AnswersActionsProvider>
+    </AnswersHeadlessProvider>
   );
 }
