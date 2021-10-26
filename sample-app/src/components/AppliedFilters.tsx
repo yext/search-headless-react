@@ -8,8 +8,7 @@ import { isNearFilterValue } from '../utils/filterutils';
 interface Props {
   showFieldNames?: boolean,
   labelText?: string,
-  delimiter?: string,
-  removable?: boolean,
+  delimiter?: string
   appliedFilters: Array<GroupedFilters>
 }
 
@@ -20,8 +19,7 @@ export default function AppliedFilters({
   showFieldNames,
   labelText,
   delimiter,
-  appliedFilters,
-  removable = false
+  appliedFilters
 }: Props): JSX.Element {
   return (
     <div className="AppliedFilters" aria-label={labelText}>
@@ -29,7 +27,7 @@ export default function AppliedFilters({
         return (
           <div className="AppliedFilters__filterGroup" key={filterGroup.label}>
             {showFieldNames && renderFilterLabel(filterGroup.label)}
-            {renderAppliedFilters(filterGroup.filters, removable)}
+            {renderAppliedFilters(filterGroup.filters)}
             {index < appliedFilters.length - 1 && <div className="AppliedFilters__filterSeparator">{delimiter}</div>}
           </div>
         );
@@ -47,9 +45,9 @@ function renderFilterLabel(label: string): JSX.Element {
   );
 }
 
-function renderAppliedFilters(filters: Array<DisplayableFilter>, removable: boolean): JSX.Element {
+function renderAppliedFilters(filters: Array<DisplayableFilter>): JSX.Element {
   const filterElems = filters.map((filter: DisplayableFilter, index: number) => {
-    if (filter.filterType === 'NLP_FILTER' || !removable) {
+    if (filter.filterType === 'NLP_FILTER') {
       return (
         <div className="AppliedFilters__filterValue" key={filter.label}>
           <span className="AppliedFilters__filterValueText">{filter.label}</span>

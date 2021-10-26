@@ -87,7 +87,6 @@ export default function VerticalSearchPage(props: {
           showFieldNames={true}
           hiddenFields={['builtin.entityType']}
           delimiter='|'
-          removable={true}
         />
         <AlternativeVerticals
           currentVerticalLabel='People'

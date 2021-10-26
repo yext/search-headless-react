@@ -29,7 +29,6 @@ describe('AppliedFilters component work as expected', () => {
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
-          removable={true}
         />
       </AnswersActionsContext.Provider>
     );
@@ -67,7 +66,6 @@ describe('AppliedFilters component work as expected', () => {
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
-          removable={true}
         />
       </AnswersActionsContext.Provider>
     );
@@ -91,7 +89,6 @@ describe('AppliedFilters component work as expected', () => {
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
-          removable={true}
         />
       </AnswersActionsContext.Provider>
     );
