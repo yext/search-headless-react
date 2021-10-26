@@ -1,4 +1,4 @@
-import { useAnswersActions } from '@yext/answers-headless-react'
+import { useAnswersUtilities } from '@yext/answers-headless-react'
 import { DisplayableFacet, DisplayableFacetOption } from '@yext/answers-core';
 import { useState } from 'react';
 import useCollapse from 'react-collapsed';
@@ -21,7 +21,7 @@ interface FacetProps extends FacetTextConfig {
 
 export default function Facet(props: FacetProps): JSX.Element {
   const { facet, onToggle, searchable, collapsible, defaultExpanded, placeholderText, label } = props;
-  const answersActions = useAnswersActions();
+  const answersUtilities = useAnswersUtilities();
   const hasSelectedFacet = !!facet.options.find(o => o.selected);
   const [ filterValue, setFilterValue ] = useState('');
   const { getCollapseProps, getToggleProps } = useCollapse({
@@ -29,7 +29,7 @@ export default function Facet(props: FacetProps): JSX.Element {
   });
 
   const facetOptions = searchable
-    ? answersActions.utilities.searchThroughFacet(facet, filterValue).options
+    ? answersUtilities.searchThroughFacet(facet, filterValue).options
     : facet.options;
 
   return (
