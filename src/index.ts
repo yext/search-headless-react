@@ -1,15 +1,15 @@
 import { useAnswersActions, AnswersActions } from './useAnswersActions';
 import { useAnswersState, StateSelector } from './useAnswersState';
 import { subscribeToStateUpdates } from './subscribeToStateUpdates';
-import { AnswersActionsProvider } from './AnswersActionsProvider';
-import { AnswersActionsContext } from './AnswersActionsContext';
+import { AnswersHeadlessProvider } from './AnswersHeadlessProvider';
+import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 export {
-  AnswersActionsContext,
+  AnswersHeadlessContext,
   subscribeToStateUpdates,
   useAnswersActions,
   useAnswersState,
-  AnswersActionsProvider,
+  AnswersHeadlessProvider,
   AnswersActions,
   StateSelector
 };

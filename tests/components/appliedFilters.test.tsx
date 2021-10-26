@@ -1,6 +1,6 @@
 import { act, render } from '@testing-library/react';
 import { provideAnswersHeadless } from '@yext/answers-headless';
-import { AnswersActionsContext } from '../../src';
+import { AnswersHeadlessContext } from '../../src';
 import DecoratedAppliedFilters from '../../sample-app/src/components/DecoratedAppliedFilters';
 import { Matcher } from '@yext/answers-core';
 import { useCallback } from 'react';
@@ -24,13 +24,13 @@ describe('AppliedFilters component work as expected', () => {
     };
     answers.setFilter(mockedFilter);
     const { container } = render(
-      <AnswersActionsContext.Provider value={answers}>
+      <AnswersHeadlessContext.Provider value={answers}>
         <MockedStaticFilter />
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
         />
-      </AnswersActionsContext.Provider>
+      </AnswersHeadlessContext.Provider>
     );
 
     let filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
@@ -62,12 +62,12 @@ describe('AppliedFilters component work as expected', () => {
     ];
     answers.setFacets(mockedFacets);
     const { container } = render(
-      <AnswersActionsContext.Provider value={answers}>\
+      <AnswersHeadlessContext.Provider value={answers}>\
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
         />
-      </AnswersActionsContext.Provider>
+      </AnswersHeadlessContext.Provider>
     );
 
     let facetLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
@@ -85,12 +85,12 @@ describe('AppliedFilters component work as expected', () => {
   it('see that nlp filters appears and is not removable', async () => {
     const answers = createAnswersHeadless();
     const { container } = render(
-      <AnswersActionsContext.Provider value={answers}>\
+      <AnswersHeadlessContext.Provider value={answers}>\
         <DecoratedAppliedFilters
           showFieldNames={true}
           delimiter='|'
         />
-      </AnswersActionsContext.Provider>
+      </AnswersHeadlessContext.Provider>
     );
 
     act(() => answers.setQuery('resultsWithNlpFilter'));

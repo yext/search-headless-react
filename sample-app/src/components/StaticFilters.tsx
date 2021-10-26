@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Filter, CombinedFilter, FilterCombinator, Matcher } from '@yext/answers-core';
-import { AnswersActionsContext } from '@yext/answers-headless-react';
+import { AnswersHeadlessContext } from '@yext/answers-headless-react';
 
 interface CheckBoxProps {
   fieldId: string,
@@ -115,4 +115,4 @@ function formatOrFilters(filters: Filter[]) {
   }
 }
 
-StaticFilters.contextType = AnswersActionsContext;
+StaticFilters.contextType = AnswersHeadlessContext;
