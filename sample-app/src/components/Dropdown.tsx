@@ -30,7 +30,11 @@ export default function Dropdown({
       [cssClasses.focusedOption]: index === focusedOptionIndex
     })
     return (
-      <div key={index} className={className} onClick={() => onClickOption(option)}>
+      <div 
+        key={index}
+        className={className}
+        id={`${cssClasses.option}-${index}`}
+        onClick={() => onClickOption(option)}>
         {option.render()}
       </div>)
   }
