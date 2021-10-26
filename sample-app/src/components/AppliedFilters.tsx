@@ -8,7 +8,7 @@ import { isNearFilterValue } from '../utils/filterutils';
 interface Props {
   showFieldNames?: boolean,
   labelText?: string,
-  delimiter?: string
+  delimiter?: string,
   appliedFilters: Array<GroupedFilters>
 }
 
