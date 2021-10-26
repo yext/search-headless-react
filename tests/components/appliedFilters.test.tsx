@@ -22,7 +22,7 @@ describe('AppliedFilters component work as expected', () => {
       }, []);
       return <button id='c_employeeCountry_United States' onClick={onChange}></button>;
     };
-    answers.setFilter(mockedFilter);
+
     const { container } = render(
       <AnswersHeadlessContext.Provider value={answers}>
         <MockedStaticFilter />
@@ -32,6 +32,10 @@ describe('AppliedFilters component work as expected', () => {
         />
       </AnswersHeadlessContext.Provider>
     );
+
+    act(() => answers.setQuery('someQuery'));
+    await act( () => answers.executeVerticalQuery());
+    act(() => answers.setFilter(mockedFilter));
 
     let filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
     expect(filterLabels.length).toBe(1);
@@ -60,7 +64,7 @@ describe('AppliedFilters component work as expected', () => {
         }]
       }
     ];
-    answers.setFacets(mockedFacets);
+
     const { container } = render(
       <AnswersHeadlessContext.Provider value={answers}>\
         <DecoratedAppliedFilters
@@ -69,6 +73,10 @@ describe('AppliedFilters component work as expected', () => {
         />
       </AnswersHeadlessContext.Provider>
     );
+
+    act(() => answers.setQuery('someQuery'));
+    await act( () => answers.executeVerticalQuery());
+    act(() => answers.setFacets(mockedFacets));
 
     let facetLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
     expect(facetLabels.length).toBe(1);
