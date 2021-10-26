@@ -24,7 +24,7 @@ describe('AppliedFilters component work as expected', () => {
     };
     answers.setFilter(mockedFilter);
     const { container } = render(
-      <AnswersActionsContext.Provider value={answers}>\
+      <AnswersActionsContext.Provider value={answers}>
         <MockedStaticFilter />
         <DecoratedAppliedFilters
           showFieldNames={true}
