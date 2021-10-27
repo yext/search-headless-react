@@ -5,6 +5,7 @@ interface Props {
   inputValue?: string,
   placeholder?: string,
   options: Option[],
+  optionIdPrefix: string,
   onSubmit?: (value: string) => void,
   updateInputValue: (value: string) => void,
   updateDropdown: () => void,
@@ -46,6 +47,7 @@ export default function InputDropdown({
   inputValue = '',
   placeholder,
   options,
+  optionIdPrefix,
   onSubmit = () => {},
   updateInputValue,
   updateDropdown,
@@ -61,7 +63,7 @@ export default function InputDropdown({
   });
   const focusOptionId = focusedOptionIndex === undefined 
     ? undefined
-    : `${cssClasses.option}-${focusedOptionIndex}`;
+    : `${optionIdPrefix}-${focusedOptionIndex}`;
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
 
@@ -134,6 +136,7 @@ export default function InputDropdown({
       {shouldDisplayDropdown &&
         <Dropdown
           options={options}
+          optionIdPrefix={optionIdPrefix}
           onClickOption={option => {
             updateInputValue(option.value);
             onSubmit(option.value)
