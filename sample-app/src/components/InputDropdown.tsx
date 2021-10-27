@@ -68,7 +68,7 @@ export default function InputDropdown({
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
-  const resultsCountRef = useRef<HTMLElement>(document.createElement('span'));
+  const resultsCountRef = useRef<HTMLDivElement>(document.createElement('div'));
 
   if (inputRef.current.value || options.length || resultsCountRef.current.innerHTML) {
     updateResultsCountText();
@@ -169,11 +169,11 @@ export default function InputDropdown({
         </div>
       }
       {cssClasses.resultsCount &&
-        <span
+        <div
           className={`${cssClasses.resultsCount} sr-only`}
           aria-live='assertive'
           ref={resultsCountRef}>
-        </span>
+        </div>
       }
       {shouldDisplayDropdown &&
         <Dropdown
