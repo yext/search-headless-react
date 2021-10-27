@@ -65,6 +65,7 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
             render: () => renderWithHighlighting(result)
           }
         })}
+        optionIdPrefix='Autocomplete__option'
         onSubmit={executeQuery}
         updateInputValue={value => {
           answersActions.setQuery(value);
