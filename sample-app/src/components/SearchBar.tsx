@@ -81,7 +81,7 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer',
           instructions: 'Autocomplete__instructions',
-          resultsCount: 'Autocomplete__resultsCount'
+          autocompleteCount: 'Autocomplete__count'
         }}
       />
     </div>

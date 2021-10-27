@@ -19,7 +19,7 @@ interface Props {
     inputElement: string,
     inputContainer: string,
     instructions?: string,
-    resultsCount?: string
+    autocompleteCount?: string
   }
 }
 
@@ -73,17 +73,17 @@ export default function InputDropdown({
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
-  const resultsCountRef = useRef<HTMLDivElement>(document.createElement('div'));
+  const autocompleteCountRef = useRef<HTMLDivElement>(document.createElement('div'));
 
-  if (inputRef.current.value || options.length || resultsCountRef.current.innerHTML) {
-    updateResultsCountText();
+  if (inputRef.current.value || options.length || autocompleteCountRef.current.innerHTML) {
+    updateAutocompleteCountText();
   }
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
       dispatch({ type: 'HideOptions' });
-      removeResultsCountText();
+      removeAutocompleteCountText();
     }
   }
 
@@ -120,15 +120,15 @@ export default function InputDropdown({
     }
   }
 
-  function removeResultsCountText() {
-    if (cssClasses.resultsCount) {
-      resultsCountRef.current.innerHTML = '';
+  function removeAutocompleteCountText() {
+    if (cssClasses.autocompleteCount) {
+      autocompleteCountRef.current.innerHTML = '';
     }
   }
 
-  function updateResultsCountText() {
-    if (cssClasses.resultsCount) {
-      resultsCountRef.current.innerHTML = processTranslation({
+  function updateAutocompleteCountText() {
+    if (cssClasses.autocompleteCount) {
+      autocompleteCountRef.current.innerHTML = processTranslation({
         phrase: `${options.length} autocomplete option found.`,
         pluralForm: `${options.length} autocomplete options found.`,
         count: options.length
@@ -148,13 +148,13 @@ export default function InputDropdown({
             setLatestUserInput(value);
             updateInputValue(value);
             updateDropdown();
-            updateResultsCountText();
+            updateAutocompleteCountText();
           }}
           onClick={() => {
             dispatch({ type: 'ShowOptions' });
             updateDropdown();
             if (options.length || inputValue) {
-              updateResultsCountText();
+              updateAutocompleteCountText();
             }
           }}
           onKeyDown={onKeyDown}
@@ -173,11 +173,11 @@ export default function InputDropdown({
           {instructionText}
         </div>
       }
-      {cssClasses.resultsCount &&
+      {cssClasses.autocompleteCount &&
         <div
-          className={`${cssClasses.resultsCount} sr-only`}
+          className={`${cssClasses.autocompleteCount} sr-only`}
           aria-live='assertive'
-          ref={resultsCountRef}>
+          ref={autocompleteCountRef}>
         </div>
       }
       {shouldDisplayDropdown &&
