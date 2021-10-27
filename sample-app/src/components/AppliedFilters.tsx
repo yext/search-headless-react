@@ -67,7 +67,7 @@ function RemovableFilter({ filter }: {filter: DisplayableFilter }): JSX.Element 
   const onRemoveFacetOption = () => {
     const { fieldId, matcher, value } = filter.filter;
     if (isNearFilterValue(value)) {
-      console.error('unrecognized value type for facet option.');
+      console.error('A Filter with a NearFilterValue is not a supported RemovableFilter.');
       return;
     }
     answersAction.unselectFacetOption(fieldId, { matcher, value });
