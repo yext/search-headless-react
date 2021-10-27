@@ -167,7 +167,7 @@ export default function InputDropdown({
       }
       {cssClasses.resultsCount &&
         <span
-          className={cssClasses.resultsCount}
+          className={`${cssClasses.resultsCount} sr-only`}
           aria-live='assertive'
           ref={resultsCountRef}>
         </span>
