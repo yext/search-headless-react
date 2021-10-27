@@ -5,7 +5,7 @@ import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
 import '../sass/Navigation.scss';
 
 interface LinkData {
-  to: string
+  to: string,
   label: string
 }
 

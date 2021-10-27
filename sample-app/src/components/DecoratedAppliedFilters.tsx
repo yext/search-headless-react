@@ -17,7 +17,8 @@ export interface DecoratedAppliedFiltersConfig {
  */
 export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersConfig): JSX.Element {
   const { hiddenFields = [], appliedQueryFilters = [], ...otherProps } = props;
-  const filterState = useAnswersState(state => state.filters);
+  const state = useAnswersState(state => state);
+  const filterState = state.vertical.results ? state.filters : {};
   const groupedFilters: Array<GroupedFilters> = getGroupedAppliedFilters(filterState, appliedQueryFilters, hiddenFields);
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }

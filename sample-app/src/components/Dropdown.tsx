@@ -1,17 +1,17 @@
 import classNames from 'classnames';
 
 export interface Option {
-  value: string
-  render: () => JSX.Element | null;
+  value: string,
+  render: () => JSX.Element | null
 }
 
 interface Props {
-  options: Option[]
+  options: Option[],
   onClickOption?: (option: Option) => void,
-  focusedOptionIndex: number | undefined;
+  focusedOptionIndex: number | undefined,
   cssClasses: {
     optionContainer: string,
-    option: string
+    option: string,
     focusedOption: string
   }
 }

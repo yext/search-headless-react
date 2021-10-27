@@ -8,7 +8,7 @@ import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 
 interface Props {
-  placeholder?: string
+  placeholder?: string,
   isVertical: boolean
 }
 
