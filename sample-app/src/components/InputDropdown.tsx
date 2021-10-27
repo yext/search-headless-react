@@ -161,7 +161,10 @@ export default function InputDropdown({
         {renderButtons()}
       </div>
       {cssClasses.instructions &&
-        <div id={cssClasses.instructions} className={cssClasses.instructions}>
+        <div
+          id={cssClasses.instructions}
+          className={`${cssClasses.instructions} sr-instructions`}
+        >
           {instructionText}
         </div>
       }
