@@ -1,25 +1,29 @@
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
+import { processTranslation } from './utils/processTranslation';
 
 interface Props {
-  inputValue?: string
-  placeholder?: string
-  options: Option[]
-  onSubmit?: (value: string) => void
-  updateInputValue: (value: string) => void
-  updateDropdown: () => void
-  renderButtons?: () => JSX.Element | null
+  inputValue?: string,
+  placeholder?: string,
+  instructionText?: string,
+  options: Option[],
+  onSubmit?: (value: string) => void,
+  updateInputValue: (value: string) => void,
+  updateDropdown: () => void,
+  renderButtons?: () => JSX.Element | null,
   cssClasses: {
     optionContainer: string,
-    option: string
-    focusedOption: string
+    option: string,
+    focusedOption: string,
     inputElement: string,
-    inputContainer: string
+    inputContainer: string,
+    instructions?: string,
+    resultsCount?: string
   }
 }
 
 interface State {
-  focusedOptionIndex?: number
+  focusedOptionIndex?: number,
   shouldDisplayDropdown: boolean
 }
 
@@ -45,6 +49,7 @@ function reducer(state: State, action: Action): State {
 export default function InputDropdown({
   inputValue = '',
   placeholder,
+  instructionText='',
   options,
   onSubmit = () => {},
   updateInputValue,
@@ -62,12 +67,18 @@ export default function InputDropdown({
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
 
-  const inputRef = useRef<HTMLInputElement>(document.createElement('input')); 
+  const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
+  const resultsCountRef = useRef<HTMLElement>(document.createElement('span'));
+
+  if (inputRef.current.value || options.length || resultsCountRef.current.innerHTML) {
+    updateResultsCountText();
+  }
   
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
       dispatch({ type: 'HideOptions' });
+      removeResultsCountText();
     }
   }
 
@@ -105,6 +116,22 @@ export default function InputDropdown({
     }
   }
 
+  function removeResultsCountText() {
+    if (cssClasses.resultsCount) {
+      resultsCountRef.current.innerHTML = '';
+    }
+  }
+  
+  function updateResultsCountText() {
+    if (cssClasses.resultsCount) {
+      resultsCountRef.current.innerHTML = processTranslation({
+        phrase: `${options.length} autocomplete option found.`,
+        pluralForm: `${options.length} autocomplete options found.`,
+        count: options.length
+      });
+    }
+  }
+
   return (
     <>
       <div className={cssClasses.inputContainer}>
@@ -117,17 +144,34 @@ export default function InputDropdown({
             setLatestUserInput(value);
             updateInputValue(value);
             updateDropdown();
+            updateResultsCountText();
           }}
           onClick={() => {
             dispatch({ type: 'ShowOptions' });
             updateDropdown();
+            if (options.length || inputValue) {
+              updateResultsCountText();
+            }
           }}
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
+          aria-describedby={cssClasses.instructions}
         />
         {renderButtons()}
       </div>
+      {cssClasses.instructions &&
+        <div id={cssClasses.instructions} className={cssClasses.instructions}>
+          {instructionText}
+        </div>
+      }
+      {cssClasses.resultsCount &&
+        <span
+          className={cssClasses.resultsCount}
+          aria-live='assertive'
+          ref={resultsCountRef}>
+        </span>
+      }
       {shouldDisplayDropdown &&
         <Dropdown
           options={options}

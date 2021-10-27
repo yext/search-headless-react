@@ -8,14 +8,15 @@ import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 
 interface Props {
-  placeholder?: string
-  isVertical: boolean
+  placeholder?: string,
+  isVertical: boolean,
+  instructions?: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar({ placeholder, isVertical }: Props) {
+export default function SearchBar({ placeholder, isVertical, instructions }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.query);
   const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
@@ -23,6 +24,9 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
   const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
+
+  const instructionsText = instructions
+    || 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
   function executeAutocomplete () {
     isVertical 
@@ -54,6 +58,7 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
+        instructionText={instructionsText}
         options={autocompleteResults.map(result => {
           return {
             value: result.value,
@@ -73,7 +78,9 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
           option: 'Autocomplete__option',
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
-          inputContainer: 'SearchBar__inputContainer'
+          inputContainer: 'SearchBar__inputContainer',
+          instructions: 'Autocomplete__instructions',
+          resultsCount: 'Autocomplete__resultsCount'
         }}
       />
     </div>
