@@ -2,15 +2,15 @@ import { ComponentType } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 interface RouteData {
-  path: string
-  page: JSX.Element
+  path: string,
+  page: JSX.Element,
   exact?: boolean
 }
 
 export type LayoutComponent = ComponentType<{ page: JSX.Element }>
 
 interface PageProps {
-  Layout?: LayoutComponent
+  Layout?: LayoutComponent,
   routes: RouteData[]
 }
 

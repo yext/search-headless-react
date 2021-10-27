@@ -5,14 +5,14 @@ import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react
 interface Props {
   isVertical: boolean,
   geolocationOptions?: {
-    enableHighAccuracy?: boolean
-    timeout?: number
+    enableHighAccuracy?: boolean,
+    timeout?: number,
     maximumAge?: number
-  }
+  },
   cssClasses?: {
-    container: string
-    location: string
-    source: string
+    container: string,
+    location: string,
+    source: string,
     button: string
   }
 }

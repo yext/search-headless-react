@@ -2,24 +2,24 @@ import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
 
 interface Props {
-  inputValue?: string
-  placeholder?: string
-  options: Option[]
-  onSubmit?: (value: string) => void
-  updateInputValue: (value: string) => void
-  updateDropdown: () => void
-  renderButtons?: () => JSX.Element | null
+  inputValue?: string,
+  placeholder?: string,
+  options: Option[],
+  onSubmit?: (value: string) => void,
+  updateInputValue: (value: string) => void,
+  updateDropdown: () => void,
+  renderButtons?: () => JSX.Element | null,
   cssClasses: {
     optionContainer: string,
-    option: string
-    focusedOption: string
+    option: string,
+    focusedOption: string,
     inputElement: string,
     inputContainer: string
   }
 }
 
 interface State {
-  focusedOptionIndex?: number
+  focusedOptionIndex?: number,
   shouldDisplayDropdown: boolean
 }
 
