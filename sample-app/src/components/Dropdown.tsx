@@ -9,6 +9,7 @@ interface Props {
   options: Option[],
   onClickOption?: (option: Option) => void,
   focusedOptionIndex: number | undefined,
+  optionIdPrefix: string,
   cssClasses: {
     optionContainer: string,
     option: string,
@@ -23,6 +24,7 @@ export default function Dropdown({
   options,
   onClickOption = () => {},
   focusedOptionIndex,
+  optionIdPrefix,
   cssClasses
 }: Props): JSX.Element | null {
   function renderOption(option: Option, index: number) {
@@ -30,7 +32,11 @@ export default function Dropdown({
       [cssClasses.focusedOption]: index === focusedOptionIndex
     })
     return (
-      <div key={index} className={className} onClick={() => onClickOption(option)}>
+      <div 
+        key={index}
+        className={className}
+        id={`${optionIdPrefix}-${index}`}
+        onClick={() => onClickOption(option)}>
         {option.render()}
       </div>)
   }
