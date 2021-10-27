@@ -5,6 +5,7 @@ interface Props {
   inputValue?: string,
   placeholder?: string,
   options: Option[],
+  optionIdPrefix: string,
   onSubmit?: (value: string) => void,
   updateInputValue: (value: string) => void,
   updateDropdown: () => void,
@@ -46,6 +47,7 @@ export default function InputDropdown({
   inputValue = '',
   placeholder,
   options,
+  optionIdPrefix,
   onSubmit = () => {},
   updateInputValue,
   updateDropdown,
@@ -59,6 +61,9 @@ export default function InputDropdown({
     focusedOptionIndex: undefined,
     shouldDisplayDropdown: false,
   });
+  const focusOptionId = focusedOptionIndex === undefined 
+    ? undefined
+    : `${optionIdPrefix}-${focusedOptionIndex}`;
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
 
@@ -83,12 +88,11 @@ export default function InputDropdown({
 
     const isFirstOptionFocused = focusedOptionIndex === 0;
     const isLastOptionFocused = focusedOptionIndex === options.length - 1;
-
     if (evt.key === 'Enter') {
       updateInputValue(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideOptions' });
-    } else if (evt.key === 'Escape') {
+    } else if (evt.key === 'Escape' || evt.key === 'Tab') {
       dispatch({ type: 'HideOptions' });
     } else if (evt.key === 'ArrowDown' && options.length > 0 && !isLastOptionFocused) {
       const newIndex = focusedOptionIndex !== undefined ? focusedOptionIndex + 1 : 0;
@@ -125,12 +129,14 @@ export default function InputDropdown({
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
+          aria-activedescendant={focusOptionId}
         />
         {renderButtons()}
       </div>
       {shouldDisplayDropdown &&
         <Dropdown
           options={options}
+          optionIdPrefix={optionIdPrefix}
           onClickOption={option => {
             updateInputValue(option.value);
             onSubmit(option.value)
