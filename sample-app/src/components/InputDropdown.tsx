@@ -27,18 +27,18 @@ interface State {
   shouldDisplayDropdown: boolean
 }
 
-type Action = 
+type Action =
   | { type: 'HideOptions' }
   | { type: 'ShowOptions' }
   | { type: 'FocusOption', newIndex?: number }
 
 function reducer(state: State, action: Action): State {
-  switch(action.type) {
-    case 'HideOptions': 
+  switch (action.type) {
+    case 'HideOptions':
       return { focusedOptionIndex: undefined, shouldDisplayDropdown: false }
-    case 'ShowOptions': 
+    case 'ShowOptions':
       return { focusedOptionIndex: undefined, shouldDisplayDropdown: true }
-    case 'FocusOption': 
+    case 'FocusOption':
       return { focusedOptionIndex: action.newIndex, shouldDisplayDropdown: true }
   }
 }
@@ -49,7 +49,7 @@ function reducer(state: State, action: Action): State {
 export default function InputDropdown({
   inputValue = '',
   placeholder,
-  instructionText='',
+  instructionText = '',
   options,
   onSubmit = () => {},
   updateInputValue,
@@ -73,7 +73,7 @@ export default function InputDropdown({
   if (inputRef.current.value || options.length || resultsCountRef.current.innerHTML) {
     updateResultsCountText();
   }
-  
+
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
@@ -121,7 +121,7 @@ export default function InputDropdown({
       resultsCountRef.current.innerHTML = '';
     }
   }
-  
+
   function updateResultsCountText() {
     if (cssClasses.resultsCount) {
       resultsCountRef.current.innerHTML = processTranslation({
