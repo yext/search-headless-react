@@ -1,10 +1,10 @@
 
 interface HighlightedValue {
-  value: string;
+  value: string,
   matchedSubstrings?: {
-    length: number;
-    offset: number;
-  }[];
+    length: number,
+    offset: number
+  }[]
 }
 
 /**

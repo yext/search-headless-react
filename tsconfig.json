@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@yext/answers-headless-react": ["src"]
+    },
     "target": "es2015",
     "outDir": "lib",
     "esModuleInterop": true,
@@ -15,6 +19,7 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "react-app.d.ts"
   ]
 }

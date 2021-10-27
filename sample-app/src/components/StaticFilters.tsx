@@ -14,7 +14,7 @@ interface FilterBoxProps {
     value: string,
     label: string
   }[],
-  title: string,
+  title: string
 }
 
 interface FiltersState {

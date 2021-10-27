@@ -3,8 +3,8 @@ import { NearFilterValue, CombinedFilter, Filter } from '@yext/answers-core';
 /**
  * Check if the object follows NearFilterValue interface
  */
-export function isNearFilterValue(obj: Object): obj is NearFilterValue {
-  return 'radius' in obj && 'lat' in obj && 'long' in obj;
+export function isNearFilterValue(obj: any): obj is NearFilterValue {
+  return typeof obj === 'object' && 'radius' in obj && 'lat' in obj && 'long' in obj;
 }
 
 /**

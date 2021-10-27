@@ -11,7 +11,7 @@ interface VerticalConfig {
 }
 
 interface VerticalSuggestion extends VerticalConfig {
-  resultsCount: number;
+  resultsCount: number
 }
 
 function isVerticalSuggestion (suggestion: VerticalSuggestion | null): suggestion is VerticalSuggestion {
@@ -21,7 +21,7 @@ function isVerticalSuggestion (suggestion: VerticalSuggestion | null): suggestio
 interface Props {
   currentVerticalLabel: string,
   verticalsConfig: VerticalConfig[],
-  displayAllResults?: boolean;
+  displayAllResults?: boolean
 }
 
 export default function AlternativeVerticals (props: Props): JSX.Element | null {
