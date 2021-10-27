@@ -75,15 +75,20 @@ export default function InputDropdown({
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
   const autocompleteCountRef = useRef<HTMLDivElement>(document.createElement('div'));
 
-  if (inputRef.current.value || options.length || autocompleteCountRef.current.innerHTML) {
-    updateAutocompleteCountText();
+  const prevAutcompleteCountText = autocompleteCountRef.current.innerHTML;
+
+  if (shouldDisplayDropdown) {
+    if (inputRef.current.value || options.length || prevAutcompleteCountText) {
+      updateAutocompleteCountText(prevAutcompleteCountText);
+    }
+  } else {
+    removeAutocompleteCountText();
   }
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
       dispatch({ type: 'HideOptions' });
-      removeAutocompleteCountText();
     }
   }
 
@@ -126,13 +131,16 @@ export default function InputDropdown({
     }
   }
 
-  function updateAutocompleteCountText() {
+  function updateAutocompleteCountText(prevText?: string) {
     if (cssClasses.autocompleteCount) {
-      autocompleteCountRef.current.innerHTML = processTranslation({
+      const latestText = processTranslation({
         phrase: `${options.length} autocomplete option found.`,
         pluralForm: `${options.length} autocomplete options found.`,
         count: options.length
       });
+      if (!prevText || prevText !== latestText) {
+        autocompleteCountRef.current.innerHTML = latestText;
+      }
     }
   }
 
