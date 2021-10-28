@@ -64,8 +64,7 @@ function App() {
           placeholder='Search...'
           isVertical={true}
           theme={{
-            root: 'h-12',
-            submitButton: 'bg-red-500'
+            submitButton: 'bg-green-500'
           }}
         />
         <div>
