@@ -82,8 +82,8 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer',
-          screenReaderInstructions: 'sr-instructions',
-          autocompleteCount: 'sr-only'
+          screenReaderInstructions: 'ScreenReader__instructions',
+          screenReaderCount: 'ScreenReader__count'
         }}
       />
     </div>

@@ -1,6 +1,6 @@
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
-import { processTranslation } from './utils/processTranslation';
+import ScreenReader from "./ScreenReader";
 
 interface Props {
   inputValue?: string,
@@ -21,7 +21,7 @@ interface Props {
     inputElement: string,
     inputContainer: string,
     screenReaderInstructions?: string,
-    autocompleteCount?: string
+    screenReaderCount?: string
   }
 }
 
@@ -52,7 +52,7 @@ function reducer(state: State, action: Action): State {
 export default function InputDropdown({
   inputValue = '',
   placeholder,
-  screenReaderInstructions = '',
+  screenReaderInstructions,
   screenReaderInstructionsId,
   hasAutocompleteCount,
   options,
@@ -75,19 +75,9 @@ export default function InputDropdown({
     : `${optionIdPrefix}-${focusedOptionIndex}`;
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
+  const [countKey, setCountKey] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
-  const autocompleteCountRef = useRef<HTMLDivElement>(document.createElement('div'));
-
-  const prevAutcompleteCountText = autocompleteCountRef.current.innerHTML;
-
-  if (shouldDisplayDropdown) {
-    if (inputRef.current.value || options.length || prevAutcompleteCountText) {
-      updateAutocompleteCountText(prevAutcompleteCountText);
-    }
-  } else {
-    removeAutocompleteCountText();
-  }
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
@@ -129,25 +119,6 @@ export default function InputDropdown({
     }
   }
 
-  function removeAutocompleteCountText() {
-    if (hasAutocompleteCount) {
-      autocompleteCountRef.current.innerHTML = '';
-    }
-  }
-
-  function updateAutocompleteCountText(prevText?: string) {
-    if (hasAutocompleteCount) {
-      const latestText = processTranslation({
-        phrase: `${options.length} autocomplete option found.`,
-        pluralForm: `${options.length} autocomplete options found.`,
-        count: options.length
-      });
-      if (!prevText || prevText !== latestText) {
-        autocompleteCountRef.current.innerHTML = latestText;
-      }
-    }
-  }
-
   return (
     <>
       <div className={cssClasses.inputContainer}>
@@ -160,13 +131,13 @@ export default function InputDropdown({
             setLatestUserInput(value);
             updateInputValue(value);
             updateDropdown();
-            updateAutocompleteCountText();
+            setCountKey(countKey + 1);
           }}
           onClick={() => {
             dispatch({ type: 'ShowOptions' });
             updateDropdown();
             if (options.length || inputValue) {
-              updateAutocompleteCountText();
+              setCountKey(countKey + 1);
             }
           }}
           onKeyDown={onKeyDown}
@@ -177,20 +148,17 @@ export default function InputDropdown({
         />
         {renderButtons()}
       </div>
-      {screenReaderInstructionsId &&
-        <div
-          id={screenReaderInstructionsId}
-          className={cssClasses.screenReaderInstructions}
-        >
-          {screenReaderInstructions}
-        </div>
-      }
-      {hasAutocompleteCount &&
-        <div
-          className={cssClasses.autocompleteCount}
-          aria-live='assertive'
-          ref={autocompleteCountRef}>
-        </div>
+      {(screenReaderInstructionsId || hasAutocompleteCount) &&
+        <ScreenReader
+          instructionsId={screenReaderInstructionsId}
+          instructions={screenReaderInstructions}
+          hasCount={hasAutocompleteCount}
+          hasInput={!!inputRef.current.value}
+          optionsLength={options.length}
+          shouldDisplayOptions={shouldDisplayDropdown}
+          countKey={countKey}
+          cssClasses={cssClasses}
+        />
       }
       {shouldDisplayDropdown &&
         <Dropdown
