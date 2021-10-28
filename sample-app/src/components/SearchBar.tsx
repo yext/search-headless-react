@@ -25,8 +25,8 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
   const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
 
-  const instructionsText = instructions
-    || 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+  const screenReaderInstructions = instructions
+    ?? 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
   function executeAutocomplete () {
     isVertical 
@@ -58,7 +58,9 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
-        instructionText={instructionsText}
+        screenReaderInstructions={screenReaderInstructions}
+        screenReaderInstructionsId='SearchBar__srInstructions'
+        hasAutocompleteCount={true}
         options={autocompleteResults.map(result => {
           return {
             value: result.value,
@@ -80,8 +82,8 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer',
-          instructions: 'Autocomplete__instructions',
-          autocompleteCount: 'Autocomplete__count'
+          screenReaderInstructions: 'sr-instructions',
+          autocompleteCount: 'sr-only'
         }}
       />
     </div>

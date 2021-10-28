@@ -5,7 +5,9 @@ import { processTranslation } from './utils/processTranslation';
 interface Props {
   inputValue?: string,
   placeholder?: string,
-  instructionText?: string,
+  screenReaderInstructions?: string,
+  screenReaderInstructionsId?: string,
+  hasAutocompleteCount: boolean,
   options: Option[],
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
@@ -18,7 +20,7 @@ interface Props {
     focusedOption: string,
     inputElement: string,
     inputContainer: string,
-    instructions?: string,
+    screenReaderInstructions?: string,
     autocompleteCount?: string
   }
 }
@@ -50,7 +52,9 @@ function reducer(state: State, action: Action): State {
 export default function InputDropdown({
   inputValue = '',
   placeholder,
-  instructionText = '',
+  screenReaderInstructions = '',
+  screenReaderInstructionsId,
+  hasAutocompleteCount,
   options,
   optionIdPrefix,
   onSubmit = () => {},
@@ -126,13 +130,13 @@ export default function InputDropdown({
   }
 
   function removeAutocompleteCountText() {
-    if (cssClasses.autocompleteCount) {
+    if (hasAutocompleteCount) {
       autocompleteCountRef.current.innerHTML = '';
     }
   }
 
   function updateAutocompleteCountText(prevText?: string) {
-    if (cssClasses.autocompleteCount) {
+    if (hasAutocompleteCount) {
       const latestText = processTranslation({
         phrase: `${options.length} autocomplete option found.`,
         pluralForm: `${options.length} autocomplete options found.`,
@@ -168,22 +172,22 @@ export default function InputDropdown({
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
-          aria-describedby={cssClasses.instructions}
+          aria-describedby={screenReaderInstructionsId}
           aria-activedescendant={focusOptionId}
         />
         {renderButtons()}
       </div>
-      {cssClasses.instructions &&
+      {screenReaderInstructionsId &&
         <div
-          id={cssClasses.instructions}
-          className={`${cssClasses.instructions} sr-instructions`}
+          id={screenReaderInstructionsId}
+          className={cssClasses.screenReaderInstructions}
         >
-          {instructionText}
+          {screenReaderInstructions}
         </div>
       }
-      {cssClasses.autocompleteCount &&
+      {hasAutocompleteCount &&
         <div
-          className={`${cssClasses.autocompleteCount} sr-only`}
+          className={cssClasses.autocompleteCount}
           aria-live='assertive'
           ref={autocompleteCountRef}>
         </div>
