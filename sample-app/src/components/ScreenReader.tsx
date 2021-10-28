@@ -5,12 +5,7 @@ interface Props {
   instructions?: string,
   shouldCount: boolean,
   countKey?: number,
-  optionsLength?: number,
-  generateCountText?: (numOptions: number) => string,
-  cssClasses: {
-    screenReaderInstructions?: string,
-    screenReaderCount?: string
-  }
+  countText?: string
 }
 
 export default function ScreenReader({
@@ -18,26 +13,22 @@ export default function ScreenReader({
   instructions,
   shouldCount,
   countKey,
-  optionsLength = 0,
-  generateCountText = () => '',
-  cssClasses
+  countText,
 } : Props): JSX.Element | null {
-
-  const countText = countKey ? generateCountText(optionsLength) : '';
 
   return (
     <>
       {instructionsId &&
         <div
           id={instructionsId}
-          className={cssClasses.screenReaderInstructions}
+          className='ScreenReader__instructions'
         >
           {instructions}
         </div>
       }
       {shouldCount &&
         <div
-          className={cssClasses.screenReaderCount}
+          className='ScreenReader__count'
           key={countKey}
           aria-live='assertive'
         >

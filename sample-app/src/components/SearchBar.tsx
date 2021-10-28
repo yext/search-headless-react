@@ -7,16 +7,18 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 
+const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+
 interface Props {
   placeholder?: string,
   isVertical: boolean,
-  instructions?: string
+  screenReaderInstructionsId: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar({ placeholder, isVertical, instructions }: Props) {
+export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.query);
   const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
@@ -24,9 +26,6 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
   const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
-
-  const screenReaderInstructions = instructions
-    ?? 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
   function executeAutocomplete () {
     isVertical 
@@ -58,8 +57,8 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
-        screenReaderInstructions={screenReaderInstructions}
-        screenReaderInstructionsId='SearchBar__srInstructions'
+        screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
+        screenReaderInstructionsId={screenReaderInstructionsId}
         shouldAutocompleteCount={true}
         options={autocompleteResults.map(result => {
           return {
@@ -82,8 +81,6 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer',
-          screenReaderInstructions: 'ScreenReader__instructions',
-          screenReaderCount: 'ScreenReader__count'
         }}
       />
     </div>

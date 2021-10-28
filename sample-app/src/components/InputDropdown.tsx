@@ -20,9 +20,7 @@ interface Props {
     option: string,
     focusedOption: string,
     inputElement: string,
-    inputContainer: string,
-    screenReaderInstructions?: string,
-    screenReaderCount?: string
+    inputContainer: string
   }
 }
 
@@ -159,15 +157,14 @@ export default function InputDropdown({
           instructions={screenReaderInstructions}
           shouldCount={shouldAutocompleteCount}
           countKey={countKey}
-          optionsLength={options.length}
-          generateCountText={(numOptions: number) => {
-            return processTranslation({
-              phrase: `${numOptions} autocomplete option found.`,
-              pluralForm: `${numOptions} autocomplete options found.`,
-              count: numOptions
-            });
-          }}
-          cssClasses={cssClasses}
+          countText={countKey ? 
+            processTranslation({
+              phrase: `${options.length} autocomplete option found.`,
+              pluralForm: `${options.length} autocomplete options found.`,
+              count: options.length
+            })
+            : ''
+          }
         />
       }
       {shouldDisplayDropdown &&
