@@ -1,15 +1,15 @@
 import { useRef } from "react";
-import { processTranslation } from './utils/processTranslation';
 import '../sass/ScreenReader.scss';
 
 interface Props {
   instructionsId?: string,
   instructions?: string,
-  hasCount: boolean,
+  shouldCount: boolean,
+  shouldDisplayOptions?: boolean,
   hasInput?: boolean,
   optionsLength?: number,
-  shouldDisplayOptions?: boolean,
   countKey?: number,
+  generateCountText?: (numOptions: number) => string,
   cssClasses: {
     screenReaderInstructions?: string,
     screenReaderCount?: string
@@ -19,11 +19,12 @@ interface Props {
 export default function ScreenReader({
   instructionsId,
   instructions,
-  hasCount,
-  hasInput,
-  optionsLength,
+  shouldCount,
   shouldDisplayOptions,
+  hasInput,
+  optionsLength = 0,
   countKey,
+  generateCountText = () => '',
   cssClasses
 } : Props): JSX.Element | null {
 
@@ -35,7 +36,7 @@ export default function ScreenReader({
   }
   
   function removeAutocompleteCountText() {
-    if (hasCount && countRef.current.innerText !== '') {
+    if (shouldCount && countRef.current.innerText !== '') {
       countRef.current.innerText = '';
     }
   }
@@ -50,18 +51,14 @@ export default function ScreenReader({
           {instructions}
         </div>
       }
-      {hasCount &&
+      {shouldCount &&
         <div
           className={cssClasses.screenReaderCount}
           key={countKey}
           aria-live='assertive'
           ref={countRef}
         >
-          {processTranslation({
-            phrase: `${optionsLength} autocomplete option found.`,
-            pluralForm: `${optionsLength} autocomplete options found.`,
-            count: optionsLength
-          })}
+          {generateCountText(optionsLength)}
         </div>
       }
     </>

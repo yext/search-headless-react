@@ -60,7 +60,7 @@ export default function SearchBar({ placeholder, isVertical, instructions }: Pro
         placeholder={placeholder}
         screenReaderInstructions={screenReaderInstructions}
         screenReaderInstructionsId='SearchBar__srInstructions'
-        hasAutocompleteCount={true}
+        shouldAutocompleteCount={true}
         options={autocompleteResults.map(result => {
           return {
             value: result.value,

@@ -1,13 +1,14 @@
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
 import ScreenReader from "./ScreenReader";
+import { processTranslation } from './utils/processTranslation';
 
 interface Props {
   inputValue?: string,
   placeholder?: string,
   screenReaderInstructions?: string,
   screenReaderInstructionsId?: string,
-  hasAutocompleteCount: boolean,
+  shouldAutocompleteCount: boolean,
   options: Option[],
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
@@ -54,7 +55,7 @@ export default function InputDropdown({
   placeholder,
   screenReaderInstructions,
   screenReaderInstructionsId,
-  hasAutocompleteCount,
+  shouldAutocompleteCount,
   options,
   optionIdPrefix,
   onSubmit = () => {},
@@ -148,15 +149,22 @@ export default function InputDropdown({
         />
         {renderButtons()}
       </div>
-      {(screenReaderInstructionsId || hasAutocompleteCount) &&
+      {(screenReaderInstructionsId || shouldAutocompleteCount) &&
         <ScreenReader
           instructionsId={screenReaderInstructionsId}
           instructions={screenReaderInstructions}
-          hasCount={hasAutocompleteCount}
+          shouldCount={shouldAutocompleteCount}
           hasInput={!!inputRef.current.value}
           optionsLength={options.length}
           shouldDisplayOptions={shouldDisplayDropdown}
           countKey={countKey}
+          generateCountText={(numOptions: number) => {
+            return processTranslation({
+              phrase: `${numOptions} autocomplete option found.`,
+              pluralForm: `${numOptions} autocomplete options found.`,
+              count: numOptions
+            });
+          }}
           cssClasses={cssClasses}
         />
       }
