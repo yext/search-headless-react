@@ -2,15 +2,15 @@
   "name": "@yext/answers-headless-react",
   "version": "0.4.0-beta.0",
   "types": "./lib/index.d.ts",
-  "main": "./lib/index.js",
-  "module": "./lib/index.js",
+  "main": "./lib/commonjs/index.js",
+  "module": "./lib/esm/index.js",
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.cjs.json && tsc -p tsconfig.esm.json",
     "start": "cd sample-app && npm start",
-    "watch": "tsc --watch",
+    "watch": "tsc -p tsconfig.esm.json --watch",
     "install-sample-app": "cd sample-app && npm install",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
