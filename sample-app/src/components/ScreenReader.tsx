@@ -35,10 +35,8 @@ export default function ScreenReader({
   }
   
   function removeAutocompleteCountText() {
-    if (hasCount) {
-      if (countRef.current.innerText !== '') {
-        countRef.current.innerText = '';
-      }
+    if (hasCount && countRef.current.innerText !== '') {
+      countRef.current.innerText = '';
     }
   }
 
