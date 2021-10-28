@@ -78,6 +78,11 @@
       "@yext/answers-headless-react": "<rootDir>/src",
       "\\.svg$": "<rootDir>/__mocks__/svgMock.tsx",
       "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.ts"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.esm.json"
+      }
     }
   }
 }
