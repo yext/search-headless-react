@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-headless-react",
-  "version": "0.4.0-beta.0",
+  "version": "0.4.0-beta.1",
   "types": "./lib/index.d.ts",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/esm/index.js",
