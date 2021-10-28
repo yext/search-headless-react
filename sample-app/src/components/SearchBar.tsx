@@ -28,13 +28,13 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
   const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
 
   function executeAutocomplete () {
-    isVertical 
+    isVertical
       ? answersActions.executeVerticalAutoComplete()
       : answersActions.executeUniversalAutoComplete()
   }
 
   function executeQuery () {
-    isVertical 
+    isVertical
       ? answersActions.executeVerticalQuery()
       : answersActions.executeUniversalQuery();
   }
@@ -80,7 +80,7 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
           option: 'Autocomplete__option',
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',
-          inputContainer: 'SearchBar__inputContainer',
+          inputContainer: 'SearchBar__inputContainer'
         }}
       />
     </div>

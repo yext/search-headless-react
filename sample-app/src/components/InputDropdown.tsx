@@ -69,7 +69,7 @@ export default function InputDropdown({
     focusedOptionIndex: undefined,
     shouldDisplayDropdown: false,
   });
-  const focusOptionId = focusedOptionIndex === undefined 
+  const focusOptionId = focusedOptionIndex === undefined
     ? undefined
     : `${optionIdPrefix}-${focusedOptionIndex}`;
 
@@ -157,7 +157,7 @@ export default function InputDropdown({
           instructions={screenReaderInstructions}
           shouldCount={shouldAutocompleteCount}
           countKey={countKey}
-          countText={countKey ? 
+          countText={countKey ?
             processTranslation({
               phrase: `${options.length} autocomplete option found.`,
               pluralForm: `${options.length} autocomplete options found.`,

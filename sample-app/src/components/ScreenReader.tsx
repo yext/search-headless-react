@@ -14,7 +14,7 @@ export default function ScreenReader({
   shouldCount,
   countKey,
   countText,
-} : Props): JSX.Element | null {
+}: Props): JSX.Element | null {
 
   return (
     <>
