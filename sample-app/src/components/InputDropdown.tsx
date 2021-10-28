@@ -80,6 +80,10 @@ export default function InputDropdown({
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
 
+  if (!shouldDisplayDropdown && countKey) {
+    setCountKey(0);
+  }
+
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
@@ -154,10 +158,8 @@ export default function InputDropdown({
           instructionsId={screenReaderInstructionsId}
           instructions={screenReaderInstructions}
           shouldCount={shouldAutocompleteCount}
-          hasInput={!!inputRef.current.value}
-          optionsLength={options.length}
-          shouldDisplayOptions={shouldDisplayDropdown}
           countKey={countKey}
+          optionsLength={options.length}
           generateCountText={(numOptions: number) => {
             return processTranslation({
               phrase: `${numOptions} autocomplete option found.`,

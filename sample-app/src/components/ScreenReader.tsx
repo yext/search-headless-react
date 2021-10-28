@@ -1,14 +1,11 @@
-import { useRef } from "react";
 import '../sass/ScreenReader.scss';
 
 interface Props {
   instructionsId?: string,
   instructions?: string,
   shouldCount: boolean,
-  shouldDisplayOptions?: boolean,
-  hasInput?: boolean,
-  optionsLength?: number,
   countKey?: number,
+  optionsLength?: number,
   generateCountText?: (numOptions: number) => string,
   cssClasses: {
     screenReaderInstructions?: string,
@@ -20,26 +17,13 @@ export default function ScreenReader({
   instructionsId,
   instructions,
   shouldCount,
-  shouldDisplayOptions,
-  hasInput,
-  optionsLength = 0,
   countKey,
+  optionsLength = 0,
   generateCountText = () => '',
   cssClasses
 } : Props): JSX.Element | null {
 
-  const countRef = useRef<HTMLDivElement>(document.createElement('div'));
-  const prevAutocompleteCountText = countRef.current.innerText;
-
-  if (!shouldDisplayOptions || !(hasInput || optionsLength || prevAutocompleteCountText)) {
-    removeAutocompleteCountText();
-  }
-  
-  function removeAutocompleteCountText() {
-    if (shouldCount && countRef.current.innerText !== '') {
-      countRef.current.innerText = '';
-    }
-  }
+  const countText = countKey ? generateCountText(optionsLength) : '';
 
   return (
     <>
@@ -56,9 +40,8 @@ export default function ScreenReader({
           className={cssClasses.screenReaderCount}
           key={countKey}
           aria-live='assertive'
-          ref={countRef}
         >
-          {generateCountText(optionsLength)}
+          {countText}
         </div>
       }
     </>
