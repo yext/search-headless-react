@@ -4,16 +4,16 @@ interface Props {
   instructionsId?: string,
   instructions?: string,
   shouldCount: boolean,
-  countKey?: number,
-  countText?: string
+  announcementKey?: number,
+  announcementText?: string
 }
 
 export default function ScreenReader({
   instructionsId,
   instructions,
   shouldCount,
-  countKey,
-  countText,
+  announcementKey,
+  announcementText,
 }: Props): JSX.Element | null {
 
   return (
@@ -28,11 +28,11 @@ export default function ScreenReader({
       }
       {shouldCount &&
         <div
-          className='ScreenReader__count'
-          key={countKey}
+          className='ScreenReader__announcementText'
+          key={announcementKey}
           aria-live='assertive'
         >
-          {countText}
+          {announcementText}
         </div>
       }
     </>

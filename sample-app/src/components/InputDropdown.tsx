@@ -156,8 +156,8 @@ export default function InputDropdown({
           instructionsId={screenReaderInstructionsId}
           instructions={screenReaderInstructions}
           shouldCount={shouldAutocompleteCount}
-          countKey={countKey}
-          countText={countKey ?
+          announcementKey={countKey}
+          announcementText={countKey ?
             processTranslation({
               phrase: `${options.length} autocomplete option found.`,
               pluralForm: `${options.length} autocomplete options found.`,
