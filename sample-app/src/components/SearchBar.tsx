@@ -7,15 +7,18 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 
+const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+
 interface Props {
   placeholder?: string,
-  isVertical: boolean
+  isVertical: boolean,
+  screenReaderInstructionsId: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar({ placeholder, isVertical }: Props) {
+export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.query);
   const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
@@ -25,13 +28,13 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
   const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
 
   function executeAutocomplete () {
-    isVertical 
+    isVertical
       ? answersActions.executeVerticalAutoComplete()
       : answersActions.executeUniversalAutoComplete()
   }
 
   function executeQuery () {
-    isVertical 
+    isVertical
       ? answersActions.executeVerticalQuery()
       : answersActions.executeUniversalQuery();
   }
@@ -54,6 +57,8 @@ export default function SearchBar({ placeholder, isVertical }: Props) {
       <InputDropdown
         inputValue={query}
         placeholder={placeholder}
+        screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
+        screenReaderInstructionsId={screenReaderInstructionsId}
         options={autocompleteResults.map(result => {
           return {
             value: result.value,

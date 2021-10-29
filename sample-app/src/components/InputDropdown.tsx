@@ -1,9 +1,13 @@
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
+import ScreenReader from "./ScreenReader";
+import { processTranslation } from './utils/processTranslation';
 
 interface Props {
   inputValue?: string,
   placeholder?: string,
+  screenReaderInstructions: string,
+  screenReaderInstructionsId: string,
   options: Option[],
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
@@ -24,18 +28,18 @@ interface State {
   shouldDisplayDropdown: boolean
 }
 
-type Action = 
+type Action =
   | { type: 'HideOptions' }
   | { type: 'ShowOptions' }
   | { type: 'FocusOption', newIndex?: number }
 
 function reducer(state: State, action: Action): State {
-  switch(action.type) {
-    case 'HideOptions': 
+  switch (action.type) {
+    case 'HideOptions':
       return { focusedOptionIndex: undefined, shouldDisplayDropdown: false }
-    case 'ShowOptions': 
+    case 'ShowOptions':
       return { focusedOptionIndex: undefined, shouldDisplayDropdown: true }
-    case 'FocusOption': 
+    case 'FocusOption':
       return { focusedOptionIndex: action.newIndex, shouldDisplayDropdown: true }
   }
 }
@@ -46,6 +50,8 @@ function reducer(state: State, action: Action): State {
 export default function InputDropdown({
   inputValue = '',
   placeholder,
+  screenReaderInstructions,
+  screenReaderInstructionsId,
   options,
   optionIdPrefix,
   onSubmit = () => {},
@@ -61,14 +67,19 @@ export default function InputDropdown({
     focusedOptionIndex: undefined,
     shouldDisplayDropdown: false,
   });
-  const focusOptionId = focusedOptionIndex === undefined 
+  const focusOptionId = focusedOptionIndex === undefined
     ? undefined
     : `${optionIdPrefix}-${focusedOptionIndex}`;
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
+  const [screenReaderKey, setScreenReaderKey] = useState(0);
 
-  const inputRef = useRef<HTMLInputElement>(document.createElement('input')); 
-  
+  const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
+
+  if (!shouldDisplayDropdown && screenReaderKey) {
+    setScreenReaderKey(0);
+  }
+
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
@@ -121,18 +132,36 @@ export default function InputDropdown({
             setLatestUserInput(value);
             updateInputValue(value);
             updateDropdown();
+            setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
             dispatch({ type: 'ShowOptions' });
             updateDropdown();
+            if (options.length || inputValue) {
+              setScreenReaderKey(screenReaderKey + 1);
+            }
           }}
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
+          aria-describedby={screenReaderInstructionsId}
           aria-activedescendant={focusOptionId}
         />
         {renderButtons()}
       </div>
+      <ScreenReader
+        instructionsId={screenReaderInstructionsId}
+        instructions={screenReaderInstructions}
+        announcementKey={screenReaderKey}
+        announcementText={screenReaderKey ?
+          processTranslation({
+            phrase: `${options.length} autocomplete option found.`,
+            pluralForm: `${options.length} autocomplete options found.`,
+            count: options.length
+          })
+          : ''
+        }
+      />
       {shouldDisplayDropdown &&
         <Dropdown
           options={options}
