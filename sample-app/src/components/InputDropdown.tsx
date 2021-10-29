@@ -6,9 +6,8 @@ import { processTranslation } from './utils/processTranslation';
 interface Props {
   inputValue?: string,
   placeholder?: string,
-  screenReaderInstructions?: string,
-  screenReaderInstructionsId?: string,
-  shouldAutocompleteCount: boolean,
+  screenReaderInstructions: string,
+  screenReaderInstructionsId: string,
   options: Option[],
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
@@ -53,7 +52,6 @@ export default function InputDropdown({
   placeholder,
   screenReaderInstructions,
   screenReaderInstructionsId,
-  shouldAutocompleteCount,
   options,
   optionIdPrefix,
   onSubmit = () => {},
@@ -74,12 +72,12 @@ export default function InputDropdown({
     : `${optionIdPrefix}-${focusedOptionIndex}`;
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
-  const [countKey, setCountKey] = useState(0);
+  const [screenReaderKey, setScreenReaderKey] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
 
-  if (!shouldDisplayDropdown && countKey) {
-    setCountKey(0);
+  if (!shouldDisplayDropdown && screenReaderKey) {
+    setScreenReaderKey(0);
   }
 
   function handleDocumentClick(evt: MouseEvent) {
@@ -134,13 +132,13 @@ export default function InputDropdown({
             setLatestUserInput(value);
             updateInputValue(value);
             updateDropdown();
-            setCountKey(countKey + 1);
+            setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
             dispatch({ type: 'ShowOptions' });
             updateDropdown();
             if (options.length || inputValue) {
-              setCountKey(countKey + 1);
+              setScreenReaderKey(screenReaderKey + 1);
             }
           }}
           onKeyDown={onKeyDown}
@@ -151,22 +149,19 @@ export default function InputDropdown({
         />
         {renderButtons()}
       </div>
-      {(screenReaderInstructionsId || shouldAutocompleteCount) &&
-        <ScreenReader
-          instructionsId={screenReaderInstructionsId}
-          instructions={screenReaderInstructions}
-          shouldCount={shouldAutocompleteCount}
-          announcementKey={countKey}
-          announcementText={countKey ?
-            processTranslation({
-              phrase: `${options.length} autocomplete option found.`,
-              pluralForm: `${options.length} autocomplete options found.`,
-              count: options.length
-            })
-            : ''
-          }
-        />
-      }
+      <ScreenReader
+        instructionsId={screenReaderInstructionsId}
+        instructions={screenReaderInstructions}
+        announcementKey={screenReaderKey}
+        announcementText={screenReaderKey ?
+          processTranslation({
+            phrase: `${options.length} autocomplete option found.`,
+            pluralForm: `${options.length} autocomplete options found.`,
+            count: options.length
+          })
+          : ''
+        }
+      />
       {shouldDisplayDropdown &&
         <Dropdown
           options={options}
