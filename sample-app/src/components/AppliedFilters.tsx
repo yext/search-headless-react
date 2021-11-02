@@ -75,7 +75,8 @@ function RemovableFilter({ filter }: {filter: DisplayableFilter }): JSX.Element 
   }
 
   const onRemoveStaticFilterOption = () => {
-    document.getElementById(`${filter.filter.fieldId + "_" + filter.filter.value}`)?.click();
+    answersAction.unselectFilterOption(filter.filter);
+    answersAction.executeVerticalQuery();
   }
 
   const onRemoveFilter = filter.filterType === 'FACET' ? onRemoveFacetOption : onRemoveStaticFilterOption;
