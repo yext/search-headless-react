@@ -9,6 +9,7 @@ import {
   getDisplayableAppliedFacets,
   getDisplayableNlpFilters
 } from "./displayablefilterutils";
+import { StaticFiltersLabelConfig } from "../components/StaticFilters";
 
 /**
  * Returns a new list of nlp filters with duplicates of other filters and 
@@ -63,9 +64,10 @@ function createGroupedFilters(
 export function getGroupedAppliedFilters(
   appliedFiltersState: FiltersState,
   nlpFilters: AppliedQueryFilter[],
-  hiddenFields: string[]
+  hiddenFields: string[],
+  staticFiltersGroupLabels: Record<string, StaticFiltersLabelConfig>
 ): Array<GroupedFilters>  {
-  const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static));
+  const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static), staticFiltersGroupLabels);
   const displayableFacets = getDisplayableAppliedFacets(appliedFiltersState?.facets);
   const displayableNlpFilters = getDisplayableNlpFilters(nlpFilters);
   

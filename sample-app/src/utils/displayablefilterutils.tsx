@@ -1,4 +1,5 @@
 import { AppliedQueryFilter, Filter, DisplayableFacet } from '@yext/answers-core';
+import { StaticFiltersLabelConfig } from '../components/StaticFilters';
 import { DisplayableFilter } from '../models/displayableFilter';
 import { getFilterDisplayValue } from './filterutils';
 
@@ -29,13 +30,16 @@ export function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefin
 /**
  * Convert a list of static filters to DisplayableFilter format.
  */
-export function getDisplayableStaticFilters(filters: Filter[]): DisplayableFilter[] {
+export function getDisplayableStaticFilters(
+  filters: Filter[],
+  groupLabels: Record<string, StaticFiltersLabelConfig>
+): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
   filters?.forEach(filter => {
     appliedStaticFilters.push({
       filterType: 'STATIC_FILTER',
       filter: filter,
-      groupLabel: filter.fieldId,
+      groupLabel: groupLabels?.[filter.fieldId]?.label || filter.fieldId,
       label: getFilterDisplayValue(filter),
     });
   });

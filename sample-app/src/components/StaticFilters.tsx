@@ -2,6 +2,10 @@ import React, { Fragment } from 'react';
 import { Filter, CombinedFilter, FilterCombinator, Matcher } from '@yext/answers-core';
 import { AnswersHeadlessContext } from '@yext/answers-headless-react';
 
+export interface StaticFiltersLabelConfig {
+  label: string
+}
+
 interface CheckBoxProps {
   fieldId: string,
   value: string,
