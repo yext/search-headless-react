@@ -1,4 +1,5 @@
-import { AppliedQueryFilter, Filter, DisplayableFacet } from '@yext/answers-core';
+import { AppliedQueryFilter, DisplayableFacet } from '@yext/answers-core';
+import { SelectableFilter } from '@yext/answers-headless/lib/commonjs/models/utils/selectablefilter';
 import { DisplayableFilter } from '../models/displayableFilter';
 import { getFilterDisplayValue } from './filterutils';
 
@@ -27,18 +28,24 @@ export function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefin
 }
 
 /**
- * Convert a list of static filters to DisplayableFilter format.
+ * Convert a map of static filters to DisplayableFilter format with only selected filters returned.
  */
-export function getDisplayableStaticFilters(filters: Filter[]): DisplayableFilter[] {
+export function getDisplayableStaticFilters(
+  staticFilters: Record<string, SelectableFilter[] | null> | null | undefined
+): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
-  filters?.forEach(filter => {
-    appliedStaticFilters.push({
-      filterType: 'STATIC_FILTER',
-      filter: filter,
-      groupLabel: filter.fieldId,
-      label: getFilterDisplayValue(filter),
-    });
-  });
+  staticFilters && Object.values(staticFilters).forEach(filterSet => 
+    filterSet?.forEach(filter => {
+      if (filter.selected) {
+        appliedStaticFilters.push({
+          filterType: 'STATIC_FILTER',
+          filter: filter.filter,
+          groupLabel: filter.filter.fieldId,
+          label: getFilterDisplayValue(filter.filter),
+        });
+      }
+    })
+  );
   return appliedStaticFilters;
 }
 

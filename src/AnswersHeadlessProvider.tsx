@@ -1,6 +1,6 @@
 import { ReactChild, ReactChildren } from 'react';
 import { provideAnswersHeadless, AnswersHeadless } from '@yext/answers-headless';
-import { AnswersConfig } from '@yext/answers-core';
+import { AnswersConfig } from '../../answers-core';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 interface Props extends AnswersConfig {
