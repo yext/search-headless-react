@@ -1,7 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Filter, Matcher } from '@yext/answers-core';
 import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import { SelectableFilter } from '@yext/answers-headless/lib/commonjs/models/utils/selectablefilter';
+import { AnswersHeadless } from '@yext/answers-headless';
 
 interface CheckBoxProps {
   fieldId: string,
@@ -10,12 +11,15 @@ interface CheckBoxProps {
   selected: boolean,
   optionHandler: Function
 }
+
+interface FilterOption {
+  fieldId: string,
+  value: string,
+  label: string
+}
+
 interface StaticFiltersProps {
-  options: {
-    fieldId: string,
-    value: string,
-    label: string
-  }[],
+  options: FilterOption[],
   title: string,
   filterSetId: string
 }
@@ -39,27 +43,27 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
   );
 }
 
+function setupInitialFilterState(answersActions: AnswersHeadless, filterSetId: string, filters: FilterOption[]) {
+  const initialFilters: SelectableFilter[] = filters.map(option => ({
+    filter: {
+      fieldId: option.fieldId,
+      matcher: Matcher.Equals,
+      value: option.value
+    },
+    selected: false
+  }));
+  answersActions.addFilters(filterSetId, initialFilters);
+}
+
 export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
-  const [initialState, updateInitialState] = useState<SelectableFilter[]>();
   const answersActions = useAnswersActions();
   const { filterSetId, options, title } = props;
-  if (!initialState) {
-    const initialFilters = options.map(option => ({
-      filter: {
-        fieldId: option.fieldId,
-        matcher: Matcher.Equals,
-        value: option.value
-      },
-      selected: false
-    }));
-    answersActions.addFilters(filterSetId, initialFilters);
-    updateInitialState(initialFilters);
-  }
+  useState(setupInitialFilterState.bind(null, answersActions, filterSetId, options));
 
   const filters = useAnswersState(state =>  state.filters.static?.[filterSetId]);
   const getOptionSelectStatus = (filters: SelectableFilter[] | null | undefined, index: number) => {
     if (!filters) {
-      !initialState && console.error(`Unable to find following filter select status: ${JSON.stringify(options[index])}`);
+      console.error(`Unable to find following filter select status: ${JSON.stringify(options[index])}`);
       return false;
     }
     return filters[index].selected;
@@ -76,7 +80,7 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
     <fieldset>
       <legend>{title}</legend>
       <div>
-        {initialState && options.map((option, index) => (
+        {options.map((option, index) => (
           <div key={index}>
             <CheckboxFilter
               fieldId={option.fieldId}
