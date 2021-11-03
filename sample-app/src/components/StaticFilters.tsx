@@ -36,7 +36,8 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
       <label htmlFor={id}>{label}</label>
       <input 
         type="checkbox"
-        id={id} checked={selected}
+        id={id}
+        checked={selected}
         onChange={evt => optionHandler(filter, evt.target.checked)}
       />
     </Fragment>
