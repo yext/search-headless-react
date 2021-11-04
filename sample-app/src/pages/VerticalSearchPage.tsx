@@ -50,6 +50,10 @@ const facetConfigs = {
   }
 }
 
+const staticFiltersGroupLabels = {
+  c_employeeCountry: 'Employee Country'
+}
+
 export default function VerticalSearchPage(props: {
   verticalKey: string
 }) {
@@ -88,6 +92,7 @@ export default function VerticalSearchPage(props: {
           showFieldNames={true}
           hiddenFields={['builtin.entityType']}
           delimiter='|'
+          staticFiltersGroupLabels={staticFiltersGroupLabels}
         />
         <AlternativeVerticals
           currentVerticalLabel='People'

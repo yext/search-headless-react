@@ -31,7 +31,8 @@ export function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefin
  * Convert a map of static filters to DisplayableFilter format with only selected filters returned.
  */
 export function getDisplayableStaticFilters(
-  staticFilters: Record<string, SelectableFilter[] | null> | null | undefined
+  staticFilters: Record<string, SelectableFilter[] | null> | null | undefined,
+  groupLabels: Record<string, string>
 ): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
   staticFilters && Object.entries(staticFilters).forEach(([filterCollectionId, filterSet]) => 
@@ -40,7 +41,7 @@ export function getDisplayableStaticFilters(
         appliedStaticFilters.push({
           filterType: 'STATIC_FILTER',
           filter: filter.filter,
-          groupLabel: filter.filter.fieldId,
+          groupLabel: groupLabels?.[filter.filter.fieldId] || filter.filter.fieldId,
           label: getFilterDisplayValue(filter.filter),
           filterCollectionId: filterCollectionId
         });
