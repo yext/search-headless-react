@@ -9,6 +9,10 @@ export interface DecoratedAppliedFiltersConfig {
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
+  /**
+   * A mapping of static filter fieldIds to their displayed group labels.
+   */
+  staticFiltersGroupLabels?: Record<string, string>,
   appliedQueryFilters?: AppliedQueryFilter[]
 }
 
@@ -16,10 +20,10 @@ export interface DecoratedAppliedFiltersConfig {
  * Container component for AppliedFilters
  */
 export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersConfig): JSX.Element {
-  const { hiddenFields = [], appliedQueryFilters = [], ...otherProps } = props;
+  const { hiddenFields = [], staticFiltersGroupLabels = {}, appliedQueryFilters = [], ...otherProps } = props;
   const state = useAnswersState(state => state);
   const filterState = state.vertical.results ? state.filters : {};
-  const groupedFilters: Array<GroupedFilters> = getGroupedAppliedFilters(filterState, appliedQueryFilters, hiddenFields);
+  const groupedFilters: Array<GroupedFilters> = getGroupedAppliedFilters(filterState, appliedQueryFilters, hiddenFields, staticFiltersGroupLabels);
   return <AppliedFilters appliedFilters={groupedFilters} {...otherProps}/>
 }
 

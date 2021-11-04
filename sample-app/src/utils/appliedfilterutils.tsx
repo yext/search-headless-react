@@ -63,9 +63,10 @@ function createGroupedFilters(
 export function getGroupedAppliedFilters(
   appliedFiltersState: FiltersState,
   nlpFilters: AppliedQueryFilter[],
-  hiddenFields: string[]
+  hiddenFields: string[],
+  staticFiltersGroupLabels: Record<string, string>
 ): Array<GroupedFilters>  {
-  const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static));
+  const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static), staticFiltersGroupLabels);
   const displayableFacets = getDisplayableAppliedFacets(appliedFiltersState?.facets);
   const displayableNlpFilters = getDisplayableNlpFilters(nlpFilters);
   

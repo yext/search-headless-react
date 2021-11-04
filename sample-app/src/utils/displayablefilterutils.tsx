@@ -29,13 +29,16 @@ export function getDisplayableAppliedFacets(facets: DisplayableFacet[] | undefin
 /**
  * Convert a list of static filters to DisplayableFilter format.
  */
-export function getDisplayableStaticFilters(filters: Filter[]): DisplayableFilter[] {
+export function getDisplayableStaticFilters(
+  filters: Filter[],
+  groupLabels: Record<string, string>
+): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
   filters?.forEach(filter => {
     appliedStaticFilters.push({
       filterType: 'STATIC_FILTER',
       filter: filter,
-      groupLabel: filter.fieldId,
+      groupLabel: groupLabels?.[filter.fieldId] || filter.fieldId,
       label: getFilterDisplayValue(filter),
     });
   });
