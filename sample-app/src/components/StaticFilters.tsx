@@ -20,7 +20,7 @@ interface FilterOption {
 interface StaticFiltersProps {
   options: FilterOption[],
   title: string,
-  filterSetId: string
+  filterCollectionId: string
 }
 
 function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: CheckBoxProps) {
@@ -45,9 +45,9 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
 
 export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
   const answersActions = useAnswersActions();
-  const { filterSetId, options, title } = props;
+  const { filterCollectionId, options, title } = props;
 
-  const filterCollection = useAnswersState(state =>  state.filters.static?.[filterSetId]);
+  const filterCollection = useAnswersState(state =>  state.filters.static?.[filterCollectionId]);
   const getOptionSelectStatus = (option: FilterOption): boolean => {
     const foundFilter = filterCollection?.find(storedFilter => {
       const targetFilter = {
@@ -61,7 +61,7 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
   };
 
   const handleFilterOptionChange = (option: Filter, isChecked: boolean) => {
-    answersActions.toggleFilterOption(filterSetId, option, isChecked);
+    answersActions.toggleFilterOption({ filter: option, selected: isChecked }, filterCollectionId);
     answersActions.executeVerticalQuery();
   }
 

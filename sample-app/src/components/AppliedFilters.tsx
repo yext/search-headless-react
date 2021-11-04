@@ -79,7 +79,7 @@ function RemovableFilter({ filter }: {filter: DisplayableFilter }): JSX.Element 
       console.error(`Undefined filter collection id. Unable to remove this filter in AppliedFilters component:\n${JSON.stringify(filter)}`);
       return;
     }
-    answersAction.toggleFilterOption(filter.filterCollectionId, filter.filter, false);
+    answersAction.toggleFilterOption({ filter: filter.filter, selected: false }, filter.filterCollectionId);
     answersAction.executeVerticalQuery();
   }
 
