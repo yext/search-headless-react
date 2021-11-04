@@ -3,14 +3,16 @@ import { AppliedQueryFilter } from "@yext/answers-core";
 import { useAnswersState } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
 import { getGroupedAppliedFilters } from '../utils/appliedfilterutils';
-import { StaticFiltersLabelConfig } from "./StaticFilters";
 
 export interface DecoratedAppliedFiltersConfig {
   showFieldNames?: boolean,
   hiddenFields?: Array<string>,
   labelText?: string,
   delimiter?: string,
-  staticFiltersGroupLabels?: Record<string, StaticFiltersLabelConfig>,
+  /**
+   * A mapping of static filter fieldIds to their displayed group labels.
+   */
+  staticFiltersGroupLabels?: Record<string, string>,
   appliedQueryFilters?: AppliedQueryFilter[]
 }
 

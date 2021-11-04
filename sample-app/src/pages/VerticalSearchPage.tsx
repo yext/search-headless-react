@@ -51,9 +51,7 @@ const facetConfigs = {
 }
 
 const staticFiltersGroupLabels = {
-  c_employeeCountry: {
-    label: 'Employee Country'
-  }
+  c_employeeCountry: 'Employee Country'
 }
 
 export default function VerticalSearchPage(props: {
