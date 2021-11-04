@@ -34,7 +34,7 @@ export function getDisplayableStaticFilters(
   staticFilters: Record<string, SelectableFilter[] | null> | null | undefined
 ): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
-  staticFilters && Object.values(staticFilters).forEach(filterSet => 
+  staticFilters && Object.entries(staticFilters).forEach(([filterCollectionId, filterSet]) => 
     filterSet?.forEach(filter => {
       if (filter.selected) {
         appliedStaticFilters.push({
@@ -42,6 +42,7 @@ export function getDisplayableStaticFilters(
           filter: filter.filter,
           groupLabel: filter.filter.fieldId,
           label: getFilterDisplayValue(filter.filter),
+          filterCollectionId: filterCollectionId
         });
       }
     })

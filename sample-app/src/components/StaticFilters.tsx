@@ -1,8 +1,7 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Filter, Matcher } from '@yext/answers-core';
 import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
-import { SelectableFilter } from '@yext/answers-headless/lib/commonjs/models/utils/selectablefilter';
-import { AnswersHeadless } from '@yext/answers-headless';
+import { isDuplicateFilter } from '../utils/filterutils';
 
 interface CheckBoxProps {
   fieldId: string,
@@ -44,36 +43,25 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
   );
 }
 
-function setupInitialFilterState(answersActions: AnswersHeadless, filterSetId: string, filters: FilterOption[]) {
-  const initialFilters: SelectableFilter[] = filters.map(option => ({
-    filter: {
-      fieldId: option.fieldId,
-      matcher: Matcher.Equals,
-      value: option.value
-    },
-    selected: false
-  }));
-  answersActions.addFilters(filterSetId, initialFilters);
-}
-
 export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
   const answersActions = useAnswersActions();
   const { filterSetId, options, title } = props;
-  useState(setupInitialFilterState.bind(null, answersActions, filterSetId, options));
 
-  const filters = useAnswersState(state =>  state.filters.static?.[filterSetId]);
-  const getOptionSelectStatus = (filters: SelectableFilter[] | null | undefined, index: number) => {
-    if (!filters) {
-      console.error(`Unable to find following filter select status: ${JSON.stringify(options[index])}`);
-      return false;
-    }
-    return filters[index].selected;
+  const filterCollection = useAnswersState(state =>  state.filters.static?.[filterSetId]);
+  const getOptionSelectStatus = (option: FilterOption): boolean => {
+    const foundFilter = filterCollection?.find(storedFilter => {
+      const targetFilter = {
+        fieldId: option.fieldId,
+        matcher: Matcher.Equals,
+        value: option.value
+      };
+      return isDuplicateFilter(storedFilter.filter, targetFilter); 
+    });
+    return !!foundFilter && foundFilter.selected;
   };
 
   const handleFilterOptionChange = (option: Filter, isChecked: boolean) => {
-    isChecked
-      ?  answersActions.selectFilterOption(option, filterSetId)
-      :  answersActions.unselectFilterOption(option, filterSetId);
+    answersActions.toggleFilterOption(filterSetId, option, isChecked);
     answersActions.executeVerticalQuery();
   }
 
@@ -87,7 +75,7 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
               fieldId={option.fieldId}
               value={option.value}
               label={option.label}
-              selected={getOptionSelectStatus(filters, index)}
+              selected={getOptionSelectStatus(option)}
               optionHandler={handleFilterOptionChange}
             />
           </div>

@@ -75,7 +75,11 @@ function RemovableFilter({ filter }: {filter: DisplayableFilter }): JSX.Element 
   }
 
   const onRemoveStaticFilterOption = () => {
-    answersAction.unselectFilterOption(filter.filter);
+    if (!filter.filterCollectionId) {
+      console.error(`Undefined filter collection id. Unable to remove this filter in AppliedFilters component:\n${JSON.stringify(filter)}`);
+      return;
+    }
+    answersAction.toggleFilterOption(filter.filterCollectionId, filter.filter, false);
     answersAction.executeVerticalQuery();
   }
 
