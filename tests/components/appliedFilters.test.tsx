@@ -13,12 +13,13 @@ describe('AppliedFilters component work as expected', () => {
     const mockedFilter = {
       fieldId: 'c_employeeCountry',
       matcher: Matcher.Equals,
-      value: 'United States'
+      value: 'United States',
+      selected: true
     };
 
     const MockedStaticFilter = () => {
       const onChange = useCallback(() => {
-        answers.setFilter(null);
+        answers.setStaticFilters({ someId: [] });
       }, []);
       return <button id='c_employeeCountry_United States' onClick={onChange}></button>;
     };
@@ -35,7 +36,7 @@ describe('AppliedFilters component work as expected', () => {
 
     act(() => answers.setQuery('someQuery'));
     await act( () => answers.executeVerticalQuery());
-    act(() => answers.setFilter(mockedFilter));
+    act(() => answers.setStaticFilters({ someId: [mockedFilter] }));
 
     let filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
     expect(filterLabels.length).toBe(1);
