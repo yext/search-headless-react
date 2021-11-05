@@ -62,7 +62,7 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
   };
 
   const handleFilterOptionChange = (option: Filter, isChecked: boolean) => {
-    answersActions.toggleFilterOption({ ...option, selected: isChecked }, filterCollectionId);
+    answersActions.setFilterOption({ ...option, selected: isChecked }, filterCollectionId);
     answersActions.executeVerticalQuery();
   }
 
