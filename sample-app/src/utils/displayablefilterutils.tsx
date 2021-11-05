@@ -36,13 +36,14 @@ export function getDisplayableStaticFilters(
 ): DisplayableFilter[] {
   let appliedStaticFilters: DisplayableFilter[] = [];
   staticFilters && Object.entries(staticFilters).forEach(([filterCollectionId, filterCollection]) => 
-    filterCollection.forEach(filter => {
-      if (filter.selected) {
+    filterCollection.forEach(selectableFilter => {
+      const { selected, ...filter } = selectableFilter;
+      if (selected) {
         appliedStaticFilters.push({
           filterType: 'STATIC_FILTER',
-          filter: filter.filter,
-          groupLabel: groupLabels?.[filter.filter.fieldId] || filter.filter.fieldId,
-          label: getFilterDisplayValue(filter.filter),
+          filter: filter,
+          groupLabel: groupLabels?.[filter.fieldId] || filter.fieldId,
+          label: getFilterDisplayValue(filter),
           filterCollectionId: filterCollectionId
         });
       }

@@ -49,19 +49,20 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
 
   const filterCollection = useAnswersState(state =>  state.filters.static?.[filterCollectionId]);
   const getOptionSelectStatus = (option: FilterOption): boolean => {
-    const foundFilter = filterCollection?.find(storedFilter => {
+    const foundFilter = filterCollection?.find(storedSelectableFilter => {
+      const { selected, ...storedFilter } = storedSelectableFilter;
       const targetFilter = {
         fieldId: option.fieldId,
         matcher: Matcher.Equals,
         value: option.value
       };
-      return isDuplicateFilter(storedFilter.filter, targetFilter); 
+      return isDuplicateFilter(storedFilter, targetFilter); 
     });
     return !!foundFilter && foundFilter.selected;
   };
 
   const handleFilterOptionChange = (option: Filter, isChecked: boolean) => {
-    answersActions.toggleFilterOption({ filter: option, selected: isChecked }, filterCollectionId);
+    answersActions.toggleFilterOption({ ...option, selected: isChecked }, filterCollectionId);
     answersActions.executeVerticalQuery();
   }
 
