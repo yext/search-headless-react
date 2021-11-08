@@ -75,7 +75,12 @@ function RemovableFilter({ filter }: {filter: DisplayableFilter }): JSX.Element 
   }
 
   const onRemoveStaticFilterOption = () => {
-    document.getElementById(`${filter.filter.fieldId + "_" + filter.filter.value}`)?.click();
+    if (!filter.filterCollectionId) {
+      console.error(`Undefined filter collection id. Unable to remove this filter in AppliedFilters component:\n${JSON.stringify(filter)}`);
+      return;
+    }
+    answersAction.setFilterOption({ ...filter.filter, selected: false }, filter.filterCollectionId);
+    answersAction.executeVerticalQuery();
   }
 
   const onRemoveFilter = filter.filterType === 'FACET' ? onRemoveFacetOption : onRemoveStaticFilterOption;

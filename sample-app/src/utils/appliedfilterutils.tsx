@@ -3,7 +3,7 @@ import { FiltersState } from "@yext/answers-headless/lib/esm/models/slices/filte
 import { DisplayableFilter } from "../models/displayableFilter";
 import { GroupedFilters } from "../models/groupedFilters";
 import { mapArrayToObject } from "./arrayutils";
-import { isDuplicateFilter, flattenFilters } from './filterutils';
+import { isDuplicateFilter } from './filterutils';
 import { 
   getDisplayableStaticFilters,
   getDisplayableAppliedFacets,
@@ -66,7 +66,7 @@ export function getGroupedAppliedFilters(
   hiddenFields: string[],
   staticFiltersGroupLabels: Record<string, string>
 ): Array<GroupedFilters>  {
-  const displayableStaticFilters = getDisplayableStaticFilters(flattenFilters(appliedFiltersState?.static), staticFiltersGroupLabels);
+  const displayableStaticFilters = getDisplayableStaticFilters(appliedFiltersState?.static, staticFiltersGroupLabels);
   const displayableFacets = getDisplayableAppliedFacets(appliedFiltersState?.facets);
   const displayableNlpFilters = getDisplayableNlpFilters(nlpFilters);
   

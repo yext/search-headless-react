@@ -73,6 +73,7 @@ export default function VerticalSearchPage(props: {
         <StaticFilters
           title='~Country and Employee Departments~'
           options={staticFilterOptions}
+          filterCollectionId='someFilterId'
         />
         <Facets
           searchOnChange={true}
