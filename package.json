@@ -18,7 +18,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
     "@types/react": "^17.0.15",
-    "@yext/answers-headless": "^0.1.0-beta.2",
+    "@yext/answers-headless": "file:~/answers-headless",
     "typescript": "^4.3.5"
   },
   "devDependencies": {
