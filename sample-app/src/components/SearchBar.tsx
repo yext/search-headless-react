@@ -1,5 +1,4 @@
-import { useAnswersActions, useAnswersState, StateSelector } from '@yext/answers-headless-react';
-import { AutocompleteResult } from '@yext/answers-core';
+import { useAnswersActions, useAnswersState, StateSelector, AutocompleteResult } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';

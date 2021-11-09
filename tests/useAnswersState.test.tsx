@@ -1,7 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Result } from '@yext/answers-core';
-import { provideAnswersHeadless } from '@yext/answers-headless';
+import { provideAnswersHeadless, Result } from '@yext/answers-headless';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import React, { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';

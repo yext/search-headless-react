@@ -1,6 +1,5 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
-import { Result } from '@yext/answers-core';
-import { useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState, Result } from '@yext/answers-headless-react';
 import classNames from 'classnames';
 import '../sass/VerticalResults.scss';
 

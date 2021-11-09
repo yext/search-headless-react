@@ -1,4 +1,4 @@
-import { AppliedQueryFilter, DisplayableFacet } from '@yext/answers-core';
+import { AppliedQueryFilter, DisplayableFacet } from '@yext/answers-headless-react';
 import { SelectableFilter } from '@yext/answers-headless/lib/esm/models/utils/selectablefilter';
 import { DisplayableFilter } from '../models/displayableFilter';
 import { getFilterDisplayValue } from './filterutils';

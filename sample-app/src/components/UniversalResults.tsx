@@ -1,5 +1,4 @@
-import { useAnswersState } from "@yext/answers-headless-react";
-import { VerticalResults } from "@yext/answers-core";
+import { useAnswersState, VerticalResults } from "@yext/answers-headless-react";
 import StandardSection from "../sections/StandardSection";
 import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
 import SectionHeader from "../sections/SectionHeader";

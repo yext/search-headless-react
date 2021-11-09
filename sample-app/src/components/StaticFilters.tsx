@@ -1,6 +1,4 @@
-import { Fragment } from 'react';
-import { Filter, Matcher } from '@yext/answers-core';
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState, Filter, Matcher } from '@yext/answers-headless-react';
 import { isDuplicateFilter } from '../utils/filterutils';
 
 interface CheckBoxProps {
@@ -31,7 +29,7 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
   }
   const id = fieldId + "_" + value
   return (
-    <Fragment>
+    <>
       <label htmlFor={id}>{label}</label>
       <input 
         type="checkbox"
@@ -39,7 +37,7 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
         checked={selected}
         onChange={evt => optionHandler(filter, evt.target.checked)}
       />
-    </Fragment>
+    </>
   );
 }
 
