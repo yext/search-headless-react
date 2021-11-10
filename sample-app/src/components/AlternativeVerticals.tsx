@@ -1,8 +1,7 @@
 import { processTranslation } from './utils/processTranslation';
 import { ReactComponent as Chevron } from '../icons/chevron.svg';
 import { ReactComponent as Star } from '../icons/star.svg';
-import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react';
-import { VerticalResults } from '@yext/answers-core';
+import { useAnswersState, useAnswersActions, VerticalResults } from '@yext/answers-headless-react';
 import '../sass/AlternativeVerticals.scss';
 
 interface VerticalConfig {

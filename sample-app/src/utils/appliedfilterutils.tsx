@@ -1,4 +1,4 @@
-import { AppliedQueryFilter } from "@yext/answers-core";
+import { AppliedQueryFilter } from "@yext/answers-headless-react";
 import { FiltersState } from "@yext/answers-headless/lib/esm/models/slices/filters";
 import { DisplayableFilter } from "../models/displayableFilter";
 import { GroupedFilters } from "../models/groupedFilters";

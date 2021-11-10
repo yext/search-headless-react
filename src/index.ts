@@ -5,6 +5,7 @@ import { subscribeToStateUpdates } from './subscribeToStateUpdates';
 import { AnswersHeadlessProvider } from './AnswersHeadlessProvider';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
+export * from '@yext/answers-headless';
 export {
   AnswersHeadlessContext,
   subscribeToStateUpdates,

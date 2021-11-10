@@ -1,8 +1,7 @@
 import { act, render } from '@testing-library/react';
-import { provideAnswersHeadless } from '@yext/answers-headless';
+import { provideAnswersHeadless, Matcher } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from '../../src';
 import DecoratedAppliedFilters from '../../sample-app/src/components/DecoratedAppliedFilters';
-import { Matcher } from '@yext/answers-core';
 import { useCallback } from 'react';
 import { verticalQueryResponseWithNlpFilters } from '../setup/responses/vertical-query';
 

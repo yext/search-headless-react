@@ -1,6 +1,5 @@
 import AppliedFilters from "./AppliedFilters";
-import { AppliedQueryFilter } from "@yext/answers-core";
-import { useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState, AppliedQueryFilter } from '@yext/answers-headless-react';
 import { GroupedFilters } from '../models/groupedFilters';
 import { getGroupedAppliedFilters } from '../utils/appliedfilterutils';
 

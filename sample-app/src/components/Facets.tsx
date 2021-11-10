@@ -1,5 +1,4 @@
-import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react'
-import { DisplayableFacetOption } from "@yext/answers-core";
+import { useAnswersState, useAnswersActions, DisplayableFacetOption } from '@yext/answers-headless-react'
 import Facet, { FacetTextConfig } from './Facet';
 import '../sass/Facets.scss';
 

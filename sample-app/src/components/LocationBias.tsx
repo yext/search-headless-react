@@ -1,6 +1,4 @@
-
-import { LocationBiasMethod } from '@yext/answers-core';
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState, LocationBiasMethod } from '@yext/answers-headless-react';
 
 interface Props {
   isVertical: boolean,
