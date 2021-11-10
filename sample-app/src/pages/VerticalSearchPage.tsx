@@ -1,5 +1,6 @@
 import ResultsCount from '../components/ResultsCount';
 import AlternativeVerticals from '../components/AlternativeVerticals';
+import FilterSearch from '../components/FilterSearch';
 import DecoratedAppliedFilters from '../components/DecoratedAppliedFilters';
 import StaticFilters from '../components/StaticFilters';
 import VerticalResults from '../components/VerticalResults';
@@ -54,6 +55,12 @@ const staticFiltersGroupLabels = {
   c_employeeCountry: 'Employee Country'
 }
 
+const filterSearchFields = [{
+  fieldApiName: 'builtin.location',
+  entityType: 'ce_person',
+  fetchEntities: false
+}];
+
 export default function VerticalSearchPage(props: {
   verticalKey: string
 }) {
@@ -69,6 +76,12 @@ export default function VerticalSearchPage(props: {
 
   return (
     <div className='VerticalSearchPage'>
+      <FilterSearch
+        title='FilterSearch location!'
+        sectioned={false}
+        searchFields={filterSearchFields}
+        screenReaderInstructionsId='FilterSearchId'
+      />
       <div className='start'>
         <StaticFilters
           title='~Country and Employee Departments~'
