@@ -1,10 +1,11 @@
-import { useAnswersActions, useAnswersState, StateSelector, AutocompleteResult } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState, AutocompleteResult } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
+import { useRef, useState } from 'react';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -20,16 +21,19 @@ interface Props {
 export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
-  const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
-    ? state => state.vertical.autoComplete?.results
-    : state => state.universal.autoComplete?.results;
-  const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
-  const isLoading = useAnswersState(state => state.searchStatus.isLoading);
-
-  function executeAutocomplete () {
+  const [ autocompleteResults, setAutoCompleteResults ] = useState<AutocompleteResult[]>([]);
+  const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
+  const networkIds = useRef({ request: 0, response: 0 });
+  async function executeAutocomplete () {
+    const requestId = ++networkIds.current.request;
+    let response = null;
     isVertical
-      ? answersActions.executeVerticalAutoComplete()
-      : answersActions.executeUniversalAutoComplete()
+      ? response = await answersActions.executeVerticalAutoComplete()
+      : response = await answersActions.executeUniversalAutoComplete();
+    if (requestId >= networkIds.current.response) {
+      setAutoCompleteResults(response?.results || []);
+      networkIds.current.response++;
+    }
   }
 
   function executeQuery () {
@@ -69,8 +73,8 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         updateInputValue={value => {
           answersActions.setQuery(value);
         }}
-        updateDropdown={() => {
-          executeAutocomplete();
+        updateDropdown={async () => {
+          await executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
