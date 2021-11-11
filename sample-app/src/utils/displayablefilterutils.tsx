@@ -1,5 +1,5 @@
-import { AppliedQueryFilter, DisplayableFacet } from '@yext/answers-core';
-import { SelectableFilter } from '@yext/answers-headless/lib/commonjs/models/utils/selectablefilter';
+import { AppliedQueryFilter, DisplayableFacet } from '@yext/answers-headless-react';
+import { SelectableFilter } from '@yext/answers-headless/lib/esm/models/utils/selectablefilter';
 import { DisplayableFilter } from '../models/displayableFilter';
 import { getFilterDisplayValue } from './filterutils';
 

@@ -1,4 +1,4 @@
-import { Result } from "@yext/answers-core";
+import { Result } from "@yext/answers-headless-react";
 import { CardConfig } from './cardComponent';
 
 export interface SectionConfig {

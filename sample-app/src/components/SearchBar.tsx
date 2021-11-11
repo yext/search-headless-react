@@ -1,5 +1,4 @@
-import { useAnswersActions, useAnswersState, StateSelector } from '@yext/answers-headless-react';
-import { AutocompleteResult } from '@yext/answers-core';
+import { useAnswersActions, useAnswersState, StateSelector, AutocompleteResult } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
@@ -20,12 +19,12 @@ interface Props {
  */
 export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
   const answersActions = useAnswersActions();
-  const query = useAnswersState(state => state.query.query);
+  const query = useAnswersState(state => state.query.input);
   const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
     ? state => state.vertical.autoComplete?.results
     : state => state.universal.autoComplete?.results;
   const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
-  const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
+  const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
   function executeAutocomplete () {
     isVertical

@@ -18,8 +18,8 @@ export function ResultsCountDisplay(props: ResultsCountConfig): JSX.Element {
 
 
 export default function ResultsCount() {
-  const resultsCount = useAnswersState(state => state.vertical?.results?.verticalResults.resultsCount) || 0;
-  const resultsLength = useAnswersState(state => state.vertical?.results?.verticalResults.results.length) || 0;
+  const resultsCount = useAnswersState(state => state.vertical?.resultsCount) || 0;
+  const resultsLength = useAnswersState(state => state.vertical?.results?.length) || 0;
   const offset = useAnswersState(state => state.vertical?.offset) || 0;
   return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset}/>;
 }
