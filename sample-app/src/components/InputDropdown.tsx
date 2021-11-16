@@ -12,7 +12,7 @@ interface Props {
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
   updateInputValue: (value: string) => void,
-  updateDropdown: () => Promise<void>,
+  updateDropdown: () => void,
   renderButtons?: () => JSX.Element | null,
   cssClasses: {
     optionContainer: string,
@@ -126,16 +126,16 @@ export default function InputDropdown({
         <input
           className={cssClasses.inputElement}
           placeholder={placeholder}
-          onChange={async evt => {
+          onChange={evt => {
             const value = evt.target.value;
             dispatch({ type: 'ShowOptions' });
             setLatestUserInput(value);
             updateInputValue(value);
-            await updateDropdown();
+            updateDropdown();
             setScreenReaderKey(screenReaderKey + 1);
           }}
-          onClick={async () => {
-            await updateDropdown();
+          onClick={() => {
+            updateDropdown();
             dispatch({ type: 'ShowOptions' });
             if (options.length || inputValue) {
               setScreenReaderKey(screenReaderKey + 1);

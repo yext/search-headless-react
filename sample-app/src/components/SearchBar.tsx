@@ -1,11 +1,11 @@
-import { useAnswersActions, useAnswersState, AutocompleteResult } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
-import { useRef, useState } from 'react';
+import { useAutocomplete } from '../hooks/useAutocomplete';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -21,20 +21,8 @@ interface Props {
 export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
-  const [ autocompleteResults, setAutoCompleteResults ] = useState<AutocompleteResult[]>([]);
+  const [ autocompleteResults, executeAutocomplete ] = useAutocomplete(isVertical);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
-  const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
-  async function executeAutocomplete () {
-    const requestId = ++autocompleteNetworkIds.current.latestRequest;
-    let response = null;
-    isVertical
-      ? response = await answersActions.executeVerticalAutocomplete()
-      : response = await answersActions.executeUniversalAutocomplete();
-    if (requestId >= autocompleteNetworkIds.current.responseInState) {
-      setAutoCompleteResults(response?.results || []);
-      autocompleteNetworkIds.current.responseInState = requestId;
-    }
-  }
 
   function executeQuery () {
     isVertical
@@ -73,8 +61,8 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         updateInputValue={value => {
           answersActions.setQuery(value);
         }}
-        updateDropdown={async () => {
-          await executeAutocomplete();
+        updateDropdown={() => {
+          executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
