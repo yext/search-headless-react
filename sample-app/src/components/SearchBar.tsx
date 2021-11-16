@@ -23,16 +23,16 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
   const query = useAnswersState(state => state.query.input);
   const [ autocompleteResults, setAutoCompleteResults ] = useState<AutocompleteResult[]>([]);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
-  const autocompleteNetworkIds = useRef({ latestRequest: 0, response: 0 });
+  const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
   async function executeAutocomplete () {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
     let response = null;
     isVertical
       ? response = await answersActions.executeVerticalAutocomplete()
       : response = await answersActions.executeUniversalAutocomplete();
-    if (requestId >= autocompleteNetworkIds.current.response) {
+    if (requestId >= autocompleteNetworkIds.current.responseInState) {
       setAutoCompleteResults(response?.results || []);
-      autocompleteNetworkIds.current.response = requestId;
+      autocompleteNetworkIds.current.responseInState = requestId;
     }
   }
 
