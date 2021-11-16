@@ -7,10 +7,9 @@ export function useAutocomplete(isVertical: boolean): [AutocompleteResult[], () 
   const [ autocompleteResults, setAutoCompleteResults ] = useState<AutocompleteResult[]>([]);
   async function executeAutocomplete () {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
-    let response = null;
-    isVertical
-      ? response = await answersActions.executeVerticalAutocomplete()
-      : response = await answersActions.executeUniversalAutocomplete();
+    const response = isVertical
+      ? await answersActions.executeVerticalAutocomplete()
+      : await answersActions.executeUniversalAutocomplete();
     if (requestId >= autocompleteNetworkIds.current.responseInState) {
       setAutoCompleteResults(response?.results || []);
       autocompleteNetworkIds.current.responseInState = requestId;
