@@ -65,7 +65,7 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
           if (sectionIndex !== undefined && optionIndex !== undefined && results) {
             const option = results.sections[sectionIndex].results[optionIndex];
             if (option.filter) {
-              answersActions.setFilterOption({ ...option.filter, selected: true }, 'someFiltersSearchId');
+              answersActions.setFilterOption({ ...option.filter, selected: true });
               answersActions.executeVerticalQuery();
               setMessage('enter!');
             }
