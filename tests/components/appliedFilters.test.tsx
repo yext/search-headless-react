@@ -18,7 +18,7 @@ describe('AppliedFilters component work as expected', () => {
 
     const MockedStaticFilter = () => {
       const onChange = useCallback(() => {
-        answers.setStaticFilters({ someId: [] });
+        answers.setStaticFilters([]);
       }, []);
       return <button id='c_employeeCountry_United States' onClick={onChange}></button>;
     };
@@ -35,7 +35,7 @@ describe('AppliedFilters component work as expected', () => {
 
     act(() => answers.setQuery('someQuery'));
     await act( () => answers.executeVerticalQuery());
-    act(() => answers.setStaticFilters({ someId: [mockedFilter] }));
+    act(() => answers.setStaticFilters([mockedFilter]));
 
     let filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
     expect(filterLabels.length).toBe(1);

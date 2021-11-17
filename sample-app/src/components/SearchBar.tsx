@@ -1,10 +1,11 @@
-import { useAnswersActions, useAnswersState, StateSelector, AutocompleteResult } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
+import { useAutocomplete } from '../hooks/useAutocomplete';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -19,18 +20,9 @@ interface Props {
  */
 export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
   const answersActions = useAnswersActions();
-  const query = useAnswersState(state => state.query.query);
-  const mapStateToAutocompleteResults: StateSelector<AutocompleteResult[] | undefined> = isVertical
-    ? state => state.vertical.autoComplete?.results
-    : state => state.universal.autoComplete?.results;
-  const autocompleteResults = useAnswersState(mapStateToAutocompleteResults) || [];
-  const isLoading = useAnswersState(state => state.vertical.searchLoading || state.universal.searchLoading);
-
-  function executeAutocomplete () {
-    isVertical
-      ? answersActions.executeVerticalAutoComplete()
-      : answersActions.executeUniversalAutoComplete()
-  }
+  const query = useAnswersState(state => state.query.input);
+  const [ autocompleteResults, executeAutocomplete ] = useAutocomplete(isVertical);
+  const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
   function executeQuery () {
     isVertical

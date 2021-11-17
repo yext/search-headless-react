@@ -29,6 +29,6 @@ export function DecoratedAppliedFiltersDisplay(props : DecoratedAppliedFiltersCo
 export default function DecoratedAppliedFilters(
   props : Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'>
 ): JSX.Element {
-  const nlpFilters = useAnswersState(state => state.vertical?.results?.verticalResults.appliedQueryFilters) || [];  
+  const nlpFilters = useAnswersState(state => state.vertical?.appliedQueryFilters) || [];  
   return <DecoratedAppliedFiltersDisplay appliedQueryFilters={nlpFilters} {...props}/>
 };

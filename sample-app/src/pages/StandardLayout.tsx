@@ -19,7 +19,7 @@ const navLinks = [
  * A LayoutComponent that provides a SearchBar and Navigation tabs to a given page.
  */
 const StandardLayout: LayoutComponent = ({ page }) => {
-  const isVertical = useAnswersState(state => !!state.vertical.key);
+  const isVertical = useAnswersState(state => !!state.vertical.verticalKey);
   return (
     <>
       <SearchBar

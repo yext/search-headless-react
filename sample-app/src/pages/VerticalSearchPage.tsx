@@ -11,7 +11,7 @@ import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 
-const staticFilterOptions = [
+const countryFilterOptions = [
   {
     label: 'canada',
     fieldId: 'c_employeeCountry',
@@ -26,7 +26,10 @@ const staticFilterOptions = [
     label: 'usa',
     fieldId: 'c_employeeCountry',
     value: 'United States',
-  },
+  }
+]
+
+const employeeFilterOptions = [
   {
     label: 'tech',
     fieldId: 'c_employeeDepartment',
@@ -51,7 +54,8 @@ const facetConfigs = {
 }
 
 const staticFiltersGroupLabels = {
-  c_employeeCountry: 'Employee Country'
+  c_employeeCountry: 'Employee Country',
+  c_employeeDepartment: 'Employee Deparment'
 }
 
 export default function VerticalSearchPage(props: {
@@ -71,9 +75,12 @@ export default function VerticalSearchPage(props: {
     <div className='VerticalSearchPage'>
       <div className='start'>
         <StaticFilters
-          title='~Country and Employee Departments~'
-          options={staticFilterOptions}
-          filterCollectionId='someFilterId'
+          title='~Country~'
+          options={countryFilterOptions}
+        />
+        <StaticFilters
+          title='~Employee Departments~'
+          options={employeeFilterOptions}
         />
         <Facets
           searchOnChange={true}

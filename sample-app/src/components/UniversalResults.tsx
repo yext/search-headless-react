@@ -30,8 +30,8 @@ export default function UniversalResults({
   verticalConfigs,
   appliedFiltersConfig
 }: UniversalResultsProps): JSX.Element | null {
-  const resultsFromAllVerticals = useAnswersState(state => state?.universal?.results?.verticalResults) || [];
-  const isLoading = useAnswersState(state => state.universal.searchLoading);
+  const resultsFromAllVerticals = useAnswersState(state => state?.universal?.verticals) || [];
+  const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
   if (resultsFromAllVerticals.length === 0) {
     return null;
