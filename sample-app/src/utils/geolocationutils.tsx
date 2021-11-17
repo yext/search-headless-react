@@ -42,17 +42,15 @@ export async function executeSearchWithUserLocation(
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       })
-      executeSearch();
     },
     (err) => {
       console.error(err);
       console.error('unable to determine user location.');
-      executeSearch();
     },
     Object.assign(defaultGeolocationOptions, geolocationOptions)
     );
   } else {
     console.warn('unable to determine user location.');
-    executeSearch();
   }
+  executeSearch();
 }
