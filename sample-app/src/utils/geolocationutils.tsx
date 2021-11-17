@@ -45,12 +45,12 @@ export async function executeSearchWithUserLocation(
     },
     (err) => {
       console.error(err);
-      console.error('unable to determine user location.');
+      console.error('Unable to determine user\'s location.');
     },
     Object.assign(defaultGeolocationOptions, geolocationOptions)
     );
   } else {
-    console.warn('unable to determine user location.');
+    console.warn('Unable to determine user\'s location.');
   }
   executeSearch();
 }
