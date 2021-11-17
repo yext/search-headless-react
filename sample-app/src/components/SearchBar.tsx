@@ -6,6 +6,7 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
+import { executeSearchWithUserLocation } from '../utils/geolocationutils';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -25,9 +26,7 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
   function executeQuery () {
-    isVertical
-      ? answersActions.executeVerticalQuery()
-      : answersActions.executeUniversalQuery();
+    executeSearchWithUserLocation(answersActions, isVertical, {}, true);
   }
 
   function renderSearchButton () {

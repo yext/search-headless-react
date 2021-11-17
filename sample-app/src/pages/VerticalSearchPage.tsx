@@ -10,6 +10,7 @@ import '../sass/VerticalSearchPage.scss';
 import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
+import { executeSearchWithUserLocation } from '../utils/geolocationutils';
 
 const countryFilterOptions = [
   {
@@ -68,7 +69,7 @@ export default function VerticalSearchPage(props: {
       universal: {}
     });
     answersActions.setVerticalKey(props.verticalKey);
-    answersActions.executeVerticalQuery();
+    executeSearchWithUserLocation(answersActions, true, {}, true);
   }, [answersActions, props.verticalKey]);
 
   return (
