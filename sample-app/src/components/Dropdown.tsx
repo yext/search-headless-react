@@ -6,7 +6,10 @@ export interface Option {
 }
 
 interface Props {
-  options: {results: Option[], label?: string}[],
+  options: {
+    results: Option[], 
+    label?: string
+  }[],
   onClickOption?: (option: Option, sectionIndex: number, optionIndex: number) => void,
   focusedSectionIndex: number | undefined,
   focusedOptionIndex: number | undefined,

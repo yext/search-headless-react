@@ -20,7 +20,6 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
   const answersActions = useAnswersActions();
   const [input, setInput] = useState('');
   const [results, updateResults] = useState<FilterSearchResponse|undefined>();
-  const [, setMessage] = useState( '' );
   const requestId = useRef(0);
   const responseId = useRef(0);
 
@@ -67,7 +66,6 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
             if (option.filter) {
               answersActions.setFilterOption({ ...option.filter, selected: true });
               answersActions.executeVerticalQuery();
-              setMessage('enter!');
             }
           }
         }}
