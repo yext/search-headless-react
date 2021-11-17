@@ -59,13 +59,16 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         placeholder={placeholder}
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
-        options={autocompleteResults.map(result => {
-          return {
-            value: result.value,
-            render: () => renderWithHighlighting(result)
-          }
-        })}
+        options={autocompleteResults.length > 0 ? [{
+          results: autocompleteResults.map(result => {
+            return {
+              value: result.value,
+              render: () => renderWithHighlighting(result)
+            }
+          })
+        }] : []}
         optionIdPrefix='Autocomplete__option'
+        onlySubmitOnOption={false}
         onSubmit={executeQuery}
         updateInputValue={value => {
           answersActions.setQuery(value);
@@ -76,6 +79,8 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         renderButtons={renderSearchButton}
         cssClasses={{
           optionContainer: 'Autocomplete',
+          optionSection: 'Autocomplete__optionSection',
+          sectionLabel: 'Autocomplete__sectionLabel',
           option: 'Autocomplete__option',
           focusedOption: 'Autocomplete__option--focused',
           inputElement: 'SearchBar__input',

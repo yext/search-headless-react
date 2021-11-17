@@ -59,6 +59,11 @@ const filterSearchFields = [{
   fieldApiName: 'builtin.location',
   entityType: 'ce_person',
   fetchEntities: false
+},
+{
+  fieldApiName: 'name',
+  entityType: 'ce_person',
+  fetchEntities: false
 }];
 
 export default function VerticalSearchPage(props: {
@@ -77,8 +82,8 @@ export default function VerticalSearchPage(props: {
   return (
     <div className='VerticalSearchPage'>
       <FilterSearch
-        title='FilterSearch location!'
-        sectioned={false}
+        title='Filter Search!'
+        sectioned={true}
         searchFields={filterSearchFields}
         screenReaderInstructionsId='FilterSearchId'
       />
