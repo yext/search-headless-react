@@ -1,8 +1,7 @@
 import { processTranslation } from './utils/processTranslation';
 import { ReactComponent as Chevron } from '../icons/chevron.svg';
 import { ReactComponent as Star } from '../icons/star.svg';
-import { useAnswersState, useAnswersActions } from '@yext/answers-headless-react';
-import { VerticalResults } from '@yext/answers-core';
+import { useAnswersState, useAnswersActions, VerticalResults } from '@yext/answers-headless-react';
 import '../sass/AlternativeVerticals.scss';
 
 interface VerticalConfig {
@@ -27,9 +26,9 @@ interface Props {
 export default function AlternativeVerticals (props: Props): JSX.Element | null {
   const { currentVerticalLabel, verticalsConfig, displayAllResults = true } = props;
 
-  const alternativeVerticals = useAnswersState(state => state.vertical.alternativeVerticals) || [];
-  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-  const query = useAnswersState(state => state.query.latest);
+  const alternativeVerticals = useAnswersState(state => state.vertical.noResults?.alternativeVerticals) || [];
+  const allResultsForVertical = useAnswersState(state => state.vertical.noResults?.allResultsForVertical.results) || [];
+  const query = useAnswersState(state => state.query.mostRecentSearch);
   const actions = useAnswersActions();
 
   const verticalSuggestions = buildVerticalSuggestions(verticalsConfig, alternativeVerticals);

@@ -188,8 +188,8 @@ export default function InputDropdown({
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
-            dispatch({ type: 'ShowOptions' });
             updateDropdown(inputValue);
+            dispatch({ type: 'ShowOptions' });
             if (options[0]?.results.length || inputValue) {
               setScreenReaderKey(screenReaderKey + 1);
             }

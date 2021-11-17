@@ -1,5 +1,4 @@
-import { useAnswersState } from "@yext/answers-headless-react";
-import { VerticalResults } from "@yext/answers-core";
+import { useAnswersState, VerticalResults } from "@yext/answers-headless-react";
 import StandardSection from "../sections/StandardSection";
 import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
 import SectionHeader from "../sections/SectionHeader";
@@ -31,8 +30,8 @@ export default function UniversalResults({
   verticalConfigs,
   appliedFiltersConfig
 }: UniversalResultsProps): JSX.Element | null {
-  const resultsFromAllVerticals = useAnswersState(state => state?.universal?.results?.verticalResults) || [];
-  const isLoading = useAnswersState(state => state.universal.searchLoading);
+  const resultsFromAllVerticals = useAnswersState(state => state?.universal?.verticals) || [];
+  const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
   if (resultsFromAllVerticals.length === 0) {
     return null;

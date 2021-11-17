@@ -6,7 +6,7 @@ import { StandardCard } from "../components/cards/StandardCard";
 
 const StandardSection: SectionComponent = function (props: SectionConfig): JSX.Element | null {
   const { results, verticalKey, cardConfig, viewMore, header } = props;
-  const latestQuery = useAnswersState(state => state.query.latest); 
+  const latestQuery = useAnswersState(state => state.query.mostRecentSearch); 
   if (results.length === 0) {
     return null;
   }

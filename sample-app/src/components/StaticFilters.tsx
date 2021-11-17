@@ -1,6 +1,4 @@
-import { Fragment } from 'react';
-import { Filter, Matcher } from '@yext/answers-core';
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState, Filter, Matcher } from '@yext/answers-headless-react';
 import { isDuplicateFilter } from '../utils/filterutils';
 
 interface CheckBoxProps {
@@ -19,8 +17,7 @@ interface FilterOption {
 
 interface StaticFiltersProps {
   options: FilterOption[],
-  title: string,
-  filterCollectionId: string
+  title: string
 }
 
 function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: CheckBoxProps) {
@@ -31,7 +28,7 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
   }
   const id = fieldId + "_" + value
   return (
-    <Fragment>
+    <>
       <label htmlFor={id}>{label}</label>
       <input 
         type="checkbox"
@@ -39,17 +36,17 @@ function CheckboxFilter({ fieldId, value, label, selected, optionHandler }: Chec
         checked={selected}
         onChange={evt => optionHandler(filter, evt.target.checked)}
       />
-    </Fragment>
+    </>
   );
 }
 
 export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
   const answersActions = useAnswersActions();
-  const { filterCollectionId, options, title } = props;
+  const { options, title } = props;
 
-  const filterCollection = useAnswersState(state =>  state.filters.static?.[filterCollectionId]);
+  const selectableFilters = useAnswersState(state =>  state.filters.static);
   const getOptionSelectStatus = (option: FilterOption): boolean => {
-    const foundFilter = filterCollection?.find(storedSelectableFilter => {
+    const foundFilter = selectableFilters?.find(storedSelectableFilter => {
       const { selected, ...storedFilter } = storedSelectableFilter;
       const targetFilter = {
         fieldId: option.fieldId,
@@ -62,7 +59,8 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
   };
 
   const handleFilterOptionChange = (option: Filter, isChecked: boolean) => {
-    answersActions.setFilterOption({ ...option, selected: isChecked }, filterCollectionId);
+    answersActions.resetFacets();
+    answersActions.setFilterOption({ ...option, selected: isChecked });
     answersActions.executeVerticalQuery();
   }
 

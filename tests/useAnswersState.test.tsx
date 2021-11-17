@@ -1,7 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Result } from '@yext/answers-core';
-import { provideAnswersHeadless } from '@yext/answers-headless';
+import { provideAnswersHeadless, Result } from '@yext/answers-headless';
 import { State } from '@yext/answers-headless/lib/esm/models/state';
 import React, { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
@@ -13,7 +12,7 @@ it('does not perform extra renders/listener registrations for nested components'
   function Test() {
     const actions = useAnswersActions();
     const results = useAnswersState(state => {
-      return state?.vertical?.results?.verticalResults.results;
+      return state?.vertical?.results;
     }) || [];
     parentStateUpdates.push(results);
     const search = useCallback(() => {
@@ -31,7 +30,7 @@ it('does not perform extra renders/listener registrations for nested components'
 
   function Child({ results }: { results: Result[] }) {
     const queryId = useAnswersState(state => {
-      return state.vertical.results?.queryId;
+      return state.query.queryId;
     }) || '';
     childStateUpdates.push(queryId);
 
@@ -79,7 +78,7 @@ it('does not perform extra renders/listener registrations for nested components'
 it('does not trigger render on unmounted component', async () => {
   const consoleSpy = jest.spyOn(console, 'error');
   function ParentComponent() {
-    const results = useAnswersState(state => state.universal?.results?.verticalResults) || [];
+    const results = useAnswersState(state => state.universal?.verticals) || [];
     return <div>{results.map((_, index) => <ChildComponent key={index}/>)}</div>;
   }
 
@@ -136,7 +135,7 @@ describe('uses the most recent selector',() => {
   it('for determining whether to trigger a rerender', () => {
     type Selector = (state: State) => string | number | undefined;
     let selector: Selector = state => {
-      return state.query.query;
+      return state.query.input;
     };
     const stateUpdates: (string | undefined | number)[] = [];
 
