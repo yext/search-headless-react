@@ -89,25 +89,15 @@ export default function InputDropdown({
 
   const screenReaderPhrases: string[] = [];
   if (options.length < 1) {
-    const phrase = processTranslation({
-      phrase: `0 autocomplete option found.`,
-      pluralForm: `0 autocomplete options found.`,
-      count: 0
-    })
-    screenReaderPhrases.push(phrase);
+    screenReaderPhrases.push(`0 autocomplete options found.`);
   } else {
     options.forEach(section => {
-      const phrase = section.label ?
-        processTranslation({
-          phrase: `${section.results.length} ${section.label} autocomplete option found.`,
-          pluralForm: `${section.results.length} ${section.label} autocomplete options found.`,
-          count: section.results.length
-        })
-        : processTranslation({
-          phrase: `${section.results.length} autocomplete option found.`,
-          pluralForm: `${section.results.length} autocomplete options found.`,
-          count: section.results.length
-        });
+      const optionInfo = section.label? `${section.results.length} ${section.label}` : `${section.results.length}`;
+      const phrase = processTranslation({
+        phrase: `${optionInfo} autocomplete option found.`,
+        pluralForm: `${optionInfo} autocomplete options found.`,
+        count: section.results.length
+      });
       screenReaderPhrases.push(phrase);
     });
   }

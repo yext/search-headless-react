@@ -34,15 +34,13 @@ export default function Dropdown({
   optionIdPrefix,
   cssClasses
 }: Props): JSX.Element | null {
-  function renderSection(section: {results: Option[], label?: string}, sectionIndex: number) {
+  function renderSection(section: { results: Option[], label?: string }, sectionIndex: number) {
     return (
       <div
         className={cssClasses.optionSection}
         key={`section-${sectionIndex}`}>
         {section.label &&
-          <div
-            className={cssClasses.sectionLabel}
-            key={section.label}>
+          <div className={cssClasses.sectionLabel}>
             {section.label}
           </div>
         }

@@ -1,5 +1,5 @@
-import { FilterSearchResponse } from "@yext/answers-core";
-import { SearchParameterField } from "@yext/answers-core";
+import { FilterSearchResponse } from "@yext/answers-headless";
+import { SearchParameterField } from "@yext/answers-headless";
 import { useRef, useState } from "react";
 import { useAnswersActions } from '@yext/answers-headless-react';
 import InputDropdown from "./InputDropdown";
