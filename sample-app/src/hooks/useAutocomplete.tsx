@@ -7,21 +7,21 @@ export function useAutocomplete(
   const answersActions = useAnswersActions();
   const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
   const [ autocompleteResponse, setAutocompleteResponse ] = useState<AutocompleteResponse>();
-  const latestAutocompleteResponseRef = useRef<Promise<void>>(Promise.resolve());
+  const responseToLatestRequestRef = useRef<Promise<void>>(Promise.resolve());
   async function executeAutocomplete () {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
-    latestAutocompleteResponseRef.current = new Promise(async (resolve) => {
+    responseToLatestRequestRef.current = new Promise(async (resolve) => {
       const response = isVertical
         ? await answersActions.executeVerticalAutocomplete()
         : await answersActions.executeUniversalAutocomplete();
+      if (requestId === autocompleteNetworkIds.current.latestRequest) {
+        resolve();
+      }
       if (requestId >= autocompleteNetworkIds.current.responseInState) {
         setAutocompleteResponse(response);
         autocompleteNetworkIds.current.responseInState = requestId;
-        if (requestId === autocompleteNetworkIds.current.latestRequest) {
-          resolve();
-        }
       }
     });
   }
-  return [ autocompleteResponse, latestAutocompleteResponseRef, executeAutocomplete ]
+  return [ autocompleteResponse, responseToLatestRequestRef, executeAutocomplete ]
 };

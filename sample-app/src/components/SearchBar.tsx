@@ -32,12 +32,12 @@ export default function SearchBar({
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
   const [ 
     autocompleteResponse,
-    latestAutocompleteResponseRef,
+    responseToLatestRequestRef,
     executeAutocomplete
   ] = useAutocomplete(isVertical);
 
   async function executeQuery () {
-    await latestAutocompleteResponseRef.current;
+    await responseToLatestRequestRef.current;
     if (autocompleteResponse?.inputIntents.includes(SearchIntent.NearMe)) {
       const position = await SearchHandler.getUserLocation(geolocationOptions);
       answersActions.setUserLocation({
