@@ -7,6 +7,12 @@ const defaultGeolocationOptions: PositionOptions = {
   maximumAge: 300000,
 };
 
+/**
+ * Provide utility functions related to vertical and universal search execution.
+ * This includes any potential data check or setup related to a query before
+ * performing a search, such as fetching searchIntents using autocomplete requests,
+ * and retrieving user's location using nagivator.geolocation API.
+ */
 export default class SearchHandler {
   static async executeSearch(answersActions: AnswersActions, isVertical: boolean) {
     isVertical
