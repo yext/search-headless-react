@@ -34,11 +34,15 @@ export default function LocationBias(props: Props) {
           : '';
 
   async function handleGeolocationClick() {
-    const position = await SearchHandler.getUserLocation(geolocationOptions);
-    answersActions.setUserLocation({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    })
+    try {
+      const position = await SearchHandler.getUserLocation(geolocationOptions);
+      answersActions.setUserLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     SearchHandler.executeSearch(answersActions, isVertical);
   }
 

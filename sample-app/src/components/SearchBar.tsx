@@ -39,11 +39,15 @@ export default function SearchBar({
   async function executeQuery () {
     const responseToLatestRequest = await responseToLatestRequestRef.current;
     if (responseToLatestRequest?.inputIntents.includes(SearchIntent.NearMe)) {
-      const position = await SearchHandler.getUserLocation(geolocationOptions);
-      answersActions.setUserLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      })
+      try {
+        const position = await SearchHandler.getUserLocation(geolocationOptions);
+        answersActions.setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      } catch(e) {
+        console.error(e);
+      }
     }
     SearchHandler.executeSearch(answersActions, true);
   }

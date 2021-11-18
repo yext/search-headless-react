@@ -22,11 +22,15 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
     const executeQuery = async () => {
       const searchIntents = await SearchHandler.getSearchIntents(answersActions, false);
       if (searchIntents?.includes(SearchIntent.NearMe)) {
-        const position = await SearchHandler.getUserLocation();
-        answersActions.setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
+        try {
+          const position = await SearchHandler.getUserLocation();
+          answersActions.setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        } catch (e) {
+          console.error(e);
+        }
       }
       SearchHandler.executeSearch(answersActions, false);
     };

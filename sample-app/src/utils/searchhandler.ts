@@ -34,15 +34,13 @@ export default class SearchHandler {
         navigator.geolocation.getCurrentPosition(
           position => resolve(position),
           err => { 
-            console.log(err);
-            console.error('Unable to determine user\'s location.');
-            reject(); 
+            console.error('Error occured using geolocation API. Unable to determine user\'s location.');
+            reject(err); 
           },
           Object.assign(defaultGeolocationOptions, geolocationOptions)
         );
       } else {
-        console.error('Unable to determine user\'s location.');
-        reject();
+        reject('No access to geolocation API. Unable to determine user\'s location.');
       }
     });
   }
