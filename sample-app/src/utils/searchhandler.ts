@@ -15,8 +15,6 @@ const defaultGeolocationOptions: PositionOptions = {
  */
 export default class SearchHandler {
   static async executeSearch(answersActions: AnswersActions, isVertical: boolean) {
-    console.log('executing search..');
-    console.log(isVertical);
     isVertical
       ? answersActions.executeVerticalQuery()
       : answersActions.executeUniversalQuery();

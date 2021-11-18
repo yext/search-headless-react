@@ -23,9 +23,7 @@ export function useAutocomplete(
         setAutocompleteResponse(response);
         autocompleteNetworkIds.current.responseInState = requestId;
       }
-      if (requestId === autocompleteNetworkIds.current.latestRequest) {
-        resolve(response);
-      }
+      resolve(response);
     });
   }
   return [ autocompleteResponse, responseToLatestRequestRef, executeAutocomplete ]
