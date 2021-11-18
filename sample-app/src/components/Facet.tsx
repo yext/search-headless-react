@@ -1,5 +1,4 @@
-import { useAnswersUtilities } from '@yext/answers-headless-react'
-import { DisplayableFacet, DisplayableFacetOption } from '@yext/answers-core';
+import { useAnswersUtilities, DisplayableFacet, DisplayableFacetOption } from '@yext/answers-headless-react'
 import { useState } from 'react';
 import useCollapse from 'react-collapsed';
 import '../sass/Facet.scss';

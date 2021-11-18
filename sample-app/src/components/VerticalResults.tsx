@@ -1,6 +1,5 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
-import { Result } from '@yext/answers-core';
-import { useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState, Result } from '@yext/answers-headless-react';
 import classNames from 'classnames';
 import '../sass/VerticalResults.scss';
 
@@ -53,9 +52,9 @@ interface VerticalResultsProps {
 export default function VerticalResults(props: VerticalResultsProps): JSX.Element | null {
   const { displayAllResults = true, ...otherProps } = props;
 
-  const verticalResults = useAnswersState(state => state.vertical.results?.verticalResults.results) || [];
-  const allResultsForVertical = useAnswersState(state => state.vertical.results?.allResultsForVertical?.verticalResults.results) || [];
-  const isLoading = useAnswersState(state => state.vertical.searchLoading);
+  const verticalResults = useAnswersState(state => state.vertical.results) || [];
+  const allResultsForVertical = useAnswersState(state => state.vertical?.noResults?.allResultsForVertical.results) || [];
+  const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
   const results = verticalResults.length === 0 && displayAllResults
     ? allResultsForVertical
