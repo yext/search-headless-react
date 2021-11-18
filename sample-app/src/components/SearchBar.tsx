@@ -37,8 +37,8 @@ export default function SearchBar({
   ] = useAutocomplete(isVertical);
 
   async function executeQuery () {
-    await responseToLatestRequestRef.current;
-    if (autocompleteResponse?.inputIntents.includes(SearchIntent.NearMe)) {
+    const responseToLatestRequest = await responseToLatestRequestRef.current;
+    if (responseToLatestRequest?.inputIntents.includes(SearchIntent.NearMe)) {
       const position = await SearchHandler.getUserLocation(geolocationOptions);
       answersActions.setUserLocation({
         latitude: position.coords.latitude,

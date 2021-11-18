@@ -3,11 +3,16 @@ import { AutocompleteResponse, useAnswersActions } from '@yext/answers-headless-
 
 export function useAutocomplete(
   isVertical: boolean
-): [ AutocompleteResponse|undefined, MutableRefObject<Promise<void>>, () => Promise<void> ] {
+): [ 
+    AutocompleteResponse|undefined,
+    MutableRefObject<Promise<AutocompleteResponse|undefined>>,
+    () => Promise<void> 
+  ]
+{
   const answersActions = useAnswersActions();
   const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
   const [ autocompleteResponse, setAutocompleteResponse ] = useState<AutocompleteResponse>();
-  const responseToLatestRequestRef = useRef<Promise<void>>(Promise.resolve());
+  const responseToLatestRequestRef = useRef<Promise<AutocompleteResponse|undefined>>(Promise.resolve(undefined));
   async function executeAutocomplete () {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
     responseToLatestRequestRef.current = new Promise(async (resolve) => {
@@ -19,7 +24,7 @@ export function useAutocomplete(
         autocompleteNetworkIds.current.responseInState = requestId;
       }
       if (requestId === autocompleteNetworkIds.current.latestRequest) {
-        resolve();
+        resolve(response);
       }
     });
   }
