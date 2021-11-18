@@ -1,5 +1,10 @@
 module.exports = {
-  extends: ['react-app', 'plugin:@typescript-eslint/recommended', 'plugin:react-perf/recommended'],
+  extends: [
+    'react-app',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-perf/recommended',
+    'plugin:@yext/export-star/recommended'
+  ],
   plugins: ['react-perf'],
   ignorePatterns: ['sample-app', 'lib', 'tests/setup/responses'],
   rules: {
