@@ -49,7 +49,7 @@ export default function SearchBar({
         console.error(e);
       }
     }
-    SearchHandler.executeSearch(answersActions, true);
+    SearchHandler.executeSearch(answersActions, isVertical);
   }
 
   function renderSearchButton () {
