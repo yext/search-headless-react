@@ -11,7 +11,7 @@ const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use 
 export interface FilterSearchProps {
   title: string,
   sectioned: boolean,
-  searchFields: SearchParameterField[],
+  searchFields: Omit<SearchParameterField, 'fetchEntities'>[],
   screenReaderInstructionsId: string
 }
 
@@ -22,17 +22,20 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
   const [results, updateResults] = useState<FilterSearchResponse|undefined>();
   const requestId = useRef(0);
   const responseId = useRef(0);
+  const searchParamFields = searchFields.map((searchField) => {
+    return { ...searchField, fetchEntities: false }
+  });
 
   async function executeFilterSearch (inputValue: string) {
     const currentId = ++requestId.current;
-    const results = await answersActions.executeFilterSearch(inputValue, sectioned, searchFields);
+    const results = await answersActions.executeFilterSearch(inputValue, sectioned, searchParamFields);
     if (currentId >= responseId.current) {
       responseId.current++;
       updateResults(results);
     }
   }
 
-  let options: {results: Option[], label?: string}[] = [];
+  let options: { results: Option[], label?: string }[] = [];
   if (results) {
     results.sections.forEach(section => {
       let results: Option[] = [];

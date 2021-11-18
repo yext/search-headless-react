@@ -61,13 +61,11 @@ const staticFiltersGroupLabels = {
 
 const filterSearchFields = [{
   fieldApiName: 'builtin.location',
-  entityType: 'ce_person',
-  fetchEntities: false
+  entityType: 'ce_person'
 },
 {
   fieldApiName: 'name',
-  entityType: 'ce_person',
-  fetchEntities: false
+  entityType: 'ce_person'
 }];
 
 export default function VerticalSearchPage(props: {

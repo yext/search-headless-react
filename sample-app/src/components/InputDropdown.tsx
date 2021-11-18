@@ -8,7 +8,7 @@ interface Props {
   placeholder?: string,
   screenReaderInstructions: string,
   screenReaderInstructionsId: string,
-  options: {results: Option[], label?: string}[],
+  options: { results: Option[], label?: string }[],
   optionIdPrefix: string,
   onlySubmitOnOption: boolean,
   onSubmit?: (value: string, sectionIndex?: number, optionIndex?: number) => void,
@@ -89,7 +89,12 @@ export default function InputDropdown({
 
   const screenReaderPhrases: string[] = [];
   if (options.length < 1) {
-    screenReaderPhrases.push(`0 autocomplete options found.`);
+    const phrase = processTranslation({
+      phrase: `0 autocomplete option found.`,
+      pluralForm: `0 autocomplete options found.`,
+      count: 0
+    });
+    screenReaderPhrases.push(phrase);
   } else {
     options.forEach(section => {
       const optionInfo = section.label? `${section.results.length} ${section.label}` : `${section.results.length}`;
@@ -127,11 +132,9 @@ export default function InputDropdown({
     const isLastOptionFocused = 
       focusedSectionIndex !== undefined &&
       focusedOptionIndex === options[focusedSectionIndex].results.length - 1;
-    if (evt.key === 'Enter') {
-      if (!onlySubmitOnOption || focusedOptionIndex !== undefined) {
-        onSubmit(inputValue, focusedSectionIndex, focusedOptionIndex);
-        dispatch({ type: 'HideOptions' });
-      }
+    if (evt.key === 'Enter' && (!onlySubmitOnOption || focusedOptionIndex !== undefined)) {
+      onSubmit(inputValue, focusedSectionIndex, focusedOptionIndex);
+      dispatch({ type: 'HideOptions' });
     } else if (evt.key === 'Escape' || evt.key === 'Tab') {
       dispatch({ type: 'HideOptions' });
     } else if (evt.key === 'ArrowDown' && options.length > 0 && !(isLastSectionFocused && isLastOptionFocused)) {
