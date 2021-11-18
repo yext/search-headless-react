@@ -14,12 +14,12 @@ export function useAutocomplete(
       const response = isVertical
         ? await answersActions.executeVerticalAutocomplete()
         : await answersActions.executeUniversalAutocomplete();
-      if (requestId === autocompleteNetworkIds.current.latestRequest) {
-        resolve();
-      }
       if (requestId >= autocompleteNetworkIds.current.responseInState) {
         setAutocompleteResponse(response);
         autocompleteNetworkIds.current.responseInState = requestId;
+      }
+      if (requestId === autocompleteNetworkIds.current.latestRequest) {
+        resolve();
       }
     });
   }
