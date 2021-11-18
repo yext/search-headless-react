@@ -1,19 +1,27 @@
-import { useRef, useState } from "react";
-import { AutocompleteResult, useAnswersActions } from '@yext/answers-headless-react';
+import { MutableRefObject, useRef, useState } from "react";
+import { AutocompleteResponse, useAnswersActions } from '@yext/answers-headless-react';
 
-export function useAutocomplete(isVertical: boolean): [AutocompleteResult[], () => Promise<void>] {
+export function useAutocomplete(
+  isVertical: boolean
+): [ AutocompleteResponse|undefined, MutableRefObject<Promise<void>>, () => Promise<void> ] {
   const answersActions = useAnswersActions();
   const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
-  const [ autocompleteResults, setAutocompleteResults ] = useState<AutocompleteResult[]>([]);
+  const [ autocompleteResponse, setAutocompleteResponse ] = useState<AutocompleteResponse>();
+  const latestAutocompleteResponseRef = useRef<Promise<void>>(Promise.resolve());
   async function executeAutocomplete () {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
-    const response = isVertical
-      ? await answersActions.executeVerticalAutocomplete()
-      : await answersActions.executeUniversalAutocomplete();
-    if (requestId >= autocompleteNetworkIds.current.responseInState) {
-      setAutocompleteResults(response?.results || []);
-      autocompleteNetworkIds.current.responseInState = requestId;
-    }
+    latestAutocompleteResponseRef.current = new Promise(async (resolve) => {
+      const response = isVertical
+        ? await answersActions.executeVerticalAutocomplete()
+        : await answersActions.executeUniversalAutocomplete();
+      if (requestId >= autocompleteNetworkIds.current.responseInState) {
+        setAutocompleteResponse(response);
+        autocompleteNetworkIds.current.responseInState = requestId;
+        if (requestId === autocompleteNetworkIds.current.latestRequest) {
+          resolve();
+        }
+      }
+    });
   }
-  return [ autocompleteResults, executeAutocomplete ]
+  return [ autocompleteResponse, latestAutocompleteResponseRef, executeAutocomplete ]
 };

@@ -3,7 +3,8 @@ import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import '../sass/UniversalSearchPage.scss';
 import { UniversalResultsConfig } from '../universalResultsConfig';
-import { executeSearchWithUserLocation } from '../utils/geolocationutils';
+import SearchHandler from '../utils/searchhandler';
+import { SearchIntent } from '@yext/answers-headless';
 
 const universalResultsFilterConfig = {
   show: true
@@ -18,7 +19,18 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
       vertical: {}
     })
     answersActions.setVerticalKey('');
-    executeSearchWithUserLocation(answersActions, false, {}, true);
+    const executeQuery = async () => {
+      const searchIntents = await SearchHandler.getSearchIntents(answersActions, false);
+      if (searchIntents?.includes(SearchIntent.NearMe)) {
+        const position = await SearchHandler.getUserLocation();
+        answersActions.setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+      }
+      SearchHandler.executeSearch(answersActions, false);
+    };
+    executeQuery();
   }, [answersActions]);
 
   return (

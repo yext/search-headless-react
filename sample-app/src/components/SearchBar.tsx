@@ -6,27 +6,46 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
-import { executeSearchWithUserLocation } from '../utils/geolocationutils';
+import SearchHandler from '../utils/searchhandler';
+import { SearchIntent } from '@yext/answers-headless';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
 interface Props {
   placeholder?: string,
   isVertical: boolean,
+  geolocationOptions?: PositionOptions,
   screenReaderInstructionsId: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
+export default function SearchBar({
+  placeholder,
+  isVertical,
+  geolocationOptions,
+  screenReaderInstructionsId 
+}: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
-  const [ autocompleteResults, executeAutocomplete ] = useAutocomplete(isVertical);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
+  const [ 
+    autocompleteResponse,
+    latestAutocompleteResponseRef,
+    executeAutocomplete
+  ] = useAutocomplete(isVertical);
 
-  function executeQuery () {
-    executeSearchWithUserLocation(answersActions, isVertical, {}, true);
+  async function executeQuery () {
+    await latestAutocompleteResponseRef.current;
+    if (autocompleteResponse?.inputIntents.includes(SearchIntent.NearMe)) {
+      const position = await SearchHandler.getUserLocation(geolocationOptions);
+      answersActions.setUserLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      })
+    }
+    SearchHandler.executeSearch(answersActions, true);
   }
 
   function renderSearchButton () {
@@ -49,12 +68,12 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         placeholder={placeholder}
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
-        options={autocompleteResults.map(result => {
+        options={autocompleteResponse?.results.map(result => {
           return {
             value: result.value,
             render: () => renderWithHighlighting(result)
           }
-        })}
+        }) ?? []}
         optionIdPrefix='Autocomplete__option'
         onSubmit={executeQuery}
         updateInputValue={value => {

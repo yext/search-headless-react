@@ -1,5 +1,5 @@
 import { useAnswersActions, useAnswersState, LocationBiasMethod } from '@yext/answers-headless-react';
-import { executeSearchWithUserLocation } from '../utils/geolocationutils';
+import SearchHandler from '../utils/searchhandler';
 
 interface Props {
   isVertical: boolean,
@@ -33,6 +33,15 @@ export default function LocationBias(props: Props) {
         : locationBias?.method === LocationBiasMethod.Device ? '(based on your device)'
           : '';
 
+  async function handleGeolocationClick() {
+    const position = await SearchHandler.getUserLocation(geolocationOptions);
+    answersActions.setUserLocation({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+    })
+    SearchHandler.executeSearch(answersActions, isVertical);
+  }
+
   return (
     <div className={cssClasses.container}>
       <span className={cssClasses.location}>
@@ -45,7 +54,7 @@ export default function LocationBias(props: Props) {
       )}
       <button 
         className={cssClasses.button}
-        onClick={() => executeSearchWithUserLocation(answersActions, isVertical, geolocationOptions, false)}
+        onClick={handleGeolocationClick}
       >
         Update your location
       </button>
