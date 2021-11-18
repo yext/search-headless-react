@@ -70,7 +70,7 @@ export default function Dropdown({
 
   return (
     <div className={cssClasses.optionContainer}>
-      {options.map((section, sectionIndex) => renderSection(section, sectionIndex))}
+      {options.map(renderSection)}
     </div>
   );
 };

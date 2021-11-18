@@ -87,26 +87,24 @@ export default function InputDropdown({
     setScreenReaderKey(0);
   }
 
-  const screenReaderPhrases: string[] = [];
+  let screenReaderText = '';
   if (options.length < 1) {
-    const phrase = processTranslation({
+    screenReaderText = processTranslation({
       phrase: `0 autocomplete option found.`,
       pluralForm: `0 autocomplete options found.`,
       count: 0
     });
-    screenReaderPhrases.push(phrase);
   } else {
-    options.forEach(section => {
+    const screenReaderPhrases = options.map(section => {
       const optionInfo = section.label? `${section.results.length} ${section.label}` : `${section.results.length}`;
-      const phrase = processTranslation({
+      return processTranslation({
         phrase: `${optionInfo} autocomplete option found.`,
         pluralForm: `${optionInfo} autocomplete options found.`,
         count: section.results.length
       });
-      screenReaderPhrases.push(phrase);
     });
+    screenReaderText = screenReaderPhrases.join(' ');
   }
-  const screenReaderText = screenReaderPhrases.join(' ');
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;

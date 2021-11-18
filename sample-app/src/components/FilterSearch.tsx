@@ -37,18 +37,16 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
 
   let options: { results: Option[], label?: string }[] = [];
   if (results) {
-    results.sections.forEach(section => {
-      let results: Option[] = [];
-      section.results.forEach(result => {
-        results.push({
-          value: result.value,
-          render: () => renderWithHighlighting(result)
-        });
-      });
-      options.push({
-        results: results,
+    options = results.sections.map(section => {
+      return {
+        results: section.results.map(result => {
+          return {
+            value: result.value,
+            render: () => renderWithHighlighting(result)
+          };
+        }),
         label: section.label
-      });
+      };
     });
   }
 
