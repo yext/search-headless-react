@@ -1,4 +1,5 @@
-import { AnswersActions } from "../../../lib";
+import { AnswersActions } from "@yext/answers-headless-react";
+import { SearchIntent } from "@yext/answers-headless";
 
 
 const defaultGeolocationOptions: PositionOptions = {
@@ -19,6 +20,26 @@ export default class SearchHandler {
       ? answersActions.executeVerticalQuery()
       : answersActions.executeUniversalQuery();
     return;
+  }
+
+  static async executeSearchWithIntents(
+    answersActions: AnswersActions,
+    isVertical: boolean,
+    intents: SearchIntent[],
+    geolocationOptions?: PositionOptions
+  ) {
+    if (intents.includes(SearchIntent.NearMe)) {
+      try {
+        const position = await SearchHandler.getUserLocation(geolocationOptions);
+        answersActions.setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      } catch(e) {
+        console.error(e);
+      }
+    }
+    SearchHandler.executeSearch(answersActions, isVertical);
   }
 
   static async getSearchIntents(answersActions: AnswersActions, isVertical: boolean) {

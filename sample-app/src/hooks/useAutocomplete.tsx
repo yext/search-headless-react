@@ -1,21 +1,19 @@
-import { MutableRefObject, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AutocompleteResponse, useAnswersActions } from '@yext/answers-headless-react';
 
 export function useAutocomplete(
   isVertical: boolean
 ): [ 
     AutocompleteResponse|undefined,
-    MutableRefObject<Promise<AutocompleteResponse|undefined>>,
-    () => Promise<void> 
+    () => Promise<AutocompleteResponse|undefined> 
   ]
 {
   const answersActions = useAnswersActions();
   const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
   const [ autocompleteResponse, setAutocompleteResponse ] = useState<AutocompleteResponse>();
-  const responseToLatestRequestRef = useRef<Promise<AutocompleteResponse|undefined>>(Promise.resolve(undefined));
-  async function executeAutocomplete () {
+  async function executeAutocomplete (): Promise<AutocompleteResponse|undefined>  {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
-    responseToLatestRequestRef.current = new Promise(async (resolve) => {
+    return new Promise(async (resolve) => {
       const response = isVertical
         ? await answersActions.executeVerticalAutocomplete()
         : await answersActions.executeUniversalAutocomplete();
@@ -26,5 +24,5 @@ export function useAutocomplete(
       resolve(response);
     });
   }
-  return [ autocompleteResponse, responseToLatestRequestRef, executeAutocomplete ]
+  return [ autocompleteResponse, executeAutocomplete ]
 };

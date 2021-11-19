@@ -11,7 +11,6 @@ import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import SearchHandler from '../utils/searchhandler';
-import { SearchIntent } from '@yext/answers-headless';
 
 const countryFilterOptions = [
   {
@@ -72,18 +71,7 @@ export default function VerticalSearchPage(props: {
     answersActions.setVerticalKey(props.verticalKey);
     const executeQuery = async () => {
       const searchIntents = await SearchHandler.getSearchIntents(answersActions, false);
-      if (searchIntents?.includes(SearchIntent.NearMe)) {
-        try {
-          const position = await SearchHandler.getUserLocation();
-          answersActions.setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      SearchHandler.executeSearch(answersActions, true);
+      SearchHandler.executeSearchWithIntents(answersActions, true, searchIntents || []);
     };
     executeQuery();
   }, [answersActions, props.verticalKey]);
