@@ -64,7 +64,7 @@ export async function getUserLocation(geolocationOptions?: PositionOptions): Pro
           console.error('Error occured using geolocation API. Unable to determine user\'s location.');
           reject(err); 
         },
-        Object.assign(defaultGeolocationOptions, geolocationOptions)
+        { ...defaultGeolocationOptions, ...geolocationOptions }
       );
     } else {
       reject('No access to geolocation API. Unable to determine user\'s location.');
