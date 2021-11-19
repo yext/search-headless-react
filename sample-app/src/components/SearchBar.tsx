@@ -31,7 +31,7 @@ export default function SearchBar({
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
-  const responseToLatestRequestRef = useRef<Promise<AutocompleteResponse|undefined>>(Promise.resolve(undefined));
+  const responseToLatestRequestRef = useRef<Promise<AutocompleteResponse|undefined>>();
   const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
 
   async function executeQuery () {
