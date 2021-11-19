@@ -1,5 +1,5 @@
 import { useAnswersActions, useAnswersState, LocationBiasMethod } from '@yext/answers-headless-react';
-import SearchHandler from '../utils/searchhandler';
+import { executeSearch, getUserLocation  } from '../utils/search-operations';
 
 interface Props {
   isVertical: boolean,
@@ -35,7 +35,7 @@ export default function LocationBias(props: Props) {
 
   async function handleGeolocationClick() {
     try {
-      const position = await SearchHandler.getUserLocation(geolocationOptions);
+      const position = await getUserLocation(geolocationOptions);
       answersActions.setUserLocation({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -43,7 +43,7 @@ export default function LocationBias(props: Props) {
     } catch (e) {
       console.error(e);
     }
-    SearchHandler.executeSearch(answersActions, isVertical);
+    executeSearch(answersActions, isVertical);
   }
 
   return (

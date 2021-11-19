@@ -6,9 +6,9 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
-import SearchHandler from '../utils/searchhandler';
 import { useRef } from 'react';
 import { AutocompleteResponse } from '@yext/answers-headless';
+import { executeSearchWithIntents } from '../utils/search-operations';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -37,7 +37,7 @@ export default function SearchBar({
   async function executeQuery () {
     const responseToLatestRequest = await responseToLatestRequestRef.current;
     const intents = responseToLatestRequest?.inputIntents || [];
-    SearchHandler.executeSearchWithIntents(answersActions, isVertical, intents, geolocationOptions);
+    executeSearchWithIntents(answersActions, isVertical, intents, geolocationOptions);
   }
 
   function renderSearchButton () {
