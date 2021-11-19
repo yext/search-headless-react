@@ -11,9 +11,9 @@ interface Props {
   focusedOptionIndex: number | undefined,
   optionIdPrefix: string,
   cssClasses: {
-    optionContainer: string,
-    option: string,
-    focusedOption: string
+    dropdownContainer?: string,
+    option?: string,
+    focusedOption?: string
   }
 }
 
@@ -29,7 +29,7 @@ export default function Dropdown({
 }: Props): JSX.Element | null {
   function renderOption(option: Option, index: number) {
     const className = classNames(cssClasses.option, {
-      [cssClasses.focusedOption]: index === focusedOptionIndex
+      [cssClasses.focusedOption ?? '']: index === focusedOptionIndex
     })
     return (
       <div 
@@ -46,7 +46,7 @@ export default function Dropdown({
   }
 
   return (
-    <div className={cssClasses.optionContainer}>
+    <div className={cssClasses.dropdownContainer}>
       {options.map((option, index) => renderOption(option, index))}
     </div>
   );

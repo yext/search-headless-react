@@ -3,6 +3,15 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { NavLink, useLocation } from 'react-router-dom';
 import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
 import '../sass/Navigation.scss';
+import { composeCssClasses } from '../utils/composeCssClasses';
+
+interface NavigationCssClasses {
+  linksWrapper?: string
+}
+
+const builtInCssClasses: NavigationCssClasses = {
+  linksWrapper: 'block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
+}
 
 interface LinkData {
   to: string,
@@ -10,10 +19,12 @@ interface LinkData {
 }
 
 interface NavigationProps {
-  links: LinkData[]
+  links: LinkData[],
+  cssClasses?: NavigationCssClasses
 }
 
-export default function Navigation({ links }: NavigationProps) {
+export default function Navigation({ links, cssClasses }: NavigationProps) {
+  const classes = composeCssClasses(builtInCssClasses, cssClasses);
   // Close the menu when clicking the document
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLButtonElement>(null);
@@ -62,7 +73,7 @@ export default function Navigation({ links }: NavigationProps) {
   });
   return (
     <nav className='Navigation' ref={navigationRef}>
-      <div className='Navigation__links'>
+      <div className={classes.linksWrapper}>
         {visibleLinks.map(l => renderLink(l, search))}
       </div>
       {numOverflowLinks > 0 &&

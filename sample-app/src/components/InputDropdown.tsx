@@ -14,12 +14,15 @@ interface Props {
   updateInputValue: (value: string) => void,
   updateDropdown: () => void,
   renderButtons?: () => JSX.Element | null,
+  renderIcon?: () => JSX.Element | null,
   cssClasses: {
-    optionContainer: string,
-    option: string,
-    focusedOption: string,
-    inputElement: string,
-    inputContainer: string
+    dropdownContainer?: string,
+    option?: string,
+    focusedOption?: string,
+    inputElement?: string,
+    inputContainer?: string,
+    iconContainer?: string,
+    buttonContainer?: string
   }
 }
 
@@ -58,6 +61,7 @@ export default function InputDropdown({
   updateInputValue,
   updateDropdown,
   renderButtons = () => null,
+  renderIcon = () => null,
   cssClasses
 }: Props): JSX.Element | null {
   const [{
@@ -123,6 +127,9 @@ export default function InputDropdown({
   return (
     <>
       <div className={cssClasses.inputContainer}>
+        <div className={cssClasses.iconContainer}>
+          {renderIcon()}
+        </div>
         <input
           className={cssClasses.inputElement}
           placeholder={placeholder}
@@ -147,7 +154,9 @@ export default function InputDropdown({
           aria-describedby={screenReaderInstructionsId}
           aria-activedescendant={focusOptionId}
         />
-        {renderButtons()}
+        <div className={cssClasses.buttonContainer}>
+          {renderButtons()}
+        </div>
       </div>
       <ScreenReader
         instructionsId={screenReaderInstructionsId}
