@@ -31,6 +31,10 @@ export default function SearchBar({
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
+  /**
+   * Allow a query search to wait on the response to the autocomplete request right
+   * before the search execution in order to retrieve the search intents
+   */
   const responseToLatestRequestRef = useRef<Promise<AutocompleteResponse|undefined>>();
   const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
 

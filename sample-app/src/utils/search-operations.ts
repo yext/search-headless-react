@@ -18,7 +18,7 @@ export async function executeSearchWithIntents(
   intents: SearchIntent[],
   geolocationOptions?: PositionOptions
 ) {
-  if (intents.includes(SearchIntent.NearMe)) {
+  if (intents.includes(SearchIntent.NearMe) && !answersActions.state.location.userLocation) {
     try {
       const position = await getUserLocation(geolocationOptions);
       answersActions.setUserLocation({
