@@ -35,14 +35,14 @@ export default function SearchBar({
    * Allow a query search to wait on the response to the autocomplete request right
    * before the search execution in order to retrieve the search intents
    */
-  const responseToLatestRequestRef = useRef<Promise<AutocompleteResponse|undefined>>();
+  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse|undefined>>();
   const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
 
   async function executeQuery () {
     let intents: SearchIntent[] = [];
     if (!answersActions.state.location.userLocation) {
-      const responseToLatestRequest = await responseToLatestRequestRef.current;
-      intents = responseToLatestRequest?.inputIntents || [];
+      const autocompleteResponseBeforeSearch = await autocompletePromiseRef.current;
+      intents = autocompleteResponseBeforeSearch?.inputIntents || [];
     }
     executeSearchWithIntents(answersActions, isVertical, intents, geolocationOptions);
   }
@@ -79,7 +79,7 @@ export default function SearchBar({
           answersActions.setQuery(value);
         }}
         updateDropdown={() => {
-          responseToLatestRequestRef.current = executeAutocomplete();
+          autocompletePromiseRef.current = executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
