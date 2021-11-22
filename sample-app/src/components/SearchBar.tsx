@@ -8,7 +8,7 @@ import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import { useRef } from 'react';
 import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
-import { executeSearchWithIntents } from '../utils/search-operations';
+import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -43,8 +43,9 @@ export default function SearchBar({
     if (!answersActions.state.location.userLocation) {
       const autocompleteResponseBeforeSearch = await autocompletePromiseRef.current;
       intents = autocompleteResponseBeforeSearch?.inputIntents || [];
+      await updateLocationIfNeeded(answersActions, intents, geolocationOptions);
     }
-    executeSearchWithIntents(answersActions, isVertical, intents, geolocationOptions);
+    executeSearch(answersActions, isVertical);
   }
 
   function renderSearchButton () {

@@ -8,13 +8,11 @@ const defaultGeolocationOptions: PositionOptions = {
 };
 
 /**
- * If the provided search intents include a 'NEAR_ME' intent, retrieve and
- * store user's location in headless state. Then, execute a search with
- * user's location, if that's successfully retrieved, attached to the request.
+ * If the provided search intents include a 'NEAR_ME' intent and there's no existing
+ * user's location in state, retrieve and store user's location in headless state.
  */
-export async function executeSearchWithIntents(
+export async function updateLocationIfNeeded(
   answersActions: AnswersActions,
-  isVertical: boolean,
   intents: SearchIntent[],
   geolocationOptions?: PositionOptions
 ) {
@@ -29,7 +27,6 @@ export async function executeSearchWithIntents(
       console.error(e);
     }
   }
-  executeSearch(answersActions, isVertical);
 }
 
 /**
@@ -39,7 +36,6 @@ export async function executeSearch(answersActions: AnswersActions, isVertical: 
   isVertical
     ? answersActions.executeVerticalQuery()
     : answersActions.executeUniversalQuery();
-  return;
 }
 
 /**

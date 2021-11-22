@@ -4,7 +4,11 @@ import { useAnswersActions } from '@yext/answers-headless-react';
 import { SearchIntent } from '@yext/answers-headless';
 import '../sass/UniversalSearchPage.scss';
 import { UniversalResultsConfig } from '../universalResultsConfig';
-import { executeSearchWithIntents, getSearchIntents } from '../utils/search-operations';
+import {
+  executeSearch,
+  getSearchIntents,
+  updateLocationIfNeeded
+} from '../utils/search-operations';
 
 const universalResultsFilterConfig = {
   show: true
@@ -23,8 +27,9 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
       let searchIntents: SearchIntent[] = [];
       if (!answersActions.state.location.userLocation) {
         searchIntents = await getSearchIntents(answersActions, false) || [];
+        updateLocationIfNeeded(answersActions, searchIntents);
       }
-      executeSearchWithIntents(answersActions, false, searchIntents);
+      executeSearch(answersActions, false);
     };
     executeQuery();
   }, [answersActions]);
