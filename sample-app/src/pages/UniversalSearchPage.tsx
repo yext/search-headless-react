@@ -19,8 +19,12 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
     })
     answersActions.setVerticalKey('');
     const executeQuery = async () => {
-      const searchIntents = await getSearchIntents(answersActions, false);
-      executeSearchWithIntents(answersActions, false, searchIntents || []);
+      if(answersActions.state.location.userLocation) {
+        answersActions.executeUniversalQuery();
+      } else {
+        const searchIntents = await getSearchIntents(answersActions, false);
+        executeSearchWithIntents(answersActions, false, searchIntents || []);
+      }
     };
     executeQuery();
   }, [answersActions]);

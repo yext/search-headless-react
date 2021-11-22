@@ -70,8 +70,12 @@ export default function VerticalSearchPage(props: {
     });
     answersActions.setVerticalKey(props.verticalKey);
     const executeQuery = async () => {
-      const searchIntents = await getSearchIntents(answersActions, false);
-      executeSearchWithIntents(answersActions, true, searchIntents || []);
+      if(answersActions.state.location.userLocation) {
+        answersActions.executeVerticalQuery();
+      } else {
+        const searchIntents = await getSearchIntents(answersActions, true);
+        executeSearchWithIntents(answersActions, true, searchIntents || []);
+      }
     };
     executeQuery();
   }, [answersActions, props.verticalKey]);
