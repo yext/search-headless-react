@@ -7,8 +7,8 @@ import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import { useRef } from 'react';
-import { AutocompleteResponse } from '@yext/answers-headless';
-import { executeSearch, executeSearchWithIntents } from '../utils/search-operations';
+import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
+import { executeSearchWithIntents } from '../utils/search-operations';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -39,13 +39,12 @@ export default function SearchBar({
   const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
 
   async function executeQuery () {
-    if (answersActions.state.location.userLocation) {
-      executeSearch(answersActions, isVertical);
-    } else {
+    let intents: SearchIntent[] = [];
+    if (!answersActions.state.location.userLocation) {
       const responseToLatestRequest = await responseToLatestRequestRef.current;
-      const intents = responseToLatestRequest?.inputIntents || [];
-      executeSearchWithIntents(answersActions, isVertical, intents, geolocationOptions);
+      intents = responseToLatestRequest?.inputIntents || [];
     }
+    executeSearchWithIntents(answersActions, isVertical, intents, geolocationOptions);
   }
 
   function renderSearchButton () {

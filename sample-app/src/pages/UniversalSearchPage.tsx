@@ -1,6 +1,7 @@
 import UniversalResults from '../components/UniversalResults';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
+import { SearchIntent } from '@yext/answers-headless';
 import '../sass/UniversalSearchPage.scss';
 import { UniversalResultsConfig } from '../universalResultsConfig';
 import { executeSearchWithIntents, getSearchIntents } from '../utils/search-operations';
@@ -19,12 +20,11 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
     })
     answersActions.setVerticalKey('');
     const executeQuery = async () => {
-      if(answersActions.state.location.userLocation) {
-        answersActions.executeUniversalQuery();
-      } else {
-        const searchIntents = await getSearchIntents(answersActions, false);
-        executeSearchWithIntents(answersActions, false, searchIntents || []);
+      let searchIntents: SearchIntent[] = [];
+      if (!answersActions.state.location.userLocation) {
+        searchIntents = await getSearchIntents(answersActions, false) || [];
       }
+      executeSearchWithIntents(answersActions, false, searchIntents);
     };
     executeQuery();
   }, [answersActions]);
