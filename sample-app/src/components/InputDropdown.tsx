@@ -1,5 +1,7 @@
+import React, { isValidElement } from "react";
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
+import DropdownSection from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
 import { processTranslation } from './utils/processTranslation';
 
@@ -11,13 +13,10 @@ interface Props {
   options: Option[],
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
-  updateInputValue: (value: string) => void,
-  updateDropdown: () => void,
+  onInputChange: (value: string) => void,
+  onInputFocus: () => void,
   renderButtons?: () => JSX.Element | null,
   cssClasses: {
-    optionContainer: string,
-    option: string,
-    focusedOption: string,
     inputElement: string,
     inputContainer: string
   }
@@ -52,14 +51,15 @@ export default function InputDropdown({
   placeholder,
   screenReaderInstructions,
   screenReaderInstructionsId,
+  children,
   options,
   optionIdPrefix,
   onSubmit = () => {},
-  updateInputValue,
-  updateDropdown,
+  onInputChange,
+  onInputFocus,
   renderButtons = () => null,
   cssClasses
-}: Props): JSX.Element | null {
+}: React.PropsWithChildren<Props>): JSX.Element | null {
   const [{
     focusedOptionIndex,
     shouldDisplayDropdown,
@@ -100,7 +100,7 @@ export default function InputDropdown({
     const isFirstOptionFocused = focusedOptionIndex === 0;
     const isLastOptionFocused = focusedOptionIndex === options.length - 1;
     if (evt.key === 'Enter') {
-      updateInputValue(inputValue);
+      onInputChange(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideOptions' });
     } else if (evt.key === 'Escape' || evt.key === 'Tab') {
@@ -109,15 +109,21 @@ export default function InputDropdown({
       const newIndex = focusedOptionIndex !== undefined ? focusedOptionIndex + 1 : 0;
       dispatch({ type: 'FocusOption', newIndex });
       const newValue = options[newIndex]?.value;
-      updateInputValue(newValue);
+      onInputChange(newValue);
     } else if (evt.key === 'ArrowUp' && focusedOptionIndex !== undefined) {
       const newIndex = isFirstOptionFocused ? undefined : focusedOptionIndex - 1;
       dispatch({ type: 'FocusOption', newIndex });
       const newValue = newIndex !== undefined
         ? options[newIndex]?.value
         : latestUserInput;
-      updateInputValue(newValue);
+      onInputChange(newValue);
     }
+  }
+
+  const sections = React.Children.toArray(children);
+  if (isValidElement<{someProp: boolean}>(sections[0])) {
+    const b = sections[0].props.someProp;
+    sections[0].props.someProp = false;
   }
 
   return (
@@ -130,12 +136,12 @@ export default function InputDropdown({
             const value = evt.target.value;
             dispatch({ type: 'ShowOptions' });
             setLatestUserInput(value);
-            updateInputValue(value);
-            updateDropdown();
+            onInputChange(value);
+            onInputFocus();
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
-            updateDropdown();
+            onInputFocus();
             dispatch({ type: 'ShowOptions' });
             if (options.length || inputValue) {
               setScreenReaderKey(screenReaderKey + 1);
@@ -163,17 +169,7 @@ export default function InputDropdown({
         }
       />
       {shouldDisplayDropdown &&
-        <Dropdown
-          options={options}
-          optionIdPrefix={optionIdPrefix}
-          onClickOption={option => {
-            updateInputValue(option.value);
-            onSubmit(option.value)
-            dispatch({ type: 'HideOptions' })
-          }}
-          focusedOptionIndex={focusedOptionIndex}
-          cssClasses={cssClasses}
-        />
+        { children }
       }
     </>
   );

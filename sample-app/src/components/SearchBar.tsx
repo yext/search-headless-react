@@ -58,10 +58,10 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         })}
         optionIdPrefix='Autocomplete__option'
         onSubmit={executeQuery}
-        updateInputValue={value => {
+        onInputChange={value => {
           answersActions.setQuery(value);
         }}
-        updateDropdown={() => {
+        onInputFocus={() => {
           executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
