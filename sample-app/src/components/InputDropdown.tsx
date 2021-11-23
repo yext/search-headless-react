@@ -1,18 +1,20 @@
+import React from "react";
 import { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
 import Dropdown, { Option } from './Dropdown';
 import ScreenReader from "./ScreenReader";
 import { processTranslation } from './utils/processTranslation';
+import { SectionProps } from './Section';
 
 interface Props {
   inputValue?: string,
   placeholder?: string,
   screenReaderInstructions: string,
   screenReaderInstructionsId: string,
-  options: Option[],
   optionIdPrefix: string,
   onSubmit?: (value: string) => void,
+  onInputChange?: (value: string) => void,
+  onInputClick?: () => void,
   updateInputValue: (value: string) => void,
-  updateDropdown: () => void,
   renderButtons?: () => JSX.Element | null,
   cssClasses: {
     optionContainer: string,
@@ -24,23 +26,23 @@ interface Props {
 }
 
 interface State {
-  focusedOptionIndex?: number,
+  focusedSectionIndex?: number,
   shouldDisplayDropdown: boolean
 }
 
 type Action =
-  | { type: 'HideOptions' }
-  | { type: 'ShowOptions' }
+  | { type: 'HideDropdown' }
+  | { type: 'ShowDropdown' }
   | { type: 'FocusOption', newIndex?: number }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'HideOptions':
-      return { focusedOptionIndex: undefined, shouldDisplayDropdown: false }
-    case 'ShowOptions':
-      return { focusedOptionIndex: undefined, shouldDisplayDropdown: true }
+    case 'HideDropdown':
+      return { focusedSectionIndex: undefined, shouldDisplayDropdown: false }
+    case 'ShowDropdown':
+      return { focusedSectionIndex: undefined, shouldDisplayDropdown: true }
     case 'FocusOption':
-      return { focusedOptionIndex: action.newIndex, shouldDisplayDropdown: true }
+      return { focusedSectionIndex: action.newIndex, shouldDisplayDropdown: true }
   }
 }
 
@@ -52,24 +54,39 @@ export default function InputDropdown({
   placeholder,
   screenReaderInstructions,
   screenReaderInstructionsId,
-  options,
   optionIdPrefix,
+  children,
   onSubmit = () => {},
   updateInputValue,
-  updateDropdown,
+  //updateDropdown,
+  onInputChange = () => {},
+  onInputClick = () => {},
   renderButtons = () => null,
   cssClasses
-}: Props): JSX.Element | null {
+}: React.PropsWithChildren<Props>): JSX.Element | null {
   const [{
-    focusedOptionIndex,
+    focusedSectionIndex,
     shouldDisplayDropdown,
   }, dispatch] = useReducer(reducer, {
-    focusedOptionIndex: undefined,
+    focusedSectionIndex: undefined,
     shouldDisplayDropdown: false,
   });
-  const focusOptionId = focusedOptionIndex === undefined
-    ? undefined
-    : `${optionIdPrefix}-${focusedOptionIndex}`;
+  // const focusOptionId = focusedOptionIndex === undefined
+  //   ? undefined
+  //   : `${optionIdPrefix}-${focusedOptionIndex}`;
+
+  const childrenArray = React.Children.toArray(children);
+  const childrenWithProps = childrenArray.map((child, index) => {
+    if (!React.isValidElement(child)) {
+      return child;
+    }
+    const updatedProps: SectionProps = {}
+    if (index === 1) {
+      updatedProps['focusStatus'] = 'active';
+      console.log('updateding props')
+    }
+    return React.cloneElement(child, updatedProps);
+  });
 
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
   const [screenReaderKey, setScreenReaderKey] = useState(0);
@@ -83,7 +100,7 @@ export default function InputDropdown({
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!target.isSameNode(inputRef.current)) {
-      dispatch({ type: 'HideOptions' });
+      dispatch({ type: 'HideDropdown' });
     }
   }
 
@@ -93,31 +110,31 @@ export default function InputDropdown({
   });
 
   function onKeyDown(evt: KeyboardEvent<HTMLInputElement>) {
-    if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
-      evt.preventDefault();
-    }
+    // if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
+    //   evt.preventDefault();
+    // }
 
-    const isFirstOptionFocused = focusedOptionIndex === 0;
-    const isLastOptionFocused = focusedOptionIndex === options.length - 1;
-    if (evt.key === 'Enter') {
-      updateInputValue(inputValue);
-      onSubmit(inputValue);
-      dispatch({ type: 'HideOptions' });
-    } else if (evt.key === 'Escape' || evt.key === 'Tab') {
-      dispatch({ type: 'HideOptions' });
-    } else if (evt.key === 'ArrowDown' && options.length > 0 && !isLastOptionFocused) {
-      const newIndex = focusedOptionIndex !== undefined ? focusedOptionIndex + 1 : 0;
-      dispatch({ type: 'FocusOption', newIndex });
-      const newValue = options[newIndex]?.value;
-      updateInputValue(newValue);
-    } else if (evt.key === 'ArrowUp' && focusedOptionIndex !== undefined) {
-      const newIndex = isFirstOptionFocused ? undefined : focusedOptionIndex - 1;
-      dispatch({ type: 'FocusOption', newIndex });
-      const newValue = newIndex !== undefined
-        ? options[newIndex]?.value
-        : latestUserInput;
-      updateInputValue(newValue);
-    }
+    // const isFirstOptionFocused = focusedOptionIndex === 0;
+    // const isLastOptionFocused = focusedOptionIndex === options.length - 1;
+    // if (evt.key === 'Enter') {
+    //   updateInputValue(inputValue);
+    //   onSubmit(inputValue);
+    //   dispatch({ type: 'HideDropdown' });
+    // } else if (evt.key === 'Escape' || evt.key === 'Tab') {
+    //   dispatch({ type: 'HideDropdown' });
+    // } else if (evt.key === 'ArrowDown' && options.length > 0 && !isLastOptionFocused) {
+    //   const newIndex = focusedOptionIndex !== undefined ? focusedOptionIndex + 1 : 0;
+    //   dispatch({ type: 'FocusOption', newIndex });
+    //   const newValue = options[newIndex]?.value;
+    //   updateInputValue(newValue);
+    // } else if (evt.key === 'ArrowUp' && focusedOptionIndex !== undefined) {
+    //   const newIndex = isFirstOptionFocused ? undefined : focusedOptionIndex - 1;
+    //   dispatch({ type: 'FocusOption', newIndex });
+    //   const newValue = newIndex !== undefined
+    //     ? options[newIndex]?.value
+    //     : latestUserInput;
+    //   updateInputValue(newValue);
+    // }
   }
 
   return (
@@ -128,28 +145,28 @@ export default function InputDropdown({
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
-            dispatch({ type: 'ShowOptions' });
+            dispatch({ type: 'ShowDropdown' });
             setLatestUserInput(value);
             updateInputValue(value);
-            updateDropdown();
+            onInputChange(value);
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
-            updateDropdown();
-            dispatch({ type: 'ShowOptions' });
-            if (options.length || inputValue) {
-              setScreenReaderKey(screenReaderKey + 1);
-            }
+            onInputClick();
+            dispatch({ type: 'ShowDropdown' });
+            // if (options.length || inputValue) {
+            //   setScreenReaderKey(screenReaderKey + 1);
+            // }
           }}
           onKeyDown={onKeyDown}
           value={inputValue}
           ref={inputRef}
           aria-describedby={screenReaderInstructionsId}
-          aria-activedescendant={focusOptionId}
+          //aria-activedescendant={focusOptionId}
         />
         {renderButtons()}
       </div>
-      <ScreenReader
+      {/* <ScreenReader
         instructionsId={screenReaderInstructionsId}
         instructions={screenReaderInstructions}
         announcementKey={screenReaderKey}
@@ -161,19 +178,19 @@ export default function InputDropdown({
           })
           : ''
         }
-      />
+      /> */}
       {shouldDisplayDropdown &&
-        <Dropdown
-          options={options}
-          optionIdPrefix={optionIdPrefix}
-          onClickOption={option => {
-            updateInputValue(option.value);
-            onSubmit(option.value)
-            dispatch({ type: 'HideOptions' })
-          }}
-          focusedOptionIndex={focusedOptionIndex}
-          cssClasses={cssClasses}
-        />
+        childrenWithProps
+        // <Dropdown
+        //   optionIdPrefix={optionIdPrefix}
+        //   onClickOption={option => {
+        //     updateInputValue(option.value);
+        //     onSubmit(option.value)
+        //     dispatch({ type: 'HideDropdown' })
+        //   }}
+        //   focusedOptionIndex={focusedOptionIndex}
+        //   cssClasses={cssClasses}
+        // />
       }
     </>
   );

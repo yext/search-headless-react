@@ -6,6 +6,7 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
+import Section from './Section';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -50,18 +51,21 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         placeholder={placeholder}
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
-        options={autocompleteResults.map(result => {
-          return {
-            value: result.value,
-            render: () => renderWithHighlighting(result)
-          }
-        })}
+        // options={autocompleteResults.map(result => {
+        //   return {
+        //     value: result.value,
+        //     render: () => renderWithHighlighting(result)
+        //   }
+        // })}
         optionIdPrefix='Autocomplete__option'
         onSubmit={executeQuery}
         updateInputValue={value => {
           answersActions.setQuery(value);
         }}
-        updateDropdown={() => {
+        onInputClick={() => {
+          executeAutocomplete();
+        }}
+        onInputChange={() => {
           executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
@@ -72,7 +76,11 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer'
         }}
-      />
+      >
+        <Section></Section>
+        <Section></Section>
+        <Section></Section>
+      </InputDropdown>
     </div>
   )
 }
