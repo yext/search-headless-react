@@ -15,7 +15,7 @@ export type Composition = 'merge' | 'replace' | 'assign';
  * @param builtInClasses The component's built-in css classes
  * @param customClasses The custom classes to combine with the built-in ones
  * @param composition The method of combining the built-in classes with the custom classes
- * @returns 
+ * @returns The composed CSS classes
  */
 export function composeCssClasses<ClassInterface> (
   builtInClasses: ClassInterface,
@@ -35,7 +35,7 @@ export function composeCssClasses<ClassInterface> (
 /**
  * Transforms the Composition types to the Compose types of the css-modules-theme library
  * @param composition The composition method
- * @returns 
+ * @returns The css-modules-theme Compose type
  */
 function getCssModulesCompose(composition?: Composition): Compose {
   if (composition === 'replace') {
@@ -50,7 +50,7 @@ function getCssModulesCompose(composition?: Composition): Compose {
 /**
  * Returns true if the object can be used a as css-modules-theme Theme
  * @param obj The object to test
- * @returns 
+ * @returns Whether or not the object is a Theme object
  */
 function isThemeObject (obj: unknown): obj is Theme {
   if (obj === null || typeof obj !== 'object') {
