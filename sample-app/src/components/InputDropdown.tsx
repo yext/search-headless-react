@@ -192,7 +192,10 @@ export default function InputDropdown({
         instructionsId={screenReaderInstructionsId}
         instructions={screenReaderInstructions}
         announcementKey={screenReaderKey}
-        announcementText={screenReaderKey ? screenReaderText : ''}
+        announcementText={screenReaderKey
+          ? screenReaderText
+          : ''
+        }
       />
       {shouldDisplayDropdown && numSections > 0 &&
         <div
