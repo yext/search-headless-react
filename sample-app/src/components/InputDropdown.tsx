@@ -104,11 +104,15 @@ export default function InputDropdown({
 
   const numSections = childrenWithProps.length;
 
-  function onLeaveSectionFocus(focusNext: boolean) {
-    if (focusedSectionIndex === undefined && focusNext) {
+  /**
+   * Handles changing which section should become focused when focus leaves the currently-focused section.
+   * @param pastEnd Whether the section focus left from the end or the beginning of the section.
+   */
+  function onLeaveSectionFocus(pastEnd: boolean) {
+    if (focusedSectionIndex === undefined && pastEnd) {
       dispatch({ type: 'FocusSection', newIndex: 0 });
     } else if (focusedSectionIndex !== undefined) {
-      let newSectionIndex: number | undefined = focusNext
+      let newSectionIndex: number | undefined = pastEnd
         ? focusedSectionIndex + 1
         : focusedSectionIndex - 1;
       if (newSectionIndex < 0) {
@@ -151,7 +155,7 @@ export default function InputDropdown({
     }
   });
 
-  function onKeyDown(evt: KeyboardEvent<HTMLInputElement>) {
+  function handleInputElementKeydown(evt: KeyboardEvent<HTMLInputElement>) {
     if (evt.key === 'Enter') {
       onInputChange(inputValue);
       onSubmit(inputValue);
@@ -180,7 +184,7 @@ export default function InputDropdown({
               setScreenReaderKey(screenReaderKey + 1);
             }
           }}
-          onKeyDown={onKeyDown}
+          onKeyDown={handleInputElementKeydown}
           value={inputValue}
           ref={inputRef}
           aria-describedby={screenReaderInstructionsId}
