@@ -6,6 +6,8 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
+import DropdownSection, { Option } from './DropdownSection';
+import { processTranslation } from './utils/processTranslation';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -23,6 +25,19 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
   const query = useAnswersState(state => state.query.input);
   const [ autocompleteResults, executeAutocomplete ] = useAutocomplete(isVertical);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
+
+  const options = autocompleteResults.map(result => {
+    return {
+      value: result.value,
+      display: renderWithHighlighting(result)
+    }
+  });
+
+  const screenReaderText = processTranslation({
+    phrase: `${options.length} autocomplete option found.`,
+    pluralForm: `${options.length} autocomplete options found.`,
+    count: options.length
+  });
 
   function executeQuery () {
     isVertical
@@ -50,15 +65,9 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         placeholder={placeholder}
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
-        options={autocompleteResults.map(result => {
-          return {
-            value: result.value,
-            render: () => renderWithHighlighting(result)
-          }
-        })}
-        optionIdPrefix='Autocomplete__option'
+        screenReaderText={screenReaderText}
         onSubmit={executeQuery}
-        onInputChange={value => {
+        onInputChange={(value) => {
           answersActions.setQuery(value);
         }}
         onInputFocus={() => {
@@ -66,13 +75,30 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
-          optionContainer: 'Autocomplete',
-          option: 'Autocomplete__option',
-          focusedOption: 'Autocomplete__option--focused',
+          dropdownContainer: 'Autocomplete',
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer'
         }}
-      />
+      >
+        <DropdownSection<Option>
+          options={options}
+          optionIdPrefix={`Autocomplete__option-${0}`}
+          onFocusChange={(value) => {
+            answersActions.setQuery(value);
+          }}
+          onClickOption={(option) => {
+            answersActions.setQuery(option.value);
+            executeQuery();
+          }}
+          cssClasses={{
+            sectionContainer: 'Autocomplete__dropdownSection',
+            sectionLabel: 'Autocomplete__sectionLabel',
+            optionsContainer: 'Autocomplete_sectionOptions',
+            option: 'Autocomplete__option',
+            focusedOption: 'Autocomplete__option--focused'
+          }}
+        />
+      </InputDropdown>
     </div>
   )
 }
