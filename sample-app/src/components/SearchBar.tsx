@@ -103,10 +103,10 @@ export default function SearchBar({
           <DropdownSection
             options={options}
             optionIdPrefix={'Autocomplete__option-0'}
-            onFocusChange={(value) => {
+            onFocusChange={value => {
               answersActions.setQuery(value);
             }}
-            onClickOption={(option) => {
+            onClickOption={option => {
               answersActions.setQuery(option.value);
               executeQuery();
             }}
