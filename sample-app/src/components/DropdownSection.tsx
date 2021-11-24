@@ -75,8 +75,6 @@ export default function DropdownSection({
   useEffect(() => {
     if (focusStatus === 'active') {
       onFocusChange(options[focusedOptionIndex].value, `${optionIdPrefix}-${focusedOptionIndex}`);
-    } else if (focusStatus === 'reset') {
-      setFocusedOptionIndex(0);
     }
   }, [focusStatus]);
 

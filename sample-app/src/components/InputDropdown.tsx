@@ -66,6 +66,7 @@ export default function InputDropdown({
 
   const [focusedOptionId, setFocusedOptionId] = useState<string | undefined>(undefined);
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
+  const [childrenKey, setChildrenKey] = useState(0);
   const [screenReaderKey, setScreenReaderKey] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
@@ -92,7 +93,7 @@ export default function InputDropdown({
     };
 
     if (focusedSectionIndex === undefined) {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'reset', onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
         onLeaveSectionFocus, focusStatus: 'active', onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
@@ -171,14 +172,16 @@ export default function InputDropdown({
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
-            dispatch({ type: 'ShowSections' });
             setLatestUserInput(value);
             onInputChange(value);
             onInputFocus();
+            setChildrenKey(childrenKey + 1);
+            dispatch({ type: 'ShowSections' });
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
             onInputFocus();
+            setChildrenKey(childrenKey + 1);
             dispatch({ type: 'ShowSections' });
             if (numSections > 0 || inputValue) {
               setScreenReaderKey(screenReaderKey + 1);
