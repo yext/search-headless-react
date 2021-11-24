@@ -106,13 +106,13 @@ export default function InputDropdown({
 
   /**
    * Handles changing which section should become focused when focus leaves the currently-focused section.
-   * @param pastEnd Whether the section focus left from the end or the beginning of the section.
+   * @param pastSectionEnd Whether the section focus left from the end or the beginning of the section.
    */
-  function onLeaveSectionFocus(pastEnd: boolean) {
-    if (focusedSectionIndex === undefined && pastEnd) {
+  function onLeaveSectionFocus(pastSectionEnd: boolean) {
+    if (focusedSectionIndex === undefined && pastSectionEnd) {
       dispatch({ type: 'FocusSection', newIndex: 0 });
     } else if (focusedSectionIndex !== undefined) {
-      let newSectionIndex: number | undefined = pastEnd
+      let newSectionIndex: number | undefined = pastSectionEnd
         ? focusedSectionIndex + 1
         : focusedSectionIndex - 1;
       if (newSectionIndex < 0) {

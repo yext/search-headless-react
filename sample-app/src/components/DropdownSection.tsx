@@ -11,7 +11,7 @@ export interface DropdownSectionProps {
   options: Option[],
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
-  onLeaveSectionFocus?: (pastEnd: boolean) => void,
+  onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
   onClickOption?: (option: Option, optionIndex: number) => void,
   label?: string,
   cssClasses: {
