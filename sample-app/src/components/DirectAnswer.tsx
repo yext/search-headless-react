@@ -1,5 +1,5 @@
 import { useAnswersState } from "@yext/answers-headless-react";
-import { FeaturedSnippetDirectAnswer, FieldValueDirectAnswer } from '@yext/answers-headless';
+import { FeaturedSnippetDirectAnswer, FieldValueDirectAnswer, DirectAnswerType } from '@yext/answers-headless';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import classNames from "classnames";
 import '../sass/DirectAnswer.scss';
@@ -7,6 +7,7 @@ import '../sass/DirectAnswer.scss';
 interface DirectAnswerProps {
   cssClasses?: {
     container?: string,
+    containerLoading?: string,
     title?: string,
     content?: string,
     description?: string
@@ -15,16 +16,11 @@ interface DirectAnswerProps {
 
 const defaultCSSClasses = {
   container: 'DirectAnswer',
+  containerLoading: 'DirectAnswer--loading',
   title: 'DirectAnswer__title',
   content: 'DirectAnswer__content',
   description: 'DirectAnswer__contentDescription'
 };
-
-function isFeaturedSnippetDirectAnswer(
-  answer: FeaturedSnippetDirectAnswer | FieldValueDirectAnswer
-): answer is FeaturedSnippetDirectAnswer {
-  return 'snippet' in answer;
-}
 
 export default function DirectAnswer(props: DirectAnswerProps): JSX.Element | null {
   const directAnswerResult = useAnswersState(state => state.directAnswer.result);
@@ -32,20 +28,20 @@ export default function DirectAnswer(props: DirectAnswerProps): JSX.Element | nu
   if (!directAnswerResult) {
     return null;
   }
-  const { cssClasses:customCssClasses } = props;
+  const { cssClasses: customCssClasses } = props;
   const cssClasses = Object.assign(defaultCSSClasses, customCssClasses);
-  const containerCssClasses = classNames(cssClasses.container, { [`${cssClasses.container}--loading`]: isLoading });
+  const containerCssClasses = classNames(cssClasses.container, { [cssClasses.containerLoading]: isLoading });
 
   return (
     <div className={containerCssClasses}>
       <div className={cssClasses.title}>
-        {isFeaturedSnippetDirectAnswer(directAnswerResult)
+        {directAnswerResult.type === DirectAnswerType.FeaturedSnippet
           ? directAnswerResult.value
           : `${directAnswerResult.entityName} / ${directAnswerResult.fieldName}`}
       </div>
       <div className={cssClasses.content}>
         <div className={cssClasses.description}>
-          {isFeaturedSnippetDirectAnswer(directAnswerResult) 
+          {directAnswerResult.type === DirectAnswerType.FeaturedSnippet 
             ? renderWithHighlighting(directAnswerResult.snippet)
             : directAnswerResult.value}
         </div>
