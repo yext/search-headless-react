@@ -1,6 +1,7 @@
 import ResultsCount from '../components/ResultsCount';
 import AlternativeVerticals from '../components/AlternativeVerticals';
 import DecoratedAppliedFilters from '../components/DecoratedAppliedFilters';
+import DirectAnswer from '../components/DirectAnswer';
 import StaticFilters from '../components/StaticFilters';
 import VerticalResults from '../components/VerticalResults';
 import SpellCheck from '../components/SpellCheck';
@@ -108,6 +109,7 @@ export default function VerticalSearchPage(props: {
         />
       </div>
       <div className='end'>
+        <DirectAnswer />
         <ResultsCount />
         <DecoratedAppliedFilters
           showFieldNames={true}

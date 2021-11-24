@@ -1,4 +1,5 @@
 import UniversalResults from '../components/UniversalResults';
+import DirectAnswer from '../components/DirectAnswer';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import { SearchIntent } from '@yext/answers-headless';
@@ -36,6 +37,7 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
 
   return (
     <div className='UniversalSearchPage'>
+      <DirectAnswer />
       <UniversalResults
         appliedFiltersConfig={universalResultsFilterConfig}
         verticalConfigs={universalResultsConfig}
