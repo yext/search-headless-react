@@ -1,12 +1,9 @@
 import { useAnswersActions, useAnswersState, LocationBiasMethod } from '@yext/answers-headless-react';
+import { executeSearch, getUserLocation  } from '../utils/search-operations';
 
 interface Props {
   isVertical: boolean,
-  geolocationOptions?: {
-    enableHighAccuracy?: boolean,
-    timeout?: number,
-    maximumAge?: number
-  },
+  geolocationOptions?: PositionOptions,
   cssClasses?: {
     container: string,
     location: string,
@@ -15,11 +12,6 @@ interface Props {
   }
 }
 
-const defaultGeolocationOptions = {
-  enableHighAccuracy: false,
-  timeout: 6000,
-  maximumAge: 300000,
-};
 
 const defaultCSSClasses = {
   container: 'LocationBias',
@@ -30,9 +22,9 @@ const defaultCSSClasses = {
 
 export default function LocationBias(props: Props) {
   const answersActions = useAnswersActions();
+  const { isVertical, geolocationOptions, cssClasses: customCssClasses } = props;
   const locationBias = useAnswersState(s => s.location.locationBias)
-  const geolocationOptions = Object.assign(defaultGeolocationOptions, props.geolocationOptions);
-  const cssClasses = Object.assign(defaultCSSClasses, props.cssClasses);
+  const cssClasses = Object.assign(defaultCSSClasses, customCssClasses);
 
   if (!locationBias?.displayName) return null;
 
@@ -41,20 +33,17 @@ export default function LocationBias(props: Props) {
         : locationBias?.method === LocationBiasMethod.Device ? '(based on your device)'
           : '';
 
-  function handleGeolocationClick() {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        answersActions.setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-        props.isVertical
-          ? answersActions.executeVerticalQuery()
-          : answersActions.executeUniversalQuery()
-      },
-      (err) => console.error(err),
-      geolocationOptions);
+  async function handleGeolocationClick() {
+    try {
+      const position = await getUserLocation(geolocationOptions);
+      answersActions.setUserLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    } catch (e) {
+      console.error(e);
     }
+    executeSearch(answersActions, isVertical);
   }
 
   return (
@@ -67,7 +56,10 @@ export default function LocationBias(props: Props) {
           {attributionMessage}
         </span>
       )}
-      <button className={cssClasses.button} onClick={handleGeolocationClick}>
+      <button 
+        className={cssClasses.button}
+        onClick={handleGeolocationClick}
+      >
         Update your location
       </button>
     </div>

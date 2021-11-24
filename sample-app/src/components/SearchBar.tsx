@@ -8,30 +8,44 @@ import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import DropdownSection, { Option } from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
+import { useRef } from 'react';
+import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
+import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
 interface Props {
   placeholder?: string,
   isVertical: boolean,
+  geolocationOptions?: PositionOptions,
   screenReaderInstructionsId: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an Autocomplete component
  */
-export default function SearchBar({ placeholder, isVertical, screenReaderInstructionsId }: Props) {
+export default function SearchBar({
+  placeholder,
+  isVertical,
+  geolocationOptions,
+  screenReaderInstructionsId 
+}: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
-  const [ autocompleteResults, executeAutocomplete ] = useAutocomplete(isVertical);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
+  /**
+   * Allow a query search to wait on the response to the autocomplete request right
+   * before the search execution in order to retrieve the search intents
+   */
+  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse|undefined>>();
+  const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
 
-  const options = autocompleteResults.map(result => {
+  const options = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
       display: renderWithHighlighting(result)
     }
-  });
+  }) ?? [];
 
   const screenReaderText = processTranslation({
     phrase: `${options.length} autocomplete option found.`,
@@ -39,10 +53,14 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
     count: options.length
   });
 
-  function executeQuery () {
-    isVertical
-      ? answersActions.executeVerticalQuery()
-      : answersActions.executeUniversalQuery();
+  async function executeQuery () {
+    let intents: SearchIntent[] = [];
+    if (!answersActions.state.location.userLocation) {
+      const autocompleteResponseBeforeSearch = await autocompletePromiseRef.current;
+      intents = autocompleteResponseBeforeSearch?.inputIntents || [];
+      await updateLocationIfNeeded(answersActions, intents, geolocationOptions);
+    }
+    executeSearch(answersActions, isVertical);
   }
 
   function renderSearchButton () {
@@ -71,7 +89,7 @@ export default function SearchBar({ placeholder, isVertical, screenReaderInstruc
           answersActions.setQuery(value);
         }}
         onInputFocus={() => {
-          executeAutocomplete();
+          autocompletePromiseRef.current = executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
         cssClasses={{

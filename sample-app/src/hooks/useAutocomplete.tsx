@@ -1,19 +1,28 @@
 import { useRef, useState } from "react";
-import { AutocompleteResult, useAnswersActions } from '@yext/answers-headless-react';
+import { AutocompleteResponse, useAnswersActions } from '@yext/answers-headless-react';
 
-export function useAutocomplete(isVertical: boolean): [AutocompleteResult[], () => Promise<void>] {
+export function useAutocomplete(
+  isVertical: boolean
+): [ 
+    AutocompleteResponse|undefined,
+    () => Promise<AutocompleteResponse|undefined> 
+  ]
+{
   const answersActions = useAnswersActions();
   const autocompleteNetworkIds = useRef({ latestRequest: 0, responseInState: 0 });
-  const [ autocompleteResults, setAutocompleteResults ] = useState<AutocompleteResult[]>([]);
-  async function executeAutocomplete () {
+  const [ autocompleteResponse, setAutocompleteResponse ] = useState<AutocompleteResponse>();
+  async function executeAutocomplete (): Promise<AutocompleteResponse|undefined>  {
     const requestId = ++autocompleteNetworkIds.current.latestRequest;
-    const response = isVertical
-      ? await answersActions.executeVerticalAutocomplete()
-      : await answersActions.executeUniversalAutocomplete();
-    if (requestId >= autocompleteNetworkIds.current.responseInState) {
-      setAutocompleteResults(response?.results || []);
-      autocompleteNetworkIds.current.responseInState = requestId;
-    }
+    return new Promise(async (resolve) => {
+      const response = isVertical
+        ? await answersActions.executeVerticalAutocomplete()
+        : await answersActions.executeUniversalAutocomplete();
+      if (requestId >= autocompleteNetworkIds.current.responseInState) {
+        setAutocompleteResponse(response);
+        autocompleteNetworkIds.current.responseInState = requestId;
+      }
+      resolve(response);
+    });
   }
-  return [ autocompleteResults, executeAutocomplete ]
+  return [ autocompleteResponse, executeAutocomplete ]
 };

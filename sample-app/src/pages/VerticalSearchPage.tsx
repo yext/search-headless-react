@@ -10,6 +10,12 @@ import '../sass/VerticalSearchPage.scss';
 import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
+import { SearchIntent } from '@yext/answers-headless';
+import {
+  executeSearch,
+  getSearchIntents,
+  updateLocationIfNeeded
+} from '../utils/search-operations';
 
 const countryFilterOptions = [
   {
@@ -68,7 +74,15 @@ export default function VerticalSearchPage(props: {
       universal: {}
     });
     answersActions.setVerticalKey(props.verticalKey);
-    answersActions.executeVerticalQuery();
+    const executeQuery = async () => {
+      let searchIntents: SearchIntent[] = [];
+      if (!answersActions.state.location.userLocation) {
+        searchIntents = await getSearchIntents(answersActions, true) || [];
+        await updateLocationIfNeeded(answersActions, searchIntents);
+      }
+      executeSearch(answersActions, true);
+    };
+    executeQuery();
   }, [answersActions, props.verticalKey]);
 
   return (
