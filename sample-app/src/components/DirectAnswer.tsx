@@ -1,5 +1,5 @@
 import { useAnswersState } from "@yext/answers-headless-react";
-import { FeaturedSnippetDirectAnswer, FieldValueDirectAnswer, DirectAnswerType } from '@yext/answers-headless';
+import { DirectAnswerType } from '@yext/answers-headless';
 import renderWithHighlighting from './utils/renderWithHighlighting';
 import classNames from "classnames";
 import '../sass/DirectAnswer.scss';
