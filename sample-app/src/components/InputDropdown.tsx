@@ -112,7 +112,11 @@ export default function InputDropdown({
       }
       dispatch({ type: 'FocusSection', newIndex: newSectionIndex });
     } else if (focusedSectionIndex === numSections - 1 && !focusNext) {
-      dispatch({ type: 'FocusSection', newIndex: focusedSectionIndex - 1 });
+      let newSectionIndex: number | undefined = focusedSectionIndex - 1;
+      if (newSectionIndex < 0) {
+        newSectionIndex = undefined;
+      }
+      dispatch({ type: 'FocusSection', newIndex: newSectionIndex });
     }
   }
 
@@ -153,6 +157,9 @@ export default function InputDropdown({
       dispatch({ type: 'FocusSection', newIndex: 0 });
     }
   }
+
+  console.log(numSections);
+  console.log(focusedSectionIndex);
 
   return (
     <>

@@ -98,24 +98,27 @@ export default function SearchBar({
           inputContainer: 'SearchBar__inputContainer'
         }}
       >
-        <DropdownSection<Option>
-          options={options}
-          optionIdPrefix={`Autocomplete__option-${0}`}
-          onFocusChange={(value) => {
-            answersActions.setQuery(value);
-          }}
-          onClickOption={(option) => {
-            answersActions.setQuery(option.value);
-            executeQuery();
-          }}
-          cssClasses={{
-            sectionContainer: 'Autocomplete__dropdownSection',
-            sectionLabel: 'Autocomplete__sectionLabel',
-            optionsContainer: 'Autocomplete_sectionOptions',
-            option: 'Autocomplete__option',
-            focusedOption: 'Autocomplete__option--focused'
-          }}
-        />
+        {
+          options.length > 0 &&
+          <DropdownSection<Option>
+            options={options}
+            optionIdPrefix={`Autocomplete__option-${0}`}
+            onFocusChange={(value) => {
+              answersActions.setQuery(value);
+            }}
+            onClickOption={(option) => {
+              answersActions.setQuery(option.value);
+              executeQuery();
+            }}
+            cssClasses={{
+              sectionContainer: 'Autocomplete__dropdownSection',
+              sectionLabel: 'Autocomplete__sectionLabel',
+              optionsContainer: 'Autocomplete_sectionOptions',
+              option: 'Autocomplete__option',
+              focusedOption: 'Autocomplete__option--focused'
+            }}
+          />
+        }
       </InputDropdown>
     </div>
   )
