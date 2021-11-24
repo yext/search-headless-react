@@ -80,7 +80,7 @@ export default function InputDropdown({
     if (!(React.isValidElement(child) && child.type === DropdownSection)) {
       return child;
     }
-    
+
     const modifiedOnClickOption = (option: Option, optionIndex: number) => {
       child.props.onClickOption?.(option, optionIndex);
       dispatch({ type: 'HideSections' });
@@ -94,7 +94,7 @@ export default function InputDropdown({
     if (focusedSectionIndex === undefined) {
       return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'reset', onClickOption: modifiedOnClickOption });
     } else if (index === focusedSectionIndex) {
-      return React.cloneElement(child, { 
+      return React.cloneElement(child, {
         onLeaveSectionFocus, focusStatus: 'active', onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
       });
     } else {
@@ -123,7 +123,7 @@ export default function InputDropdown({
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
-    if (!(target.isSameNode(inputRef.current) || (dropdownRef.current?.contains(target)))) {  
+    if (!(target.isSameNode(inputRef.current) || (dropdownRef.current?.contains(target)))) {
       dispatch({ type: 'HideSections' });
     }
   }

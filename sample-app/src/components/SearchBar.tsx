@@ -28,7 +28,7 @@ export default function SearchBar({
   placeholder,
   isVertical,
   geolocationOptions,
-  screenReaderInstructionsId 
+  screenReaderInstructionsId
 }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
@@ -37,8 +37,8 @@ export default function SearchBar({
    * Allow a query search to wait on the response to the autocomplete request right
    * before the search execution in order to retrieve the search intents
    */
-  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse|undefined>>();
-  const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
+  const [autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
 
   const options = autocompleteResponse?.results.map(result => {
     return {
