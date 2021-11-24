@@ -6,13 +6,13 @@ export interface Option {
   display: JSX.Element
 }
 
-interface DropdownSectionProps<T> {
+export interface DropdownSectionProps {
   focusStatus?: string,
-  options: T[],
+  options: Option[],
   optionIdPrefix: string,
-  onFocusChange: (value: string, focusedOptionId: string) => void,
+  onFocusChange?: (value: string, focusedOptionId: string) => void,
   onLeaveSectionFocus?: (focusNext: boolean) => void,
-  onClickOption: (option: T, optionIndex: number) => void,
+  onClickOption?: (option: Option, optionIndex: number) => void,
   label?: string,
   cssClasses: {
     sectionContainer: string,
@@ -23,29 +23,38 @@ interface DropdownSectionProps<T> {
   }
 }
 
-export default function DropdownSection<T extends Option>({
+export default function DropdownSection({
   focusStatus,
   options,
   optionIdPrefix,
-  onFocusChange,
+  onFocusChange = () => {},
   onLeaveSectionFocus = () => {},
-  onClickOption,
+  onClickOption = () => {},
   label = '',
   cssClasses
-}: DropdownSectionProps<T>): JSX.Element | null {
+}: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
 
-  function changeOptionFocus(focusNext: boolean) {
-    let newIndex = focusNext ? focusedOptionIndex + 1 : focusedOptionIndex - 1;
-
-    if (newIndex > -1 && newIndex < options.length) {
+  function incrementOptionFocus() {
+    let newIndex = focusedOptionIndex + 1;
+    if (newIndex < options.length) {
       onFocusChange(options[newIndex].value, `${optionIdPrefix}-${newIndex}`);
     } else {
-      focusNext ? onLeaveSectionFocus(true) : onLeaveSectionFocus(false);
-      newIndex = newIndex === -1 ? 0 : options.length - 1;
+      onLeaveSectionFocus(true);
+      newIndex = options.length - 1;
     }
+    setFocusedOptionIndex(newIndex);
+  }
 
+  function decrementOptionFocus() {
+    let newIndex = focusedOptionIndex - 1;
+    if (newIndex > -1) {
+      onFocusChange(options[newIndex].value, `${optionIdPrefix}-${newIndex}`);
+    } else {
+      onLeaveSectionFocus(false);
+      newIndex = 0;
+    }
     setFocusedOptionIndex(newIndex);
   }
 
@@ -56,9 +65,9 @@ export default function DropdownSection<T extends Option>({
       }
 
       if (evt.key === 'ArrowDown' || evt.key === 'ArrowRight') {
-        changeOptionFocus(true);
+        incrementOptionFocus();
       } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
-        changeOptionFocus(false);
+        decrementOptionFocus();
       }
     }
   }
@@ -78,7 +87,7 @@ export default function DropdownSection<T extends Option>({
     }
   });
 
-  function renderOption(option: T, index: number) {
+  function renderOption(option: Option, index: number) {
     const className = classNames(cssClasses.option, {
       [cssClasses.focusedOption]: focusStatus === 'active' && index === focusedOptionIndex
     })

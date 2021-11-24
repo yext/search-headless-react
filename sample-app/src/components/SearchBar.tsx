@@ -6,7 +6,7 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
-import DropdownSection, { Option } from './DropdownSection';
+import DropdownSection from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
 import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
@@ -85,7 +85,7 @@ export default function SearchBar({
         screenReaderInstructionsId={screenReaderInstructionsId}
         screenReaderText={screenReaderText}
         onSubmit={executeQuery}
-        onInputChange={(value) => {
+        onInputChange={value => {
           answersActions.setQuery(value);
         }}
         onInputFocus={() => {
@@ -100,9 +100,9 @@ export default function SearchBar({
       >
         {
           options.length > 0 &&
-          <DropdownSection<Option>
+          <DropdownSection
             options={options}
-            optionIdPrefix={`Autocomplete__option-${0}`}
+            optionIdPrefix={'Autocomplete__option-0'}
             onFocusChange={(value) => {
               answersActions.setQuery(value);
             }}

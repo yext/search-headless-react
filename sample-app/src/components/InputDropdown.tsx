@@ -1,4 +1,5 @@
 import React, { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
+import DropdownSection, { Option } from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
 
 interface Props {
@@ -76,24 +77,26 @@ export default function InputDropdown({
 
   const childrenArray = React.Children.toArray(children);
   const childrenWithProps = childrenArray.map((child, index) => {
-    if (!React.isValidElement(child)) {
+    if (!(React.isValidElement(child) && child.type === DropdownSection)) {
       return child;
     }
     
-    const modifiedOnClickOption : typeof child.props.onClickOption = (option: typeof child.props.options[0]) => {
-      child.props.onClickOption(option);
+    const modifiedOnClickOption = (option: Option, optionIndex: number) => {
+      child.props.onClickOption?.(option, optionIndex);
       dispatch({ type: 'HideSections' });
     }
 
     const modifiedOnFocusChange = (value: string, focusedOptionId: string) => {
-      child.props.onFocusChange(value);
+      child.props.onFocusChange?.(value, focusedOptionId);
       setFocusedOptionId(focusedOptionId);
     };
 
     if (focusedSectionIndex === undefined) {
       return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'reset', onClickOption: modifiedOnClickOption });
     } else if (index === focusedSectionIndex) {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'active', onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { 
+        onLeaveSectionFocus, focusStatus: 'active', onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
+      });
     } else {
       return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', onClickOption: modifiedOnClickOption });
     }
@@ -104,17 +107,15 @@ export default function InputDropdown({
   function onLeaveSectionFocus(focusNext: boolean) {
     if (focusedSectionIndex === undefined && focusNext) {
       dispatch({ type: 'FocusSection', newIndex: 0 });
-    } else if (focusedSectionIndex !== undefined && focusedSectionIndex < numSections - 1) {
-      let newSectionIndex: number | undefined = focusNext ? focusedSectionIndex + 1 : focusedSectionIndex - 1;
+    } else if (focusedSectionIndex !== undefined) {
+      let newSectionIndex: number | undefined = focusNext
+        ? focusedSectionIndex + 1
+        : focusedSectionIndex - 1;
       if (newSectionIndex < 0) {
         newSectionIndex = undefined;
         onInputChange(latestUserInput);
-      }
-      dispatch({ type: 'FocusSection', newIndex: newSectionIndex });
-    } else if (focusedSectionIndex === numSections - 1 && !focusNext) {
-      let newSectionIndex: number | undefined = focusedSectionIndex - 1;
-      if (newSectionIndex < 0) {
-        newSectionIndex = undefined;
+      } else if (newSectionIndex > numSections - 1) {
+        newSectionIndex = numSections - 1;
       }
       dispatch({ type: 'FocusSection', newIndex: newSectionIndex });
     }
@@ -122,14 +123,20 @@ export default function InputDropdown({
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
-    if (!(target.isSameNode(inputRef.current) || (dropdownRef.current !== null && dropdownRef.current.contains(target)))) {
+    if (!(target.isSameNode(inputRef.current) || (dropdownRef.current?.contains(target)))) {  
       dispatch({ type: 'HideSections' });
     }
   }
 
   function handleDocumentKeydown(evt: globalThis.KeyboardEvent) {
-    if ((evt.key === 'Escape' || evt.key === 'Tab')) {
+    if (['ArrowDown'].includes(evt.key)) {
+      evt.preventDefault();
+    }
+
+    if (evt.key === 'Escape' || evt.key === 'Tab') {
       dispatch({ type: 'HideSections' });
+    } else if (evt.key === 'ArrowDown' && numSections > 0 && focusedSectionIndex === undefined) {
+      dispatch({ type: 'FocusSection', newIndex: 0 });
     }
   }
 
@@ -145,21 +152,12 @@ export default function InputDropdown({
   });
 
   function onKeyDown(evt: KeyboardEvent<HTMLInputElement>) {
-    if (['ArrowDown', 'ArrowRight'].includes(evt.key)) {
-      evt.preventDefault();
-    }
-
     if (evt.key === 'Enter') {
       onInputChange(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideSections' });
-    } else if ((evt.key === 'ArrowDown' || evt.key === 'ArrowRight' ) && numSections > 0 && focusedSectionIndex === undefined) {
-      dispatch({ type: 'FocusSection', newIndex: 0 });
     }
   }
-
-  console.log(numSections);
-  console.log(focusedSectionIndex);
 
   return (
     <>
