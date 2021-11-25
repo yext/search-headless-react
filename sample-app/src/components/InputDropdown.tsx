@@ -96,10 +96,10 @@ export default function InputDropdown({
       return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
-        onLeaveSectionFocus, focusStatus: 'active', onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
+        onLeaveSectionFocus, focusStatus: 'active', key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
       });
     } else {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
     }
   });
 
