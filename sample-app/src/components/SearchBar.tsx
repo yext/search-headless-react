@@ -6,6 +6,8 @@ import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
+import DropdownSection from './DropdownSection';
+import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
 import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
 import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
@@ -26,7 +28,7 @@ export default function SearchBar({
   placeholder,
   isVertical,
   geolocationOptions,
-  screenReaderInstructionsId 
+  screenReaderInstructionsId
 }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
@@ -35,8 +37,21 @@ export default function SearchBar({
    * Allow a query search to wait on the response to the autocomplete request right
    * before the search execution in order to retrieve the search intents
    */
-  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse|undefined>>();
-  const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
+  const [autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+
+  const options = autocompleteResponse?.results.map(result => {
+    return {
+      value: result.value,
+      display: renderWithHighlighting(result)
+    }
+  }) ?? [];
+
+  const screenReaderText = processTranslation({
+    phrase: `${options.length} autocomplete option found.`,
+    pluralForm: `${options.length} autocomplete options found.`,
+    count: options.length
+  });
 
   async function executeQuery () {
     let intents: SearchIntent[] = [];
@@ -68,29 +83,43 @@ export default function SearchBar({
         placeholder={placeholder}
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
-        options={autocompleteResponse?.results.map(result => {
-          return {
-            value: result.value,
-            render: () => renderWithHighlighting(result)
-          }
-        }) ?? []}
-        optionIdPrefix='Autocomplete__option'
+        screenReaderText={screenReaderText}
         onSubmit={executeQuery}
-        updateInputValue={value => {
+        onInputChange={value => {
           answersActions.setQuery(value);
         }}
-        updateDropdown={() => {
+        onInputFocus={() => {
           autocompletePromiseRef.current = executeAutocomplete();
         }}
         renderButtons={renderSearchButton}
         cssClasses={{
-          optionContainer: 'Autocomplete',
-          option: 'Autocomplete__option',
-          focusedOption: 'Autocomplete__option--focused',
+          dropdownContainer: 'Autocomplete',
           inputElement: 'SearchBar__input',
           inputContainer: 'SearchBar__inputContainer'
         }}
-      />
+      >
+        {
+          options.length > 0 &&
+          <DropdownSection
+            options={options}
+            optionIdPrefix={'Autocomplete__option-0'}
+            onFocusChange={value => {
+              answersActions.setQuery(value);
+            }}
+            onClickOption={option => {
+              answersActions.setQuery(option.value);
+              executeQuery();
+            }}
+            cssClasses={{
+              sectionContainer: 'Autocomplete__dropdownSection',
+              sectionLabel: 'Autocomplete__sectionLabel',
+              optionsContainer: 'Autocomplete_sectionOptions',
+              option: 'Autocomplete__option',
+              focusedOption: 'Autocomplete__option--focused'
+            }}
+          />
+        }
+      </InputDropdown>
     </div>
   )
 }
