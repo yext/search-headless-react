@@ -9,7 +9,7 @@ import { useAutocomplete } from '../hooks/useAutocomplete';
 import DropdownSection from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
-import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
+import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless-react';
 import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
@@ -102,7 +102,7 @@ export default function SearchBar({
           options.length > 0 &&
           <DropdownSection
             options={options}
-            optionIdPrefix={'Autocomplete__option-0'}
+            optionIdPrefix='Autocomplete__option-0'
             onFocusChange={value => {
               answersActions.setQuery(value);
             }}
