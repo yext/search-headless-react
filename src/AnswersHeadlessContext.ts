@@ -1,4 +1,4 @@
-import { AnswersHeadless } from '@yext/answers-headless';
+import { AnswersHeadless } from '@yext/answers-headless-react';
 import { createContext } from 'react';
 
 // The default is empty because we don't know the user's config yet

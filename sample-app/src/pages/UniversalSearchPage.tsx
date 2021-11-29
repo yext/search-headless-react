@@ -2,7 +2,7 @@ import UniversalResults from '../components/UniversalResults';
 import DirectAnswer from '../components/DirectAnswer';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
-import { SearchIntent } from '@yext/answers-headless';
+import { SearchIntent } from '@yext/answers-headless-react';
 import '../sass/UniversalSearchPage.scss';
 import { UniversalResultsConfig } from '../universalResultsConfig';
 import {
