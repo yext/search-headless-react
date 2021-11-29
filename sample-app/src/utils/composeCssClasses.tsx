@@ -3,6 +3,7 @@ import { Compose, Theme } from '@css-modules-theme/core';
 
 /**
  * The method of combining a component's built-in CSS classes with custom CSS classes
+ *
  * @remarks
  * Merge keeps the component's built-in classes and adds the custom classes to them (default).
  * Replace ignore all of the component’s built-in classes and only uses the custom classes.
