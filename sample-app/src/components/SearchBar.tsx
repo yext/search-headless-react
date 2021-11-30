@@ -40,7 +40,7 @@ const builtInCssClasses: SearchBarCssClasses = {
   logoContainer: 'w-8 mx-2',
   searchButtonContainer: 'w-8 h-full mx-2',
   submitButton: 'h-full w-full',
-  dropdownContainer: 'relative bg-white pt-2 pb-1',
+  dropdownContainer: 'relative bg-white py-1',
   option: 'flex items-center py-1 px-2 cursor-pointer',
   focusedOption: 'bg-gray-100',
   divider: 'border mx-2',
