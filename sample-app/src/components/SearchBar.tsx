@@ -1,14 +1,14 @@
 import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
-import renderWithHighlighting from './utils/renderWithHighlighting';
+import renderHighlightedValue from './utils/renderHighlightedValue';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import { ReactComponent as YextLogoIcon } from '../icons/yext_logo.svg';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
 import { useRef } from 'react';
-import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless';
+import { AutocompleteResponse, AutocompleteResult, SearchIntent } from '@yext/answers-headless';
 import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
-import { composeCssClasses, CompositionMethod } from '../utils/composeCssClasses';
+import { useComposedCssClasses, CompositionMethod } from '../utils/useComposedCssClasses';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -62,7 +62,7 @@ export default function SearchBar({
   cssClasses: customCssClasses,
   cssCompositionMethod
 }: Props) {
-  const cssClasses = composeCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
@@ -96,6 +96,24 @@ export default function SearchBar({
     )
   }
 
+  function renderAutocompleteResult (result: AutocompleteResult) {
+    return <>
+      <div className={cssClasses.resultIconContainer}>
+        < MagnifyingGlassIcon/>
+      </div>
+      <div>
+        {renderAutocompleteValue(result)}
+      </div>
+    </>
+  }
+
+  function renderAutocompleteValue ({ value, matchedSubstrings }: AutocompleteResult) {
+    if (!matchedSubstrings || matchedSubstrings.length === 0) {
+      return <span>{value}</span>;
+    }
+    return renderHighlightedValue({ value, matchedSubstrings });
+  }
+
   return (
     <div className={cssClasses.container}>
       <div className={cssClasses.inputDropdownContainer}>
@@ -107,7 +125,7 @@ export default function SearchBar({
           options={autocompleteResponse?.results.map(result => {
             return {
               value: result.value,
-              render: () => <><div className={cssClasses.resultIconContainer}>< MagnifyingGlassIcon/></div>{renderWithHighlighting(result)}</>
+              render: () => renderAutocompleteResult(result)
             }
           }) ?? []}
           optionIdPrefix='Autocomplete__option'

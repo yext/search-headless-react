@@ -1,5 +1,6 @@
 import { composeTheme } from '@css-modules-theme/core';
 import { Compose, Theme } from '@css-modules-theme/core';
+import { useMemo } from 'react';
 
 /**
  * The method of combining a component's built-in CSS classes with custom CSS classes
@@ -7,10 +8,12 @@ import { Compose, Theme } from '@css-modules-theme/core';
  * @remarks
  * Merge keeps the component's built-in classes and adds the custom classes to them (default).
  * Replace ignore all of the component’s built-in classes and only uses the custom classes.
- * Assign keeps the component's built-in classes, however custom classes will completely override their associated built-in classes.
+ * Assign keeps the component's built-in classes, however custom classes will completely override their
+ * associated built-in classes.
  * 
  * @example
- * Suppose a component has a built-in theme of `{ icon: 'Icon', button: 'Button' }`, and it is provided a custom theme of `{ icon: 'Blue' }`
+ * Suppose a component has a built-in theme of `{ icon: 'Icon', button: 'Button' }`,
+ * and it is provided a custom theme of `{ icon: 'Blue' }`.
  * The various composition methods would result in the following composed themes:
  * Merge: { icon: 'Icon Blue', button: 'Button' }
  * Replace: { icon: 'Blue' }
@@ -19,25 +22,27 @@ import { Compose, Theme } from '@css-modules-theme/core';
 export type CompositionMethod = 'merge' | 'replace' | 'assign';
 
 /**
- * Combines a component's built-in CSS classes with custom CSS classes.
+ * A react hook which combines a component's built-in CSS classes with custom CSS classes.
  * @param builtInClasses The component's built-in css classes
  * @param customClasses The custom classes to combine with the built-in ones
  * @param compositionMethod The method of combining the built-in classes with the custom classes
  * @returns The composed CSS classes
  */
-export function composeCssClasses<ClassInterface> (
+export function useComposedCssClasses<ClassInterface> (
   builtInClasses: ClassInterface,
   customClasses?: ClassInterface,
   compositionMethod?: CompositionMethod
 ): ClassInterface | Theme {
-  if (!isThemeObject(customClasses)) {
-    return builtInClasses;
-  }
-  if (!isThemeObject(builtInClasses)) {
-    return customClasses ?? {};
-  }
-  const compose = getCssModulesCompose(compositionMethod);
-  return composeTheme([{ theme: builtInClasses }, { theme: customClasses, compose }]);
+  return useMemo(() => {
+    if (!isThemeObject(customClasses)) {
+      return builtInClasses;
+    }
+    if (!isThemeObject(builtInClasses)) {
+      return customClasses ?? {};
+    }
+    const compose = getCssModulesCompose(compositionMethod);
+    return composeTheme([{ theme: builtInClasses }, { theme: customClasses, compose }]);
+  }, [builtInClasses, customClasses, compositionMethod]);
 }
 
 /**

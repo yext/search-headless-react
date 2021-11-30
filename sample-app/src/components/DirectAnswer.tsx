@@ -1,6 +1,6 @@
 import { useAnswersState } from "@yext/answers-headless-react";
 import { DirectAnswerType } from '@yext/answers-headless';
-import renderWithHighlighting from './utils/renderWithHighlighting';
+import renderHighlightedValue from './utils/renderHighlightedValue';
 import classNames from "classnames";
 import '../sass/DirectAnswer.scss';
 
@@ -42,7 +42,7 @@ export default function DirectAnswer(props: DirectAnswerProps): JSX.Element | nu
       <div className={cssClasses.content}>
         <div className={cssClasses.description}>
           {directAnswerResult.type === DirectAnswerType.FeaturedSnippet 
-            ? renderWithHighlighting(directAnswerResult.snippet)
+            ? renderHighlightedValue(directAnswerResult.snippet)
             : directAnswerResult.value}
         </div>
         {directAnswerResult.relatedResult.link 

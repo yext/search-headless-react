@@ -1,19 +1,9 @@
-
-interface HighlightedValue {
-  value: string,
-  matchedSubstrings?: {
-    length: number,
-    offset: number
-  }[]
-}
+import { HighlightedValue } from "@yext/answers-core";
 
 /**
  * Renders an AutocompleteResult with highlighting based on its matchedSubstrings.
  */
-export default function renderWithHighlighting ({ value, matchedSubstrings }: HighlightedValue): JSX.Element {
-  if (!matchedSubstrings || matchedSubstrings.length === 0) {
-    return <span>{value}</span>;
-  }
+export default function renderHighlightedValue ({ value, matchedSubstrings }: HighlightedValue): JSX.Element {
   const substrings = [...matchedSubstrings];
   substrings.sort((a, b) => a.offset - b.offset);
   const highlightedJSX = []

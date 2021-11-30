@@ -3,7 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { NavLink, useLocation } from 'react-router-dom';
 import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
 import '../sass/Navigation.scss';
-import { composeCssClasses } from '../utils/composeCssClasses';
+import { useComposedCssClasses } from '../utils/useComposedCssClasses';
 
 interface NavigationCssClasses {
   wrapper?: string,
@@ -29,7 +29,7 @@ interface NavigationProps {
 }
 
 export default function Navigation({ links, cssClasses }: NavigationProps) {
-  const classes = composeCssClasses(builtInCssClasses, cssClasses);
+  const classes = useComposedCssClasses(builtInCssClasses, cssClasses);
   // Close the menu when clicking the document
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLButtonElement>(null);
