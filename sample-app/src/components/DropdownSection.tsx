@@ -7,7 +7,7 @@ export interface Option {
 }
 
 export interface DropdownSectionProps {
-  focusStatus?: string,
+  isFocused?: boolean,
   options: Option[],
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
@@ -24,7 +24,7 @@ export interface DropdownSectionProps {
 }
 
 export default function DropdownSection({
-  focusStatus,
+  isFocused = false,
   options,
   optionIdPrefix,
   onFocusChange = () => {},
@@ -35,7 +35,7 @@ export default function DropdownSection({
 }: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
-  const wasActive = useRef<boolean>(focusStatus === 'active');
+  const wasFocused = useRef<boolean>(isFocused);
 
   function incrementOptionFocus() {
     let newIndex = focusedOptionIndex + 1;
@@ -74,22 +74,22 @@ export default function DropdownSection({
   }
 
   useEffect(() => {
-    if (focusStatus === 'active') {
-      if (!wasActive.current) {
+    if (isFocused) {
+      if (!wasFocused.current) {
         onFocusChange(options[focusedOptionIndex].value, `${optionIdPrefix}-${focusedOptionIndex}`);
       }
-      wasActive.current = true;
+      wasFocused.current = true;
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
     }
     else {
-      wasActive.current = false;
+      wasFocused.current = false;
     }
   });
 
   function renderOption(option: Option, index: number) {
     const className = classNames(cssClasses.option, {
-      [cssClasses.focusedOption]: focusStatus === 'active' && index === focusedOptionIndex
+      [cssClasses.focusedOption]: isFocused && index === focusedOptionIndex
     })
     return (
       <div
