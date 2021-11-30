@@ -17,7 +17,7 @@ const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use 
 const builtInCssClasses: SearchBarCssClasses = {
   container: 'h-12',
   divider: 'border mx-2',
-  dropdownContainer: 'relative bg-white py-1',
+  dropdownContainer: 'relative bg-white py-1 z-10',
   focusedOption: 'bg-gray-100',
   inputContainer: 'h-12 inline-flex items-center justify-between w-full',
   inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
@@ -114,10 +114,15 @@ export default function SearchBar({
     )
   }
 
+  /**
+   * Renders an autocomplete result including the icon to the left
+   * @param result The result to render
+   * @returns JSX.Element
+   */
   function renderAutocompleteResult (result: AutocompleteResult) {
     return <>
       <div className={cssClasses.resultIconContainer}>
-        < MagnifyingGlassIcon/>
+        <MagnifyingGlassIcon/>
       </div>
       <div>
         {renderAutocompleteValue(result)}
@@ -125,6 +130,10 @@ export default function SearchBar({
     </>
   }
 
+  /**
+   * Renders a particular autocopmlete value which may include highlighting
+   * @returns JSX.Element
+   */
   function renderAutocompleteValue ({ value, matchedSubstrings }: AutocompleteResult) {
     if (!matchedSubstrings || matchedSubstrings.length === 0) {
       return <span>{value}</span>;

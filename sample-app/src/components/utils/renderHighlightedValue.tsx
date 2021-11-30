@@ -1,4 +1,4 @@
-import { HighlightedValue } from "@yext/answers-core";
+import { HighlightedValue } from "@yext/answers-headless-react";
 
 /**
  * Renders an AutocompleteResult with highlighting based on its matchedSubstrings.
