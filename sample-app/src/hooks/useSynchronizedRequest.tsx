@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
 
-export function useSynchronizedRequest<T>(
-  executeRequest: (inputValue?: string) => Promise<T | undefined>
+export function useSynchronizedRequest<RequestParams, ResponseType>(
+  executeRequest: (data?: RequestParams) => Promise<ResponseType | undefined>
 ): [
-    T | undefined,
-    (inputValue?: string) => Promise<T | undefined>
+    ResponseType | undefined,
+    (data?: RequestParams) => Promise<ResponseType | undefined>
   ]
 {
   const networkIds = useRef({ latestRequest: 0, responseInState: 0 });
-  const [synchronizedResponse, setSynchronizedResponse] = useState<T>();
-  async function executeSynchronizedRequest (inputValue?: string): Promise<T | undefined> {
+  const [synchronizedResponse, setSynchronizedResponse] = useState<ResponseType>();
+  async function executeSynchronizedRequest (data?: RequestParams): Promise<ResponseType | undefined> {
     const requestId = ++networkIds.current.latestRequest;
     return new Promise(async (resolve) => {
-      const response = await executeRequest(inputValue);
+      const response = await executeRequest(data);
       if (requestId >= networkIds.current.responseInState) {
         setSynchronizedResponse(response);
         networkIds.current.responseInState = requestId;

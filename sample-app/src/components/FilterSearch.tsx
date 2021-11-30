@@ -1,10 +1,8 @@
-import { SearchParameterField } from "@yext/answers-headless";
 import { useState } from "react";
-import { useAnswersActions } from '@yext/answers-headless-react';
+import { useAnswersActions, FilterSearchResponse, SearchParameterField } from '@yext/answers-headless-react';
 import InputDropdown from "./InputDropdown";
 import renderWithHighlighting from "./utils/renderWithHighlighting";
-import { Option } from "./DropdownSection";
-import DropdownSection from "./DropdownSection";
+import DropdownSection, { Option } from "./DropdownSection";
 import { processTranslation } from "./utils/processTranslation";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
 
@@ -40,7 +38,7 @@ export default function FilterSearch ({
     return { ...searchField, fetchEntities: false }
   });
 
-  const [filterSearchResponse, executeFilterSearch] = useSynchronizedRequest(inputValue =>
+  const [filterSearchResponse, executeFilterSearch] = useSynchronizedRequest<string, FilterSearchResponse>(inputValue =>
     answersActions.executeFilterSearch(inputValue ?? '', sectioned, searchParamFields)
   );
 
