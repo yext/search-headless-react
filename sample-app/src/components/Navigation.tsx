@@ -6,10 +6,15 @@ import '../sass/Navigation.scss';
 import { composeCssClasses } from '../utils/composeCssClasses';
 
 interface NavigationCssClasses {
-  linksWrapper?: string
+  wrapper?: string,
+  linksWrapper?: string,
+  menuWrapper?: string,
+  link?: string,
+  activeNavLink?: string
 }
 
 const builtInCssClasses: NavigationCssClasses = {
+  wrapper: '',
   linksWrapper: 'block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
 }
 
@@ -72,12 +77,12 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
     'Navigation__menuButton--open': menuOpen
   });
   return (
-    <nav className='Navigation' ref={navigationRef}>
+    <nav className={classes.wrapper} ref={navigationRef}>
       <div className={classes.linksWrapper}>
-        {visibleLinks.map(l => renderLink(l, search))}
+        {visibleLinks.map(l => renderLink(l, search, classes))}
       </div>
       {numOverflowLinks > 0 &&
-        <div className='Navigation__menuWrapper'>
+        <div className={classes.menuWrapper}>
           <button
             className={menuButtonClassNames}
             ref={menuRef}
@@ -86,7 +91,7 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
             <KebabIcon /> More
           </button>
           <div className='Navigation__menuLinks'>
-            {menuOpen && overflowLinks.map(l => renderLink(l, search))}
+            {menuOpen && overflowLinks.map(l => renderLink(l, search, classes))}
           </div>
         </div>
       }
@@ -94,13 +99,17 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
   )
 }
 
-function renderLink(linkData: LinkData, queryParams: string) {
+function renderLink(
+  linkData: LinkData,
+  queryParams: string,
+  cssClasses: { link?: string, activeNavLink?: string }) 
+{
   const { to, label } = linkData;
   return (
     <NavLink
       key={to}
-      className='Navigation__link'
-      activeClassName='Navigation__link--currentRoute'
+      className={cssClasses.link}
+      activeClassName={cssClasses.activeNavLink}
       to={`${to}${queryParams}`}
       exact={true}
     >
