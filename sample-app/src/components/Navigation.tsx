@@ -26,6 +26,7 @@ export default function Navigation({ links }: NavigationProps) {
     document.addEventListener('click', handleDocumentClick)
     return () => document.removeEventListener('click', handleDocumentClick);
   }, []);
+
   // Responsive tabs
   const [numOverflowLinks, setNumOverflowLinks] = useState<number>(0);
   const navigationRef = useRef<HTMLDivElement>(null);
@@ -52,6 +53,7 @@ export default function Navigation({ links }: NavigationProps) {
     window.addEventListener('resize', resizeListener);
     return () => window.removeEventListener('resize', resizeListener);
   }, [handleResize]);
+
   const { search } = useLocation();
   const visibleLinks = links.slice(0, links.length - numOverflowLinks);
   const overflowLinks = links.slice(-numOverflowLinks);
