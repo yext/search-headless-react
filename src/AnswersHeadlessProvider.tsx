@@ -1,7 +1,7 @@
 import { ReactChild, ReactChildren } from 'react';
 import { provideAnswersHeadless, AnswersHeadless, AnswersConfig } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
-import { v4 as uuidv4 } from 'uuid';
+import acquireSessionId from './utils/acquireSessionId';
 
 type Props = AnswersConfig & {
   children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[],
@@ -23,18 +23,4 @@ export function AnswersHeadlessProvider(props: Props): JSX.Element {
       {children}
     </AnswersHeadlessContext.Provider>
   );
-}
-
-function acquireSessionId(): string | null {
-  try {
-    let sessionId = window.sessionStorage.getItem('sessionId');
-    if (!sessionId) {
-      sessionId = uuidv4();
-      window.sessionStorage.setItem('sessionId', sessionId);
-    }
-    return sessionId;
-  } catch (err) {
-    console.warn('Unable to use browser sessionStorage for sessionId.\n', err);
-    return null;
-  }
 }
