@@ -10,7 +10,7 @@ import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
 import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless-react';
 import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
-import { useComposedCssClasses, CompositionMethod } from '../utils/useComposedCssClasses';
+import { useComposedCssClasses, CompositionMethod } from '../hooks/useComposedCssClasses';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
