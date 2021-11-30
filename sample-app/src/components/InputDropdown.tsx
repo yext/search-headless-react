@@ -13,16 +13,18 @@ interface Props {
   onSubmit?: (value: string) => void,
   updateInputValue: (value: string) => void,
   updateDropdown: () => void,
-  renderButtons?: () => JSX.Element | null,
-  renderIcon?: () => JSX.Element | null,
+  renderSearchButton?: () => JSX.Element | null,
+  renderLogo?: () => JSX.Element | null,
+  renderResultIcon?: () => JSX.Element | null,
   cssClasses: {
     dropdownContainer?: string,
     option?: string,
     focusedOption?: string,
     inputElement?: string,
     inputContainer?: string,
-    iconContainer?: string,
-    buttonContainer?: string
+    logoContainer?: string,
+    searchButtonContainer?: string,
+    divider?: string
   }
 }
 
@@ -60,8 +62,8 @@ export default function InputDropdown({
   onSubmit = () => {},
   updateInputValue,
   updateDropdown,
-  renderButtons = () => null,
-  renderIcon = () => null,
+  renderSearchButton = () => null,
+  renderLogo = () => null,
   cssClasses
 }: Props): JSX.Element | null {
   const [{
@@ -127,8 +129,8 @@ export default function InputDropdown({
   return (
     <>
       <div className={cssClasses.inputContainer}>
-        <div className={cssClasses.iconContainer}>
-          {renderIcon()}
+        <div className={cssClasses.logoContainer}>
+          {renderLogo()}
         </div>
         <input
           className={cssClasses.inputElement}
@@ -154,8 +156,8 @@ export default function InputDropdown({
           aria-describedby={screenReaderInstructionsId}
           aria-activedescendant={focusOptionId}
         />
-        <div className={cssClasses.buttonContainer}>
-          {renderButtons()}
+        <div className={cssClasses.searchButtonContainer}>
+          {renderSearchButton()}
         </div>
       </div>
       <ScreenReader
@@ -171,18 +173,21 @@ export default function InputDropdown({
           : ''
         }
       />
-      {shouldDisplayDropdown &&
-        <Dropdown
-          options={options}
-          optionIdPrefix={optionIdPrefix}
-          onClickOption={option => {
-            updateInputValue(option.value);
-            onSubmit(option.value)
-            dispatch({ type: 'HideOptions' })
-          }}
-          focusedOptionIndex={focusedOptionIndex}
-          cssClasses={cssClasses}
-        />
+      {shouldDisplayDropdown && options.length > 0 &&
+        <>
+          <div className={cssClasses.divider}></div>
+          <Dropdown
+            options={options}
+            optionIdPrefix={optionIdPrefix}
+            onClickOption={option => {
+              updateInputValue(option.value);
+              onSubmit(option.value)
+              dispatch({ type: 'HideOptions' })
+            }}
+            focusedOptionIndex={focusedOptionIndex}
+            cssClasses={cssClasses}
+          />
+        </>
       }
     </>
   );

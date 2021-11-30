@@ -13,25 +13,33 @@ import { composeCssClasses, CompositionMethod } from '../utils/composeCssClasses
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
 interface SearchBarCssClasses {
+  inputDropdownContainer?: string,
   dropdownContainer?: string,
   option?: string,
   focusedOption?: string, 
   inputElement?: string,
   inputContainer?: string,
-  iconContainer?: string,
-  buttonContainer?: string,
-  submitButton?: string
+  logoContainer?: string,
+  searchButtonContainer?: string,
+  submitButton?: string,
+  container?: string,
+  divider?: string,
+  resultIconContainer?: string
 }
 
-const builtInCssClasses: SearchBarCssClasses = {
-  inputContainer: 'h-12 inline-flex items-center justify-between bg-white shadow border rounded-full border-gray-300 w-full',
-  inputElement: 'flex-grow border-none h-full px-2',
-  iconContainer: 'w-8 mx-2',
-  buttonContainer: 'w-8 h-full mx-2',
+const builtInCssClasses = {
+  container: 'h-12',
+  inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
+  inputContainer: 'h-12 inline-flex items-center justify-between w-full',
+  inputElement: 'outline-none flex-grow border-none h-full px-2',
+  logoContainer: 'w-8 mx-2',
+  searchButtonContainer: 'w-8 h-full mx-2',
   submitButton: 'h-full w-full',
-  dropdownContainer: 'absolute rounded-b-lg bg-white w-max mx-12 border shadow',
-  option: 'py-2 px-2 cursor-pointer',
-  focusedOption: 'bg-gray-100'
+  dropdownContainer: 'relative bg-white pt-2 pb-1',
+  option: 'flex items-center py-1 px-2 cursor-pointer',
+  focusedOption: 'bg-gray-100',
+  divider: 'border mx-2',
+  resultIconContainer: 'opacity-20 w-8 h-8 pl-1 mr-4'
 }
 
 interface Props {
@@ -54,7 +62,7 @@ export default function SearchBar({
   cssClasses: customCssClasses,
   cssCompositionMethod
 }: Props) {
-  const classes = composeCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
+  const cssClasses = composeCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
@@ -78,7 +86,7 @@ export default function SearchBar({
   function renderSearchButton () {
     return (
       <button
-        className={classes.submitButton}
+        className={cssClasses.submitButton}
         onClick={executeQuery}
       >
         {isLoading
@@ -89,30 +97,32 @@ export default function SearchBar({
   }
 
   return (
-    <div className='SearchBar'>
-      <InputDropdown
-        inputValue={query}
-        placeholder={placeholder}
-        screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
-        screenReaderInstructionsId={screenReaderInstructionsId}
-        options={autocompleteResponse?.results.map(result => {
-          return {
-            value: result.value,
-            render: () => renderWithHighlighting(result)
-          }
-        }) ?? []}
-        optionIdPrefix='Autocomplete__option'
-        onSubmit={executeQuery}
-        updateInputValue={value => {
-          answersActions.setQuery(value);
-        }}
-        updateDropdown={() => {
-          autocompletePromiseRef.current = executeAutocomplete();
-        }}
-        renderIcon={() => <YextLogoIcon />}
-        renderButtons={renderSearchButton}
-        cssClasses={classes}
-      />
+    <div className={cssClasses.container}>
+      <div className={cssClasses.inputDropdownContainer}>
+        <InputDropdown
+          inputValue={query}
+          placeholder={placeholder}
+          screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
+          screenReaderInstructionsId={screenReaderInstructionsId}
+          options={autocompleteResponse?.results.map(result => {
+            return {
+              value: result.value,
+              render: () => <><div className={cssClasses.resultIconContainer}>< MagnifyingGlassIcon/></div>{renderWithHighlighting(result)}</>
+            }
+          }) ?? []}
+          optionIdPrefix='Autocomplete__option'
+          onSubmit={executeQuery}
+          updateInputValue={value => {
+            answersActions.setQuery(value);
+          }}
+          updateDropdown={() => {
+            autocompletePromiseRef.current = executeAutocomplete();
+          }}
+          renderLogo={() => <YextLogoIcon />}
+          renderSearchButton={renderSearchButton}
+          cssClasses={cssClasses}
+        />
+      </div>
     </div>
   )
 }
