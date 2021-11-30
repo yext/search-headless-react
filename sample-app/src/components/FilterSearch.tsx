@@ -26,7 +26,7 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
     return { ...searchField, fetchEntities: false }
   });
 
-  const [filterSearchResponse, executeFilterSearch] = useSynchronizedSearch<FilterSearchResponse>((inputValue) => {
+  const [filterSearchResponse, executeFilterSearch] = useSynchronizedSearch((inputValue) => {
     return inputValue
       ? answersActions.executeFilterSearch(inputValue, sectioned, searchParamFields)
       : answersActions.executeFilterSearch('', sectioned, searchParamFields);
