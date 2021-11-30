@@ -8,7 +8,7 @@ interface Props {
   screenReaderInstructions: string,
   screenReaderInstructionsId: string,
   screenReaderText: string,
-  onlySubmitOnOption: boolean,
+  onlyAllowDropdownOptionSubmissions: boolean,
   onSubmit?: (value: string) => void,
   onInputChange: (value: string) => void,
   onInputFocus: (input: string) => void,
@@ -50,7 +50,7 @@ export default function InputDropdown({
   screenReaderInstructions,
   screenReaderInstructionsId,
   screenReaderText,
-  onlySubmitOnOption,
+  onlyAllowDropdownOptionSubmissions,
   children,
   onSubmit = () => {},
   onInputChange,
@@ -160,7 +160,7 @@ export default function InputDropdown({
   });
 
   function handleInputElementKeydown(evt: KeyboardEvent<HTMLInputElement>) {
-    if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlySubmitOnOption) {
+    if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlyAllowDropdownOptionSubmissions) {
       setLatestUserInput(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideSections' });

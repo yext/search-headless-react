@@ -6,7 +6,7 @@ import renderWithHighlighting from "./utils/renderWithHighlighting";
 import { Option } from "./DropdownSection";
 import DropdownSection from "./DropdownSection";
 import { processTranslation } from "./utils/processTranslation";
-import { useSynchronizedSearch } from "../hooks/useSynchronizedSearch";
+import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -14,18 +14,33 @@ export interface FilterSearchProps {
   title: string,
   sectioned: boolean,
   searchFields: Omit<SearchParameterField, 'fetchEntities'>[],
-  screenReaderInstructionsId: string
+  screenReaderInstructionsId: string,
+  cssClasses: {
+    dropdownContainer: string,
+    inputElement: string,
+    inputContainer: string,
+    sectionContainer: string,
+    sectionLabel: string,
+    optionsContainer: string,
+    option: string,
+    focusedOption: string
+  }
 }
 
-export default function FilterSearch (props: FilterSearchProps): JSX.Element {
-  const { title, sectioned, searchFields, screenReaderInstructionsId } = props;
+export default function FilterSearch ({
+  title,
+  sectioned,
+  searchFields,
+  screenReaderInstructionsId,
+  cssClasses
+}: FilterSearchProps): JSX.Element {
   const answersActions = useAnswersActions();
   const [input, setInput] = useState('');
   const searchParamFields = searchFields.map((searchField) => {
     return { ...searchField, fetchEntities: false }
   });
 
-  const [filterSearchResponse, executeFilterSearch] = useSynchronizedSearch(inputValue =>
+  const [filterSearchResponse, executeFilterSearch] = useSynchronizedRequest(inputValue =>
     answersActions.executeFilterSearch(inputValue ?? '', sectioned, searchParamFields)
   );
 
@@ -74,18 +89,14 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
         screenReaderText={screenReaderText}
-        onlySubmitOnOption={true}
+        onlyAllowDropdownOptionSubmissions={true}
         onInputChange={newInput => {
           setInput(newInput);
         }}
         onInputFocus={(input) => {
           executeFilterSearch(input);
         }}
-        cssClasses={{
-          dropdownContainer: 'Autocomplete',
-          inputElement: 'FilterSearch__input',
-          inputContainer: 'FilterSearch__inputContainer'
-        }}
+        cssClasses={cssClasses}
       >
         {sections.map((section, sectionIndex) => {
           return (
@@ -107,13 +118,7 @@ export default function FilterSearch (props: FilterSearchProps): JSX.Element {
                 }
               }}
               label={section.label}
-              cssClasses={{
-                sectionContainer: 'Autocomplete__dropdownSection',
-                sectionLabel: 'Autocomplete__sectionLabel',
-                optionsContainer: 'Autocomplete_sectionOptions',
-                option: 'Autocomplete__option',
-                focusedOption: 'Autocomplete__option--focused'
-              }}
+              cssClasses={cssClasses}
             />
           );
         })}

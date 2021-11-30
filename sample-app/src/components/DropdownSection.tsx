@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export interface Option {
   value: string,
@@ -35,6 +35,7 @@ export default function DropdownSection({
 }: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
+  const wasActive = useRef<boolean>(focusStatus === 'active');
 
   function incrementOptionFocus() {
     let newIndex = focusedOptionIndex + 1;
@@ -74,14 +75,15 @@ export default function DropdownSection({
 
   useEffect(() => {
     if (focusStatus === 'active') {
-      onFocusChange(options[focusedOptionIndex].value, `${optionIdPrefix}-${focusedOptionIndex}`);
-    }
-  }, [focusStatus]);
-
-  useEffect(() => {
-    if (focusStatus === 'active') {
+      if (!wasActive.current) {
+        onFocusChange(options[focusedOptionIndex].value, `${optionIdPrefix}-${focusedOptionIndex}`);
+      }
+      wasActive.current = true;
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+    else {
+      wasActive.current = false;
     }
   });
 
