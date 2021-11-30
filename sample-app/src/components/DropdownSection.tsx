@@ -12,7 +12,7 @@ export interface DropdownSectionProps {
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
   onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
-  onSelect?: (optionValue: string, optionIndex: number, ) => void,
+  onSelect?: (optionValue: string, optionIndex: number) => void,
   label?: string,
   cssClasses: {
     sectionContainer: string,
