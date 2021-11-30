@@ -1,4 +1,3 @@
-import { FilterSearchResponse } from "@yext/answers-headless";
 import { SearchParameterField } from "@yext/answers-headless";
 import { useState } from "react";
 import { useAnswersActions } from '@yext/answers-headless-react';
