@@ -1,24 +1,6 @@
 import './sass/App.scss';
-import VerticalSearchPage from './pages/VerticalSearchPage';
-import UniversalSearchPage from './pages/UniversalSearchPage';
-import PageRouter from './PageRouter';
-import StandardLayout from './pages/StandardLayout';
 import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
-import { universalResultsConfig } from './universalResultsConfig';
-
-const routes = [
-  {
-    path: '/',
-    exact: true,
-    page: <UniversalSearchPage universalResultsConfig={universalResultsConfig} />
-  },
-  ...Object.keys(universalResultsConfig).map(key => {
-    return {
-      path: `/${key}`,
-      page: <VerticalSearchPage verticalKey={key} />
-    }
-  })
-];
+import ResultsOnlyPage from './pages/ResultsOnlyPage';
 
 export default function App() {
   return (
@@ -29,10 +11,7 @@ export default function App() {
       verticalKey='people'
     >
       <div className='App'>
-        <PageRouter
-          Layout={StandardLayout}
-          routes={routes}
-        />
+        <ResultsOnlyPage />
       </div>
     </AnswersHeadlessProvider>
   );
