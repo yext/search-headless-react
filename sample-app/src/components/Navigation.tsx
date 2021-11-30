@@ -3,20 +3,6 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { NavLink, useLocation } from 'react-router-dom';
 import { ReactComponent as KebabIcon } from '../icons/kebab.svg';
 import '../sass/Navigation.scss';
-import { useComposedCssClasses } from '../utils/useComposedCssClasses';
-
-interface NavigationCssClasses {
-  wrapper?: string,
-  linksWrapper?: string,
-  menuWrapper?: string,
-  link?: string,
-  activeNavLink?: string
-}
-
-const builtInCssClasses: NavigationCssClasses = {
-  wrapper: '',
-  linksWrapper: 'block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'
-}
 
 interface LinkData {
   to: string,
@@ -24,12 +10,10 @@ interface LinkData {
 }
 
 interface NavigationProps {
-  links: LinkData[],
-  cssClasses?: NavigationCssClasses
+  links: LinkData[]
 }
 
-export default function Navigation({ links, cssClasses }: NavigationProps) {
-  const classes = useComposedCssClasses(builtInCssClasses, cssClasses);
+export default function Navigation({ links }: NavigationProps) {
   // Close the menu when clicking the document
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLButtonElement>(null);
@@ -42,7 +26,6 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
     document.addEventListener('click', handleDocumentClick)
     return () => document.removeEventListener('click', handleDocumentClick);
   }, []);
-
   // Responsive tabs
   const [numOverflowLinks, setNumOverflowLinks] = useState<number>(0);
   const navigationRef = useRef<HTMLDivElement>(null);
@@ -69,7 +52,6 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
     window.addEventListener('resize', resizeListener);
     return () => window.removeEventListener('resize', resizeListener);
   }, [handleResize]);
-
   const { search } = useLocation();
   const visibleLinks = links.slice(0, links.length - numOverflowLinks);
   const overflowLinks = links.slice(-numOverflowLinks);
@@ -77,12 +59,12 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
     'Navigation__menuButton--open': menuOpen
   });
   return (
-    <nav className={classes.wrapper} ref={navigationRef}>
-      <div className={classes.linksWrapper}>
-        {visibleLinks.map(l => renderLink(l, search, classes))}
+    <nav className='Navigation' ref={navigationRef}>
+      <div className='Navigation__links'>
+        {visibleLinks.map(l => renderLink(l, search))}
       </div>
       {numOverflowLinks > 0 &&
-        <div className={classes.menuWrapper}>
+        <div className='Navigation__menuWrapper'>
           <button
             className={menuButtonClassNames}
             ref={menuRef}
@@ -91,7 +73,7 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
             <KebabIcon /> More
           </button>
           <div className='Navigation__menuLinks'>
-            {menuOpen && overflowLinks.map(l => renderLink(l, search, classes))}
+            {menuOpen && overflowLinks.map(l => renderLink(l, search))}
           </div>
         </div>
       }
@@ -99,17 +81,13 @@ export default function Navigation({ links, cssClasses }: NavigationProps) {
   )
 }
 
-function renderLink(
-  linkData: LinkData,
-  queryParams: string,
-  cssClasses: { link?: string, activeNavLink?: string }) 
-{
+function renderLink(linkData: LinkData, queryParams: string) {
   const { to, label } = linkData;
   return (
     <NavLink
       key={to}
-      className={cssClasses.link}
-      activeClassName={cssClasses.activeNavLink}
+      className='Navigation__link'
+      activeClassName='Navigation__link--currentRoute'
       to={`${to}${queryParams}`}
       exact={true}
     >
