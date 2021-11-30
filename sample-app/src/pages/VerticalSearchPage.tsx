@@ -12,7 +12,7 @@ import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import FilterSearch from '../components/FilterSearch';
-import { SearchIntent } from '@yext/answers-headless';
+import { SearchIntent } from '@yext/answers-headless-react';
 import {
   executeSearch,
   getSearchIntents,
