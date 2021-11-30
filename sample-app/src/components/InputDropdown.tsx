@@ -161,7 +161,7 @@ export default function InputDropdown({
 
   function handleInputElementKeydown(evt: KeyboardEvent<HTMLInputElement>) {
     if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlySubmitOnOption) {
-      setLatestUserInput(inputValue)
+      setLatestUserInput(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideSections' });
     }

@@ -100,7 +100,7 @@ export default function VerticalSearchPage(props: {
     <div className='VerticalSearchPage'>
       <FilterSearch
         title='Filter Search!'
-        sectioned={false}
+        sectioned={true}
         searchFields={filterSearchFields}
         screenReaderInstructionsId='FilterSearchId'
       />
