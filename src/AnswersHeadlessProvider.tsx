@@ -13,13 +13,26 @@ export function AnswersHeadlessProvider(props: Props): JSX.Element {
   const { children, verticalKey, sessionTrackingEnabled=true, ...answersConfig } = props;
   const answers: AnswersHeadless = provideAnswersHeadless(answersConfig);
   verticalKey && answers.setVerticalKey(verticalKey);
-  answers.setSessionTrackingEnabled(sessionTrackingEnabled);
-  if (sessionTrackingEnabled && !answers.state.sessionTracking.sessionId) {
-    answers.setSessionId(uuidv4());
-  }
+  handleSessionTracking(answers, sessionTrackingEnabled);
   return (
     <AnswersHeadlessContext.Provider value={answers}>
       {children}
     </AnswersHeadlessContext.Provider>
   );
+}
+
+function handleSessionTracking(answers: AnswersHeadless, sessionTrackingEnabled: boolean) {
+  answers.setSessionTrackingEnabled(sessionTrackingEnabled);
+  if (sessionTrackingEnabled) {
+    try {
+      let sessionId = window.sessionStorage.getItem('sessionId');
+      if (!sessionId) {
+        sessionId = uuidv4();
+        window.sessionStorage.setItem('sessionId', sessionId);
+      }
+      answers.setSessionId(sessionId);
+    } catch (err) {
+      console.warn('Unable to use browser sessionStorage for sessionId.\n', err);
+    }
+  }
 }
