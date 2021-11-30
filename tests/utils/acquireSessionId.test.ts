@@ -18,7 +18,7 @@ describe('handle session id properly', () => {
   });
 
   it('session id does not exist in session storage', () => {
-    expect(acquireSessionId()).toEqual('some-uuid-value');
+    expect(acquireSessionId()).toEqual(uuidString);
     expect(window.sessionStorage.getItem('sessionId')).toEqual(uuidString);
   });
 
