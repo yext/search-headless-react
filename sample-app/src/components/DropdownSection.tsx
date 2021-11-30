@@ -85,7 +85,7 @@ export default function DropdownSection({
     }
   });
 
-  function renderOption(option: Option, index: number) {
+  function renderOption(index: number, option: Option) {
     const className = classNames(cssClasses.option, {
       [cssClasses.focusedOption]: focusStatus === 'active' && index === focusedOptionIndex
     })
@@ -108,7 +108,7 @@ export default function DropdownSection({
         </div>
       }
       <div className={cssClasses.optionsContainer}>
-        {options.map((option, index) => renderOption(option, index))}
+        {options.map((option, index) => renderOption(index, option))}
       </div>
     </div>
   );
