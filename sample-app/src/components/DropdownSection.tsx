@@ -12,7 +12,7 @@ export interface DropdownSectionProps {
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
   onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
-  onClickOption?: (option: Option, optionIndex: number) => void,
+  onSubmit?: (optionIndex: number, option?: Option) => void,
   label?: string,
   cssClasses: {
     sectionContainer: string,
@@ -29,7 +29,7 @@ export default function DropdownSection({
   optionIdPrefix,
   onFocusChange = () => {},
   onLeaveSectionFocus = () => {},
-  onClickOption = () => {},
+  onSubmit = () => {},
   label = '',
   cssClasses
 }: DropdownSectionProps): JSX.Element | null {
@@ -59,16 +59,16 @@ export default function DropdownSection({
   }
 
   function handleKeyDown(evt: globalThis.KeyboardEvent) {
-    if (focusStatus === 'active') {
-      if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(evt.key)) {
-        evt.preventDefault();
-      }
+    if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(evt.key)) {
+      evt.preventDefault();
+    }
 
-      if (evt.key === 'ArrowDown' || evt.key === 'ArrowRight') {
-        incrementOptionFocus();
-      } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
-        decrementOptionFocus();
-      }
+    if (evt.key === 'ArrowDown' || evt.key === 'ArrowRight') {
+      incrementOptionFocus();
+    } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
+      decrementOptionFocus();
+    } else if (evt.key === 'Enter') {
+      onSubmit(focusedOptionIndex);
     }
   }
 
@@ -94,7 +94,7 @@ export default function DropdownSection({
         key={index}
         className={className}
         id={`${optionIdPrefix}-${index}`}
-        onClick={() => onClickOption(option, index)}>
+        onClick={() => onSubmit(index, option)}>
         {option.display}
       </div>
     );

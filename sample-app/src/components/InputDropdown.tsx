@@ -8,9 +8,10 @@ interface Props {
   screenReaderInstructions: string,
   screenReaderInstructionsId: string,
   screenReaderText: string,
+  onlySubmitOnOption: boolean,
   onSubmit?: (value: string) => void,
   onInputChange: (value: string) => void,
-  onInputFocus: () => void,
+  onInputFocus: (input: string) => void,
   renderButtons?: () => JSX.Element | null,
   cssClasses: {
     dropdownContainer: string,
@@ -49,6 +50,7 @@ export default function InputDropdown({
   screenReaderInstructions,
   screenReaderInstructionsId,
   screenReaderText,
+  onlySubmitOnOption,
   children,
   onSubmit = () => {},
   onInputChange,
@@ -82,8 +84,9 @@ export default function InputDropdown({
       return child;
     }
 
-    const modifiedOnClickOption = (option: Option, optionIndex: number) => {
-      child.props.onClickOption?.(option, optionIndex);
+    const modifiedOnSubmit = (optionIndex: number, option?: Option) => {
+      child.props.onSubmit?.(optionIndex, option);
+      option ? setLatestUserInput(option.value) : setLatestUserInput(inputValue);
       dispatch({ type: 'HideSections' });
     }
 
@@ -93,13 +96,13 @@ export default function InputDropdown({
     };
 
     if (focusedSectionIndex === undefined) {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onSubmit: modifiedOnSubmit });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
-        onLeaveSectionFocus, focusStatus: 'active', key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
+        onLeaveSectionFocus, focusStatus: 'active', key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSubmit: modifiedOnSubmit
       });
     } else {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onSubmit: modifiedOnSubmit });
     }
   });
 
@@ -134,7 +137,7 @@ export default function InputDropdown({
   }
 
   function handleDocumentKeydown(evt: globalThis.KeyboardEvent) {
-    if (['ArrowDown'].includes(evt.key)) {
+    if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
       evt.preventDefault();
     }
 
@@ -157,8 +160,8 @@ export default function InputDropdown({
   });
 
   function handleInputElementKeydown(evt: KeyboardEvent<HTMLInputElement>) {
-    if (evt.key === 'Enter') {
-      onInputChange(inputValue);
+    if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlySubmitOnOption) {
+      setLatestUserInput(inputValue)
       onSubmit(inputValue);
       dispatch({ type: 'HideSections' });
     }
@@ -174,13 +177,13 @@ export default function InputDropdown({
             const value = evt.target.value;
             setLatestUserInput(value);
             onInputChange(value);
-            onInputFocus();
+            onInputFocus(value);
             setChildrenKey(childrenKey + 1);
             dispatch({ type: 'ShowSections' });
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
-            onInputFocus();
+            onInputFocus(inputValue);
             setChildrenKey(childrenKey + 1);
             dispatch({ type: 'ShowSections' });
             if (numSections > 0 || inputValue) {

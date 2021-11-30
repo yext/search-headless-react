@@ -11,6 +11,7 @@ import '../sass/VerticalSearchPage.scss';
 import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
+import FilterSearch from '../components/FilterSearch';
 import { SearchIntent } from '@yext/answers-headless';
 import {
   executeSearch,
@@ -65,6 +66,15 @@ const staticFiltersGroupLabels = {
   c_employeeDepartment: 'Employee Deparment'
 }
 
+const filterSearchFields = [{
+  fieldApiName: 'builtin.location',
+  entityType: 'ce_person'
+},
+{
+  fieldApiName: 'name',
+  entityType: 'ce_person'
+}];
+
 export default function VerticalSearchPage(props: {
   verticalKey: string
 }) {
@@ -88,6 +98,12 @@ export default function VerticalSearchPage(props: {
 
   return (
     <div className='VerticalSearchPage'>
+      <FilterSearch
+        title='Filter Search!'
+        sectioned={false}
+        searchFields={filterSearchFields}
+        screenReaderInstructionsId='FilterSearchId'
+      />
       <div className='start'>
         <StaticFilters
           title='~Country~'
