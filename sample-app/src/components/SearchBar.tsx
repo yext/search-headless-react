@@ -1,12 +1,14 @@
-import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { AutocompleteResult, useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderHighlightedValue from './utils/renderHighlightedValue';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import { ReactComponent as YextLogoIcon } from '../icons/yext_logo.svg';
 import LoadingIndicator from './LoadingIndicator';
 import { useAutocomplete } from '../hooks/useAutocomplete';
+import DropdownSection from './DropdownSection';
+import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
-import { AutocompleteResponse, AutocompleteResult, SearchIntent } from '@yext/answers-headless';
+import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless-react';
 import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
 import { useComposedCssClasses, CompositionMethod } from '../utils/useComposedCssClasses';
 
@@ -16,7 +18,6 @@ interface SearchBarCssClasses {
   inputDropdownContainer?: string,
   dropdownContainer?: string,
   option?: string,
-  focusedOption?: string, 
   inputElement?: string,
   inputContainer?: string,
   logoContainer?: string,
@@ -24,10 +25,14 @@ interface SearchBarCssClasses {
   submitButton?: string,
   container?: string,
   divider?: string,
-  resultIconContainer?: string
+  resultIconContainer?: string,
+  sectionContainer?: string,
+  sectionLabel?: string,
+  optionsContainer?: string,
+  focusedOption?: string
 }
 
-const builtInCssClasses = {
+const builtInCssClasses: SearchBarCssClasses = {
   container: 'h-12',
   inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
   inputContainer: 'h-12 inline-flex items-center justify-between w-full',
@@ -70,8 +75,21 @@ export default function SearchBar({
    * Allow a query search to wait on the response to the autocomplete request right
    * before the search execution in order to retrieve the search intents
    */
-  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse|undefined>>();
-  const [ autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
+  const [autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+
+  const options = autocompleteResponse?.results.map(result => {
+    return {
+      value: result.value,
+      display: renderAutocompleteResult(result)
+    }
+  }) ?? [];
+
+  const screenReaderText = processTranslation({
+    phrase: `${options.length} autocomplete option found.`,
+    pluralForm: `${options.length} autocomplete options found.`,
+    count: options.length
+  });
 
   async function executeQuery () {
     let intents: SearchIntent[] = [];
@@ -122,24 +140,34 @@ export default function SearchBar({
           placeholder={placeholder}
           screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
           screenReaderInstructionsId={screenReaderInstructionsId}
-          options={autocompleteResponse?.results.map(result => {
-            return {
-              value: result.value,
-              render: () => renderAutocompleteResult(result)
-            }
-          }) ?? []}
-          optionIdPrefix='Autocomplete__option'
+          screenReaderText={screenReaderText}
           onSubmit={executeQuery}
-          updateInputValue={value => {
+          onInputChange={value => {
             answersActions.setQuery(value);
           }}
-          updateDropdown={() => {
+          onInputFocus={() => {
             autocompletePromiseRef.current = executeAutocomplete();
           }}
           renderLogo={() => <YextLogoIcon />}
           renderSearchButton={renderSearchButton}
           cssClasses={cssClasses}
-        />
+        >
+          {
+            options.length > 0 &&
+            <DropdownSection
+              options={options}
+              optionIdPrefix='Autocomplete__option-0'
+              onFocusChange={value => {
+                answersActions.setQuery(value);
+              }}
+              onClickOption={option => {
+                answersActions.setQuery(option.value);
+                executeQuery();
+              }}
+              cssClasses={cssClasses}
+            />
+          }
+        </InputDropdown>
       </div>
     </div>
   )
