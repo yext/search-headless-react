@@ -111,10 +111,8 @@ export default function SearchBar({
             onFocusChange={value => {
               answersActions.setQuery(value);
             }}
-            onSubmit={(_, option) => {
-              if (option) {
-                answersActions.setQuery(option.value);
-              }
+            onSelect={(optionValue) => {
+              answersActions.setQuery(optionValue);
               executeQuery();
             }}
             cssClasses={{

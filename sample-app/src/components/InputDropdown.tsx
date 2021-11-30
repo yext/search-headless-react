@@ -1,5 +1,5 @@
 import React, { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
-import DropdownSection, { Option } from "./DropdownSection";
+import DropdownSection from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
 
 interface Props {
@@ -84,9 +84,9 @@ export default function InputDropdown({
       return child;
     }
 
-    const modifiedOnSubmit = (optionIndex: number, option?: Option) => {
-      child.props.onSubmit?.(optionIndex, option);
-      option ? setLatestUserInput(option.value) : setLatestUserInput(inputValue);
+    const modifiedOnSelect = (optionValue: string, optionIndex: number) => {
+      child.props.onSelect?.(optionValue, optionIndex);
+      setLatestUserInput(optionValue);
       dispatch({ type: 'HideSections' });
     }
 
@@ -96,13 +96,13 @@ export default function InputDropdown({
     };
 
     if (focusedSectionIndex === undefined) {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onSubmit: modifiedOnSubmit });
+      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onSelect: modifiedOnSelect });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
-        onLeaveSectionFocus, focusStatus: 'active', key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSubmit: modifiedOnSubmit
+        onLeaveSectionFocus, focusStatus: 'active', key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSelect: modifiedOnSelect
       });
     } else {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onSubmit: modifiedOnSubmit });
+      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onSelect: modifiedOnSelect });
     }
   });
 

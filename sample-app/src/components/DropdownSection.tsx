@@ -12,7 +12,7 @@ export interface DropdownSectionProps {
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
   onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
-  onSubmit?: (optionIndex: number, option?: Option) => void,
+  onSelect?: (optionValue: string, optionIndex: number, ) => void,
   label?: string,
   cssClasses: {
     sectionContainer: string,
@@ -29,7 +29,7 @@ export default function DropdownSection({
   optionIdPrefix,
   onFocusChange = () => {},
   onLeaveSectionFocus = () => {},
-  onSubmit = () => {},
+  onSelect = () => {},
   label = '',
   cssClasses
 }: DropdownSectionProps): JSX.Element | null {
@@ -69,7 +69,7 @@ export default function DropdownSection({
     } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
       decrementOptionFocus();
     } else if (evt.key === 'Enter') {
-      onSubmit(focusedOptionIndex);
+      onSelect(options[focusedOptionIndex].value, focusedOptionIndex);
     }
   }
 
@@ -96,7 +96,7 @@ export default function DropdownSection({
         key={index}
         className={className}
         id={`${optionIdPrefix}-${index}`}
-        onClick={() => onSubmit(index, option)}>
+        onClick={() => onSelect(option.value, index)}>
         {option.display}
       </div>
     );
