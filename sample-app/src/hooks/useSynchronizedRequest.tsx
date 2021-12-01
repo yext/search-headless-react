@@ -1,5 +1,13 @@
 import { useRef, useState } from "react";
 
+/**
+ * Handles the network request race condition by synchronizing requests with their responses. If multiple
+ * requests are sent before getting a response, only the response corresponding to the latest request will
+ * be returned.
+ * 
+ * @param executeRequest Function that executes the network request
+ * @returns Reponse to the latest request and a function to execute the request in a synchronized manner
+ */
 export function useSynchronizedRequest<RequestDataType, ResponseType>(
   executeRequest: (data?: RequestDataType) => Promise<ResponseType | undefined>
 ): [

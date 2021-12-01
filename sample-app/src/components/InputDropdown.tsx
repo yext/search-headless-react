@@ -84,8 +84,8 @@ export default function InputDropdown({
       return child;
     }
 
-    const modifiedOnSelect = (optionValue: string, optionIndex: number) => {
-      child.props.onSelect?.(optionValue, optionIndex);
+    const modifiedOnSelectOption = (optionValue: string, optionIndex: number) => {
+      child.props.onSelectOption?.(optionValue, optionIndex);
       setLatestUserInput(optionValue);
       dispatch({ type: 'HideSections' });
     }
@@ -96,13 +96,13 @@ export default function InputDropdown({
     };
 
     if (focusedSectionIndex === undefined) {
-      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelect: modifiedOnSelect });
+      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelectOption: modifiedOnSelectOption });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
-        onLeaveSectionFocus, isFocused: true, key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSelect: modifiedOnSelect
+        onLeaveSectionFocus, isFocused: true, key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSelectOption: modifiedOnSelectOption
       });
     } else {
-      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelect: modifiedOnSelect });
+      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelectOption: modifiedOnSelectOption });
     }
   });
 

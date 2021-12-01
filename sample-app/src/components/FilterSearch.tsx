@@ -105,7 +105,7 @@ export default function FilterSearch ({
               onFocusChange={value => {
                 setInput(value);
               }}
-              onSelect={(optionValue, optionIndex) => {
+              onSelectOption={(optionValue, optionIndex) => {
                 setInput(optionValue);
                 const result = filterSearchResponse?.sections[sectionIndex].results[optionIndex];
                 if (result?.filter) {

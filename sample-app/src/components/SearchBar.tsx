@@ -111,7 +111,7 @@ export default function SearchBar({
             onFocusChange={value => {
               answersActions.setQuery(value);
             }}
-            onSelect={(optionValue) => {
+            onSelectOption={(optionValue) => {
               answersActions.setQuery(optionValue);
               executeQuery();
             }}
