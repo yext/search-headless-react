@@ -18,7 +18,8 @@ interface Props {
   placeholder?: string,
   isVertical: boolean,
   geolocationOptions?: PositionOptions,
-  screenReaderInstructionsId: string
+  screenReaderInstructionsId: string,
+  onExecuteSearch?: () => void
 }
 
 /**
@@ -28,7 +29,8 @@ export default function SearchBar({
   placeholder,
   isVertical,
   geolocationOptions,
-  screenReaderInstructionsId
+  screenReaderInstructionsId,
+  onExecuteSearch=()=>{}
 }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
@@ -61,6 +63,7 @@ export default function SearchBar({
       await updateLocationIfNeeded(answersActions, intents, geolocationOptions);
     }
     executeSearch(answersActions, isVertical);
+    onExecuteSearch();
   }
 
   function renderSearchButton () {

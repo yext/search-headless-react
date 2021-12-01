@@ -5,15 +5,22 @@ import PageRouter from './PageRouter';
 import StandardLayout from './pages/StandardLayout';
 import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
+import GuidedSearchPage from './pages/GuidedSearchPage';
 
 const routes = [
   {
+    Layout: StandardLayout,
     path: '/',
     exact: true,
     page: <UniversalSearchPage universalResultsConfig={universalResultsConfig} />
   },
+  {
+    path: '/prompt',
+    page: <GuidedSearchPage verticalKey='people' />
+  },
   ...Object.keys(universalResultsConfig).map(key => {
     return {
+      Layout: StandardLayout,
       path: `/${key}`,
       page: <VerticalSearchPage verticalKey={key} />
     }
@@ -30,7 +37,6 @@ export default function App() {
     >
       <div className='App'>
         <PageRouter
-          Layout={StandardLayout}
           routes={routes}
         />
       </div>
