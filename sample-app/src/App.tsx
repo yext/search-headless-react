@@ -28,7 +28,7 @@ export default function App() {
       locale='en'
       verticalKey='people'
     >
-      <div className='App'>
+      <div className='App mx-8'>
         <PageRouter
           Layout={StandardLayout}
           routes={routes}
