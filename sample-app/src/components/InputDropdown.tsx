@@ -13,10 +13,10 @@ interface Props {
   onInputChange: (value: string) => void,
   onInputFocus: (input: string) => void,
   renderButtons?: () => JSX.Element | null,
-  cssClasses: {
-    dropdownContainer: string,
-    inputElement: string,
-    inputContainer: string
+  cssClasses?: {
+    dropdownContainer?: string,
+    inputElement?: string,
+    inputContainer?: string
   }
 }
 
@@ -169,9 +169,9 @@ export default function InputDropdown({
 
   return (
     <>
-      <div className={cssClasses.inputContainer}>
+      <div className={cssClasses?.inputContainer}>
         <input
-          className={cssClasses.inputElement}
+          className={cssClasses?.inputElement}
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
@@ -209,7 +209,7 @@ export default function InputDropdown({
       />
       {shouldDisplayDropdown && numSections > 0 &&
         <div
-          className={cssClasses.dropdownContainer}
+          className={cssClasses?.dropdownContainer}
           ref={dropdownRef}
         >
           {childrenWithProps}

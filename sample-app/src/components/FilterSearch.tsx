@@ -13,15 +13,15 @@ export interface FilterSearchProps {
   sectioned: boolean,
   searchFields: Omit<SearchParameterField, 'fetchEntities'>[],
   screenReaderInstructionsId: string,
-  cssClasses: {
-    dropdownContainer: string,
-    inputElement: string,
-    inputContainer: string,
-    sectionContainer: string,
-    sectionLabel: string,
-    optionsContainer: string,
-    option: string,
-    focusedOption: string
+  customCssClasses?: {
+    dropdownContainer?: string,
+    inputElement?: string,
+    inputContainer?: string,
+    sectionContainer?: string,
+    sectionLabel?: string,
+    optionsContainer?: string,
+    option?: string,
+    focusedOption?: string
   }
 }
 
@@ -30,7 +30,7 @@ export default function FilterSearch ({
   sectioned,
   searchFields,
   screenReaderInstructionsId,
-  cssClasses
+  customCssClasses
 }: FilterSearchProps): JSX.Element {
   const answersActions = useAnswersActions();
   const [input, setInput] = useState('');
@@ -94,7 +94,7 @@ export default function FilterSearch ({
         onInputFocus={(input) => {
           executeFilterSearch(input);
         }}
-        cssClasses={cssClasses}
+        cssClasses={customCssClasses}
       >
         {sections.map((section, sectionIndex) => {
           return (
@@ -114,7 +114,7 @@ export default function FilterSearch ({
                 }
               }}
               label={section.label}
-              cssClasses={cssClasses}
+              cssClasses={customCssClasses}
             />
           );
         })}
