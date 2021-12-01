@@ -17,13 +17,13 @@ interface NavigationCssClasses {
 }
 
 const builtInCssClasses: NavigationCssClasses = {
-  nav: 'border-b border-gray-200 text-gray-600 flex space-x-6 font-medium',
+  nav: 'border-b border-gray-200 text-gray-600 flex space-x-6 font-medium pt-4',
   navLink: 'whitespace-nowrap py-4 px-1 font-medium text-md border-b-2 border-opacity-0 hover:border-gray-300',
   activeNavLink: 'text-blue-600 border-blue-600 border-b-2 border-opacity-100 hover:border-blue-600',
-  menuButtonContainer: 'flex flex-grow justify-end mr-4',
+  menuButtonContainer: 'relative flex flex-grow justify-end mr-4',
   menuButton: 'flex flex-row items-center font-medium text-md px-1 border-b-2 border-opacity-0 hover:border-gray-300',
   menuButton___menuOpen: 'bg-gray-200',
-  menuContainer: 'absolute flex flex-col bg-white border top-24 mt-0.5'
+  menuContainer: 'absolute flex flex-col bg-white border top-14 mt-0.5'
 }
 
 interface LinkData {
