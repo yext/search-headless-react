@@ -131,7 +131,7 @@ export default function SearchBar({
   }
 
   /**
-   * Renders a particular autocopmlete value which may include highlighting
+   * Renders a particular autocomplete value which may include highlighting
    * @returns JSX.Element
    */
   function renderAutocompleteValue ({ value, matchedSubstrings }: AutocompleteResult) {

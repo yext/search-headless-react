@@ -11,7 +11,6 @@ interface Props {
   onSubmit?: (value: string) => void,
   renderSearchButton?: () => JSX.Element | null,
   renderLogo?: () => JSX.Element | null,
-  renderResultIcon?: () => JSX.Element | null,
   onInputChange: (value: string) => void,
   onInputFocus: () => void,
   cssClasses: {
