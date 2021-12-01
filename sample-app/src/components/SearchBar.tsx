@@ -18,7 +18,8 @@ interface Props {
   placeholder?: string,
   isVertical: boolean,
   geolocationOptions?: PositionOptions,
-  screenReaderInstructionsId: string
+  screenReaderInstructionsId: string,
+  renderCustomSearchButton?: () => JSX.Element
 }
 
 /**
@@ -28,7 +29,8 @@ export default function SearchBar({
   placeholder,
   isVertical,
   geolocationOptions,
-  screenReaderInstructionsId
+  screenReaderInstructionsId,
+  renderCustomSearchButton
 }: Props) {
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
@@ -91,7 +93,7 @@ export default function SearchBar({
         onInputFocus={() => {
           autocompletePromiseRef.current = executeAutocomplete();
         }}
-        renderButtons={renderSearchButton}
+        renderButtons={renderCustomSearchButton ?? renderSearchButton}
         cssClasses={{
           dropdownContainer: 'Autocomplete',
           inputElement: 'SearchBar__input',

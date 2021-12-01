@@ -5,12 +5,17 @@ import PageRouter from './PageRouter';
 import StandardLayout from './pages/StandardLayout';
 import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
+import DropdownSearchPage from './pages/DropdownSearchPage';
 
 const routes = [
   {
     path: '/',
     exact: true,
     page: <UniversalSearchPage universalResultsConfig={universalResultsConfig} />
+  }, {
+    path: '/dropdown-search',
+    exact: true,
+    page: <DropdownSearchPage />
   },
   ...Object.keys(universalResultsConfig).map(key => {
     return {

@@ -21,7 +21,7 @@ interface PageProps {
 export default function PageRouter({ Layout, routes }: PageProps) {
   const pages = routes.map(routeData => {
     const { path, page, exact } = routeData;
-    if (Layout) {
+    if (Layout && path !== '/dropdown-search') {
       return (
         <Route key={path} path={path} exact={exact}>
           <Layout page={page}/>
