@@ -1,28 +1,32 @@
 import { useState } from "react";
 import { useAnswersActions, FilterSearchResponse, SearchParameterField } from '@yext/answers-headless-react';
-import InputDropdown from "./InputDropdown";
+import InputDropdown, { InputDropdownCssClasses } from "./InputDropdown";
 import renderWithHighlighting from "./utils/renderWithHighlighting";
-import DropdownSection, { Option } from "./DropdownSection";
+import DropdownSection, { DropdownSectionCssClasses, Option } from "./DropdownSection";
 import { processTranslation } from "./utils/processTranslation";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+
+interface FilterSearchCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {}
+
+const builtInCssClasses: FilterSearchCssClasses = {
+  dropdownContainer: 'Autocomplete',
+  inputElement: 'FilterSearch__input',
+  inputContainer: 'FilterSearch__inputContainer',
+  sectionContainer: 'Autocomplete__dropdownSection',
+  sectionLabel: 'Autocomplete__sectionLabel',
+  optionsContainer: 'Autocomplete_sectionOptions',
+  option: 'Autocomplete__option',
+  focusedOption: 'Autocomplete__option--focused'
+}
 
 export interface FilterSearchProps {
   title: string,
   sectioned: boolean,
   searchFields: Omit<SearchParameterField, 'fetchEntities'>[],
   screenReaderInstructionsId: string,
-  customCssClasses?: {
-    dropdownContainer?: string,
-    inputElement?: string,
-    inputContainer?: string,
-    sectionContainer?: string,
-    sectionLabel?: string,
-    optionsContainer?: string,
-    option?: string,
-    focusedOption?: string
-  }
+  customCssClasses?: FilterSearchCssClasses
 }
 
 export default function FilterSearch ({
@@ -37,6 +41,7 @@ export default function FilterSearch ({
   const searchParamFields = searchFields.map((searchField) => {
     return { ...searchField, fetchEntities: false }
   });
+  const cssClasses = builtInCssClasses;
 
   const [filterSearchResponse, executeFilterSearch] = useSynchronizedRequest<string, FilterSearchResponse>(inputValue =>
     answersActions.executeFilterSearch(inputValue ?? '', sectioned, searchParamFields)
@@ -94,7 +99,7 @@ export default function FilterSearch ({
         onInputFocus={(input) => {
           executeFilterSearch(input);
         }}
-        cssClasses={customCssClasses}
+        cssClasses={cssClasses}
       >
         {sections.map((section, sectionIndex) => {
           return (
@@ -114,7 +119,7 @@ export default function FilterSearch ({
                 }
               }}
               label={section.label}
-              cssClasses={customCssClasses}
+              cssClasses={cssClasses}
             />
           );
         })}

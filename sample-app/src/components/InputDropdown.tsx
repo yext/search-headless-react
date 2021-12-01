@@ -2,6 +2,12 @@ import React, { useReducer, KeyboardEvent, useRef, useEffect, useState } from "r
 import DropdownSection from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
 
+export interface InputDropdownCssClasses {
+  dropdownContainer?: string,
+  inputElement?: string,
+  inputContainer?: string
+}
+
 interface Props {
   inputValue?: string,
   placeholder?: string,
@@ -13,11 +19,7 @@ interface Props {
   onInputChange: (value: string) => void,
   onInputFocus: (input: string) => void,
   renderButtons?: () => JSX.Element | null,
-  cssClasses?: {
-    dropdownContainer?: string,
-    inputElement?: string,
-    inputContainer?: string
-  }
+  cssClasses?: InputDropdownCssClasses
 }
 
 interface State {

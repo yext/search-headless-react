@@ -103,16 +103,6 @@ export default function VerticalSearchPage(props: {
         sectioned={true}
         searchFields={filterSearchFields}
         screenReaderInstructionsId='FilterSearchId'
-        cssClasses={{
-          dropdownContainer: 'Autocomplete',
-          inputElement: 'FilterSearch__input',
-          inputContainer: 'FilterSearch__inputContainer',
-          sectionContainer: 'Autocomplete__dropdownSection',
-          sectionLabel: 'Autocomplete__sectionLabel',
-          optionsContainer: 'Autocomplete_sectionOptions',
-          option: 'Autocomplete__option',
-          focusedOption: 'Autocomplete__option--focused'
-        }}
       />
       <div className='start'>
         <StaticFilters

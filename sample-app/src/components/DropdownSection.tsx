@@ -6,6 +6,14 @@ export interface Option {
   display: JSX.Element
 }
 
+export interface DropdownSectionCssClasses {
+  sectionContainer?: string,
+  sectionLabel?: string,
+  optionsContainer?: string,
+  option?: string,
+  focusedOption?: string
+}
+
 export interface DropdownSectionProps {
   isFocused?: boolean,
   options: Option[],
@@ -14,13 +22,7 @@ export interface DropdownSectionProps {
   onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
   onSelectOption?: (optionValue: string, optionIndex: number) => void,
   label?: string,
-  cssClasses?: {
-    sectionContainer?: string,
-    sectionLabel?: string,
-    optionsContainer?: string,
-    option?: string,
-    focusedOption?: string
-  }
+  cssClasses?: DropdownSectionCssClasses
 }
 
 export default function DropdownSection({
