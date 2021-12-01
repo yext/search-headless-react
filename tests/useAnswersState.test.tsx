@@ -5,6 +5,25 @@ import { State } from '@yext/answers-headless/lib/esm/models/state';
 import React, { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
 
+it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
+  function Test(): JSX.Element {
+    const query = useAnswersState(state => state.query.input);
+    return (
+      <div>{query}</div>
+    );
+  }
+  jest.spyOn(global.console, 'error').mockImplementation();
+  try {
+    render(
+      <Test />
+    );
+  } catch(e) {
+    expect(e).toEqual(new Error('Attempt to use AnswersHeadless before it\'s initialized.'
+    + ' Ensure that \'useAnswersState()\' is call within an AnswersHeadlessProvider component.'));
+  }
+  jest.clearAllMocks();
+});
+
 it('does not perform extra renders/listener registrations for nested components', async () => {
   const parentStateUpdates: Result[][] = [];
   const childStateUpdates: string[] = [];
