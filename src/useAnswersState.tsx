@@ -11,8 +11,8 @@ export type StateSelector<T> = (s: State) => T;
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const answers = useContext(AnswersHeadlessContext);
   if (answers.state === undefined) {
-    throw new Error('Attempt to use AnswersHeadless before it\'s initialized.'
-     + ' Ensure that \'useAnswersState()\' is call within an AnswersHeadlessProvider component.');
+    throw new Error('Attempted to use AnswersHeadless before it\'s initialized.'
+     + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
   }
 
   // useRef stores values across renders without triggering additional ones

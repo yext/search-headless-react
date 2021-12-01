@@ -8,18 +8,14 @@ import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../s
 it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
   function Test(): JSX.Element {
     const query = useAnswersState(state => state.query.input);
-    return (
-      <div>{query}</div>
-    );
+    return <div>{query}</div>;
   }
   jest.spyOn(global.console, 'error').mockImplementation();
   try {
-    render(
-      <Test />
-    );
+    render(<Test />);
   } catch(e) {
-    expect(e).toEqual(new Error('Attempt to use AnswersHeadless before it\'s initialized.'
-    + ' Ensure that \'useAnswersState()\' is call within an AnswersHeadlessProvider component.'));
+    expect(e).toEqual(new Error('Attempted to use AnswersHeadless before it\'s initialized.'
+    + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.'));
   }
   jest.clearAllMocks();
 });

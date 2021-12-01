@@ -7,8 +7,8 @@ export type AnswersActions = AnswersHeadless;
 export function useAnswersActions(): AnswersActions {
   const answersHeadless = useContext(AnswersHeadlessContext);
   if (answersHeadless.state === undefined) {
-    throw new Error('Attempt to use AnswersHeadless before it\'s initialized.'
-     + ' Ensure that \'useAnswersActions()\' is call within an AnswersHeadlessProvider component.');
+    throw new Error('Attempted to use AnswersHeadless before it\'s initialized.'
+     + ' Please ensure that \'useAnswersActions()\' is called within an AnswersHeadlessProvider component.');
   }
   return answersHeadless;
 }

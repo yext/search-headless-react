@@ -5,18 +5,14 @@ it('invoke useAnswersActions outside of AnswersHeadlessProvider', () => {
   function Test(): JSX.Element {
     const answersActions = useAnswersActions();
     answersActions.setQuery('');
-    return (
-      <div>Test</div>
-    );
+    return <div>Test</div>;
   }
   jest.spyOn(global.console, 'error').mockImplementation();
   try {
-    render(
-      <Test />
-    );
+    render(<Test />);
   } catch(e) {
-    expect(e).toEqual(new Error('Attempt to use AnswersHeadless before it\'s initialized.'
-    + ' Ensure that \'useAnswersActions()\' is call within an AnswersHeadlessProvider component.'));
+    expect(e).toEqual(new Error('Attempted to use AnswersHeadless before it\'s initialized.'
+    + ' Please ensure that \'useAnswersActions()\' is called within an AnswersHeadlessProvider component.'));
   }
   jest.clearAllMocks();
 });
