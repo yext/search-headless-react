@@ -1,4 +1,4 @@
-import React, { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
+import React, { useReducer, KeyboardEvent, useRef, useEffect, useState, FocusEvent } from "react"
 import DropdownSection from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
 
@@ -14,7 +14,7 @@ interface Props {
   screenReaderInstructions: string,
   screenReaderInstructionsId: string,
   screenReaderText: string,
-  onlyAllowDropdownOptionSubmissions: boolean,
+  onlyAllowDropdownOptionSubmissions?: boolean,
   onSubmit?: (value: string) => void,
   onInputChange: (value: string) => void,
   onInputFocus: (input: string) => void,
@@ -73,8 +73,9 @@ export default function InputDropdown({
   const [childrenKey, setChildrenKey] = useState(0);
   const [screenReaderKey, setScreenReaderKey] = useState(0);
 
-  const inputRef = useRef<HTMLInputElement>(document.createElement('input'));
-  const dropdownRef = useRef<HTMLDivElement>(document.createElement('div'));
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputDropdownRef = useRef<HTMLDivElement>(null);
 
   if (!shouldDisplayDropdown && screenReaderKey) {
     setScreenReaderKey(0);
@@ -143,7 +144,7 @@ export default function InputDropdown({
       evt.preventDefault();
     }
 
-    if (evt.key === 'Escape' || evt.key === 'Tab') {
+    if (evt.key === 'Escape') {
       dispatch({ type: 'HideSections' });
     } else if (evt.key === 'ArrowDown' && numSections > 0 && focusedSectionIndex === undefined) {
       dispatch({ type: 'FocusSection', newIndex: 0 });
@@ -169,8 +170,17 @@ export default function InputDropdown({
     }
   }
 
+  function handleBlur(evt: FocusEvent<HTMLDivElement>) {
+    if (!evt.relatedTarget || !(evt.relatedTarget instanceof HTMLElement) || !inputDropdownRef.current) {
+      return;
+    }
+    if (!inputDropdownRef.current.contains(evt.relatedTarget)) {
+      dispatch({ type: 'HideSections' });
+    }
+  }
+
   return (
-    <>
+    <div ref={inputDropdownRef} onBlur={handleBlur}>
       <div className={cssClasses?.inputContainer}>
         <input
           className={cssClasses?.inputElement}
@@ -217,6 +227,6 @@ export default function InputDropdown({
           {childrenWithProps}
         </div>
       }
-    </>
+    </div>
   );
 };

@@ -100,7 +100,9 @@ export default function DropdownSection({
         key={index}
         className={className}
         id={`${optionIdPrefix}-${index}`}
-        onClick={() => onSelectOption(option.value, index)}>
+        onClick={() => onSelectOption(option.value, index)}
+        tabIndex={0}
+      >
         {option.display}
       </div>
     );

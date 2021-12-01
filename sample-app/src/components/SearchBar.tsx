@@ -1,16 +1,13 @@
 import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import InputDropdown from './InputDropdown';
 import renderWithHighlighting from './utils/renderWithHighlighting';
-import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
-import LoadingIndicator from './LoadingIndicator';
-import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
 import DropdownSection from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
-import { useRef } from 'react';
-import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless-react';
-import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
+import SearchButton from './SearchButton';
+import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
+import useNearMeSearch from '../hooks/useNearMeSearch';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -22,7 +19,7 @@ interface Props {
 }
 
 /**
- * Renders a SearchBar that is hooked up with an Autocomplete component
+ * Renders a SearchBar that is hooked up with an InputDropdown component
  */
 export default function SearchBar({
   placeholder,
@@ -33,16 +30,12 @@ export default function SearchBar({
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
-  /**
-   * Allow a query search to wait on the response to the autocomplete request right
-   * before the search execution in order to retrieve the search intents
-   */
-  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
   const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(() => {
     return isVertical
       ? answersActions.executeVerticalAutocomplete()
       : answersActions.executeUniversalAutocomplete();
   });
+  const [ executeQuery, autocompletePromiseRef ] = useNearMeSearch(answersActions, geolocationOptions);
 
   const options = autocompleteResponse?.results.map(result => {
     return {
@@ -57,27 +50,13 @@ export default function SearchBar({
     count: options.length
   });
 
-  async function executeQuery () {
-    let intents: SearchIntent[] = [];
-    if (!answersActions.state.location.userLocation) {
-      const autocompleteResponseBeforeSearch = await autocompletePromiseRef.current;
-      intents = autocompleteResponseBeforeSearch?.inputIntents || [];
-      await updateLocationIfNeeded(answersActions, intents, geolocationOptions);
-    }
-    executeSearch(answersActions, isVertical);
-  }
 
   function renderSearchButton () {
-    return (
-      <button
-        className='SearchBar__submitButton'
-        onClick={executeQuery}
-      >
-        {isLoading
-          ? <LoadingIndicator />
-          : <MagnifyingGlassIcon />}
-      </button>
-    )
+    return <SearchButton
+      className='SearchBar__submitButton'
+      handleClick={executeQuery}
+      isLoading={isLoading || false}
+    />
   }
 
   return (
@@ -111,7 +90,8 @@ export default function SearchBar({
             onFocusChange={value => {
               answersActions.setQuery(value);
             }}
-            onSelectOption={(optionValue) => {
+            onSelectOption={optionValue => {
+              autocompletePromiseRef.current = undefined;
               answersActions.setQuery(optionValue);
               executeQuery();
             }}
