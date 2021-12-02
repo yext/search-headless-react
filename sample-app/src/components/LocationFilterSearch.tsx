@@ -92,7 +92,29 @@ export default function LocationFilterSearch ({
   const onGetUserLocation = async () => {
     const position: GeolocationPosition = await getUserLocation();
     const location = position.coords.altitude + ' ' + position.coords.longitude;
-    setInput(location);
+    console.log('this is the real user\'s location coordinate', location);
+    /**
+     * Note: in a real experience, user may use another library for coordinate to name
+     * conversion or trigger a search to use the returned locationBias. For the purpose
+     * of this mock, a fixed location is used.
+     */
+    const mockLocation = 'New York, New York, United States';
+    setInput(mockLocation);
+    const response = await executeFilterSearch(mockLocation);
+    const result = response?.sections[0].results[0];
+    if(!result) {
+      console.warn('unknown location.');
+      return;
+    }
+    onSelectOption(result.value, result.filter);
+    if (result.filter) {
+      if (selectedFilterOptionRef.current) {
+        answersActions.setFilterOption({ ...selectedFilterOptionRef.current, selected: false });
+      }
+      selectedFilterOptionRef.current = result.filter;
+      answersActions.setFilterOption({ ...result.filter, selected: true });
+      answersActions.executeVerticalQuery();
+    }
   }
 
   return (
