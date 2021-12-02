@@ -82,9 +82,11 @@ export default function Navigation({ links, customCssClasses, compositionMethod 
   const { search } = useLocation();
   const visibleLinks = links.slice(0, links.length - numOverflowLinks);
   const overflowLinks = links.slice(-numOverflowLinks);
-  const menuButtonClassNames = classNames(cssClasses.menuButton, {
-    [cssClasses.menuButton___menuOpen ?? '']: menuOpen
-  });
+  const menuButtonClassNames = cssClasses.menuButton___menuOpen
+    ? classNames(cssClasses.menuButton, {
+      [cssClasses.menuButton___menuOpen]: menuOpen
+    })
+    : cssClasses.menuButton;
   return (
     <nav className={cssClasses.nav} ref={navigationRef}>
       {visibleLinks.map(l => renderLink(l, search, cssClasses))}
