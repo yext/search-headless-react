@@ -14,7 +14,7 @@ it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
   try {
     render(<Test />);
   } catch(e) {
-    expect(e).toEqual(new Error('Attempted to use AnswersHeadless before it\'s initialized.'
+    expect(e).toEqual(new Error('Attempted to call useAnswersState() outside of AnswersHeadlessProvider.'
     + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.'));
   }
   jest.clearAllMocks();

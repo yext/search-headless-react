@@ -11,7 +11,7 @@ export type StateSelector<T> = (s: State) => T;
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const answers = useContext(AnswersHeadlessContext);
   if (answers.state === undefined) {
-    throw new Error('Attempted to use AnswersHeadless before it\'s initialized.'
+    throw new Error('Attempted to call useAnswersState() outside of AnswersHeadlessProvider.'
      + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
   }
 
