@@ -4,13 +4,13 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 interface RouteData {
   path: string,
   page: JSX.Element,
-  exact?: boolean
+  exact?: boolean,
+  Layout?: LayoutComponent
 }
 
 export type LayoutComponent = ComponentType<{ page: JSX.Element }>
 
 interface PageProps {
-  Layout?: LayoutComponent,
   routes: RouteData[]
 }
 
@@ -18,9 +18,9 @@ interface PageProps {
  * PageRouter abstracts away logic surrounding react-router, and provides an easy way
  * to specify a {@link LayoutComponent} for a page.
  */
-export default function PageRouter({ Layout, routes }: PageProps) {
+export default function PageRouter({ routes }: PageProps) {
   const pages = routes.map(routeData => {
-    const { path, page, exact } = routeData;
+    const { path, page, exact, Layout } = routeData;
     if (Layout) {
       return (
         <Route key={path} path={path} exact={exact}>

@@ -1,6 +1,8 @@
 import './sass/App.scss';
 import VerticalSearchPage from './pages/VerticalSearchPage';
 import UniversalSearchPage from './pages/UniversalSearchPage';
+import FilterSearchPage from './pages/FilterSearchPage';
+import FilterSearchResultsPage from './pages/FilterSearchResultsPage';
 import PageRouter from './PageRouter';
 import StandardLayout from './pages/StandardLayout';
 import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
@@ -10,12 +12,22 @@ const routes = [
   {
     path: '/',
     exact: true,
-    page: <UniversalSearchPage universalResultsConfig={universalResultsConfig} />
+    page: <UniversalSearchPage universalResultsConfig={universalResultsConfig} />,
+    Layout: StandardLayout
+  },
+  {
+    path: '/filter-search-page',
+    page: <FilterSearchPage verticalKey='people' />
+  },
+  {
+    path: '/filter-search-results-page',
+    page: <FilterSearchResultsPage verticalKey='people' />
   },
   ...Object.keys(universalResultsConfig).map(key => {
     return {
       path: `/${key}`,
-      page: <VerticalSearchPage verticalKey={key} />
+      page: <VerticalSearchPage verticalKey={key} />,
+      Layout: StandardLayout
     }
   })
 ];
@@ -31,7 +43,6 @@ export default function App() {
     >
       <div className='App'>
         <PageRouter
-          Layout={StandardLayout}
           routes={routes}
         />
       </div>

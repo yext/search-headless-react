@@ -5,6 +5,7 @@ import renderWithHighlighting from "./utils/renderWithHighlighting";
 import DropdownSection, { DropdownSectionCssClasses, Option } from "./DropdownSection";
 import { processTranslation } from "./utils/processTranslation";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
+import { getUserLocation } from "../utils/search-operations";
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -31,7 +32,7 @@ export interface FilterSearchProps {
   customCssClasses?: FilterSearchCssClasses
 }
 
-export default function FilterSearch ({
+export default function LocationFilterSearch ({
   title,
   sectioned,
   inputValue='',
@@ -87,52 +88,62 @@ export default function FilterSearch ({
     });
     screenReaderText = screenReaderPhrases.join(' ');
   }
+
+  const onGetUserLocation = async () => {
+    const position: GeolocationPosition = await getUserLocation();
+    const location = position.coords.altitude + ' ' + position.coords.longitude;
+    setInput(location);
+  }
+
   return (
     <div className='FilterSearch'>
       <h1>{title}</h1>
-      <InputDropdown
-        inputValue={input}
-        placeholder='this is filter search...'
-        screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
-        screenReaderInstructionsId={screenReaderInstructionsId}
-        screenReaderText={screenReaderText}
-        onlyAllowDropdownOptionSubmissions={true}
-        onInputChange={newInput => {
-          setInput(newInput);
-        }}
-        onInputFocus={(input) => {
-          executeFilterSearch(input);
-        }}
-        cssClasses={cssClasses}
-      >
-        {sections.map((section, sectionIndex) => {
-          return (
-            <DropdownSection
-              key={`Autocomplete__section-${sectionIndex}`}
-              options={section.results}
-              optionIdPrefix={`Autocomplete__option-${sectionIndex}`}
-              onFocusChange={value => {
-                setInput(value);
-              }}
-              onSelectOption={(optionValue, optionIndex) => {
-                setInput(optionValue);
-                const result = filterSearchResponse?.sections[sectionIndex].results[optionIndex];
-                onSelectOption(optionValue, result?.filter);
-                if (result?.filter) {
-                  if (selectedFilterOptionRef.current) {
-                    answersActions.setFilterOption({ ...selectedFilterOptionRef.current, selected: false });
+      <div className='FilterSearch__searchContainter'>
+        <InputDropdown
+          inputValue={input}
+          placeholder='this is filter search...'
+          screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
+          screenReaderInstructionsId={screenReaderInstructionsId}
+          screenReaderText={screenReaderText}
+          onlyAllowDropdownOptionSubmissions={true}
+          onInputChange={newInput => {
+            setInput(newInput);
+          }}
+          onInputFocus={(input) => {
+            executeFilterSearch(input);
+          }}
+          cssClasses={cssClasses}
+        >
+          {sections.map((section, sectionIndex) => {
+            return (
+              <DropdownSection
+                key={`Autocomplete__section-${sectionIndex}`}
+                options={section.results}
+                optionIdPrefix={`Autocomplete__option-${sectionIndex}`}
+                onFocusChange={value => {
+                  setInput(value);
+                }}
+                onSelectOption={(optionValue, optionIndex) => {
+                  setInput(optionValue);
+                  const result = filterSearchResponse?.sections[sectionIndex].results[optionIndex];
+                  onSelectOption(optionValue, result?.filter);
+                  if (result?.filter) {
+                    if (selectedFilterOptionRef.current) {
+                      answersActions.setFilterOption({ ...selectedFilterOptionRef.current, selected: false });
+                    }
+                    selectedFilterOptionRef.current = result.filter;
+                    answersActions.setFilterOption({ ...result.filter, selected: true });
+                    answersActions.executeVerticalQuery();
                   }
-                  selectedFilterOptionRef.current = result.filter;
-                  answersActions.setFilterOption({ ...result.filter, selected: true });
-                  answersActions.executeVerticalQuery();
-                }
-              }}
-              label={section.label}
-              cssClasses={cssClasses}
-            />
-          );
-        })}
-      </InputDropdown>
+                }}
+                label={section.label}
+                cssClasses={cssClasses}
+              />
+            );
+          })}
+        </InputDropdown>
+        <button onClick={onGetUserLocation}>get user location</button>
+      </div>
     </div>
   );
 }

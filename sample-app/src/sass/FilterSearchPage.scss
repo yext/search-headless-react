@@ -1,0 +1,50 @@
+.FilterSearchPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__filtersContainer {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__inputElement {
+    width: 80%;
+    padding-right: 0.5em;
+    padding-left: 0.25em;
+    border: 1px solid #dcdcdc;
+  }
+
+  &__autocompleteContainter {
+    position: absolute;
+    width: 20%;
+  }
+
+  &__locationFilter {
+    display: flex;
+  }
+  
+  .FilterSearch__searchContainter {
+    display: flex;
+  }
+}
+
+button {
+  border: 1px solid #dcdcdc;
+}
+
+.FilterSearchResultsPage {
+  &__results {
+    margin-top: 20px;
+  }
+
+  .FilterSearch__searchContainter {
+    display: flex;
+  }
+}
