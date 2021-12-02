@@ -50,14 +50,12 @@ export function useComposedCssClasses<ClassInterface> (
  * @param compositionMethod The compositionMethod method
  * @returns The css-modules-theme Compose type
  */
-function getCssModulesCompose(compositionMethod?: CompositionMethod): Compose {
-  if (compositionMethod === 'replace') {
-    return Compose.Replace;
-  } else if (compositionMethod === 'assign') {
-    return Compose.Assign;
-  } else {
-    return Compose.Merge;
-  }
+function getCssModulesCompose(compositionMethod: CompositionMethod = 'merge'): Compose {
+  return {
+    replace: Compose.Replace,
+    assign: Compose.Assign,
+    merge: Compose.Merge
+  }[compositionMethod];
 }
 
 /**

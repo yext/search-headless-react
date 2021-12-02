@@ -27,6 +27,7 @@ export default function App() {
       experienceKey='slanswers'
       locale='en'
       verticalKey='people'
+      sessionTrackingEnabled={true}
     >
       <div className='App mx-8 mt-4'>
         <PageRouter

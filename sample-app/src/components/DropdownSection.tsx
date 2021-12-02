@@ -1,40 +1,43 @@
 import classNames from "classnames";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export interface Option {
   value: string,
   display: JSX.Element
 }
 
+export interface DropdownSectionCssClasses {
+  sectionContainer?: string,
+  sectionLabel?: string,
+  optionsContainer?: string,
+  option?: string,
+  focusedOption?: string
+}
+
 export interface DropdownSectionProps {
-  focusStatus?: string,
+  isFocused?: boolean,
   options: Option[],
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
   onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
-  onClickOption?: (option: Option, optionIndex: number) => void,
+  onSelectOption?: (optionValue: string, optionIndex: number) => void,
   label?: string,
-  cssClasses: {
-    sectionContainer: string,
-    sectionLabel: string,
-    optionsContainer: string,
-    option: string,
-    focusedOption: string
-  }
+  cssClasses?: DropdownSectionCssClasses
 }
 
 export default function DropdownSection({
-  focusStatus,
+  isFocused = false,
   options,
   optionIdPrefix,
   onFocusChange = () => {},
   onLeaveSectionFocus = () => {},
-  onClickOption = () => {},
+  onSelectOption = () => {},
   label = '',
   cssClasses
 }: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
+  const wasFocused = useRef<boolean>(isFocused);
 
   function incrementOptionFocus() {
     let newIndex = focusedOptionIndex + 1;
@@ -59,55 +62,58 @@ export default function DropdownSection({
   }
 
   function handleKeyDown(evt: globalThis.KeyboardEvent) {
-    if (focusStatus === 'active') {
-      if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(evt.key)) {
-        evt.preventDefault();
-      }
+    if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft'].includes(evt.key)) {
+      evt.preventDefault();
+    }
 
-      if (evt.key === 'ArrowDown' || evt.key === 'ArrowRight') {
-        incrementOptionFocus();
-      } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
-        decrementOptionFocus();
-      }
+    if (evt.key === 'ArrowDown' || evt.key === 'ArrowRight') {
+      incrementOptionFocus();
+    } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
+      decrementOptionFocus();
+    } else if (evt.key === 'Enter') {
+      onSelectOption(options[focusedOptionIndex].value, focusedOptionIndex);
     }
   }
 
   useEffect(() => {
-    if (focusStatus === 'active') {
-      onFocusChange(options[focusedOptionIndex].value, `${optionIdPrefix}-${focusedOptionIndex}`);
-    }
-  }, [focusStatus, focusedOptionIndex, onFocusChange, optionIdPrefix, options]);
-
-  useEffect(() => {
-    if (focusStatus === 'active') {
+    if (isFocused) {
+      if (!wasFocused.current) {
+        onFocusChange(options[focusedOptionIndex].value, `${optionIdPrefix}-${focusedOptionIndex}`);
+      }
+      wasFocused.current = true;
       document.addEventListener('keydown', handleKeyDown);
       return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+    else {
+      wasFocused.current = false;
     }
   });
 
   function renderOption(option: Option, index: number) {
-    const className = classNames(cssClasses.option, {
-      [cssClasses.focusedOption]: focusStatus === 'active' && index === focusedOptionIndex
-    })
+    const className = cssClasses?.focusedOption
+      ? classNames(cssClasses?.option, {
+        [cssClasses.focusedOption]: isFocused && index === focusedOptionIndex
+      })
+      : cssClasses?.option;
     return (
       <div
         key={index}
         className={className}
         id={`${optionIdPrefix}-${index}`}
-        onClick={() => onClickOption(option, index)}>
+        onClick={() => onSelectOption(option.value, index)}>
         {option.display}
       </div>
     );
   }
 
   return (
-    <div className={cssClasses.sectionContainer}>
+    <div className={cssClasses?.sectionContainer}>
       {label &&
-        <div className={cssClasses.sectionLabel}>
+        <div className={cssClasses?.sectionLabel}>
           {label}
         </div>
       }
-      <div className={cssClasses.optionsContainer}>
+      <div className={cssClasses?.optionsContainer}>
         {options.map((option, index) => renderOption(option, index))}
       </div>
     </div>
