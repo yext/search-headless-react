@@ -1,6 +1,12 @@
 import React, { useReducer, KeyboardEvent, useRef, useEffect, useState } from "react"
-import DropdownSection, { Option } from "./DropdownSection";
+import DropdownSection from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
+
+export interface InputDropdownCssClasses {
+  dropdownContainer?: string,
+  inputElement?: string,
+  inputContainer?: string
+}
 
 interface Props {
   inputValue?: string,
@@ -8,15 +14,12 @@ interface Props {
   screenReaderInstructions: string,
   screenReaderInstructionsId: string,
   screenReaderText: string,
+  onlyAllowDropdownOptionSubmissions: boolean,
   onSubmit?: (value: string) => void,
   onInputChange: (value: string) => void,
-  onInputFocus: () => void,
+  onInputFocus: (input: string) => void,
   renderButtons?: () => JSX.Element | null,
-  cssClasses: {
-    dropdownContainer: string,
-    inputElement: string,
-    inputContainer: string
-  }
+  cssClasses?: InputDropdownCssClasses
 }
 
 interface State {
@@ -49,6 +52,7 @@ export default function InputDropdown({
   screenReaderInstructions,
   screenReaderInstructionsId,
   screenReaderText,
+  onlyAllowDropdownOptionSubmissions,
   children,
   onSubmit = () => {},
   onInputChange,
@@ -82,8 +86,9 @@ export default function InputDropdown({
       return child;
     }
 
-    const modifiedOnClickOption = (option: Option, optionIndex: number) => {
-      child.props.onClickOption?.(option, optionIndex);
+    const modifiedOnSelectOption = (optionValue: string, optionIndex: number) => {
+      child.props.onSelectOption?.(optionValue, optionIndex);
+      setLatestUserInput(optionValue);
       dispatch({ type: 'HideSections' });
     }
 
@@ -93,13 +98,13 @@ export default function InputDropdown({
     };
 
     if (focusedSectionIndex === undefined) {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelectOption: modifiedOnSelectOption });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
-        onLeaveSectionFocus, focusStatus: 'active', key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onClickOption: modifiedOnClickOption
+        onLeaveSectionFocus, isFocused: true, key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSelectOption: modifiedOnSelectOption
       });
     } else {
-      return React.cloneElement(child, { onLeaveSectionFocus, focusStatus: 'inactive', key: `${index}-${childrenKey}`, onClickOption: modifiedOnClickOption });
+      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelectOption: modifiedOnSelectOption });
     }
   });
 
@@ -134,7 +139,7 @@ export default function InputDropdown({
   }
 
   function handleDocumentKeydown(evt: globalThis.KeyboardEvent) {
-    if (['ArrowDown'].includes(evt.key)) {
+    if (['ArrowDown', 'ArrowUp'].includes(evt.key)) {
       evt.preventDefault();
     }
 
@@ -157,8 +162,8 @@ export default function InputDropdown({
   });
 
   function handleInputElementKeydown(evt: KeyboardEvent<HTMLInputElement>) {
-    if (evt.key === 'Enter') {
-      onInputChange(inputValue);
+    if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlyAllowDropdownOptionSubmissions) {
+      setLatestUserInput(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideSections' });
     }
@@ -166,21 +171,21 @@ export default function InputDropdown({
 
   return (
     <>
-      <div className={cssClasses.inputContainer}>
+      <div className={cssClasses?.inputContainer}>
         <input
-          className={cssClasses.inputElement}
+          className={cssClasses?.inputElement}
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
             setLatestUserInput(value);
             onInputChange(value);
-            onInputFocus();
+            onInputFocus(value);
             setChildrenKey(childrenKey + 1);
             dispatch({ type: 'ShowSections' });
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
-            onInputFocus();
+            onInputFocus(inputValue);
             setChildrenKey(childrenKey + 1);
             dispatch({ type: 'ShowSections' });
             if (numSections > 0 || inputValue) {
@@ -206,7 +211,7 @@ export default function InputDropdown({
       />
       {shouldDisplayDropdown && numSections > 0 &&
         <div
-          className={cssClasses.dropdownContainer}
+          className={cssClasses?.dropdownContainer}
           ref={dropdownRef}
         >
           {childrenWithProps}

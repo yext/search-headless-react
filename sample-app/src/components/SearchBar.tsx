@@ -5,7 +5,7 @@ import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass
 import '../sass/SearchBar.scss';
 import '../sass/Autocomplete.scss';
 import LoadingIndicator from './LoadingIndicator';
-import { useAutocomplete } from '../hooks/useAutocomplete';
+import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
 import DropdownSection from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
@@ -38,7 +38,11 @@ export default function SearchBar({
    * before the search execution in order to retrieve the search intents
    */
   const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
-  const [autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+  const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(() => {
+    return isVertical
+      ? answersActions.executeVerticalAutocomplete()
+      : answersActions.executeUniversalAutocomplete();
+  });
 
   const options = autocompleteResponse?.results.map(result => {
     return {
@@ -84,6 +88,7 @@ export default function SearchBar({
         screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
         screenReaderInstructionsId={screenReaderInstructionsId}
         screenReaderText={screenReaderText}
+        onlyAllowDropdownOptionSubmissions={false}
         onSubmit={executeQuery}
         onInputChange={value => {
           answersActions.setQuery(value);
@@ -106,8 +111,8 @@ export default function SearchBar({
             onFocusChange={value => {
               answersActions.setQuery(value);
             }}
-            onClickOption={option => {
-              answersActions.setQuery(option.value);
+            onSelectOption={(optionValue) => {
+              answersActions.setQuery(optionValue);
               executeQuery();
             }}
             cssClasses={{
