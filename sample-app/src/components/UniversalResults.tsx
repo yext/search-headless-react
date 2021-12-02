@@ -4,14 +4,24 @@ import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFil
 import SectionHeader from "../sections/SectionHeader";
 import { SectionComponent } from "../models/sectionComponent";
 import { CardConfig } from '../models/cardComponent';
+import { useComposedCssClasses, CompositionMethod } from "../hooks/useComposedCssClasses";
 import classNames from "classnames";
-import '../sass/UniversalResults.scss';
+
+interface UniversalResultsCssClasses {
+  container?: string,
+  results___loading?: string
+}
+
+const builtInCssClasses: UniversalResultsCssClasses = {
+  container: 'space-y-8 mt-6',
+  results___loading: 'opacity-50'
+}
 
 export interface VerticalConfig {
   SectionComponent?: SectionComponent,
   cardConfig?: CardConfig,
   label?: string,
-  viewMore?: boolean
+  viewAllButton?: boolean
 }
 
 interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
@@ -20,7 +30,9 @@ interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appl
 
 interface UniversalResultsProps {
   appliedFiltersConfig?: AppliedFiltersConfig,
-  verticalConfigs: Record<string, VerticalConfig>
+  verticalConfigs: Record<string, VerticalConfig>,
+  customCssClasses?: UniversalResultsCssClasses,
+  compositionMethod?: CompositionMethod
 }
 
 /**
@@ -28,8 +40,11 @@ interface UniversalResultsProps {
  */
 export default function UniversalResults({
   verticalConfigs,
-  appliedFiltersConfig
+  appliedFiltersConfig,
+  customCssClasses,
+  compositionMethod
 }: UniversalResultsProps): JSX.Element | null {
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod)
   const resultsFromAllVerticals = useAnswersState(state => state?.universal?.verticals) || [];
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 
@@ -37,7 +52,9 @@ export default function UniversalResults({
     return null;
   }
 
-  const resultsClassNames = classNames('UniversalResults', { 'UniversalResults--loading': isLoading });
+  const resultsClassNames = cssClasses.results___loading
+    ? classNames(cssClasses.container, { [cssClasses.results___loading]: isLoading })
+    : cssClasses.container;
 
   return (
     <div className={resultsClassNames}>
@@ -81,9 +98,14 @@ function renderVerticalSections(props: VerticalSectionsProps): JSX.Element {
         return <SectionComponent
           results={results}
           verticalKey={verticalKey}
-          header={<SectionHeader {...{ label, resultsCountConfig, appliedFiltersConfig }}/>}
+          header={<SectionHeader {...{ 
+            label, 
+            resultsCountConfig,
+            appliedFiltersConfig,
+            verticalKey,
+            viewAllButton: verticalConfig.viewAllButton 
+          }}/>}
           cardConfig={verticalConfig.cardConfig}
-          viewMore={verticalConfig.viewMore}
           key={verticalKey}
         />
       })
