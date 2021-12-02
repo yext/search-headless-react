@@ -3,8 +3,8 @@ import { VerticalResults } from '@yext/answers-headless-react';
 import { VisualAutocompleteSection, VisualAutocompleteSectionProps } from './VisualAutocompleteSection';
 
 /**
- * VisualAutocompleteEntities is a wrapper around props.children, that adds special behavior to any
- * VisualAutocompleteSection children found.
+ * VisualAutocompleteEntities provides vertical results to any VisualAutocompleteSection children found.
+ * The results given correspond to the child's verticalKey prop.
  */
 export default function VisualAutocompleteEntities({ children, verticalResultsArray }: PropsWithChildren<{
   verticalResultsArray: VerticalResults[]

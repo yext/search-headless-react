@@ -7,9 +7,10 @@ export interface VisualAutocompleteSectionProps {
 }
 
 /**
- * VisualAutocompleteSection is a dummy component who's responsibility is decorating its children with
- * VisualAutocomplete behavior. The results that correspond to the given verticalKey are
- * exposed as a FACC (function as a child component).
+ * VisualAutocompleteSection is responsible for providing configuration to VisualAutocompleteEntities,
+ * and allowing users to specify arbitrary VisualAutocomplete layouts.
+ * 
+ * This is done by providing results through props.children, using an FACC (function as a child component).
  */
 export function VisualAutocompleteSection(_: VisualAutocompleteSectionProps) {
   return null;

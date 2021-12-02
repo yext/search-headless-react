@@ -11,8 +11,8 @@ interface VisualEntitiesState {
 type ExecuteVisualEntitiesQuery = (query: string, universalLimit: UniversalLimit) => void
 
 /**
- * VisualAutocomplete makes a universal autocomplete, and a debounced universal search request
- * every time it is called.
+ * useVisualEntities provides state surrounding the visual entities portion of visual autocomplete,
+ * which performs debounced universal searches.
  * 
  * @param headlessId a unique id for the new headless instance that will be created by the hook
  * @param debounceTime the time in milliseconds to debounce the universal search request

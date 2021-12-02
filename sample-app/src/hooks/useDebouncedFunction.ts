@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-type Func = (...args: any) => any;
+type Func = (...args: any[]) => any;
 type DebouncedFunction<F extends Func> = (...args: Parameters<F>) => Promise<undefined | ReturnType<F>>;
 
 export default function useDebouncedFunction<F extends Func>(func: F, milliseconds: number): DebouncedFunction<F> {
