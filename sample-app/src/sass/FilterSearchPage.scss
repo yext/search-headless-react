@@ -29,10 +29,6 @@
   &__locationFilter {
     display: flex;
   }
-  
-  .FilterSearch__searchContainter {
-    display: flex;
-  }
 }
 
 button {
@@ -42,9 +38,5 @@ button {
 .FilterSearchResultsPage {
   &__results {
     margin-top: 20px;
-  }
-
-  .FilterSearch__searchContainter {
-    display: flex;
   }
 }
