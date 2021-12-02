@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useAnswersActions, FilterSearchResponse, SearchParameterField } from '@yext/answers-headless-react';
+import { useRef, useState } from "react";
+import { useAnswersActions, FilterSearchResponse, SearchParameterField, Filter } from '@yext/answers-headless-react';
 import InputDropdown, { InputDropdownCssClasses } from "./InputDropdown";
 import renderWithHighlighting from "./utils/renderWithHighlighting";
 import DropdownSection, { DropdownSectionCssClasses, Option } from "./DropdownSection";
@@ -38,10 +38,11 @@ export default function FilterSearch ({
 }: FilterSearchProps): JSX.Element {
   const answersActions = useAnswersActions();
   const [input, setInput] = useState('');
+  const selectedFilterOptionRef = useRef<Filter|null>(null);
   const searchParamFields = searchFields.map((searchField) => {
     return { ...searchField, fetchEntities: false }
   });
-  const cssClasses = builtInCssClasses;
+  const cssClasses = { builtInCssClasses, ...customCssClasses };
 
   const [filterSearchResponse, executeFilterSearch] = useSynchronizedRequest<string, FilterSearchResponse>(inputValue =>
     answersActions.executeFilterSearch(inputValue ?? '', sectioned, searchParamFields)
@@ -114,6 +115,10 @@ export default function FilterSearch ({
                 setInput(optionValue);
                 const result = filterSearchResponse?.sections[sectionIndex].results[optionIndex];
                 if (result?.filter) {
+                  if (selectedFilterOptionRef.current) {
+                    answersActions.setFilterOption({ ...selectedFilterOptionRef.current, selected: false });
+                  }
+                  selectedFilterOptionRef.current = result.filter;
                   answersActions.setFilterOption({ ...result.filter, selected: true });
                   answersActions.executeVerticalQuery();
                 }
