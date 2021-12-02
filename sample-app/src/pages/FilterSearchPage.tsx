@@ -3,7 +3,7 @@ import { useAnswersActions, Filter } from '@yext/answers-headless-react';
 import FilterSearch from '../components/FilterSearch';
 import LocationFilterSearch from '../components/LocationFilterSearch';
 import '../sass/FilterSearchPage.scss';
-import { useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 const filterSearchNameField = [{
   fieldApiName: 'name',
@@ -34,8 +34,10 @@ export interface FilterSeachPageLocationParams {
 export default function FilterSearchPage(props: { verticalKey: string }) {
   const { verticalKey } = props;
   const answersActions = useAnswersActions();
-  answersActions.setStaticFilters([]);
-  answersActions.setVerticalKey(verticalKey);
+  useLayoutEffect(() => {
+    answersActions.setStaticFilters([]);
+    answersActions.setVerticalKey(verticalKey);
+  });
   const history = useHistory();
   const selectedOptionRef = useRef<FilterSeachPageLocationParams>({
     filterSearchNameOption: null,

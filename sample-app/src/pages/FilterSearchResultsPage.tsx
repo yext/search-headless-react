@@ -9,7 +9,7 @@ import '../sass/FilterSearchPage.scss';
 import { StandardCard } from '../components/cards/StandardCard';
 import { useLocation } from 'react-router';
 import { FilterSeachPageLocationParams } from './FilterSearchPage';
-import { useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import LocationFilterSearch from '../components/LocationFilterSearch';
 
 const filterSearchNameField = [{
@@ -34,8 +34,11 @@ const staticFiltersGroupLabels = {
 
 
 export default function FilterSearchPageResults(props: { verticalKey: string }) {
-  // const { verticalKey } = props;
+  const { verticalKey } = props;
   const answersActions = useAnswersActions();
+  useLayoutEffect(() => {
+    answersActions.setVerticalKey(verticalKey);
+  });
   const onSubmit = () => {
     answersActions.setQuery('');
     answersActions.executeVerticalQuery();
