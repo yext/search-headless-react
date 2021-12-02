@@ -1,11 +1,11 @@
 import { AutocompleteResult, useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
-import InputDropdown from './InputDropdown';
+import InputDropdown, { InputDropdownCssClasses } from './InputDropdown';
 import renderHighlightedValue from './utils/renderHighlightedValue';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import { ReactComponent as YextLogoIcon } from '../icons/yext_logo.svg';
 import LoadingIndicator from './LoadingIndicator';
-import { useAutocomplete } from '../hooks/useAutocomplete';
-import DropdownSection from './DropdownSection';
+import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
+import DropdownSection, { DropdownSectionCssClasses } from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import { useRef } from 'react';
 import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless-react';
@@ -29,21 +29,10 @@ const builtInCssClasses: SearchBarCssClasses = {
   submitButton: 'h-full w-full'
 }
 
-interface SearchBarCssClasses {
+interface SearchBarCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {
   container?: string,
-  divider?: string,
-  dropdownContainer?: string,
-  focusedOption?: string,
-  inputContainer?: string,
   inputDropdownContainer?: string,
-  inputElement?: string,
-  logoContainer?: string,
-  option?: string,
-  optionsContainer?: string,
   resultIconContainer?: string,
-  searchButtonContainer?: string,
-  sectionContainer?: string,
-  sectionLabel?: string,
   submitButton?: string
 }
 
@@ -76,7 +65,11 @@ export default function SearchBar({
    * before the search execution in order to retrieve the search intents
    */
   const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
-  const [autocompleteResponse, executeAutocomplete] = useAutocomplete(isVertical);
+  const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(() => {
+    return isVertical
+      ? answersActions.executeVerticalAutocomplete()
+      : answersActions.executeUniversalAutocomplete();
+  });
 
   const options = autocompleteResponse?.results.map(result => {
     return {
@@ -125,20 +118,9 @@ export default function SearchBar({
         <MagnifyingGlassIcon/>
       </div>
       <div>
-        {renderAutocompleteValue(result)}
+        {renderHighlightedValue(result)}
       </div>
     </>
-  }
-
-  /**
-   * Renders a particular autocomplete value which may include highlighting
-   * @returns JSX.Element
-   */
-  function renderAutocompleteValue ({ value, matchedSubstrings }: AutocompleteResult) {
-    if (!matchedSubstrings || matchedSubstrings.length === 0) {
-      return <span>{value}</span>;
-    }
-    return renderHighlightedValue({ value, matchedSubstrings });
   }
 
   return (
@@ -150,6 +132,7 @@ export default function SearchBar({
           screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
           screenReaderInstructionsId={screenReaderInstructionsId}
           screenReaderText={screenReaderText}
+          onlyAllowDropdownOptionSubmissions={false}
           onSubmit={executeQuery}
           onInputChange={value => {
             answersActions.setQuery(value);
@@ -169,8 +152,8 @@ export default function SearchBar({
               onFocusChange={value => {
                 answersActions.setQuery(value);
               }}
-              onClickOption={option => {
-                answersActions.setQuery(option.value);
+              onSelectOption={optionValue => {
+                answersActions.setQuery(optionValue);
                 executeQuery();
               }}
               cssClasses={cssClasses}
