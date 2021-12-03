@@ -1,20 +1,18 @@
-import { AutocompleteResult, useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react';
 import InputDropdown, { InputDropdownCssClasses } from './InputDropdown';
-import renderHighlightedValue from './utils/renderHighlightedValue';
-import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 import { ReactComponent as YextLogoIcon } from '../icons/yext_logo.svg';
-import LoadingIndicator from './LoadingIndicator';
-import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
+import '../sass/Autocomplete.scss';
 import DropdownSection, { DropdownSectionCssClasses } from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
-import { useRef } from 'react';
-import { AutocompleteResponse, SearchIntent } from '@yext/answers-headless-react';
-import { executeSearch, updateLocationIfNeeded } from '../utils/search-operations';
-import { useComposedCssClasses, CompositionMethod } from '../hooks/useComposedCssClasses';
+import SearchButton from './SearchButton';
+import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
+import useSearchWithNearMeHandling from '../hooks/useSearchWithNearMeHandling';
+import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
+import renderAutocompleteResult from './utils/renderAutocompleteResult';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
-const builtInCssClasses: SearchBarCssClasses = {
+export const builtInCssClasses: SearchBarCssClasses = {
   container: 'h-12',
   divider: 'border mx-2',
   dropdownContainer: 'relative bg-white py-1 z-10',
@@ -29,7 +27,7 @@ const builtInCssClasses: SearchBarCssClasses = {
   submitButton: 'h-full w-full'
 }
 
-interface SearchBarCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {
+export interface SearchBarCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {
   container?: string,
   inputDropdownContainer?: string,
   resultIconContainer?: string,
@@ -46,7 +44,7 @@ interface Props {
 }
 
 /**
- * Renders a SearchBar that is hooked up with an Autocomplete component
+ * Renders a SearchBar that is hooked up with an InputDropdown component
  */
 export default function SearchBar({
   placeholder,
@@ -60,21 +58,17 @@ export default function SearchBar({
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input);
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
-  /**
-   * Allow a query search to wait on the response to the autocomplete request right
-   * before the search execution in order to retrieve the search intents
-   */
-  const autocompletePromiseRef = useRef<Promise<AutocompleteResponse | undefined>>();
   const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(() => {
     return isVertical
       ? answersActions.executeVerticalAutocomplete()
       : answersActions.executeUniversalAutocomplete();
   });
+  const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, geolocationOptions);
 
   const options = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      display: renderAutocompleteResult(result)
+      display: renderAutocompleteResult(result, cssClasses.resultIconContainer)
     }
   }) ?? [];
 
@@ -84,45 +78,13 @@ export default function SearchBar({
     count: options.length
   });
 
-  async function executeQuery () {
-    let intents: SearchIntent[] = [];
-    if (!answersActions.state.location.userLocation) {
-      const autocompleteResponseBeforeSearch = await autocompletePromiseRef.current;
-      intents = autocompleteResponseBeforeSearch?.inputIntents || [];
-      await updateLocationIfNeeded(answersActions, intents, geolocationOptions);
-    }
-    executeSearch(answersActions, isVertical);
+  function renderSearchButton() {
+    return <SearchButton
+      className={cssClasses.submitButton}
+      handleClick={executeQuery}
+      isLoading={isLoading || false}
+    />
   }
-
-  function renderSearchButton () {
-    return (
-      <button
-        className={cssClasses.submitButton}
-        onClick={executeQuery}
-      >
-        {isLoading
-          ? <LoadingIndicator />
-          : <MagnifyingGlassIcon />}
-      </button>
-    )
-  }
-
-  /**
-   * Renders an autocomplete result including the icon to the left
-   * @param result The result to render
-   * @returns JSX.Element
-   */
-  function renderAutocompleteResult (result: AutocompleteResult) {
-    return <>
-      <div className={cssClasses.resultIconContainer}>
-        <MagnifyingGlassIcon/>
-      </div>
-      <div>
-        {renderHighlightedValue(result)}
-      </div>
-    </>
-  }
-
   return (
     <div className={cssClasses.container}>
       <div className={cssClasses.inputDropdownContainer}>
@@ -132,7 +94,6 @@ export default function SearchBar({
           screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
           screenReaderInstructionsId={screenReaderInstructionsId}
           screenReaderText={screenReaderText}
-          onlyAllowDropdownOptionSubmissions={false}
           onSubmit={executeQuery}
           onInputChange={value => {
             answersActions.setQuery(value);
@@ -153,6 +114,7 @@ export default function SearchBar({
                 answersActions.setQuery(value);
               }}
               onSelectOption={optionValue => {
+                autocompletePromiseRef.current = undefined;
                 answersActions.setQuery(optionValue);
                 executeQuery();
               }}

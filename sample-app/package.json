@@ -104,6 +104,10 @@
           "ignoreComments": true
         }
       ],
+      "react/jsx-curly-brace-presence": [
+        "warn",
+        "never"
+      ],
       "@typescript-eslint/member-delimiter-style": [
         "error",
         {
