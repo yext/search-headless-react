@@ -84,7 +84,6 @@ export default function InputDropdown({
 
   let numSections = 0;
   const childrenWithProps = recursivelyMapChildren(children, (child, index) => {
-    console.log(child, React.isValidElement(child) && child.type === DropdownSection)
     if (!(React.isValidElement(child) && child.type === DropdownSection)) {
       return child;
     }
