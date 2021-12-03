@@ -2,7 +2,7 @@ name: WCAG tests
 
 on:
   pull_request:
-    branches: [develop, hotfix/*, release/*, support/*]
+    branches: [main, hotfix/*, release/*, support/*]
 
 jobs:
   WCAG-test:
