@@ -45,10 +45,9 @@ function isCtaData(data: unknown): data is CtaData {
   if (typeof data !== 'object' || data === null) {
     return false;
   }
-  const ctaData = data as CtaData;
   const expectedKeys = ['label', 'link', 'linkType'];
   return expectedKeys.every(key => {
-    return key in ctaData;
+    return key in data;
   });
 }
 
