@@ -44,7 +44,7 @@ export default function AppliedFilters({
       if (filter.filterType === 'NLP_FILTER') {
         return <NlpFilter filter={filter} key={filter.label} cssClasses={cssClasses}/>
       }
-      return <RemovableFilter filter={filter} key={filter.label}/>
+      return <RemovableFilter filter={filter} key={filter.label} cssClasses={cssClasses}/>
     });
   
     return <>{filterElems}</>;
