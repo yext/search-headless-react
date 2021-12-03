@@ -30,7 +30,7 @@ async function wcagTester() {
     port: PORT
   });
   server.start();
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   
   const pageNavigator = new PageNavigator(page, `http://localhost:${PORT}`);
