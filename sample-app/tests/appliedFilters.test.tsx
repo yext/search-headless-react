@@ -1,9 +1,13 @@
 import { act, render } from '@testing-library/react';
-import { provideAnswersHeadless, Matcher } from '@yext/answers-headless';
-import { AnswersHeadlessContext } from '../../src';
-import DecoratedAppliedFilters from '../../sample-app/src/components/DecoratedAppliedFilters';
+import { 
+  provideAnswersHeadless,
+  AnswersHeadlessContext,
+  Matcher,
+  AnswersHeadless
+} from '@yext/answers-headless-react';
+import DecoratedAppliedFilters from '../src/components/DecoratedAppliedFilters';
 import { useCallback } from 'react';
-import { verticalQueryResponseWithNlpFilters } from '../setup/responses/vertical-query';
+import { verticalQueryResponseWithNlpFilters } from '../../tests/setup/responses/vertical-query';
 
 describe('AppliedFilters component work as expected', () => {
 
@@ -34,7 +38,7 @@ describe('AppliedFilters component work as expected', () => {
     );
 
     act(() => answers.setQuery('someQuery'));
-    await act( () => answers.executeVerticalQuery());
+    await act( async () => { await answers.executeVerticalQuery() });
     act(() => answers.setStaticFilters([mockedFilter]));
 
     let filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
@@ -75,7 +79,7 @@ describe('AppliedFilters component work as expected', () => {
     );
 
     act(() => answers.setQuery('someQuery'));
-    await act( () => answers.executeVerticalQuery());
+    await act( async () => { await answers.executeVerticalQuery() });
     act(() => answers.setFacets(mockedFacets));
 
     let facetLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
@@ -102,7 +106,7 @@ describe('AppliedFilters component work as expected', () => {
     );
 
     act(() => answers.setQuery('resultsWithNlpFilter'));
-    await act( () => answers.executeVerticalQuery());
+    await act( async () => { await answers.executeVerticalQuery() });
 
     const nlpFilterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
     expect(nlpFilterLabels.length).toBe(1);
@@ -115,7 +119,7 @@ describe('AppliedFilters component work as expected', () => {
 
 });
 
-function createAnswersHeadless() {
+function createAnswersHeadless(): AnswersHeadless {
   const answers = provideAnswersHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
