@@ -20,6 +20,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
-    - run: cd sample-app && npm run ci
-    - run: cd sample-app && npm run build
-    - run: cd sample-app && npm run wcag
+    - run: npm run install-sample-app
+    - run: npm run build-sample-app
+    - run: npm run wcag
