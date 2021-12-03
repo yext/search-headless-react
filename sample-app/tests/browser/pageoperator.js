@@ -4,8 +4,7 @@ const { BrowserPageWidths } = require("./constants");
  * Responsible for browser navigation based on given test locations.
  * Each test location is an object which may contain:
  * - name: name of this test
- * - page: the vertical page to navigate to (if omit, navigate to universal page by default)
- * - queryParams: the query params to peform the search on
+ * - path: additional path to append to base url
  * - viewport: viewport of the page (if omit, desktop view is used by default)
  * - commands: a list of actions to perform on the page by the page navigator
  */
