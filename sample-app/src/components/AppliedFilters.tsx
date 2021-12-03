@@ -40,7 +40,7 @@ export default function AppliedFilters({
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod);
 
   function renderAppliedFilters(filters: Array<DisplayableFilter>): JSX.Element {
-    const filterElems = filters.map((filter: DisplayableFilter, index: number) => {
+    const filterElems = filters.map((filter: DisplayableFilter) => {
       if (filter.filterType === 'NLP_FILTER') {
         return <NlpFilter filter={filter} key={filter.label} cssClasses={cssClasses}/>
       }
