@@ -33,7 +33,7 @@ export default function DropdownSection({
   onLeaveSectionFocus = () => {},
   onSelectOption = () => {},
   label = '',
-  cssClasses
+  cssClasses = {}
 }: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
@@ -90,11 +90,11 @@ export default function DropdownSection({
   });
 
   function renderOption(option: Option, index: number) {
-    const className = cssClasses?.focusedOption
-      ? classNames(cssClasses?.option, {
+    const className = cssClasses.focusedOption
+      ? classNames(cssClasses.option, {
         [cssClasses.focusedOption]: isFocused && index === focusedOptionIndex
       })
-      : cssClasses?.option;
+      : cssClasses.option;
     return (
       <div
         key={index}
@@ -107,13 +107,13 @@ export default function DropdownSection({
   }
 
   return (
-    <div className={cssClasses?.sectionContainer}>
+    <div className={cssClasses.sectionContainer}>
       {label &&
-        <div className={cssClasses?.sectionLabel}>
+        <div className={cssClasses.sectionLabel}>
           {label}
         </div>
       }
-      <div className={cssClasses?.optionsContainer}>
+      <div className={cssClasses.optionsContainer}>
         {options.map((option, index) => renderOption(option, index))}
       </div>
     </div>

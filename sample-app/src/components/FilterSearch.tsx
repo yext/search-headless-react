@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useAnswersActions, FilterSearchResponse, SearchParameterField, Filter } from '@yext/answers-headless-react';
 import InputDropdown, { InputDropdownCssClasses } from "./InputDropdown";
-import renderWithHighlighting from "./utils/renderWithHighlighting";
+import renderHighlightedValue from "./utils/renderHighlightedValue";
 import DropdownSection, { DropdownSectionCssClasses, Option } from "./DropdownSection";
 import { processTranslation } from "./utils/processTranslation";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
@@ -55,7 +55,7 @@ export default function FilterSearch ({
         results: section.results.map(result => {
           return {
             value: result.value,
-            display: renderWithHighlighting(result)
+            display: renderHighlightedValue(result)
           };
         }),
         label: section.label

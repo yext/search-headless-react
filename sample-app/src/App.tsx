@@ -29,7 +29,7 @@ export default function App() {
       verticalKey='people'
       sessionTrackingEnabled={true}
     >
-      <div className='App'>
+      <div className='App mx-8 mt-4'>
         <PageRouter
           Layout={StandardLayout}
           routes={routes}

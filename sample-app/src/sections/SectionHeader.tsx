@@ -28,14 +28,14 @@ interface SectionHeaderConfig {
   resultsCountConfig?: ResultsCountConfig,
   appliedFiltersConfig?: DecoratedAppliedFiltersConfig,
   customCssClasses?: SectionHeaderCssClasses,
-  compositionMethod?: CompositionMethod,
+  cssCompositionMethod?: CompositionMethod,
   verticalKey: string,
   viewAllButton?: boolean
 }
 
 export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {
-  const { label, resultsCountConfig, verticalKey, viewAllButton = false, appliedFiltersConfig, customCssClasses, compositionMethod } = props;
-  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod)
+  const { label, resultsCountConfig, verticalKey, viewAllButton = false, appliedFiltersConfig, customCssClasses, cssCompositionMethod } = props;
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod)
   const latestQuery = useAnswersState(state => state.query.mostRecentSearch); 
   return (
     <div className={cssClasses.sectionHeaderContainer}>

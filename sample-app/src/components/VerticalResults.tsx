@@ -17,7 +17,7 @@ interface VerticalResultsDisplayProps {
   isLoading?: boolean,
   results: Result[],
   customCssClasses?: VerticalResultsCssClasses,
-  compositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod
 }
 
 /**
@@ -27,8 +27,8 @@ interface VerticalResultsDisplayProps {
  *                to be used.
  */
 export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.Element | null {
-  const { CardComponent, results, cardConfig = {}, isLoading = false, customCssClasses, compositionMethod } = props;
-  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod);
+  const { CardComponent, results, cardConfig = {}, isLoading = false, customCssClasses, cssCompositionMethod } = props;
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
 
   if (results.length === 0) {
     return null;
@@ -61,7 +61,7 @@ interface VerticalResultsProps {
   cardConfig?: CardConfigTypes,
   displayAllResults?: boolean,
   customCssClasses?: VerticalResultsCssClasses,
-  compositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod
 }
 
 export default function VerticalResults(props: VerticalResultsProps): JSX.Element | null {

@@ -25,13 +25,13 @@ export type CompositionMethod = 'merge' | 'replace' | 'assign';
  * A react hook which combines a component's built-in CSS classes with custom CSS classes.
  * @param builtInClasses The component's built-in css classes
  * @param customClasses The custom classes to combine with the built-in ones
- * @param compositionMethod The method of combining the built-in classes with the custom classes
+ * @param cssCompositionMethod The method of combining the built-in classes with the custom classes
  * @returns The composed CSS classes
  */
 export function useComposedCssClasses<ClassInterface> (
   builtInClasses: ClassInterface,
   customClasses?: ClassInterface,
-  compositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod
 ): ClassInterface | Theme {
   return useMemo(() => {
     if (!isThemeObject(customClasses)) {
@@ -40,22 +40,22 @@ export function useComposedCssClasses<ClassInterface> (
     if (!isThemeObject(builtInClasses)) {
       return customClasses ?? {};
     }
-    const compose = getCssModulesCompose(compositionMethod);
+    const compose = getCssModulesCompose(cssCompositionMethod);
     return composeTheme([{ theme: builtInClasses }, { theme: customClasses, compose }]);
-  }, [builtInClasses, customClasses, compositionMethod]);
+  }, [builtInClasses, customClasses, cssCompositionMethod]);
 }
 
 /**
  * Transforms the CompositionMethod types to the Compose types of the css-modules-theme library
- * @param compositionMethod The compositionMethod method
+ * @param cssCompositionMethod The cssCompositionMethod method
  * @returns The css-modules-theme Compose type
  */
-function getCssModulesCompose(compositionMethod: CompositionMethod = 'merge'): Compose {
+function getCssModulesCompose(cssCompositionMethod: CompositionMethod = 'merge'): Compose {
   return {
     replace: Compose.Replace,
     assign: Compose.Assign,
     merge: Compose.Merge
-  }[compositionMethod];
+  }[cssCompositionMethod];
 }
 
 /**
