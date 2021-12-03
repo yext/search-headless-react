@@ -10,7 +10,8 @@ interface SectionHeaderCssClasses {
   sectionHeaderIconContainer?: string,
   sectionHeaderLabel?: string,
   viewMoreContainer?: string,
-  viewMoreLink?: string
+  viewMoreLink?: string,
+  appliedFiltersContainer?: string
 }
 
 const builtInCssClasses: SectionHeaderCssClasses = {
@@ -18,7 +19,8 @@ const builtInCssClasses: SectionHeaderCssClasses = {
   sectionHeaderIconContainer: 'w-5 h-5',
   sectionHeaderLabel: 'font-semibold text-gray-800 text-base pl-3', 
   viewMoreContainer: 'flex justify-end flex-grow ml-auto font-medium text-gray-800',
-  viewMoreLink: 'text-blue-600 text-sm pr-1 pl-3'
+  viewMoreLink: 'text-blue-600 text-sm pr-1 pl-3',
+  appliedFiltersContainer: 'ml-2'
 }
 
 interface SectionHeaderConfig {
@@ -44,8 +46,10 @@ export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {
       {/* TODO (cea2aj): Add support for ResultsCountDisplay once we get the mocks from UX
         {resultsCountConfig &&
            <ResultsCountDisplay resultsLength={resultsCountConfig.resultsLength} resultsCount={resultsCountConfig.resultsCount} />} */}
-      {appliedFiltersConfig && 
-        <DecoratedAppliedFiltersDisplay {...appliedFiltersConfig}/>}
+      {appliedFiltersConfig &&
+        <div className={cssClasses.appliedFiltersContainer}>
+          <DecoratedAppliedFiltersDisplay {...appliedFiltersConfig}/>
+        </div>}
       {viewAllButton && 
         <div className={cssClasses.viewMoreContainer}>
           <Link className={cssClasses.viewMoreLink} to={`/${verticalKey}?query=${latestQuery}`}>
