@@ -12,8 +12,6 @@
     "start": "cd sample-app && npm start",
     "watch": "tsc --watch",
     "install-sample-app": "cd sample-app && npm install",
-    "build-sample-app": "cd sample-app && npm run build",
-    "wcag": "cd sample-app && npm run wcag",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
