@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [15.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -20,5 +20,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
-    - run: cd sample-app && npm ci && npm run build && npm run wcag
+    - run: cd sample-app && npm i && npm run build && npm run wcag
     - run: npm run wcag
