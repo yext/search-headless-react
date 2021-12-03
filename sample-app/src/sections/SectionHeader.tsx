@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { DecoratedAppliedFiltersDisplay, DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
-import { ResultsCountDisplay, ResultsCountConfig } from "../components/ResultsCount";
+import { ResultsCountConfig } from "../components/ResultsCount";
 import { useComposedCssClasses, CompositionMethod } from "../hooks/useComposedCssClasses";
 import { ReactComponent as CollectionIcon } from '../icons/collection.svg';
 import { useAnswersState } from '@yext/answers-headless-react';
@@ -32,7 +32,7 @@ interface SectionHeaderConfig {
 }
 
 export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {
-  const { label, resultsCountConfig, verticalKey, viewAllButton = false, appliedFiltersConfig, customCssClasses, cssCompositionMethod } = props;
+  const { label, verticalKey, viewAllButton = false, appliedFiltersConfig, customCssClasses, cssCompositionMethod } = props;
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod)
   const latestQuery = useAnswersState(state => state.query.mostRecentSearch); 
   return (
