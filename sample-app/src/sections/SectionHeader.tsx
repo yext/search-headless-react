@@ -20,7 +20,7 @@ const builtInCssClasses: SectionHeaderCssClasses = {
   sectionHeaderLabel: 'font-semibold text-gray-800 text-base pl-3', 
   viewMoreContainer: 'flex justify-end flex-grow ml-auto font-medium text-gray-800',
   viewMoreLink: 'text-blue-600 text-sm pr-1 pl-3',
-  appliedFiltersContainer: 'ml-2'
+  appliedFiltersContainer: 'ml-3'
 }
 
 interface SectionHeaderConfig {

@@ -1,7 +1,7 @@
 import { DisplayableFilter } from '../models/displayableFilter';
 import { GroupedFilters } from '../models/groupedFilters';
 import { ReactComponent as CloseX } from '../icons/x.svg';
-import { Matcher, useAnswersActions } from '@yext/answers-headless-react'
+import { useAnswersActions } from '@yext/answers-headless-react'
 import { isNearFilterValue } from '../utils/filterutils';
 import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
 
