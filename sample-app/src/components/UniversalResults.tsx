@@ -32,7 +32,7 @@ interface UniversalResultsProps {
   appliedFiltersConfig?: AppliedFiltersConfig,
   verticalConfigs: Record<string, VerticalConfig>,
   customCssClasses?: UniversalResultsCssClasses,
-  compositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod
 }
 
 /**
@@ -42,9 +42,9 @@ export default function UniversalResults({
   verticalConfigs,
   appliedFiltersConfig,
   customCssClasses,
-  compositionMethod
+  cssCompositionMethod
 }: UniversalResultsProps): JSX.Element | null {
-  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod)
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod)
   const resultsFromAllVerticals = useAnswersState(state => state?.universal?.verticals) || [];
   const isLoading = useAnswersState(state => state.searchStatus.isLoading);
 

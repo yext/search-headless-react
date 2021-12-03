@@ -8,7 +8,7 @@ export interface StandardCardConfig {
 export interface StandardCardProps extends CardProps {
   configuration: StandardCardConfig,
   customCssClasses?: StandardCardCssClasses,
-  compositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod
 }
 
 export interface StandardCardCssClasses {
@@ -41,47 +41,44 @@ interface CtaData {
   linkType: string
 }
 
+function isCtaData(data: unknown): data is CtaData {
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
+  const ctaData = data as CtaData;
+  const expectedKeys = ['label', 'link', 'linkType'];
+  return expectedKeys.every(key => {
+    return key in ctaData;
+  });
+}
+
 /**
  * This Component renders the base result card.
  * 
  * @param props - An object containing the result itself.
  */
 export function StandardCard(props: StandardCardProps): JSX.Element {
-  const { configuration, result, customCssClasses, compositionMethod } = props;
-  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod);
+  const { configuration, result, customCssClasses, cssCompositionMethod } = props;
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
 
-  const cta1 = result.rawData.c_primaryCTA as CtaData;
-  const cta2 = result.rawData.c_secondaryCTA as CtaData;
+  const cta1 = isCtaData(result.rawData.c_primaryCTA) ? result.rawData.c_primaryCTA : undefined;
+  const cta2 = isCtaData(result.rawData.c_secondaryCTA) ? result.rawData.c_secondaryCTA : undefined;
 
   // TODO (cea2aj) We need to handle the various linkType so these CTAs are clickable
   function renderCTAs(cta1?: CtaData, cta2?: CtaData) {
     return (<>
       {(cta1 ?? cta2) && 
         <div className={cssClasses.ctaContainer}>
-          {cta1 && renderFirstCTA(cta1)}
-          {cta2 && renderSecondCTA(cta2)}
+          {cta1 && <button className={cssClasses.cta1}>{cta1.label}</button>}
+          {cta2 && <button className={cssClasses.cta2}>{cta2.label}</button>}
         </div>
       }
     </>);
   }
 
-  function renderFirstCTA({ label, link, linkType }: CtaData) {
+  function renderOrdinal(index: number) {
     return (
-      <button className={cssClasses.cta1}>{label}</button>
-    )
-  }
-
-  function renderSecondCTA({ label, link, linkType }: CtaData) {
-    return (
-      <button className={cssClasses.cta2}>{label}</button>
-    )
-  }
-
-  function renderOrdinal(ordinal: number) {
-    return (
-      <div className={cssClasses.ordinal}>
-        {ordinal} -
-      </div>
+      <div className={cssClasses.ordinal}>{index} -</div>
     );
   }
 
@@ -97,9 +94,10 @@ export function StandardCard(props: StandardCardProps): JSX.Element {
       </div>
       {(result.description ?? cta1 ?? cta2) &&
         <div className={cssClasses.body}>
+          {result.description &&
           <div className={cssClasses.descriptionContainer}> 
             <span>{result.description}</span>
-          </div>
+          </div>}
           {renderCTAs(cta1, cta2)}
         </div>
       }
