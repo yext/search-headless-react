@@ -21,4 +21,3 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: cd sample-app && npm i && npm run build && npm run wcag
-    - run: npm run wcag
