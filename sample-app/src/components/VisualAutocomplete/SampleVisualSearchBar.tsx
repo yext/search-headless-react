@@ -1,5 +1,5 @@
 import VisualSearchBar from './VisualSearchBar';
-import { VisualAutocompleteSection } from './VisualAutocompleteSection';
+import { VisualAutocompleteSection } from './VisualEntities';
 import { Result } from '@yext/answers-headless-react';
 import Accordion from 'react-bootstrap/Accordion';
 import '../../sass/SampleAutocompleteSection.scss';
@@ -15,20 +15,24 @@ export default function SampleVisualSearchBar() {
       headlessId='visual-autocomplete'
       debounceTime={150}
     >
-      <VisualAutocompleteSection verticalKey='people'>
-        {results => (
-          <div className='people-section'>
-            {results.map(r => <PeopleCard result={r} key={r.name} />)}
-          </div>
-        )}
-      </VisualAutocompleteSection>
-      <VisualAutocompleteSection verticalKey='faq' limit={2}>
-        {results => (
-          <div className='faq-section'>
-            {results.map(r => <FaqCard result={r} key={r.name} />)}
-          </div>
-        )}
-      </VisualAutocompleteSection>
+      {autocompleteDropdown => (
+        <>
+          <VisualEntities verticalKey='people'>
+            {results => (
+              <div className='people-section'>
+                {results.map(r => <PeopleCard result={r} key={r.name} />)}
+              </div>
+            )}
+          </VisualEntities>
+          <VisualEntities verticalKey='faq' limit={2}>
+            {results => (
+              <div className='faq-section'>
+                {results.map(r => <FaqCard result={r} key={r.name} />)}
+              </div>
+            )}
+          </VisualEntities>
+        </>
+      )}
     </VisualSearchBar>
   )
 }
@@ -64,7 +68,7 @@ function PeopleCard({ result }: CardProps) {
   return (
     <div tabIndex={0} className='people-card'>
       <a href={result.link}>{result.name}</a>
-      {headshotUrl && <img src={headshotUrl} alt={result.name} width={100} height={100}/>}
+      {headshotUrl && <img src={headshotUrl} alt={result.name} width={100} height={100} />}
     </div>
   )
 }

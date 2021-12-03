@@ -12,7 +12,7 @@ type AutocompleteRef = MutableRefObject<Promise<AutocompleteResponse | undefined
  * You can optionally use the provided ref to store autocomplete responses, to avoid
  * making unnecessary autocomplete requests.
  */
-export default function useNearMeSearch(
+export default function useSearchWithNearMeHandling(
   answersActions: AnswersHeadless,
   geolocationOptions?: PositionOptions,
   isVertical = false
@@ -25,12 +25,12 @@ export default function useNearMeSearch(
 
   async function executeQuery() {
     let intents: SearchIntent[] = [];
-    if (!autocompletePromiseRef.current) {
-      autocompletePromiseRef.current = isVertical
-        ? answersActions.executeVerticalAutocomplete()
-        : answersActions.executeUniversalAutocomplete();
-    }
     if (!answersActions.state.location.userLocation) {
+      if (!autocompletePromiseRef.current) {
+        autocompletePromiseRef.current = isVertical
+          ? answersActions.executeVerticalAutocomplete()
+          : answersActions.executeUniversalAutocomplete();
+      }
       const autocompleteResponseBeforeSearch = await autocompletePromiseRef.current;
       intents = autocompleteResponseBeforeSearch?.inputIntents || [];
       await updateLocationIfNeeded(answersActions, intents, geolocationOptions);

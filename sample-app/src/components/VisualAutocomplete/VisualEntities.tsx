@@ -1,6 +1,6 @@
 import { Result } from '@yext/answers-headless-react';
 
-export interface VisualAutocompleteSectionProps {
+export interface VisualEntitiesProps {
   verticalKey: string,
   children: (results: Result[]) => JSX.Element,
   limit?: number
@@ -12,6 +12,6 @@ export interface VisualAutocompleteSectionProps {
  * 
  * This is done by providing results through props.children, using an FACC (function as a child component).
  */
-export function VisualAutocompleteSection(_: VisualAutocompleteSectionProps) {
+export function VisualEntities(_: VisualEntitiesProps) {
   return null;
 }

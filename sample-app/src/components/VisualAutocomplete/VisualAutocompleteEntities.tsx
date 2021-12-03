@@ -1,18 +1,21 @@
 import { Children, PropsWithChildren, isValidElement, Fragment } from 'react';
 import { VerticalResults } from '@yext/answers-headless-react';
-import { VisualAutocompleteSection, VisualAutocompleteSectionProps } from './VisualAutocompleteSection';
+import { VisualAutocompleteSection, VisualAutocompleteSectionProps } from './VisualEntities';
+import { useVisualEntities } from '../../hooks/useVisualEntities';
+
+type Props = PropsWithChildren<{
+  verticalResultsArray: VerticalResults[]
+}>
 
 /**
- * VisualAutocompleteEntities provides vertical results to any VisualAutocompleteSection children found.
+ * VisualEntities provides vertical results to its children through a FACC.
+ * 
  * The results given correspond to the child's verticalKey prop.
  */
-export default function VisualAutocompleteEntities({ children, verticalResultsArray }: PropsWithChildren<{
-  verticalResultsArray: VerticalResults[]
-}>) {
-  const verticalKeyToResults = verticalResultsArray.reduce<Record<string, VerticalResults>>((prev, current) => {
-    prev[current.verticalKey] = current;
-    return prev;
-  }, {});
+export default function VisualEntities({
+  children,
+  verticalResultsArray
+}: Props) {
 
   const childrenArray = Children.toArray(children).map(child => {
     if (!isValidElement(child) || child.type !== VisualAutocompleteSection) {
@@ -26,5 +29,9 @@ export default function VisualAutocompleteEntities({ children, verticalResultsAr
     return children(verticalResults.results);
   });
 
-  return <>{childrenArray.map((child, i) => <Fragment key={i}>{child}</Fragment>)}</>;
+  return (
+    <>
+      {childrenArray.map((child, i) => <Fragment key={i}>{child}</Fragment>)}
+    </>
+  )
 }
