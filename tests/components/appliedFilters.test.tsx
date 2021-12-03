@@ -1,13 +1,21 @@
 import { act, render } from '@testing-library/react';
 import { provideAnswersHeadless, Matcher } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from '../../src';
-import DecoratedAppliedFilters from '../../sample-app/src/components/DecoratedAppliedFilters';
+import AppliedFilters, { AppliedFiltersCssClasses } from '../../sample-app/src/components/AppliedFilters';
 import { useCallback } from 'react';
 import { verticalQueryResponseWithNlpFilters } from '../setup/responses/vertical-query';
 
-describe('AppliedFilters component work as expected', () => {
+const cssClasses: Required<AppliedFiltersCssClasses> = {
+  filterLabel: 'filterLabel',
+  removeFilterButton: 'removeFilterButton',
+  appliedFiltersContainer: '',
+  nlpFilter: '',
+  removableFilter: ''
+};
 
-  it('see that selected static filters appears and is removable', async () => {
+describe('AppliedFilters component works as expected', () => {
+
+  it('Selected static filters appear and are removable', async () => {
     const answers = createAnswersHeadless();
     const mockedFilter = {
       fieldId: 'c_employeeCountry',
@@ -26,9 +34,8 @@ describe('AppliedFilters component work as expected', () => {
     const { container } = render(
       <AnswersHeadlessContext.Provider value={answers}>
         <MockedStaticFilter />
-        <DecoratedAppliedFilters
-          showFieldNames={true}
-          delimiter='|'
+        <AppliedFilters
+          customCssClasses={cssClasses}
         />
       </AnswersHeadlessContext.Provider>
     );
@@ -37,19 +44,19 @@ describe('AppliedFilters component work as expected', () => {
     await act( () => answers.executeVerticalQuery());
     act(() => answers.setStaticFilters([mockedFilter]));
 
-    let filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
+    let filterLabels = container.getElementsByClassName(cssClasses.filterLabel);
     expect(filterLabels.length).toBe(1);
     expect(filterLabels[0].innerHTML).toBe(mockedFilter.value);
     const filerRemoveButton = container
-      .getElementsByClassName('AppliedFilters__removeFilterButton')[0] as HTMLElement;
+      .getElementsByClassName(cssClasses.removeFilterButton)[0] as HTMLElement;
     expect(filerRemoveButton).toBeTruthy();
 
     filerRemoveButton.click();
-    filterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
+    filterLabels = container.getElementsByClassName(cssClasses.filterLabel);
     expect(filterLabels.length).toBe(0);
   });
 
-  it('see that selected facet appears and is removable', async () => {
+  it('A selected facet appears and is removable', async () => {
     const answers = createAnswersHeadless();
     const mockedFacets = [
       {
@@ -67,10 +74,7 @@ describe('AppliedFilters component work as expected', () => {
 
     const { container } = render(
       <AnswersHeadlessContext.Provider value={answers}>\
-        <DecoratedAppliedFilters
-          showFieldNames={true}
-          delimiter='|'
-        />
+        <AppliedFilters customCssClasses={cssClasses}/>
       </AnswersHeadlessContext.Provider>
     );
 
@@ -78,38 +82,35 @@ describe('AppliedFilters component work as expected', () => {
     await act( () => answers.executeVerticalQuery());
     act(() => answers.setFacets(mockedFacets));
 
-    let facetLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
+    let facetLabels = container.getElementsByClassName(cssClasses.filterLabel);
     expect(facetLabels.length).toBe(1);
     expect(facetLabels[0].innerHTML).toBe(mockedFacets[0].options[0].displayName);
     const filerRemoveButton = container
-      .getElementsByClassName('AppliedFilters__removeFilterButton')[0] as HTMLElement;
+      .getElementsByClassName(cssClasses.removeFilterButton)[0] as HTMLElement;
     expect(filerRemoveButton).toBeTruthy();
 
     filerRemoveButton.click();
-    facetLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
+    facetLabels = container.getElementsByClassName(cssClasses.filterLabel);
     expect(facetLabels.length).toBe(0);
   });
 
-  it('see that nlp filters appears and is not removable', async () => {
+  it('NLP filters appear and are not removable', async () => {
     const answers = createAnswersHeadless();
     const { container } = render(
       <AnswersHeadlessContext.Provider value={answers}>\
-        <DecoratedAppliedFilters
-          showFieldNames={true}
-          delimiter='|'
-        />
+        <AppliedFilters customCssClasses={cssClasses}/>
       </AnswersHeadlessContext.Provider>
     );
 
     act(() => answers.setQuery('resultsWithNlpFilter'));
     await act( () => answers.executeVerticalQuery());
 
-    const nlpFilterLabels = container.getElementsByClassName('AppliedFilters__filterValueText');
+    const nlpFilterLabels = container.getElementsByClassName(cssClasses.filterLabel);
     expect(nlpFilterLabels.length).toBe(1);
     expect(nlpFilterLabels[0].innerHTML)
       .toBe(verticalQueryResponseWithNlpFilters.response.appliedQueryFilters[0].displayValue);
     const filerRemoveButton = container
-      .getElementsByClassName('AppliedFilters__removeFilterButton')[0] as HTMLElement;
+      .getElementsByClassName(cssClasses.removeFilterButton)[0] as HTMLElement;
     expect(filerRemoveButton).toBeFalsy();
   });
 

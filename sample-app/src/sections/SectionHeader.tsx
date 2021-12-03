@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { DecoratedAppliedFiltersDisplay, DecoratedAppliedFiltersConfig } from "../components/DecoratedAppliedFilters";
+import { AppliedFiltersDisplay, AppliedFiltersProps } from "../components/AppliedFilters";
 import { ResultsCountConfig } from "../components/ResultsCount";
 import { useComposedCssClasses, CompositionMethod } from "../hooks/useComposedCssClasses";
 import { ReactComponent as CollectionIcon } from '../icons/collection.svg';
-import { useAnswersState } from '@yext/answers-headless-react';
+import { AppliedQueryFilter, useAnswersState } from '@yext/answers-headless-react';
+import { DisplayableFilter } from "../models/displayableFilter";
 
 interface SectionHeaderCssClasses {
   sectionHeaderContainer?: string,
@@ -26,7 +27,7 @@ const builtInCssClasses: SectionHeaderCssClasses = {
 interface SectionHeaderConfig {
   label: string,
   resultsCountConfig?: ResultsCountConfig,
-  appliedFiltersConfig?: DecoratedAppliedFiltersConfig,
+  appliedFiltersConfig?: AppliedFiltersProps,
   customCssClasses?: SectionHeaderCssClasses,
   cssCompositionMethod?: CompositionMethod,
   verticalKey: string,
@@ -37,6 +38,15 @@ export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {
   const { label, verticalKey, viewAllButton = false, appliedFiltersConfig, customCssClasses, cssCompositionMethod } = props;
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod)
   const latestQuery = useAnswersState(state => state.query.mostRecentSearch); 
+  const displayableFilters = appliedFiltersConfig?.appliedQueryFilters?.map((appliedQueryFilter): DisplayableFilter => {
+    return {
+      filterType: 'NLP_FILTER',
+      filter: appliedQueryFilter.filter,
+      groupLabel: appliedQueryFilter.displayKey,
+      label: appliedQueryFilter.displayValue
+    }
+  }) ?? [];
+
   return (
     <div className={cssClasses.sectionHeaderContainer}>
       <div className={cssClasses.sectionHeaderIconContainer}> 
@@ -48,7 +58,7 @@ export default function SectionHeader(props: SectionHeaderConfig): JSX.Element {
            <ResultsCountDisplay resultsLength={resultsCountConfig.resultsLength} resultsCount={resultsCountConfig.resultsCount} />} */}
       {appliedFiltersConfig &&
         <div className={cssClasses.appliedFiltersContainer}>
-          <DecoratedAppliedFiltersDisplay {...appliedFiltersConfig}/>
+          <AppliedFiltersDisplay displayableFilters={displayableFilters}/>
         </div>}
       {viewAllButton && 
         <div className={cssClasses.viewMoreContainer}>
