@@ -5,7 +5,10 @@ import ScreenReader from "./ScreenReader";
 export interface InputDropdownCssClasses {
   dropdownContainer?: string,
   inputElement?: string,
-  inputContainer?: string
+  inputContainer?: string,
+  divider?: string,
+  logoContainer?: string,
+  searchButtonContainer?: string
 }
 
 interface Props {
@@ -16,9 +19,10 @@ interface Props {
   screenReaderText: string,
   onlyAllowDropdownOptionSubmissions: boolean,
   onSubmit?: (value: string) => void,
+  renderSearchButton?: () => JSX.Element | null,
+  renderLogo?: () => JSX.Element | null,
   onInputChange: (value: string) => void,
-  onInputFocus: (input: string) => void,
-  renderButtons?: () => JSX.Element | null,
+  onInputFocus: (value: string) => void,
   cssClasses?: InputDropdownCssClasses
 }
 
@@ -55,10 +59,11 @@ export default function InputDropdown({
   onlyAllowDropdownOptionSubmissions,
   children,
   onSubmit = () => {},
+  renderSearchButton = () => null,
+  renderLogo = () => null,
   onInputChange,
   onInputFocus,
-  renderButtons = () => null,
-  cssClasses
+  cssClasses = {}
 }: React.PropsWithChildren<Props>): JSX.Element | null {
   const [{
     focusedSectionIndex,
@@ -171,9 +176,12 @@ export default function InputDropdown({
 
   return (
     <>
-      <div className={cssClasses?.inputContainer}>
+      <div className={cssClasses.inputContainer}>
+        <div className={cssClasses.logoContainer}>
+          {renderLogo()}
+        </div>
         <input
-          className={cssClasses?.inputElement}
+          className={cssClasses.inputElement}
           placeholder={placeholder}
           onChange={evt => {
             const value = evt.target.value;
@@ -198,7 +206,9 @@ export default function InputDropdown({
           aria-describedby={screenReaderInstructionsId}
           aria-activedescendant={focusedOptionId}
         />
-        {renderButtons()}
+        <div className={cssClasses.searchButtonContainer}>
+          {renderSearchButton()}
+        </div>
       </div>
       <ScreenReader
         instructionsId={screenReaderInstructionsId}
@@ -210,12 +220,12 @@ export default function InputDropdown({
         }
       />
       {shouldDisplayDropdown && numSections > 0 &&
-        <div
-          className={cssClasses?.dropdownContainer}
-          ref={dropdownRef}
-        >
-          {childrenWithProps}
-        </div>
+        <>
+          <div className={cssClasses.divider}></div>
+          <div className={cssClasses.dropdownContainer} ref={dropdownRef}>
+            {childrenWithProps}
+          </div>
+        </>
       }
     </>
   );

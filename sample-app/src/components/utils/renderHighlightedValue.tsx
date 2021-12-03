@@ -1,16 +1,10 @@
-
-interface HighlightedValue {
-  value: string,
-  matchedSubstrings?: {
-    length: number,
-    offset: number
-  }[]
-}
+import { HighlightedValue } from "@yext/answers-headless-react";
 
 /**
- * Renders an AutocompleteResult with highlighting based on its matchedSubstrings.
+ * Renders a HighlightedValue with highlighting based on its matchedSubstrings.
+ * @returns JSX.Element
  */
-export default function renderWithHighlighting ({ value, matchedSubstrings }: HighlightedValue): JSX.Element {
+export default function renderHighlightedValue ({ value = '', matchedSubstrings }: Partial<HighlightedValue>): JSX.Element {
   if (!matchedSubstrings || matchedSubstrings.length === 0) {
     return <span>{value}</span>;
   }
