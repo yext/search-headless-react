@@ -1,13 +1,23 @@
 import { CardComponent, CardConfigTypes } from '../models/cardComponent';
 import { useAnswersState, Result } from '@yext/answers-headless-react';
 import classNames from 'classnames';
-import '../sass/VerticalResults.scss';
+import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
+
+interface VerticalResultsCssClasses {
+  results___loading?: string
+}
+
+const builtInCssClasses: VerticalResultsCssClasses = {
+  results___loading: 'opacity-50'
+}
 
 interface VerticalResultsDisplayProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
   isLoading?: boolean,
-  results: Result[]
+  results: Result[],
+  customCssClasses?: VerticalResultsCssClasses,
+  cssCompositionMethod?: CompositionMethod
 }
 
 /**
@@ -17,13 +27,16 @@ interface VerticalResultsDisplayProps {
  *                to be used.
  */
 export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.Element | null {
-  const { CardComponent, results, cardConfig = {}, isLoading = false } = props;
+  const { CardComponent, results, cardConfig = {}, isLoading = false, customCssClasses, cssCompositionMethod } = props;
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
 
   if (results.length === 0) {
     return null;
   }
 
-  const resultsClassNames = classNames('VerticalResults', { 'VerticalResults--loading': isLoading });
+  const resultsClassNames = cssClasses.results___loading
+    ? classNames({ [cssClasses.results___loading]: isLoading })
+    : '';
 
   return (
     <div className={resultsClassNames}>
@@ -46,7 +59,9 @@ function renderResult(CardComponent: CardComponent, cardConfig: CardConfigTypes,
 interface VerticalResultsProps {
   CardComponent: CardComponent,
   cardConfig?: CardConfigTypes,
-  displayAllResults?: boolean
+  displayAllResults?: boolean,
+  customCssClasses?: VerticalResultsCssClasses,
+  cssCompositionMethod?: CompositionMethod
 }
 
 export default function VerticalResults(props: VerticalResultsProps): JSX.Element | null {

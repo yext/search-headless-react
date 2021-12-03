@@ -1,31 +1,38 @@
 import { VerticalResultsDisplay } from "../components/VerticalResults";
-import { Link } from "react-router-dom";
-import { useAnswersState } from "@yext/answers-headless-react";
 import { SectionComponent, SectionConfig } from "../models/sectionComponent";
 import { StandardCard } from "../components/cards/StandardCard";
+import { CompositionMethod, useComposedCssClasses } from "../hooks/useComposedCssClasses";
 
-const StandardSection: SectionComponent = function (props: SectionConfig): JSX.Element | null {
-  const { results, verticalKey, cardConfig, viewMore, header } = props;
-  const latestQuery = useAnswersState(state => state.query.mostRecentSearch); 
+interface StandardSectionCssClasses {
+  section?: string
+}
+
+const builtInCssClasses: StandardSectionCssClasses = {
+  section: ''
+}
+
+interface StandardSectionConfig extends SectionConfig {
+  customCssClasses?: StandardSectionCssClasses,
+  compositionmethod?: CompositionMethod
+}
+
+const StandardSection: SectionComponent = function (props: StandardSectionConfig): JSX.Element | null {
+  const cssClasses = useComposedCssClasses(builtInCssClasses, props.customCssClasses, props.compositionmethod )
+  const { results,  cardConfig, header } = props;
+  
   if (results.length === 0) {
     return null;
   }
   const cardComponent = cardConfig?.CardComponent || StandardCard;
   
   return (
-    <section className='StandardSection'>
-      <div className='StandardSection__sectionHead'>
-        {header}
-      </div>
+    <section className={cssClasses.section}>
+      {header}
       <VerticalResultsDisplay
         results={results}
         CardComponent={cardComponent}
         {...(cardConfig && { cardConfig })}
       />
-      {viewMore && 
-        <Link className='StandardSection__sectionLink' to={`/${verticalKey}?query=${latestQuery}`}>
-          View all
-        </Link>}
     </section>
   );
 }

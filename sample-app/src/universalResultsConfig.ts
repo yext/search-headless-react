@@ -6,25 +6,25 @@ export type UniversalResultsConfig = Record<string, VerticalConfig>;
 export const universalResultsConfig: UniversalResultsConfig = {
   people: {
     label: 'People',
-    viewMore: true,
+    viewAllButton: true,
     cardConfig: {
       CardComponent: StandardCard,
-      showOrdinal: true
+      showOrdinal: false
     }
   },
   events: {
     label: 'Events',
     cardConfig: {
       CardComponent: StandardCard,
-      showOrdinal: true
+      showOrdinal: false
     }
   },
   links: {
     label: 'Links',
-    viewMore: true,
+    viewAllButton: true,
     cardConfig: {
       CardComponent: StandardCard,
-      showOrdinal: true
+      showOrdinal: false
     }
   },
   financial_professionals: {

@@ -34,11 +34,11 @@ interface LinkData {
 interface NavigationProps {
   links: LinkData[],
   customCssClasses?: NavigationCssClasses,
-  compositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod
 }
 
-export default function Navigation({ links, customCssClasses, compositionMethod }: NavigationProps) {
-  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, compositionMethod);
+export default function Navigation({ links, customCssClasses, cssCompositionMethod }: NavigationProps) {
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   // Close the menu when clicking the document
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLButtonElement>(null);
