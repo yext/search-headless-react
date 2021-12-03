@@ -1,8 +1,8 @@
 import VisualSearchBar from './VisualSearchBar';
-import { VisualAutocompleteSection } from './VisualEntities';
 import { Result } from '@yext/answers-headless-react';
 import Accordion from 'react-bootstrap/Accordion';
 import '../../sass/SampleAutocompleteSection.scss';
+import VisualEntities from './VisualEntities';
 
 /**
  * This is an example of how to use the VisualSearchBar component.
@@ -14,9 +14,8 @@ export default function SampleVisualSearchBar() {
       screenReaderInstructionsId='SearchBar__srInstructions'
       headlessId='visual-autocomplete'
       debounceTime={150}
-    >
-      {autocompleteDropdown => (
-        <>
+      renderVisualEntities={(isLoading) => (
+        <div style={{ opacity: isLoading ? 0.5 : 1 }}>
           <VisualEntities verticalKey='people'>
             {results => (
               <div className='people-section'>
@@ -31,6 +30,13 @@ export default function SampleVisualSearchBar() {
               </div>
             )}
           </VisualEntities>
+        </div>
+      )}
+    >
+      {(autocompleteDropdown, visualEntities) => (
+        <>
+          {autocompleteDropdown}
+          {visualEntities}
         </>
       )}
     </VisualSearchBar>

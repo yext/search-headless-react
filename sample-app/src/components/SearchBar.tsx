@@ -7,7 +7,7 @@ import DropdownSection from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import SearchButton from './SearchButton';
 import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
-import useNearMeSearch from '../hooks/useNearMeSearch';
+import useSearchWithNearMeHandling from '../hooks/useSearchWithNearMeHandling';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -35,7 +35,7 @@ export default function SearchBar({
       ? answersActions.executeVerticalAutocomplete()
       : answersActions.executeUniversalAutocomplete();
   });
-  const [ executeQuery, autocompletePromiseRef ] = useNearMeSearch(answersActions, geolocationOptions);
+  const [ executeQuery, autocompletePromiseRef ] = useSearchWithNearMeHandling(answersActions, geolocationOptions);
 
   const options = autocompleteResponse?.results.map(result => {
     return {
@@ -82,28 +82,30 @@ export default function SearchBar({
           inputContainer: 'SearchBar__inputContainer'
         }}
       >
-        {
-          options.length > 0 &&
-          <DropdownSection
-            options={options}
-            optionIdPrefix='Autocomplete__option-0'
-            onFocusChange={value => {
-              answersActions.setQuery(value);
-            }}
-            onSelectOption={optionValue => {
-              autocompletePromiseRef.current = undefined;
-              answersActions.setQuery(optionValue);
-              executeQuery();
-            }}
-            cssClasses={{
-              sectionContainer: 'Autocomplete__dropdownSection',
-              sectionLabel: 'Autocomplete__sectionLabel',
-              optionsContainer: 'Autocomplete_sectionOptions',
-              option: 'Autocomplete__option',
-              focusedOption: 'Autocomplete__option--focused'
-            }}
-          />
-        }
+        <>
+          {
+            options.length > 0 &&
+            <DropdownSection
+              options={options}
+              optionIdPrefix='Autocomplete__option-0'
+              onFocusChange={value => {
+                answersActions.setQuery(value);
+              }}
+              onSelectOption={optionValue => {
+                autocompletePromiseRef.current = undefined;
+                answersActions.setQuery(optionValue);
+                executeQuery();
+              }}
+              cssClasses={{
+                sectionContainer: 'Autocomplete__dropdownSection',
+                sectionLabel: 'Autocomplete__sectionLabel',
+                optionsContainer: 'Autocomplete_sectionOptions',
+                option: 'Autocomplete__option',
+                focusedOption: 'Autocomplete__option--focused'
+              }}
+            />
+          }
+        </>
       </InputDropdown>
     </div>
   )

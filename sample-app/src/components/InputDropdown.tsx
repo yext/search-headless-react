@@ -1,6 +1,7 @@
 import React, { useReducer, KeyboardEvent, useRef, useEffect, useState, FocusEvent } from "react"
 import DropdownSection from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
+import recursivelyMapChildren from './utils/recursivelyMapChildren';
 
 export interface InputDropdownCssClasses {
   dropdownContainer?: string,
@@ -81,11 +82,13 @@ export default function InputDropdown({
     setScreenReaderKey(0);
   }
 
-  const childrenArray = React.Children.toArray(children);
-  const childrenWithProps = childrenArray.map((child, index) => {
+  let numSections = 0;
+  const childrenWithProps = recursivelyMapChildren(children, (child, index) => {
+    console.log(child, React.isValidElement(child) && child.type === DropdownSection)
     if (!(React.isValidElement(child) && child.type === DropdownSection)) {
       return child;
     }
+    numSections++;
 
     const modifiedOnSelectOption = (optionValue: string, optionIndex: number) => {
       child.props.onSelectOption?.(optionValue, optionIndex);
@@ -109,7 +112,6 @@ export default function InputDropdown({
     }
   });
 
-  const numSections = childrenWithProps.length;
 
   /**
    * Handles changing which section should become focused when focus leaves the currently-focused section.

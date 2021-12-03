@@ -38,12 +38,15 @@ export function useVisualEntities(headlessId: string, debounceTime: number):[ Vi
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
   function executeVisualEntitiesQuery(query: string, universalLimit: UniversalLimit) {
-    setLoadingState(true);
     if (!headlessRef.current) {
       return;
     }
-    headlessRef.current.setUniversalLimit(universalLimit);
+    if (query === headlessRef.current.state.query.input) {
+      return;
+    }
+    setLoadingState(true);
     headlessRef.current.setQuery(query);
+    headlessRef.current.setUniversalLimit(universalLimit);
     debouncedUniversalSearch();
   }
   return [{ verticalResultsArray, isLoading }, executeVisualEntitiesQuery];
