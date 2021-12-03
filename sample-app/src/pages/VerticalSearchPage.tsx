@@ -20,17 +20,17 @@ import {
 
 const countryFilterOptions = [
   {
-    label: 'canada',
+    label: 'Canada',
     fieldId: 'c_employeeCountry',
     value: 'Canada',
   },
   {
-    label: 'remote',
+    label: 'Remote',
     fieldId: 'c_employeeCountry',
     value: 'Remote'
   },
   {
-    label: 'usa',
+    label: 'USA',
     fieldId: 'c_employeeCountry',
     value: 'United States',
   }
@@ -38,21 +38,29 @@ const countryFilterOptions = [
 
 const employeeFilterOptions = [
   {
-    label: 'tech',
+    label: 'Tech',
     fieldId: 'c_employeeDepartment',
     value: 'Technology'
   },
   {
-    label: 'consult',
+    label: 'Consult',
     fieldId: 'c_employeeDepartment',
     value: 'Consulting',
   },
   {
-    label: 'fin',
+    label: 'Fin',
     fieldId: 'c_employeeDepartment',
     value: 'Finance',
   }
 ]
+
+const staticFiltersConfig = [{
+  title: 'Country',
+  options: countryFilterOptions
+},{
+  title: 'Employee Departments',
+  options: employeeFilterOptions
+}]
 
 const facetConfigs = {
   c_employeeDepartment: {
@@ -97,20 +105,15 @@ export default function VerticalSearchPage(props: {
 
   return (
     <div className='VerticalSearchPage'>
-      <FilterSearch
+      {/* <FilterSearch
         title='Filter Search!'
         sectioned={true}
         searchFields={filterSearchFields}
         screenReaderInstructionsId='FilterSearchId'
-      />
+      /> */}
       <div className='start'>
         <StaticFilters
-          title='~Country~'
-          options={countryFilterOptions}
-        />
-        <StaticFilters
-          title='~Employee Departments~'
-          options={employeeFilterOptions}
+          config={staticFiltersConfig}
         />
         <Facets
           searchOnChange={true}
