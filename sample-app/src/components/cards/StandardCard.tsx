@@ -1,4 +1,5 @@
 import { CardProps } from '../../models/cardComponent';
+import renderWithHighlighting from '../utils/renderWithHighlighting';
 
 export interface StandardCardConfig {
   showOrdinal?: boolean
@@ -15,7 +16,7 @@ export interface StandardCardProps extends CardProps {
  */
 export function StandardCard(props: StandardCardProps): JSX.Element {
   const { configuration, result } = props;
-
+  if (result.highlightedFields) { console.log (result.highlightedFields)}
   return (
     <div className='StandardCard'>
       {configuration.showOrdinal && result.index && renderOrdinal(result.index)}

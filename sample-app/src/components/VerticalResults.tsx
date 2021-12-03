@@ -19,13 +19,13 @@ interface VerticalResultsDisplayProps {
  */
 export function VerticalResultsDisplay(props: VerticalResultsDisplayProps): JSX.Element | null {
   const { CardComponent, results, cardConfig = {}, isLoading = false } = props;
-
+  const hightlightedFields = useAnswersState(state => state.vertical.results?.verticalResults.results);
   if (results.length === 0) {
     return null;
   }
 
   const resultsClassNames = classNames('VerticalResults', { 'VerticalResults--loading': isLoading });
-
+  
   return (
     <div className={resultsClassNames}>
       {results && results.map(result => renderResult(CardComponent, cardConfig, result))}
