@@ -93,11 +93,11 @@
     ],
     "rules": {
       "object-curly-spacing": [
-        "error",
+        "warn",
         "always"
       ],
       "indent": [
-        "error",
+        "warn",
         2,
         {
           "SwitchCase": 1,
@@ -109,7 +109,7 @@
         "never"
       ],
       "@typescript-eslint/member-delimiter-style": [
-        "error",
+        "warn",
         {
           "multiline": {
             "delimiter": "comma",
