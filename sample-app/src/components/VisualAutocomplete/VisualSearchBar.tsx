@@ -7,7 +7,7 @@ import { useEntityPreviews } from '../../hooks/useEntityPreviews';
 import SearchButton from '../SearchButton';
 import { processTranslation } from '../utils/processTranslation';
 import { useSynchronizedRequest } from '../../hooks/useSynchronizedRequest';
-import { calculateUniversalLimit, transformEntityPreviews } from './EntityPreviews';
+import { calculateRestrictVerticals, calculateUniversalLimit, transformEntityPreviews } from './EntityPreviews';
 import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling';
 import { builtInCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
@@ -59,12 +59,13 @@ export default function VisualSearchBar({
   const { verticalResultsArray, isLoading: entityPreviewsLoading } = entityPreviewsState;
   const autocompleteResults = autocompleteResponse?.results || [];
   const entityPreviews = renderEntityPreviews && renderEntityPreviews(entityPreviewsLoading, verticalResultsArray);
+  const restrictVerticals = calculateRestrictVerticals(entityPreviews);
+  const universalLimit = calculateUniversalLimit(entityPreviews);
   function updateEntityPreviews(query: string) {
     if (!renderEntityPreviews) {
       return;
     }
-    const universalLimit = calculateUniversalLimit(entityPreviews);
-    executeEntityPreviewsQuery(query, universalLimit);
+    executeEntityPreviewsQuery(query, universalLimit, restrictVerticals);
   }
 
   function renderQuerySuggestions() {
@@ -106,7 +107,6 @@ export default function VisualSearchBar({
           onSubmit={executeQuery}
           onInputChange={value => {
             answersActions.setQuery(value);
-            updateEntityPreviews(value);
           }}
           onInputFocus={value => {
             updateEntityPreviews(value);
