@@ -23,24 +23,27 @@ export interface ResultsCountConfig {
   resultsCount?: number,
   resultsLength?: number,
   offset?: number,
-  cssClasses?: ResultsCountCssClasses
+  customCssClasses?: ResultsCountCssClasses,
+  cssCompositionMethod?: CompositionMethod
 }
 
 
-export default function ResultsCount({ customCssClasses, cssCompositionMethod }: Props) {
+export default function ResultsCount(props: Props) {
   const resultsCount = useAnswersState(state => state.vertical?.resultsCount) || 0;
   const resultsLength = useAnswersState(state => state.vertical?.results?.length) || 0;
   const offset = useAnswersState(state => state.vertical?.offset) || 0;
-  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
-  return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset} cssClasses={cssClasses}/>;
+  
+  return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset} {...props}/>;
 }
 
 export function ResultsCountDisplay({
   resultsCount=0,
   resultsLength=0,
   offset=0, 
-  cssClasses={} 
+  customCssClasses,
+  cssCompositionMethod
 }: ResultsCountConfig): JSX.Element | null {
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   if (resultsLength === 0) {
     return null;
   }
