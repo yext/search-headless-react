@@ -1,32 +1,34 @@
 const { BrowserPageWidths } = require("./constants");
 
 /**
- * Responsible for browser navigation based on given test instructions.
+ * Responsible for browser navigation based on given tests.
  */
-class TestOperator {
+class TestRunner {
   /**
    * @param {PageOperator} pageOperator page operator
    * @param {import('puppeteer').Page} page A Pupeteer Page
-   * @param {Object[]} testInstructions a list of test instructions to perform
-   * @param {string} testInstructions[].name test name
-   * @param {string} testInstructions[].path additional path to append to base url
-   * @param {string} testInstructions[].viewport viewport of the page (if omit, desktop view is used by default)
-   * @param {string} testInstructions[].commands a list of actions to perform on the page by the page operator
+   * @param {Object[]} tests a list of tests to perform
+   * @param {string} tests[].name test name
+   * @param {string} tests[].path additional path to append to base url
+   * @param {string} tests[].viewport viewport of the page (if omit, desktop view is used by default)
+   * @param {Object[]} tests[].commands a list of actions to perform on the page by the page operator
+   * @param {string} tests[].commands[].type function name to invoke from page operator
+   * @param {any[]} tests[].commands[].params list of params to pass to the corresponding function in page operator
    */
-  constructor(pageOperator, page, testInstructions) {
+  constructor(pageOperator, page, tests) {
     this._pageOperator = pageOperator;
     this._page = page;
-    this._testInstructions = testInstructions;
-    this._testInstructionIndex = -1;
+    this._tests = tests;
+    this._testIndex = -1;
   }
 
-  hasNextTestInstruction() {
-    return this._testInstructionIndex < this._testInstructions.length - 1;
+  hasNextTest() {
+    return this._testIndex < this._tests.length - 1;
   }
 
-  async nextTestInstruction() {
-    this._testInstructionIndex++;
-    const testConfig = this._testInstructions[this._testInstructionIndex];
+  async nextTest() {
+    this._testIndex++;
+    const testConfig = this._tests[this._testIndex];
     await this._setPageViewport(testConfig.viewport);
     testConfig.path
       ? await this._pageOperator.gotoPage(testConfig.path)
@@ -54,4 +56,4 @@ class TestOperator {
   }
 }
 
-module.exports = TestOperator;
+module.exports = TestRunner;

@@ -4,8 +4,8 @@ const HttpServer = require('../browser/server');
 const { AxePuppeteer } = require('@axe-core/puppeteer');
 const PageOperator = require('../browser/pageoperator');
 const puppeteer = require('puppeteer');
-const TestOperator = require('../browser/testoperator');
-const testInstructions = require('./testinstructions');
+const TestRunner = require('../browser/testrunner');
+const tests = require('./tests');
 const PORT = 3033;
 
 /**
@@ -38,9 +38,9 @@ async function wcagTester() {
 
   let results = [];
   try {
-    const operator = new TestOperator(pageOperator, page, testInstructions);
-    while (operator.hasNextTestInstruction()) {
-      await operator.nextTestInstruction();
+    const operator = new TestRunner(pageOperator, page, tests);
+    while (operator.hasNextTest()) {
+      await operator.nextTest();
       results.push(await analyzer.analyze());
     }
   } catch (e) {
