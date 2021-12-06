@@ -62,9 +62,8 @@ export default function Facets (props: FacetsProps): JSX.Element {
       const isLastFacet = index === facetArray.length -1;
       const config = facetConfigs?.[facet.fieldId] ?? {};
       return (
-        <>
+        <div key={facet.fieldId}>
           <Facet
-            key={facet.fieldId}
             facet={facet}
             {...config}
             searchable={searchable}
@@ -72,7 +71,7 @@ export default function Facets (props: FacetsProps): JSX.Element {
             defaultExpanded={defaultExpanded}
             onToggle={handleFacetOptionChange} />
           {!isLastFacet && <Divider customCssClasses={{ divider: cssClasses.divider }}/>}
-        </>
+        </div>
       );
     });
 

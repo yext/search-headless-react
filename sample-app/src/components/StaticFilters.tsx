@@ -74,7 +74,7 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
     <div className={cssClasses.container}>
       {filterConfig.map((filterSet, index) => {
         const isLastFilterSet = index === filterConfig.length - 1;
-        return <fieldset>
+        return <fieldset key={`${index}-${filterSet.title}`}>
           <legend className={cssClasses.title}>{filterSet.title}</legend>
           <div className={cssClasses.optionsContainer}>
             {filterSet.options.map((option, index) => (
