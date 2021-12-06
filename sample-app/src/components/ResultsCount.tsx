@@ -8,6 +8,12 @@ interface ResultsCountCssClasses {
   number?: string
 }
 
+const builtInCssClasses: ResultsCountCssClasses = {
+  container: 'pb-4',
+  text: 'text-sm text-gray-700',
+  number: 'font-medium'
+}
+
 interface Props {
   customCssClasses?: ResultsCountCssClasses,
   cssCompositionMethod?: CompositionMethod
@@ -27,13 +33,6 @@ export default function ResultsCount({ customCssClasses, cssCompositionMethod }:
   const offset = useAnswersState(state => state.vertical?.offset) || 0;
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset} cssClasses={cssClasses}/>;
-}
-
-
-const builtInCssClasses: ResultsCountCssClasses = {
-  container: 'pb-4',
-  text: 'text-sm text-gray-700',
-  number: 'font-medium'
 }
 
 export function ResultsCountDisplay({
