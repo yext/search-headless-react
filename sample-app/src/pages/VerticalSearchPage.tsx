@@ -11,7 +11,7 @@ import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import FilterSearch from '../components/FilterSearch';
-import Divider from '../components/Divider';
+import { Divider } from '../components/StaticFilters';
 import { SearchIntent } from '@yext/answers-headless-react';
 import {
   executeSearch,
@@ -106,15 +106,16 @@ export default function VerticalSearchPage(props: {
 
   return (
     <div className='VerticalSearchPage pt-7 flex'>
-      <FilterSearch
-        title='Filter Search!'
-        sectioned={true}
-        searchFields={filterSearchFields}
-        screenReaderInstructionsId='FilterSearchId'
-      />
       <div className='start'>
         <StaticFilters
           filterConfig={staticFiltersConfig}
+        />
+        <Divider/>
+        <FilterSearch
+          title='Filter Search!'
+          sectioned={true}
+          searchFields={filterSearchFields}
+          screenReaderInstructionsId='FilterSearchId'
         />
         <Divider/>
         <Facets
