@@ -34,18 +34,18 @@ interface State {
 }
 
 type Action =
-  | { type: 'HideSections' }
-  | { type: 'ShowSections' }
-  | { type: 'FocusSection', newIndex?: number }
+  | { type: 'HideSections', hideDropdown?: boolean }
+  | { type: 'ShowSections', hideDropdown?: boolean }
+  | { type: 'FocusSection', newIndex?: number, hideDropdown?: boolean }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'HideSections':
       return { focusedSectionIndex: undefined, shouldDisplayDropdown: false }
     case 'ShowSections':
-      return { focusedSectionIndex: undefined, shouldDisplayDropdown: true }
+      return { focusedSectionIndex: undefined, shouldDisplayDropdown: true && !action.hideDropdown }
     case 'FocusSection':
-      return { focusedSectionIndex: action.newIndex, shouldDisplayDropdown: true }
+      return { focusedSectionIndex: action.newIndex, shouldDisplayDropdown: true && !action.hideDropdown }
   }
 }
 
@@ -99,7 +99,7 @@ export default function InputDropdown({
     const modifiedOnSelectOption = (optionValue: string, optionIndex: number) => {
       child.props.onSelectOption?.(optionValue, optionIndex);
       setLatestUserInput(optionValue);
-      dispatch({ type: 'HideSections' });
+      dispatch({ type: 'HideSections', hideDropdown });
     }
 
     const modifiedOnFocusChange = (value: string, focusedOptionId: string) => {
@@ -125,7 +125,7 @@ export default function InputDropdown({
    */
   function onLeaveSectionFocus(pastSectionEnd: boolean) {
     if (focusedSectionIndex === undefined && pastSectionEnd) {
-      dispatch({ type: 'FocusSection', newIndex: 0 });
+      dispatch({ type: 'FocusSection', newIndex: 0, hideDropdown });
     } else if (focusedSectionIndex !== undefined) {
       let newSectionIndex: number | undefined = pastSectionEnd
         ? focusedSectionIndex + 1
@@ -136,14 +136,14 @@ export default function InputDropdown({
       } else if (newSectionIndex > numSections - 1) {
         newSectionIndex = numSections - 1;
       }
-      dispatch({ type: 'FocusSection', newIndex: newSectionIndex });
+      dispatch({ type: 'FocusSection', newIndex: newSectionIndex, hideDropdown });
     }
   }
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!(target.isSameNode(inputRef.current) || (dropdownRef.current?.contains(target)))) {
-      dispatch({ type: 'HideSections' });
+      dispatch({ type: 'HideSections', hideDropdown });
     }
   }
 
@@ -153,9 +153,9 @@ export default function InputDropdown({
     }
 
     if (evt.key === 'Escape') {
-      dispatch({ type: 'HideSections' });
+      dispatch({ type: 'HideSections', hideDropdown });
     } else if (evt.key === 'ArrowDown' && numSections > 0 && focusedSectionIndex === undefined) {
-      dispatch({ type: 'FocusSection', newIndex: 0 });
+      dispatch({ type: 'FocusSection', newIndex: 0, hideDropdown });
     }
   }
 
@@ -174,7 +174,7 @@ export default function InputDropdown({
     if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlyAllowDropdownOptionSubmissions) {
       setLatestUserInput(inputValue);
       onSubmit(inputValue);
-      dispatch({ type: 'HideSections' });
+      dispatch({ type: 'HideSections', hideDropdown });
     }
   }
 
@@ -183,7 +183,7 @@ export default function InputDropdown({
       return;
     }
     if (!inputDropdownRef.current.contains(evt.relatedTarget)) {
-      dispatch({ type: 'HideSections' });
+      dispatch({ type: 'HideSections', hideDropdown });
     }
   }
 
@@ -202,13 +202,13 @@ export default function InputDropdown({
             onInputChange(value);
             onInputFocus(value);
             setChildrenKey(childrenKey + 1);
-            dispatch({ type: 'ShowSections' });
+            dispatch({ type: 'ShowSections', hideDropdown });
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
             onInputFocus(inputValue);
             setChildrenKey(childrenKey + 1);
-            dispatch({ type: 'ShowSections' });
+            dispatch({ type: 'ShowSections', hideDropdown });
             if (numSections > 0 || inputValue) {
               setScreenReaderKey(screenReaderKey + 1);
             }
@@ -232,7 +232,7 @@ export default function InputDropdown({
           : ''
         }
       />
-      {shouldDisplayDropdown && !hideDropdown &&
+      {shouldDisplayDropdown &&
         <>
           <div className={cssClasses.divider}></div>
           <div className={cssClasses.dropdownContainer} ref={dropdownRef}>

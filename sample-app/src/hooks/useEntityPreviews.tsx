@@ -3,21 +3,21 @@ import { provideAnswersHeadless, VerticalResults, AnswersHeadless, UniversalLimi
 import { ANSWERS_CONFIG } from '../utils/constants';
 import useDebouncedFunction from './useDebouncedFunction';
 
-interface EntityPreviewState {
+interface EntityPreviewsState {
   verticalResultsArray: VerticalResults[],
   isLoading: boolean
 }
 
-type ExecuteEntityPreviewQuery = (query: string, universalLimit: UniversalLimit) => void
+type ExecuteEntityPreviewsQuery = (query: string, universalLimit: UniversalLimit) => void
 
 /**
- * useEntityPreview provides state surrounding the visual entities portion of visual autocomplete,
+ * useEntityPreviews provides state surrounding the visual entities portion of visual autocomplete,
  * which performs debounced universal searches.
  * 
  * @param headlessId a unique id for the new headless instance that will be created by the hook
  * @param debounceTime the time in milliseconds to debounce the universal search request
  */
-export function useEntityPreviews(headlessId: string, debounceTime: number):[ EntityPreviewState, ExecuteEntityPreviewQuery ] {
+export function useEntityPreviews(headlessId: string, debounceTime: number):[ EntityPreviewsState, ExecuteEntityPreviewsQuery ] {
   const headlessRef = useRef<AnswersHeadless>();
   if (!headlessRef.current) {
     headlessRef.current = provideAnswersHeadless({
@@ -37,7 +37,7 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
   }, debounceTime)
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
-  function executeEntityPreviewQuery(query: string, universalLimit: UniversalLimit) {
+  function executeEntityPreviewsQuery(query: string, universalLimit: UniversalLimit) {
     if (!headlessRef.current) {
       return;
     }
@@ -49,5 +49,5 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
     headlessRef.current.setUniversalLimit(universalLimit);
     debouncedUniversalSearch();
   }
-  return [{ verticalResultsArray, isLoading }, executeEntityPreviewQuery];
+  return [{ verticalResultsArray, isLoading }, executeEntityPreviewsQuery];
 };
