@@ -78,16 +78,15 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
           <legend className={cssClasses.title}>{filterSet.title}</legend>
           <div className={cssClasses.optionsContainer}>
             {filterSet.options.map((option, index) => (
-              <div key={index}>
-                <CheckboxFilter
-                  fieldId={option.fieldId}
-                  value={option.value}
-                  label={option.label}
-                  selected={getOptionSelectStatus(option)}
-                  optionHandler={handleFilterOptionChange}
-                  cssClasses={cssClasses}
-                />
-              </div>
+              <CheckboxFilter
+                fieldId={option.fieldId}
+                value={option.value}
+                label={option.label}
+                key={index}
+                selected={getOptionSelectStatus(option)}
+                optionHandler={handleFilterOptionChange}
+                cssClasses={cssClasses}
+              />
             ))}
           </div>
           {!isLastFilterSet && <Divider customCssClasses={{ divider: cssClasses.divider }}/>}

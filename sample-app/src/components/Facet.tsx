@@ -22,7 +22,6 @@ interface FacetProps extends FacetTextConfig {
 
 interface FacetCssClasses {
   facetLabel?: string,
-  body?: string,
   optionsContainer?: string,
   option?: string,
   optionInput?: string,
