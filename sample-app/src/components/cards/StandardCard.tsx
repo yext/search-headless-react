@@ -24,7 +24,7 @@ export interface StandardCardCssClasses {
 }
 
 const builtInCssClasses: StandardCardCssClasses = {
-  container: 'StandardCard flex flex-col justify-between border rounded-lg mt-4 p-4',
+  container: 'StandardCard flex flex-col justify-between border rounded-lg mb-4 p-4',
   header: 'flex text-gray-800',
   body: 'flex justify-end pt-2.5',
   descriptionContainer: 'w-full text-base',

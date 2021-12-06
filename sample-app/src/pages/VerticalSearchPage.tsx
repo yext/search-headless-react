@@ -11,6 +11,7 @@ import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import FilterSearch from '../components/FilterSearch';
+import { Divider } from '../components/StaticFilters';
 import { SearchIntent } from '@yext/answers-headless-react';
 import {
   executeSearch,
@@ -20,17 +21,17 @@ import {
 
 const countryFilterOptions = [
   {
-    label: 'canada',
+    label: 'Canada',
     fieldId: 'c_employeeCountry',
     value: 'Canada',
   },
   {
-    label: 'remote',
+    label: 'Remote',
     fieldId: 'c_employeeCountry',
     value: 'Remote'
   },
   {
-    label: 'usa',
+    label: 'USA',
     fieldId: 'c_employeeCountry',
     value: 'United States',
   }
@@ -38,21 +39,29 @@ const countryFilterOptions = [
 
 const employeeFilterOptions = [
   {
-    label: 'tech',
+    label: 'Tech',
     fieldId: 'c_employeeDepartment',
     value: 'Technology'
   },
   {
-    label: 'consult',
+    label: 'Consult',
     fieldId: 'c_employeeDepartment',
     value: 'Consulting',
   },
   {
-    label: 'fin',
+    label: 'Fin',
     fieldId: 'c_employeeDepartment',
     value: 'Finance',
   }
 ]
+
+const staticFiltersConfig = [{
+  title: 'Country',
+  options: countryFilterOptions
+},{
+  title: 'Employee Departments',
+  options: employeeFilterOptions
+}]
 
 const facetConfigs = {
   c_employeeDepartment: {
@@ -96,22 +105,19 @@ export default function VerticalSearchPage(props: {
   }, [answersActions, props.verticalKey]);
 
   return (
-    <div className='VerticalSearchPage'>
-      <FilterSearch
-        title='Filter Search!'
-        sectioned={true}
-        searchFields={filterSearchFields}
-        screenReaderInstructionsId='FilterSearchId'
-      />
+    <div className='VerticalSearchPage pt-7 flex'>
       <div className='start'>
         <StaticFilters
-          title='~Country~'
-          options={countryFilterOptions}
+          filterConfig={staticFiltersConfig}
         />
-        <StaticFilters
-          title='~Employee Departments~'
-          options={employeeFilterOptions}
+        <Divider/>
+        <FilterSearch
+          title='Filter Search!'
+          sectioned={true}
+          searchFields={filterSearchFields}
+          screenReaderInstructionsId='FilterSearchId'
         />
+        <Divider/>
         <Facets
           searchOnChange={true}
           searchable={true}
@@ -119,16 +125,20 @@ export default function VerticalSearchPage(props: {
           defaultExpanded={true}
           facetConfigs={facetConfigs}
         />
+      </div>
+      <div className='end ml-10 flex-grow'>
+        <DirectAnswer />
         <SpellCheck
           isVertical={true}
         />
-      </div>
-      <div className='end'>
-        <DirectAnswer />
         <ResultsCount />
         <AppliedFilters
           hiddenFields={['builtin.entityType']}
           staticFiltersGroupLabels={staticFiltersGroupLabels}
+          customCssClasses={{
+            nlpFilter: 'mb-4',
+            removableFilter: 'mb-4'
+          }}
         />
         <AlternativeVerticals
           currentVerticalLabel='People'
