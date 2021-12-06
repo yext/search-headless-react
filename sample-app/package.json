@@ -85,19 +85,23 @@
     ],
     "rules": {
       "object-curly-spacing": [
-        "error",
+        "warn",
         "always"
       ],
       "indent": [
-        "error",
+        "warn",
         2,
         {
           "SwitchCase": 1,
           "ignoreComments": true
         }
       ],
+      "react/jsx-curly-brace-presence": [
+        "warn",
+        "never"
+      ],
       "@typescript-eslint/member-delimiter-style": [
-        "error",
+        "warn",
         {
           "multiline": {
             "delimiter": "comma",
