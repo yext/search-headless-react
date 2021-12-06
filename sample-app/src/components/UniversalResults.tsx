@@ -1,6 +1,6 @@
 import { useAnswersState, VerticalResults } from "@yext/answers-headless-react";
 import StandardSection from "../sections/StandardSection";
-import { DecoratedAppliedFiltersConfig } from '../components/DecoratedAppliedFilters';
+import { AppliedFiltersProps } from '../components/AppliedFilters';
 import SectionHeader from "../sections/SectionHeader";
 import { SectionComponent } from "../models/sectionComponent";
 import { CardConfig } from '../models/cardComponent';
@@ -24,7 +24,7 @@ export interface VerticalConfig {
   viewAllButton?: boolean
 }
 
-interface AppliedFiltersConfig extends Omit<DecoratedAppliedFiltersConfig, 'appliedQueryFilters'> {
+interface AppliedFiltersConfig extends Omit<AppliedFiltersProps, 'appliedQueryFilters'> {
   show: boolean
 }
 
