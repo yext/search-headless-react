@@ -2,10 +2,10 @@
 
 const HttpServer = require('../browser/server');
 const { AxePuppeteer } = require('@axe-core/puppeteer');
-const PageNavigator = require('../browser/pagenavigator');
-const puppeteer = require('puppeteer');
 const PageOperator = require('../browser/pageoperator');
-const testLocations = require('./testlocations');
+const puppeteer = require('puppeteer');
+const TestOperator = require('../browser/testoperator');
+const testInstructions = require('./testinstructions');
 const PORT = 3033;
 
 /**
@@ -33,14 +33,14 @@ async function wcagTester() {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   
-  const pageNavigator = new PageNavigator(page, `http://localhost:${PORT}`);
+  const pageOperator = new PageOperator(page, `http://localhost:${PORT}`);
   const analyzer = new AxePuppeteer(page).options(config);
 
   let results = [];
   try {
-    const operator = new PageOperator(pageNavigator, page, testLocations);
-    while (operator.hasNextTestLocation()) {
-      await operator.nextTestLocation();
+    const operator = new TestOperator(pageOperator, page, testInstructions);
+    while (operator.hasNextTestInstruction()) {
+      await operator.nextTestInstruction();
       results.push(await analyzer.analyze());
     }
   } catch (e) {

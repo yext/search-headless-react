@@ -43,10 +43,10 @@ const directAnswersTests = [
   }
 ];
 
-const testLocations = [
+const testInstructions = [
   ...universalSearchTests,
   ...verticalSearchTests, 
   ...directAnswersTests
 ]
 
-module.exports = testLocations;
+module.exports = testInstructions;

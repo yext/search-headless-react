@@ -1,57 +1,39 @@
-const { BrowserPageWidths } = require("./constants");
+const { waitTillHTMLRendered } = require('./utils');
 
 /**
- * Responsible for browser navigation based on given test locations.
- * Each test location is an object which may contain:
- * - name: name of this test
- * - path: additional path to append to base url
- * - viewport: viewport of the page (if omit, desktop view is used by default)
- * - commands: a list of actions to perform on the page by the page navigator
+ * Responsible for interactions with an answers experience page.
  */
 class PageOperator {
   /**
-   * @param {PageNavigator} pageNavigator page navigator
    * @param {import('puppeteer').Page} page A Pupeteer Page
-   * @param {Object[]} testLocations a list of test locations to navigate to
+   * @param {string} siteUrl A url to the index of the site
    */
-  constructor(pageNavigator, page, testLocations) {
-    this._pageNavigator = pageNavigator;
+  constructor(page, siteUrl) {
     this._page = page;
-    this._testLocations = testLocations;
-    this._testLocationIndex = -1;
+    this._siteUrl = siteUrl;
   }
 
-  hasNextTestLocation() {
-    return this._testLocationIndex < this._testLocations.length - 1;
+  async gotoPage(path='') {
+    const url = `${this._siteUrl}/${path}`;
+    await this._page.goto(url);
+    await waitTillHTMLRendered(this._page);
   }
 
-  async nextTestLocation() {
-    this._testLocationIndex++;
-    const testConfig = this._testLocations[this._testLocationIndex];
-    await this._setPageViewport(testConfig.viewport);
-    testConfig.path
-      ? await this._pageNavigator.gotoPage(testConfig.path)
-      : await this._pageNavigator.gotoPage();
-    await this._executeTestCommands(testConfig.commands);
-    return testConfig;
+  async click(selector) {
+    await this._page.click(selector);
+    await waitTillHTMLRendered(this._page);
   }
 
-  async _setPageViewport(viewport) {
-    if (viewport && !['desktop', 'mobile'].includes(viewport)) {
-      throw Error(`unknown viewport: ${viewport}`);
-    }
-    viewport === 'mobile'
-      ? await this._page.setViewport({ width: BrowserPageWidths.Mobile, height: this._page.viewport().height })
-      : await this._page.setViewport({ width: BrowserPageWidths.Desktop, height: this._page.viewport().height });
+  async type(input) {
+    await this._page.keyboard.type(input);
+    await waitTillHTMLRendered(this._page);
   }
 
-  async _executeTestCommands(commands) {
-    if (!commands) {
-      return;
-    }
-    for (const command of commands ) {
-      await this._pageNavigator[command.type].apply(this._pageNavigator, command.params);
-    }
+  async search(input, inputSelector) {
+    await this._page.click(inputSelector);
+    await this._page.keyboard.type(input);
+    await this._page.keyboard.press('Enter');
+    await waitTillHTMLRendered(this._page);
   }
 }
 
