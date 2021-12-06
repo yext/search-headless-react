@@ -3,7 +3,7 @@ import { AppliedFiltersDisplay, AppliedFiltersProps } from "../components/Applie
 import { ResultsCountConfig } from "../components/ResultsCount";
 import { useComposedCssClasses, CompositionMethod } from "../hooks/useComposedCssClasses";
 import { ReactComponent as CollectionIcon } from '../icons/collection.svg';
-import { AppliedQueryFilter, useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/answers-headless-react';
 import { DisplayableFilter } from "../models/displayableFilter";
 
 interface SectionHeaderCssClasses {
@@ -16,7 +16,7 @@ interface SectionHeaderCssClasses {
 }
 
 const builtInCssClasses: SectionHeaderCssClasses = {
-  sectionHeaderContainer: 'flex items-center w-full pl-1',
+  sectionHeaderContainer: 'flex items-center w-full pl-1 mb-4',
   sectionHeaderIconContainer: 'w-5 h-5',
   sectionHeaderLabel: 'font-semibold text-gray-800 text-base pl-3', 
   viewMoreContainer: 'flex justify-end flex-grow ml-auto font-medium text-gray-800',

@@ -17,7 +17,7 @@ export interface AppliedFiltersCssClasses {
 const builtInCssClasses: AppliedFiltersCssClasses = {
   appliedFiltersContainer: 'flex flex-wrap',
   nlpFilter: 'border rounded-3xl px-3 py-1.5 text-sm font-medium italic text-gray-800 mr-2',
-  removableFilter: 'flex items-center border rounded-3xl px-3 py-1.5 text-sm font-medium text-gray-800 mt-2 mr-2',
+  removableFilter: 'flex items-center border rounded-3xl px-3 py-1.5 text-sm font-medium text-gray-800 mr-2',
   removeFilterButton: 'w-2 h-2 text-gray-500 m-1.5'
 }
 
@@ -99,13 +99,17 @@ export function AppliedFiltersDisplay ({
   }
 
   return (
-    <div className={cssClasses.appliedFiltersContainer} aria-label={labelText}>
-      {displayableFilters.map((filter: DisplayableFilter) => {
-        if (filter.filterType === 'NLP_FILTER') {
-          return <NlpFilter filter={filter} key={filter.label}/>
-        }
-        return <RemovableFilter filter={filter} key={filter.label}/>
-      })}
-    </div>
+    <>
+      { displayableFilters.length > 0 &&
+        <div className={cssClasses.appliedFiltersContainer} aria-label={labelText}>
+          {displayableFilters.map((filter: DisplayableFilter) => {
+            if (filter.filterType === 'NLP_FILTER') {
+              return <NlpFilter filter={filter} key={filter.label}/>
+            }
+            return <RemovableFilter filter={filter} key={filter.label}/>
+          })}
+        </div>
+      }
+    </>
   )
 }

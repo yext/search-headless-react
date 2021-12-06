@@ -28,7 +28,7 @@ export default function App() {
       verticalKey='people'
       sessionTrackingEnabled={true}
     >
-      <div className='flex justify-center px-8 py-4'>
+      <div className='flex justify-center px-8 py-6'>
         <div className='w-full max-w-5xl'>
           <PageRouter
             Layout={StandardLayout}
