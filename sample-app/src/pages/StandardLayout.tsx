@@ -1,8 +1,9 @@
 import Navigation from '../components/Navigation';
-import SearchBar from '../components/SearchBar';
 import { useAnswersState } from '@yext/answers-headless-react';
 import { universalResultsConfig } from '../universalResultsConfig';
 import { LayoutComponent } from '../PageRouter';
+import SearchBar from '../components/SearchBar';
+import SampleVisualSearchBar from '../components/VisualAutocomplete/SampleVisualSearchBar';
 
 const navLinks = [
   {
@@ -22,11 +23,14 @@ const StandardLayout: LayoutComponent = ({ page }) => {
   const isVertical = useAnswersState(state => !!state.vertical.verticalKey);
   return (
     <>
-      <SearchBar
-        placeholder='Search...'
-        isVertical={isVertical}
-        screenReaderInstructionsId='SearchBar__srInstructions'
-      />
+      {isVertical
+        ? <SearchBar
+          placeholder='Search...'
+          isVertical={true}
+          screenReaderInstructionsId='SearchBar__srInstructions'
+        />
+        : <SampleVisualSearchBar />
+      }
       <Navigation links={navLinks} />
       {page}
     </>
