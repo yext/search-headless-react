@@ -1,6 +1,6 @@
 import VisualSearchBar from './VisualSearchBar';
 import { Result } from '@yext/answers-headless-react';
-import VisualEntities from './VisualEntities';
+import EntityPreview from './EntityPreview';
 
 /**
  * This is an example of how to use the VisualSearchBar component.
@@ -11,33 +11,26 @@ export default function SampleVisualSearchBar() {
       placeholder='Search...'
       screenReaderInstructionsId='SearchBar__srInstructions'
       headlessId='visual-autocomplete'
-      debounceTime={150}
-      renderVisualEntities={(isLoading) => (
+      entityPreviewsDebouncingTime={150}
+      renderEntityPreviews={isLoading => (
         <div className={isLoading ? 'opacity-50' : ''}>
-          <VisualEntities verticalKey='people'>
+          <EntityPreview verticalKey='people'>
             {results => (
               <div className='flex'>
                 {results.map(r => <PeopleCard result={r} key={r.name} />)}
               </div>
             )}
-          </VisualEntities>
-          <VisualEntities verticalKey='faq' limit={2}>
+          </EntityPreview>
+          <EntityPreview verticalKey='faq' limit={2}>
             {results => (
               <div className='flex flex-col'>
                 {results.map(r => <FaqCard result={r} key={r.name} />)}
               </div>
             )}
-          </VisualEntities>
+          </EntityPreview>
         </div>
       )}
-    >
-      {(autocompleteDropdown, visualEntities) => 
-        <>
-          {autocompleteDropdown}
-          {visualEntities}
-        </>
-      }
-    </VisualSearchBar>
+    />
   )
 }
 

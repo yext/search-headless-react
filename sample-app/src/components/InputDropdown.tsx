@@ -19,6 +19,7 @@ interface Props {
   screenReaderInstructionsId: string,
   screenReaderText: string,
   onlyAllowDropdownOptionSubmissions?: boolean,
+  hideDropdown?: boolean,
   onSubmit?: (value: string) => void,
   renderSearchButton?: () => JSX.Element | null,
   renderLogo?: () => JSX.Element | null,
@@ -58,6 +59,7 @@ export default function InputDropdown({
   screenReaderInstructionsId,
   screenReaderText,
   onlyAllowDropdownOptionSubmissions,
+  hideDropdown,
   children,
   onSubmit = () => {},
   renderSearchButton = () => null,
@@ -230,7 +232,7 @@ export default function InputDropdown({
           : ''
         }
       />
-      {shouldDisplayDropdown &&
+      {shouldDisplayDropdown && !hideDropdown &&
         <>
           <div className={cssClasses.divider}></div>
           <div className={cssClasses.dropdownContainer} ref={dropdownRef}>

@@ -3,11 +3,11 @@ import { PropsWithChildren } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
 import DropdownSection from '../DropdownSection';
-import { useVisualEntities } from '../../hooks/useVisualEntities';
+import { useEntityPreviews } from '../../hooks/useEntityPreviews';
 import SearchButton from '../SearchButton';
 import { processTranslation } from '../utils/processTranslation';
 import { useSynchronizedRequest } from '../../hooks/useSynchronizedRequest';
-import { calculateUniversalLimit, transformVisualEntities } from './VisualEntities';
+import { calculateUniversalLimit, transformEntityPreviews } from './EntityPreview';
 import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling';
 import { builtInCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
@@ -16,7 +16,7 @@ import renderAutocompleteResult from '../utils/renderAutocompleteResult';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
-type RenderVisualEntities = (
+type RenderEntityPreviews = (
   autocompleteLoading: boolean,
   verticalResultsArray: VerticalResults[]
 ) => JSX.Element;
@@ -26,10 +26,9 @@ interface Props {
   geolocationOptions?: PositionOptions,
   screenReaderInstructionsId: string,
   headlessId: string,
-  // The visual entities debouncing time in milliseconds
-  debounceTime: number,
-  renderVisualEntities: RenderVisualEntities,
-  children: (autocompleteDropdown: JSX.Element | null, visualEntities: JSX.Element | null) => JSX.Element,
+  // The debouncing time, in milliseconds, for making API requests for entity previews
+  entityPreviewsDebouncingTime: number,
+  renderEntityPreviews?: RenderEntityPreviews,
   customCssClasses?: SearchBarCssClasses,
   cssCompositionMethod?: CompositionMethod
 }
@@ -38,14 +37,13 @@ interface Props {
  * Renders a SearchBar with visual autocomplete.
  */
 export default function VisualSearchBar({
-  children,
   placeholder,
   screenReaderInstructionsId,
   headlessId,
-  renderVisualEntities,
+  renderEntityPreviews,
   customCssClasses,
   cssCompositionMethod,
-  debounceTime = 500
+  entityPreviewsDebouncingTime = 500
 }: PropsWithChildren<Props>) {
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
 
@@ -57,13 +55,19 @@ export default function VisualSearchBar({
     return answersActions.executeUniversalAutocomplete();
   });
 
-  const [visualAutocompleteState, executeVisualEntitiesQuery] = useVisualEntities(headlessId, debounceTime);
-  const { verticalResultsArray, isLoading: visualEntitiesLoading } = visualAutocompleteState;
+  const [entityPreviewsState, executeEntityPreviewQuery] = useEntityPreviews(headlessId, entityPreviewsDebouncingTime);
+  const { verticalResultsArray, isLoading: entityPreviewsLoading } = entityPreviewsState;
   const autocompleteResults = autocompleteResponse?.results || [];
-  const visualEntities = renderVisualEntities(visualEntitiesLoading, verticalResultsArray);
-  const universalLimit = calculateUniversalLimit(visualEntities);
+  const entityPreviews = renderEntityPreviews && renderEntityPreviews(entityPreviewsLoading, verticalResultsArray);
+  function updateEntityPreviews(query: string) {
+    if (!renderEntityPreviews) {
+      return;
+    }
+    const universalLimit = calculateUniversalLimit(entityPreviews);
+    executeEntityPreviewQuery(query, universalLimit);
+  }
 
-  function renderDropdownSection() {
+  function renderQuerySuggestions() {
     if (autocompleteResults.length === 0) {
       return null;
     }
@@ -76,10 +80,10 @@ export default function VisualSearchBar({
 
     return <DropdownSection
       options={options}
-      optionIdPrefix='VisualAutocompleteOption_0'
+      optionIdPrefix='VisualSearchBar-QuerySuggestions'
       onFocusChange={value => {
         answersActions.setQuery(value);
-        executeVisualEntitiesQuery(value, universalLimit);
+        updateEntityPreviews(value);
       }}
       onSelectOption={optionValue => {
         autocompletePromiseRef.current = undefined;
@@ -102,7 +106,7 @@ export default function VisualSearchBar({
           onSubmit={executeQuery}
           onInputChange={value => {
             answersActions.setQuery(value);
-            executeVisualEntitiesQuery(value, universalLimit);
+            updateEntityPreviews(value);
           }}
           onInputFocus={() => {
             autocompletePromiseRef.current = executeAutocomplete();
@@ -116,8 +120,10 @@ export default function VisualSearchBar({
           }
           renderLogo={() => <YextLogoIcon />}
           cssClasses={cssClasses}
+          hideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0}
         >
-          {children(renderDropdownSection(), transformVisualEntities(visualEntities, verticalResultsArray))}
+          {renderQuerySuggestions()}
+          {entityPreviews && transformEntityPreviews(entityPreviews, verticalResultsArray)}
         </InputDropdown>
       </div>
     </div>

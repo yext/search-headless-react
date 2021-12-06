@@ -3,21 +3,21 @@ import { provideAnswersHeadless, VerticalResults, AnswersHeadless, UniversalLimi
 import { ANSWERS_CONFIG } from '../utils/constants';
 import useDebouncedFunction from './useDebouncedFunction';
 
-interface VisualEntitiesState {
+interface EntityPreviewState {
   verticalResultsArray: VerticalResults[],
   isLoading: boolean
 }
 
-type ExecuteVisualEntitiesQuery = (query: string, universalLimit: UniversalLimit) => void
+type ExecuteEntityPreviewQuery = (query: string, universalLimit: UniversalLimit) => void
 
 /**
- * useVisualEntities provides state surrounding the visual entities portion of visual autocomplete,
+ * useEntityPreview provides state surrounding the visual entities portion of visual autocomplete,
  * which performs debounced universal searches.
  * 
  * @param headlessId a unique id for the new headless instance that will be created by the hook
  * @param debounceTime the time in milliseconds to debounce the universal search request
  */
-export function useVisualEntities(headlessId: string, debounceTime: number):[ VisualEntitiesState, ExecuteVisualEntitiesQuery ] {
+export function useEntityPreviews(headlessId: string, debounceTime: number):[ EntityPreviewState, ExecuteEntityPreviewQuery ] {
   const headlessRef = useRef<AnswersHeadless>();
   if (!headlessRef.current) {
     headlessRef.current = provideAnswersHeadless({
@@ -37,7 +37,7 @@ export function useVisualEntities(headlessId: string, debounceTime: number):[ Vi
   }, debounceTime)
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
-  function executeVisualEntitiesQuery(query: string, universalLimit: UniversalLimit) {
+  function executeEntityPreviewQuery(query: string, universalLimit: UniversalLimit) {
     if (!headlessRef.current) {
       return;
     }
@@ -49,5 +49,5 @@ export function useVisualEntities(headlessId: string, debounceTime: number):[ Vi
     headlessRef.current.setUniversalLimit(universalLimit);
     debouncedUniversalSearch();
   }
-  return [{ verticalResultsArray, isLoading }, executeVisualEntitiesQuery];
+  return [{ verticalResultsArray, isLoading }, executeEntityPreviewQuery];
 };
