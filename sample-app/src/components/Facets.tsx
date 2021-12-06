@@ -1,6 +1,7 @@
 import { useAnswersState, useAnswersActions, DisplayableFacetOption } from '@yext/answers-headless-react'
+import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
 import Facet, { FacetTextConfig } from './Facet';
-import '../sass/Facets.scss';
+import { Divider } from './StaticFilters';
 
 
 interface FacetsProps {
@@ -8,11 +9,31 @@ interface FacetsProps {
   searchable?: boolean,
   collapsible?: boolean,
   defaultExpanded?: boolean,
-  facetConfigs?: Record<string, FacetTextConfig>
+  facetConfigs?: Record<string, FacetTextConfig>,
+  customCssClasses?: FacetsCssClasses,
+  cssCompositionMethod?: CompositionMethod
+}
+
+interface FacetsCssClasses {
+  container?: string,
+  divider?: string
+}
+
+const builtInCssClasses: FacetsCssClasses = {
+  container: 'md:w-40'
 }
 
 export default function Facets (props: FacetsProps): JSX.Element {
-  const { searchOnChange, searchable, collapsible, defaultExpanded, facetConfigs = {} } = props;
+  const { 
+    searchOnChange,
+    searchable,
+    collapsible,
+    defaultExpanded,
+    facetConfigs = {},
+    customCssClasses,
+    cssCompositionMethod
+  } = props;
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   const facets = useAnswersState(state => state.filters?.facets) || [];
 
   const answersActions = useAnswersActions();
@@ -37,26 +58,31 @@ export default function Facets (props: FacetsProps): JSX.Element {
 
   const facetComponents = facets
     .filter(facet => facet.options?.length > 0)
-    .map(facet => {
+    .map((facet, index, facetArray) => {
+      const isLastFacet = index === facetArray.length -1;
       const config = facetConfigs?.[facet.fieldId] ?? {};
-      return <Facet
-        key={facet.fieldId}
-        facet={facet}
-        {...config}
-        searchable={searchable}
-        collapsible={collapsible}
-        defaultExpanded={defaultExpanded}
-        onToggle={handleFacetOptionChange} />
+      return (
+        <div key={facet.fieldId}>
+          <Facet
+            facet={facet}
+            {...config}
+            searchable={searchable}
+            collapsible={collapsible}
+            defaultExpanded={defaultExpanded}
+            onToggle={handleFacetOptionChange} />
+          {!isLastFacet && <Divider customCssClasses={{ divider: cssClasses.divider }}/>}
+        </div>
+      );
     });
 
   return (
-    <div className='Facets'>
-      <div className='Facets__options'>
+    <div className={cssClasses.container}>
+      <div>
         {facetComponents}
       </div>
-      <div className='Facets__controls'>
-        {!searchOnChange && <button className='Facets__button' onClick={executeSearch}>Apply</button>}
-        <button className='Facets__link' onClick={handleResetFacets}>Reset all</button>
+      <div>
+        {!searchOnChange && <button onClick={executeSearch}>Apply</button>}
+        <button onClick={handleResetFacets}>Reset all</button>
       </div>
     </div>
   )
