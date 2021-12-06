@@ -14,17 +14,17 @@ const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use 
 
 export const builtInCssClasses: SearchBarCssClasses = {
   container: 'h-12',
-  divider: 'border mx-2',
+  divider: 'border-t border-gray-200 mx-2',
   dropdownContainer: 'relative bg-white py-1 z-10',
   focusedOption: 'bg-gray-100',
-  inputContainer: 'h-12 inline-flex items-center justify-between w-full',
-  inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
-  inputElement: 'outline-none flex-grow border-none h-full px-2',
-  logoContainer: 'w-8 mx-2',
+  inputContainer: 'h-11 inline-flex items-center justify-between w-full',
+  inputDropdownContainer: 'bg-white border rounded-3xl border-gray-200 w-full overflow-hidden',
+  inputElement: 'outline-none flex-grow border-none h-full pl-0.5 pr-2',
+  logoContainer: 'w-7 mx-2.5 my-2',
   option: 'flex items-center py-1 px-2 cursor-pointer',
-  resultIconContainer: 'opacity-20 w-8 h-8 pl-1 mr-4',
-  searchButtonContainer: 'w-8 h-full mx-2',
-  submitButton: 'h-full w-full'
+  resultIconContainer: 'opacity-20 w-7 h-7 pl-1 mr-4',
+  searchButtonContainer: 'w-8 h-full mx-2 flex flex-col justify-center items-center',
+  submitButton: 'h-7 w-7'
 }
 
 export interface SearchBarCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {
