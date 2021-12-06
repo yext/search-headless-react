@@ -54,23 +54,19 @@ export function ResultsCountDisplay({
     resultsCount,
     'Results'
   ];
-   
-  function textSpan(value: string | number, className: string) {
-    return <span className={className}>{value}</span>
-  }
-  
-  return <div className={cssClasses.container}>
-    {messageArray.map((value, index) => {
-      const isLastString = index === messageArray.length - 1;
-      const isNumber = typeof value === 'number';
-      
-      const classes = cssClasses.number
-        ? classNames(cssClasses.text, { [cssClasses.number]: isNumber })
-        : cssClasses.text ?? '';
 
-      return isLastString 
-        ? textSpan(value, classes)
-        : textSpan(value + ' ', classes);
-    })}
-  </div>
+  const spanArray = messageArray.map((value, index) => {
+    const isLastString = index === messageArray.length - 1;
+    const isNumber = typeof value === 'number';
+    
+    const classes = cssClasses.number
+      ? classNames(cssClasses.text, { [cssClasses.number]: isNumber })
+      : cssClasses.text ?? '';
+
+    const spanValue = isLastString ? value : `${value} `;
+
+    return <span key={`${index}-${value}`} className={classes}>{spanValue}</span>
+  });
+  
+  return <div className={cssClasses.container}>{spanArray}</div>
 }
