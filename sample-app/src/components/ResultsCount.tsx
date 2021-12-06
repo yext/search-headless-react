@@ -1,25 +1,77 @@
 import { useAnswersState } from '@yext/answers-headless-react';
+import classNames from 'classnames';
+import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
+
+interface ResultsCountCssClasses {
+  container?: string,
+  text?: string,
+  number?: string
+}
+
+interface Props {
+  customCssClasses?: ResultsCountCssClasses,
+  cssCompositionMethod?: CompositionMethod
+}
+
 export interface ResultsCountConfig {
   resultsCount?: number,
   resultsLength?: number,
-  offset?: number
-}
-
-export function ResultsCountDisplay(props: ResultsCountConfig): JSX.Element {
-  const resultsCount = props.resultsCount || 0;
-  const resultsLength = props.resultsLength || 0;
-  const offset = props.offset || 0;
-  const results = ((resultsLength === 0) ? "" : `${offset + 1}-${offset + resultsLength} of ${resultsCount}`)
-
-  return (
-    <div> {results} </div>
-  )
+  offset?: number,
+  cssClasses?: ResultsCountCssClasses
 }
 
 
-export default function ResultsCount() {
+export default function ResultsCount({ customCssClasses, cssCompositionMethod }: Props) {
   const resultsCount = useAnswersState(state => state.vertical?.resultsCount) || 0;
   const resultsLength = useAnswersState(state => state.vertical?.results?.length) || 0;
   const offset = useAnswersState(state => state.vertical?.offset) || 0;
-  return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset}/>;
+  const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
+  return <ResultsCountDisplay resultsCount={resultsCount} resultsLength={resultsLength} offset={offset} cssClasses={cssClasses}/>;
+}
+
+
+const builtInCssClasses: ResultsCountCssClasses = {
+  container: 'pb-4',
+  text: 'text-sm text-gray-700',
+  number: 'font-medium'
+}
+
+export function ResultsCountDisplay({
+  resultsCount=0,
+  resultsLength=0,
+  offset=0, 
+  cssClasses={} 
+}: ResultsCountConfig): JSX.Element | null {
+  if (resultsLength === 0) {
+    return null;
+  }
+
+  const messageArray = [
+    'Showing',
+    offset + 1,
+    'to',
+    offset + resultsLength,
+    'of',
+    resultsCount,
+    'Results'
+  ];
+   
+  function textSpan(value: string | number, className: string) {
+    return <span className={className}>{value}</span>
+  }
+  
+  return <div className={cssClasses.container}>
+    {messageArray.map((value, index) => {
+      const isLastString = index === messageArray.length - 1;
+      const isNumber = typeof value === 'number';
+      
+      const classes = cssClasses.number
+        ? classNames(cssClasses.text, { [cssClasses.number]: isNumber })
+        : cssClasses.text ?? '';
+
+      return isLastString 
+        ? textSpan(value, classes)
+        : textSpan(value + ' ', classes);
+    })}
+  </div>
 }
