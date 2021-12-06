@@ -38,9 +38,9 @@ async function wcagTester() {
 
   let results = [];
   try {
-    const operator = new TestRunner(pageOperator, page, tests);
-    while (operator.hasNextTest()) {
-      await operator.nextTest();
+    const testRunner = new TestRunner(pageOperator, page, tests);
+    while (testRunner.hasNextTest()) {
+      await testRunner.nextTest();
       results.push(await analyzer.analyze());
     }
   } catch (e) {
