@@ -1,16 +1,16 @@
 import ResultsCount from '../components/ResultsCount';
-//import AlternativeVerticals from '../components/AlternativeVerticals';
+import AlternativeVerticals from '../components/AlternativeVerticals';
 import AppliedFilters from '../components/AppliedFilters';
-//import DirectAnswer from '../components/DirectAnswer';
+import DirectAnswer from '../components/DirectAnswer';
 import StaticFilters from '../components/StaticFilters';
 import VerticalResults from '../components/VerticalResults';
-//import SpellCheck from '../components/SpellCheck';
-//import LocationBias from '../components/LocationBias';
+import SpellCheck from '../components/SpellCheck';
+import LocationBias from '../components/LocationBias';
 import Facets from '../components/Facets';
 import { StandardCard } from '../components/cards/StandardCard';
 import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
-//import FilterSearch from '../components/FilterSearch';
+import FilterSearch from '../components/FilterSearch';
 import Divider from '../components/Divider';
 import { SearchIntent } from '@yext/answers-headless-react';
 import {
@@ -74,14 +74,14 @@ const staticFiltersGroupLabels = {
   c_employeeDepartment: 'Employee Deparment'
 }
 
-// const filterSearchFields = [{
-//   fieldApiName: 'builtin.location',
-//   entityType: 'ce_person'
-// },
-// {
-//   fieldApiName: 'name',
-//   entityType: 'ce_person'
-// }];
+const filterSearchFields = [{
+  fieldApiName: 'builtin.location',
+  entityType: 'ce_person'
+},
+{
+  fieldApiName: 'name',
+  entityType: 'ce_person'
+}];
 
 export default function VerticalSearchPage(props: {
   verticalKey: string
@@ -106,12 +106,12 @@ export default function VerticalSearchPage(props: {
 
   return (
     <div className='VerticalSearchPage pt-7 flex'>
-      {/* <FilterSearch
+      <FilterSearch
         title='Filter Search!'
         sectioned={true}
         searchFields={filterSearchFields}
         screenReaderInstructionsId='FilterSearchId'
-      /> */}
+      />
       <div className='start'>
         <StaticFilters
           filterConfig={staticFiltersConfig}
@@ -126,10 +126,10 @@ export default function VerticalSearchPage(props: {
         />
       </div>
       <div className='end ml-10 flex-grow'>
-        {/* <DirectAnswer /> */}
-        {/* <SpellCheck
+        <DirectAnswer />
+        <SpellCheck
           isVertical={true}
-        /> */}
+        />
         <ResultsCount />
         <AppliedFilters
           hiddenFields={['builtin.entityType']}
@@ -139,19 +139,19 @@ export default function VerticalSearchPage(props: {
             removableFilter: 'mb-4'
           }}
         />
-        {/* <AlternativeVerticals
+        <AlternativeVerticals
           currentVerticalLabel='People'
           verticalsConfig={[
             { label: 'Locations', verticalKey: 'KM' },
             { label: 'FAQs', verticalKey: 'faq' }
           ]}
-        /> */}
+        />
         <VerticalResults
           CardComponent={StandardCard}
           cardConfig={{ showOrdinal: true }}
           displayAllResults={true}
         />
-        {/* <LocationBias isVertical={false} /> */}
+        <LocationBias isVertical={false} />
       </div>
     </div>
   )

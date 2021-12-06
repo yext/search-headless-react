@@ -38,7 +38,17 @@ const builtInCssClasses: FacetCssClasses = {
 }
 
 export default function Facet(props: FacetProps): JSX.Element {
-  const { facet, onToggle, searchable, collapsible, defaultExpanded, label, customCssclasses, cssCompositionMethod } = props;
+  const { 
+    facet,
+    onToggle,
+    searchable,
+    collapsible,
+    defaultExpanded,
+    label,
+    placeholderText,
+    customCssclasses,
+    cssCompositionMethod 
+  } = props;
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssclasses, cssCompositionMethod);
   const answersUtilities = useAnswersUtilities();
   const hasSelectedFacet = !!facet.options.find(o => o.selected);
@@ -57,13 +67,13 @@ export default function Facet(props: FacetProps): JSX.Element {
         {label || facet.displayName} 
       </button>
       <div {...(collapsible ? getCollapseProps() : {})}>
-        {/* {searchable 
+        {searchable 
           && <input
             className='Facet__search' 
             type='text' 
             placeholder={placeholderText || 'Search here...'} 
             value={filterValue} 
-            onChange={e => setFilterValue(e.target.value)}/>} */}
+            onChange={e => setFilterValue(e.target.value)}/>}
         <div className={cssClasses.optionsContainer}>
           {facetOptions.map(option => 
             <FacetOption 

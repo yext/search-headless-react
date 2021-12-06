@@ -39,13 +39,12 @@ export default function Facets (props: FacetsProps): JSX.Element {
   const answersActions = useAnswersActions();
   const executeSearch = () => answersActions.executeVerticalQuery();
 
-  // TODO (cea2aj) Support the 'Reset all' button once we get mocks from UX
-  // const handleResetFacets = () => {
-  //   answersActions.resetFacets();
-  //   if (searchOnChange) { 
-  //     executeSearch();
-  //   }
-  // }
+  const handleResetFacets = () => {
+    answersActions.resetFacets();
+    if (searchOnChange) { 
+      executeSearch();
+    }
+  }
 
   const handleFacetOptionChange = (fieldId: string, option: DisplayableFacetOption) => {
     option.selected
@@ -84,7 +83,7 @@ export default function Facets (props: FacetsProps): JSX.Element {
       </div>
       <div>
         {!searchOnChange && <button onClick={executeSearch}>Apply</button>}
-        {/* <button className='Facets__link' onClick={handleResetFacets}>Reset all</button> */}
+        <button onClick={handleResetFacets}>Reset all</button>
       </div>
     </div>
   )
