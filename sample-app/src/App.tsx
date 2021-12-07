@@ -1,9 +1,13 @@
-import VerticalSearchPage from './pages/VerticalSearchPage';
+//import VerticalSearchPage from './pages/VerticalSearchPage';
 import UniversalSearchPage from './pages/UniversalSearchPage';
+import FAQsPage from './pages/FAQsPage';
+import EventsPage from './pages/EventsPage';
 import PageRouter from './PageRouter';
 import StandardLayout from './pages/StandardLayout';
 import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
 import { universalResultsConfig } from './universalResultsConfig';
+import JobsPage from './pages/JobsPage';
+import LocationsPage from './pages/LocationsPage';
 
 const routes = [
   {
@@ -11,19 +15,29 @@ const routes = [
     exact: true,
     page: <UniversalSearchPage universalResultsConfig={universalResultsConfig} />
   },
-  ...Object.keys(universalResultsConfig).map(key => {
-    return {
-      path: `/${key}`,
-      page: <VerticalSearchPage verticalKey={key} />
-    }
-  })
+  {
+    path: '/faqs',
+    page: <FAQsPage verticalKey='faqs'/>
+  },
+  {
+    path: '/events',
+    page: <EventsPage verticalKey='events'/>
+  },
+  {
+    path: '/locations',
+    page: <LocationsPage verticalKey='locations' />
+  },
+  {
+    path: '/jobs',
+    page: <JobsPage verticalKey='jobs' />
+  }
 ];
 
 export default function App() {
   return (
     <AnswersHeadlessProvider
-      apiKey='2d8c550071a64ea23e263118a2b0680b'
-      experienceKey='slanswers'
+      apiKey='3517add824e992916861b76e456724d9'
+      experienceKey='answers-js-docs'
       locale='en'
       verticalKey='people'
       sessionTrackingEnabled={true}

@@ -1,15 +1,12 @@
 import UniversalResults from '../components/UniversalResults';
 import DirectAnswer from '../components/DirectAnswer';
-import { useLayoutEffect } from 'react';
-import { useAnswersActions } from '@yext/answers-headless-react';
-import { SearchIntent } from '@yext/answers-headless-react';
 import { UniversalResultsConfig } from '../universalResultsConfig';
 import SpellCheck from '../components/SpellCheck';
-import {
-  executeSearch,
-  getSearchIntents,
-  updateLocationIfNeeded
-} from '../utils/search-operations';
+import usePage from '../hooks/usePage';
+import { SearchIntent } from '@yext/answers-headless';
+import { useLayoutEffect } from 'react';
+import { useAnswersActions } from '@yext/answers-headless-react';
+import { getSearchIntents, updateLocationIfNeeded, executeSearch } from '../utils/search-operations';
 
 const universalResultsFilterConfig = {
   show: true
@@ -36,7 +33,7 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
   }, [answersActions]);
 
   return (
-    <div className='UniversalSearchPage'>
+    <div>
       <SpellCheck
         isVertical={false}
       />
