@@ -19,11 +19,9 @@ import useRecentSearches from '../../hooks/useRecentSearches';
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 const builtInCssClasses: VisualSearchBarCssClasses = { 
   ...builtInSearchBarCssClasses, 
-  ...{
-    recentSearchesOption: 'flex items-center py-1 px-2 cursor-pointer',
-    recentSearchesLogoContainer: 'w-4',
-    recentSearchesOptionValue: 'ml-2'
-  } 
+  recentSearchesOption: 'flex items-center py-1 px-2 cursor-pointer',
+  recentSearchesLogoContainer: 'w-4',
+  recentSearchesOptionValue: 'ml-2'
 };
 
 interface VisualSearchBarCssClasses extends SearchBarCssClasses {
