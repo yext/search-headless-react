@@ -73,7 +73,7 @@ export default function VisualSearchBar({
 
   function executeQuery() {
     if (!hideRecentSearches) {
-      let input = answersActions.state.query.input;
+      const input = answersActions.state.query.input;
       input && recentSearches?.setRecentSearch(input);
     }
     executeQueryWithNearMeHandling();
