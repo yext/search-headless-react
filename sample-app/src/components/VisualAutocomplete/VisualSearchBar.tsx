@@ -137,7 +137,10 @@ export default function VisualSearchBar({
           </div>
         )
       }
-    }) ?? [];
+    });
+    if (!options) {
+      return null;
+    }
 
     return <DropdownSection
       options={options}
