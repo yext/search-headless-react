@@ -9,7 +9,7 @@ import { processTranslation } from '../utils/processTranslation';
 import { useSynchronizedRequest } from '../../hooks/useSynchronizedRequest';
 import { calculateUniversalLimit, transformEntityPreviews } from './EntityPreviews';
 import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling';
-import { builtInCssClasses, SearchBarCssClasses } from '../SearchBar';
+import { builtInCssClasses as builtInSearchBarCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
 import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
 import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
@@ -17,6 +17,18 @@ import renderAutocompleteResult from '../utils/renderAutocompleteResult';
 import useRecentSearches from '../../hooks/useRecentSearches';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+const builtInCssClasses: VisualSearchBarCssClasses = { 
+  ...builtInSearchBarCssClasses, 
+  ...{
+    recentSearchesOption: 'flex items-center py-1 px-2 cursor-pointer',
+    recentSearchesOptionValue: 'ml-2'
+  } 
+};
+
+interface VisualSearchBarCssClasses extends SearchBarCssClasses {
+  recentSearchesOption?: string,
+  recentSearchesOptionValue?: string
+}
 
 type RenderEntityPreviews = (
   autocompleteLoading: boolean,
@@ -33,7 +45,7 @@ interface Props {
   renderEntityPreviews?: RenderEntityPreviews,
   hideRecentSearches?: boolean,
   recentSearchesLimit?: number,
-  customCssClasses?: SearchBarCssClasses,
+  customCssClasses?: VisualSearchBarCssClasses,
   cssCompositionMethod?: CompositionMethod
 }
 
@@ -119,9 +131,9 @@ export default function VisualSearchBar({
       return {
         value: result.query,
         display: (
-          <div className='flex items-center'>
+          <div className={cssClasses.recentSearchesOption}>
             <RecentSearchIcon />
-            <div className='ml-1'>{result.query}</div>
+            <div className={cssClasses.recentSearchesOptionValue}>{result.query}</div>
           </div>
         )
       }
