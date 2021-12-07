@@ -109,9 +109,9 @@ it('does not trigger render on unmounted component', async () => {
     </AnswersHeadlessContext.Provider>
   );
   act(() => answers.setQuery('resultsWithFilter'));
-  await act( () => answers.executeUniversalQuery());
+  await act( async () => { await answers.executeUniversalQuery(); });
   act(() => answers.setQuery('default'));
-  await act( () => answers.executeUniversalQuery());
+  await act( async () => { await answers.executeUniversalQuery(); });
   expect(consoleSpy).not.toHaveBeenCalledWith(
     expect.stringMatching('Can\'t perform a React state update on an unmounted component'),
     expect.anything(),

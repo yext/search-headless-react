@@ -19,7 +19,6 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src",
-    "react-app.d.ts"
+    "src"
   ]
 }
