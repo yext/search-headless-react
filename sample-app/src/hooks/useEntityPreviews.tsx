@@ -8,7 +8,7 @@ interface EntityPreviewsState {
   isLoading: boolean
 }
 
-type ExecuteEntityPreviewsQuery = (query: string, universalLimit: UniversalLimit) => void
+type ExecuteEntityPreviewsQuery = (query: string, universalLimit: UniversalLimit, restrictVerticals: string[]) => void
 
 /**
  * useEntityPreviews provides state surrounding the visual entities portion of visual autocomplete,
@@ -37,7 +37,7 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
   }, debounceTime)
   const [isLoading, setLoadingState] = useState<boolean>(false);
 
-  function executeEntityPreviewsQuery(query: string, universalLimit: UniversalLimit) {
+  function executeEntityPreviewsQuery(query: string, universalLimit: UniversalLimit, restrictVerticals: string[]) {
     if (!headlessRef.current) {
       return;
     }
@@ -46,6 +46,7 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
     }
     setLoadingState(true);
     headlessRef.current.setQuery(query);
+    headlessRef.current.setRestrictVerticals(restrictVerticals);
     headlessRef.current.setUniversalLimit(universalLimit);
     debouncedUniversalSearch();
   }

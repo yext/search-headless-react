@@ -7,7 +7,7 @@ import { useEntityPreviews } from '../../hooks/useEntityPreviews';
 import SearchButton from '../SearchButton';
 import { processTranslation } from '../utils/processTranslation';
 import { useSynchronizedRequest } from '../../hooks/useSynchronizedRequest';
-import { calculateUniversalLimit, transformEntityPreviews } from './EntityPreviews';
+import { calculateRestrictVerticals, calculateUniversalLimit, transformEntityPreviews } from './EntityPreviews';
 import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling';
 import { builtInCssClasses as builtInSearchBarCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
@@ -97,8 +97,9 @@ export default function VisualSearchBar({
     if (!renderEntityPreviews) {
       return;
     }
+    const restrictVerticals = calculateRestrictVerticals(entityPreviews);
     const universalLimit = calculateUniversalLimit(entityPreviews);
-    executeEntityPreviewsQuery(query, universalLimit);
+    executeEntityPreviewsQuery(query, universalLimit, restrictVerticals);
   }
 
   function renderQuerySuggestions() {
@@ -168,7 +169,6 @@ export default function VisualSearchBar({
           onSubmit={executeQuery}
           onInputChange={value => {
             answersActions.setQuery(value);
-            updateEntityPreviews(value);
           }}
           onInputFocus={value => {
             updateEntityPreviews(value);
@@ -183,7 +183,7 @@ export default function VisualSearchBar({
           }
           renderLogo={() => <YextLogoIcon />}
           cssClasses={cssClasses}
-          hideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0 && !haveRecentSearches}
+          forceHideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0 && !haveRecentSearches}
         >
           {!hideRecentSearches && renderRecentSearches()}
           {renderQuerySuggestions()}
