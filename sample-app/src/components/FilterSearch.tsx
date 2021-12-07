@@ -49,7 +49,7 @@ export default function FilterSearch ({
   );
 
   let sections: { results: Option[], label?: string }[] = [];
-  if (filterSearchResponse?.results) {
+  if (filterSearchResponse) {
     sections = filterSearchResponse.sections.map(section => {
       return {
         results: section.results.map(result => {
