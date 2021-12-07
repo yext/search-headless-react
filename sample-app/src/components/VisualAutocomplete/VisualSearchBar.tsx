@@ -74,19 +74,21 @@ export default function VisualSearchBar({
   });
   const [
     recentSearches,
-    createNewRecentSearchesStorage,
-    removeRecentSearchesStorage
+    setRecentSearch,
+    clearRecentSearches
   ] = useRecentSearches(recentSearchesLimit);
   useEffect(() => {
-    hideRecentSearches ? removeRecentSearchesStorage() : createNewRecentSearchesStorage();
-  }, [hideRecentSearches, createNewRecentSearchesStorage, removeRecentSearchesStorage])
-  const haveRecentSearches = !hideRecentSearches && recentSearches?.getRecentSearches()?.length !== 0;
+    if (hideRecentSearches) {
+      clearRecentSearches();
+    }
+  }, [clearRecentSearches, hideRecentSearches])
+  const haveRecentSearches = !hideRecentSearches && recentSearches?.length !== 0;
   
 
   function executeQuery() {
     if (!hideRecentSearches) {
       const input = answersActions.state.query.input;
-      input && recentSearches?.setRecentSearch(input);
+      input && setRecentSearch(input);
     }
     executeQueryWithNearMeHandling();
   }
@@ -132,7 +134,7 @@ export default function VisualSearchBar({
   }
 
   function renderRecentSearches() {
-    const options = recentSearches?.getRecentSearches().map(result => {
+    const options = recentSearches?.map(result => {
       return {
         value: result.query,
         display: (

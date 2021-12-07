@@ -1,22 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
-import RecentSearches from "recent-searches";
+import RecentSearches, { ISearch } from "recent-searches";
 
-const RECENT_SEARCHES_KEY = '__yxt_recent_searches__'
+export const RECENT_SEARCHES_KEY = '__yxt_recent_searches__'
 
 export default function useRecentSearches(
   recentSearchesLimit: number
-): [RecentSearches|undefined, () => void, () => void] {
+): [ISearch[]|undefined, (input: string) => void, () => void] {
   const [ recentSearches, setRecentSeaches ] = useState<RecentSearches>();
-  const removeRecentSearchesStorage = useCallback(() => {
-    localStorage.removeItem(RECENT_SEARCHES_KEY);
-  }, []);
 
-  const createNewRecentSearchesStorage = useCallback(() => {
+  const clearRecentSearches = useCallback(() => {
+    localStorage.removeItem(RECENT_SEARCHES_KEY);
     setRecentSeaches(new RecentSearches({
       limit: recentSearchesLimit,
       namespace: RECENT_SEARCHES_KEY 
     }));
+    localStorage.removeItem(RECENT_SEARCHES_KEY);
   }, [recentSearchesLimit]);
+
+  const setRecentSearch = (input: string) => {
+    recentSearches?.setRecentSearch(input);
+  }
   
   useEffect(() => {
     setRecentSeaches(new RecentSearches({
@@ -25,5 +28,5 @@ export default function useRecentSearches(
     }));
   }, [recentSearchesLimit]);
 
-  return [recentSearches, createNewRecentSearchesStorage, removeRecentSearchesStorage];
+  return [recentSearches?.getRecentSearches(), setRecentSearch, clearRecentSearches];
 }
