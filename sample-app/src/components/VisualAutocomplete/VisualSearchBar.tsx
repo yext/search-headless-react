@@ -17,6 +17,7 @@ import renderAutocompleteResult from '../utils/renderAutocompleteResult';
 import RecentSearches from "recent-searches";
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+const DEFAULT_RECENT_SEARCH_KEY = '__yxt_recent_searches__'
 
 type RenderEntityPreviews = (
   autocompleteLoading: boolean,
@@ -61,10 +62,14 @@ export default function VisualSearchBar({
     return answersActions.executeUniversalAutocomplete();
   });
   const recentSearches = useMemo(() => {
-    return hideRecentSearches 
-      ? undefined
-      : new RecentSearches({ limit: recentSearchesLimit })
+    if (hideRecentSearches) {
+      localStorage.removeItem(DEFAULT_RECENT_SEARCH_KEY);
+      return undefined;
+    } else {
+      return new RecentSearches({ limit: recentSearchesLimit, namespace: DEFAULT_RECENT_SEARCH_KEY });
+    }
   }, [recentSearchesLimit, hideRecentSearches]);
+  const haveRecentSearches = !hideRecentSearches && recentSearches?.getRecentSearches() && recentSearches.getRecentSearches().length > 0;
 
   function executeQuery() {
     if (!hideRecentSearches) {
@@ -129,10 +134,6 @@ export default function VisualSearchBar({
     return <DropdownSection
       options={options}
       optionIdPrefix='VisualSearchBar-RecentSearches'
-      onFocusChange={value => {
-        answersActions.setQuery(value);
-        updateEntityPreviews(value);
-      }}
       onSelectOption={optionValue => {
         autocompletePromiseRef.current = undefined;
         answersActions.setQuery(optionValue);
@@ -169,7 +170,7 @@ export default function VisualSearchBar({
           }
           renderLogo={() => <YextLogoIcon />}
           cssClasses={cssClasses}
-          hideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0}
+          hideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0 && !haveRecentSearches}
         >
           {!hideRecentSearches && renderRecentSearches()}
           {renderQuerySuggestions()}
