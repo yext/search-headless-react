@@ -4,6 +4,7 @@ import { useLayoutEffect } from 'react';
 import { useAnswersActions } from '@yext/answers-headless-react';
 import { SearchIntent } from '@yext/answers-headless-react';
 import { UniversalResultsConfig } from '../universalResultsConfig';
+import SpellCheck from '../components/SpellCheck';
 import {
   executeSearch,
   getSearchIntents,
@@ -36,6 +37,9 @@ export default function UniversalSearchPage(props: { universalResultsConfig: Uni
 
   return (
     <div className='UniversalSearchPage'>
+      <SpellCheck
+        isVertical={false}
+      />
       <DirectAnswer />
       <UniversalResults
         appliedFiltersConfig={universalResultsFilterConfig}
