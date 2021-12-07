@@ -21,12 +21,14 @@ const builtInCssClasses: VisualSearchBarCssClasses = {
   ...builtInSearchBarCssClasses, 
   ...{
     recentSearchesOption: 'flex items-center py-1 px-2 cursor-pointer',
+    recentSearchesLogoContainer: 'w-4',
     recentSearchesOptionValue: 'ml-2'
   } 
 };
 
 interface VisualSearchBarCssClasses extends SearchBarCssClasses {
   recentSearchesOption?: string,
+  recentSearchesLogoContainer?: string,
   recentSearchesOptionValue?: string
 }
 
@@ -132,7 +134,7 @@ export default function VisualSearchBar({
         value: result.query,
         display: (
           <div className={cssClasses.recentSearchesOption}>
-            <RecentSearchIcon />
+            <div className={cssClasses.recentSearchesLogoContainer}><RecentSearchIcon /></div>
             <div className={cssClasses.recentSearchesOptionValue}>{result.query}</div>
           </div>
         )
