@@ -30,7 +30,7 @@ interface Props {
 
 interface State {
   focusedSectionIndex?: number,
-  shouldDisplayDropdown: boolean
+  dropdownHidden: boolean
 }
 
 type Action =
@@ -41,11 +41,11 @@ type Action =
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'HideSections':
-      return { focusedSectionIndex: undefined, shouldDisplayDropdown: false }
+      return { focusedSectionIndex: undefined, dropdownHidden: true }
     case 'ShowSections':
-      return { focusedSectionIndex: undefined, shouldDisplayDropdown: true }
+      return { focusedSectionIndex: undefined, dropdownHidden: false }
     case 'FocusSection':
-      return { focusedSectionIndex: action.newIndex, shouldDisplayDropdown: true }
+      return { focusedSectionIndex: action.newIndex, dropdownHidden: false }
   }
 }
 
@@ -70,12 +70,12 @@ export default function InputDropdown({
 }: React.PropsWithChildren<Props>): JSX.Element | null {
   const [{
     focusedSectionIndex,
-    shouldDisplayDropdown: shouldDisplayDropdownWithoutForcedHide,
+    dropdownHidden,
   }, dispatch] = useReducer(reducer, {
     focusedSectionIndex: undefined,
-    shouldDisplayDropdown: false,
+    dropdownHidden: true,
   });
-  const shouldDisplayDropdown = shouldDisplayDropdownWithoutForcedHide && !hideDropdown;
+  const shouldDisplayDropdown = !dropdownHidden && !hideDropdown;
 
   const [focusedOptionId, setFocusedOptionId] = useState<string | undefined>(undefined);
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
