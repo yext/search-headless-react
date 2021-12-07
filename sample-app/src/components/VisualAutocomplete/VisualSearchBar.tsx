@@ -74,7 +74,11 @@ export default function VisualSearchBar({
   const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(async () => {
     return answersActions.executeUniversalAutocomplete();
   });
-  const [recentSearches, createNewRecentSearchesStorage, removeRecentSearchesStorage] = useRecentSearches(recentSearchesLimit);
+  const [
+    recentSearches,
+    createNewRecentSearchesStorage,
+    removeRecentSearchesStorage
+  ] = useRecentSearches(recentSearchesLimit);
   useEffect(() => {
     hideRecentSearches ? removeRecentSearchesStorage() : createNewRecentSearchesStorage();
   }, [hideRecentSearches, createNewRecentSearchesStorage, removeRecentSearchesStorage])
