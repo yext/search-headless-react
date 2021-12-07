@@ -19,7 +19,7 @@ interface Props {
   screenReaderInstructionsId: string,
   screenReaderText: string,
   onlyAllowDropdownOptionSubmissions?: boolean,
-  hideDropdown?: boolean,
+  forceHideDropdown?: boolean,
   onSubmit?: (value: string) => void,
   renderSearchButton?: () => JSX.Element | null,
   renderLogo?: () => JSX.Element | null,
@@ -59,7 +59,7 @@ export default function InputDropdown({
   screenReaderInstructionsId,
   screenReaderText,
   onlyAllowDropdownOptionSubmissions,
-  hideDropdown,
+  forceHideDropdown,
   children,
   onSubmit = () => {},
   renderSearchButton = () => null,
@@ -75,7 +75,7 @@ export default function InputDropdown({
     focusedSectionIndex: undefined,
     dropdownHidden: true,
   });
-  const shouldDisplayDropdown = !dropdownHidden && !hideDropdown;
+  const shouldDisplayDropdown = !dropdownHidden && !forceHideDropdown;
 
   const [focusedOptionId, setFocusedOptionId] = useState<string | undefined>(undefined);
   const [latestUserInput, setLatestUserInput] = useState(inputValue);

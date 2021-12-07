@@ -121,7 +121,7 @@ export default function VisualSearchBar({
           }
           renderLogo={() => <YextLogoIcon />}
           cssClasses={cssClasses}
-          hideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0}
+          forceHideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0}
         >
           {renderQuerySuggestions()}
           {entityPreviews && transformEntityPreviews(entityPreviews, verticalResultsArray)}
