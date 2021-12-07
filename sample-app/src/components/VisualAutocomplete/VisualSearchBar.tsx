@@ -59,12 +59,12 @@ export default function VisualSearchBar({
   const { verticalResultsArray, isLoading: entityPreviewsLoading } = entityPreviewsState;
   const autocompleteResults = autocompleteResponse?.results || [];
   const entityPreviews = renderEntityPreviews && renderEntityPreviews(entityPreviewsLoading, verticalResultsArray);
-  const restrictVerticals = calculateRestrictVerticals(entityPreviews);
-  const universalLimit = calculateUniversalLimit(entityPreviews);
   function updateEntityPreviews(query: string) {
     if (!renderEntityPreviews) {
       return;
     }
+    const restrictVerticals = calculateRestrictVerticals(entityPreviews);
+    const universalLimit = calculateUniversalLimit(entityPreviews);
     executeEntityPreviewsQuery(query, universalLimit, restrictVerticals);
   }
 
