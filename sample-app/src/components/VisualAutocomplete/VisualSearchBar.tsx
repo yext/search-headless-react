@@ -17,7 +17,7 @@ import renderAutocompleteResult from '../utils/renderAutocompleteResult';
 import RecentSearches from "recent-searches";
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
-const DEFAULT_RECENT_SEARCH_KEY = '__yxt_recent_searches__'
+const RECENT_SEARCHES_KEY = '__yxt_recent_searches__'
 
 type RenderEntityPreviews = (
   autocompleteLoading: boolean,
@@ -45,9 +45,9 @@ export default function VisualSearchBar({
   placeholder,
   screenReaderInstructionsId,
   headlessId,
-  hideRecentSearches=false,
+  hideRecentSearches,
   renderEntityPreviews,
-  recentSearchesLimit=5,
+  recentSearchesLimit = 5,
   customCssClasses,
   cssCompositionMethod,
   entityPreviewsDebouncingTime = 500
@@ -63,10 +63,10 @@ export default function VisualSearchBar({
   });
   const recentSearches = useMemo(() => {
     if (hideRecentSearches) {
-      localStorage.removeItem(DEFAULT_RECENT_SEARCH_KEY);
+      localStorage.removeItem(RECENT_SEARCHES_KEY);
       return undefined;
     } else {
-      return new RecentSearches({ limit: recentSearchesLimit, namespace: DEFAULT_RECENT_SEARCH_KEY });
+      return new RecentSearches({ limit: recentSearchesLimit, namespace: RECENT_SEARCHES_KEY });
     }
   }, [recentSearchesLimit, hideRecentSearches]);
   const haveRecentSearches = !hideRecentSearches && recentSearches?.getRecentSearches() && recentSearches.getRecentSearches().length > 0;
