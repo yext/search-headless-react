@@ -1,5 +1,5 @@
 import { useAnswersActions, useAnswersState, VerticalResults, AutocompleteResult } from '@yext/answers-headless-react';
-import { PropsWithChildren, useMemo } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
 import DropdownSection from '../DropdownSection';
@@ -14,10 +14,9 @@ import { CompositionMethod, useComposedCssClasses } from '../../hooks/useCompose
 import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
 import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
 import renderAutocompleteResult from '../utils/renderAutocompleteResult';
-import RecentSearches from "recent-searches";
+import useRecentSearches from '../../hooks/useRecentSearches';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
-const RECENT_SEARCHES_KEY = '__yxt_recent_searches__'
 
 type RenderEntityPreviews = (
   autocompleteLoading: boolean,
@@ -61,15 +60,12 @@ export default function VisualSearchBar({
   const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(async () => {
     return answersActions.executeUniversalAutocomplete();
   });
-  const recentSearches = useMemo(() => {
-    if (hideRecentSearches) {
-      localStorage.removeItem(RECENT_SEARCHES_KEY);
-      return undefined;
-    } else {
-      return new RecentSearches({ limit: recentSearchesLimit, namespace: RECENT_SEARCHES_KEY });
-    }
-  }, [recentSearchesLimit, hideRecentSearches]);
-  const haveRecentSearches = !hideRecentSearches && recentSearches?.getRecentSearches() && recentSearches.getRecentSearches().length > 0;
+  const [recentSearches, createNewRecentSearchesStorage, removeRecentSearchesStorage] = useRecentSearches(recentSearchesLimit);
+  useEffect(() => {
+    hideRecentSearches ? removeRecentSearchesStorage() : createNewRecentSearchesStorage();
+  }, [hideRecentSearches, createNewRecentSearchesStorage, removeRecentSearchesStorage])
+  const haveRecentSearches = !hideRecentSearches && recentSearches?.getRecentSearches()?.length !== 0;
+  
 
   function executeQuery() {
     if (!hideRecentSearches) {
