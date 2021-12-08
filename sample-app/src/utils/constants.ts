@@ -1,6 +1,6 @@
 export const ANSWERS_CONFIG = {
-  apiKey: '2d8c550071a64ea23e263118a2b0680b',
-  experienceKey: 'slanswers',
+  apiKey: '3517add824e992916861b76e456724d9',
+  experienceKey: 'answers-js-docs',
   locale: 'en',
-  verticalKey: 'people'
+  verticalKey: 'events'
 }
