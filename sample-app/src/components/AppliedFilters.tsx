@@ -64,7 +64,7 @@ export function AppliedFiltersDisplay ({
 
   function NlpFilter({ filter }: { filter: DisplayableFilter }): JSX.Element {
     return (
-      <div className={cssClasses.nlpFilter} key={filter.label}>
+      <div className={cssClasses.nlpFilter}>
         <span className={cssClasses.filterLabel}>{filter.label}</span>
       </div>
     );
@@ -103,10 +103,11 @@ export function AppliedFiltersDisplay ({
       { displayableFilters.length > 0 &&
         <div className={cssClasses.appliedFiltersContainer} aria-label={labelText}>
           {displayableFilters.map((filter: DisplayableFilter) => {
+            const key = `${filter.filterType}-${filter.label}`;
             if (filter.filterType === 'NLP_FILTER') {
-              return <NlpFilter filter={filter} key={filter.label}/>
+              return <NlpFilter filter={filter} key={key}/>
             }
-            return <RemovableFilter filter={filter} key={filter.label}/>
+            return <RemovableFilter filter={filter} key={key}/>
           })}
         </div>
       }

@@ -9,8 +9,17 @@ import { StandardCard } from '../components/cards/StandardCard';
 import usePage from '../hooks/usePage';
 import Facets from '../components/Facets';
 import FilterSearch from '../components/FilterSearch';
-import StaticFilters, { Divider } from '../components/StaticFilters';
 
+const filterSearchFields = [{
+  fieldApiName: 'name',
+  entityType: 'location'
+}, {
+  fieldApiName: 'paymentOptions',
+  entityType: 'location'
+}, {
+  fieldApiName: 'services',
+  entityType: 'location'
+}];
 
 export default function LocationsPage({ verticalKey }: {
   verticalKey: string
@@ -20,6 +29,11 @@ export default function LocationsPage({ verticalKey }: {
   return (
     <div className='pt-7 flex'> 
       <div>
+        <FilterSearch
+          title='Filter Search!'
+          sectioned={true}
+          searchFields={filterSearchFields}
+          screenReaderInstructionsId='FilterSearchId'/>
         <Facets
           searchOnChange={true}
           searchable={true}
