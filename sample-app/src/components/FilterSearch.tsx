@@ -55,7 +55,10 @@ export default function FilterSearch ({
         results: section.results.map(result => {
           return {
             value: result.value,
-            render: () => renderHighlightedValue(result)
+            render: (onClick, isOptionFocus) =>
+              <div onClick={onClick} className={isOptionFocus ? 'Autocomplete__option--focused' : ''}>
+                {renderHighlightedValue(result)}
+              </div>
           };
         }),
         label: section.label

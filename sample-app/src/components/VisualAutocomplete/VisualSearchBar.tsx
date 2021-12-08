@@ -2,7 +2,7 @@ import { useAnswersActions, useAnswersState, VerticalResults, AutocompleteResult
 import { PropsWithChildren, useEffect } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
-import DropdownSection from '../DropdownSection';
+import DropdownSection, { Option } from '../DropdownSection';
 import { useEntityPreviews } from '../../hooks/useEntityPreviews';
 import SearchButton from '../SearchButton';
 import { processTranslation } from '../utils/processTranslation';
@@ -15,6 +15,7 @@ import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
 import renderAutocompleteResult, { AutocompleteResultCssClasses } from '../utils/renderAutocompleteResult';
 import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
 import useRecentSearches from '../../hooks/useRecentSearches';
+import classNames from 'classnames';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 const builtInCssClasses: VisualSearchBarCssClasses = { 
@@ -154,18 +155,21 @@ export default function VisualSearchBar({
   }
 
   function renderRecentSearches() {
-    const options = recentSearches?.map(result => {
+    const options: Option[] = recentSearches?.map(result => {
       return {
         value: result.query,
-        render: () => (
-          <div className={cssClasses.recentSearchesOption}>
+        render: (onClick, isOptionFocus) => {
+          const OptionCssClasses = cssClasses.focusedOption
+            ? classNames(cssClasses.recentSearchesOption, { [cssClasses.focusedOption]: isOptionFocus })
+            : cssClasses.recentSearchesOption;
+          return (<div onClick={onClick} className={OptionCssClasses}>
             <div className={cssClasses.recentSearchesLogoContainer}><RecentSearchIcon /></div>
             <div className={cssClasses.recentSearchesOptionValue}>{result.query}</div>
-          </div>
-        )
+          </div>)
+        }
       }
-    });
-    if (!options) {
+    }) ?? [];
+    if (options.length === 0) {
       return null;
     }
 
