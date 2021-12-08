@@ -1,5 +1,5 @@
 import { useAnswersActions, useAnswersState, VerticalResults, AutocompleteResult } from '@yext/answers-headless-react';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
 import DropdownSection from '../DropdownSection';
@@ -9,12 +9,26 @@ import { processTranslation } from '../utils/processTranslation';
 import { useSynchronizedRequest } from '../../hooks/useSynchronizedRequest';
 import { calculateRestrictVerticals, calculateUniversalLimit, transformEntityPreviews } from './EntityPreviews';
 import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling';
-import { builtInCssClasses, SearchBarCssClasses } from '../SearchBar';
+import { builtInCssClasses as builtInSearchBarCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
 import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
 import renderAutocompleteResult, { AutocompleteResultCssClasses } from '../utils/renderAutocompleteResult';
+import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
+import useRecentSearches from '../../hooks/useRecentSearches';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
+const builtInCssClasses: VisualSearchBarCssClasses = { 
+  ...builtInSearchBarCssClasses, 
+  recentSearchesOption: 'flex items-center py-1 px-2 cursor-pointer',
+  recentSearchesLogoContainer: 'w-4',
+  recentSearchesOptionValue: 'ml-2'
+};
+
+interface VisualSearchBarCssClasses extends SearchBarCssClasses {
+  recentSearchesOption?: string,
+  recentSearchesLogoContainer?: string,
+  recentSearchesOptionValue?: string
+}
 
 type RenderEntityPreviews = (
   autocompleteLoading: boolean,
@@ -31,7 +45,9 @@ interface Props {
   renderEntityPreviews?: RenderEntityPreviews,
   hideVerticalLinks?: boolean,
   verticalKeyToNameMapping?: Record<string, string>,
-  customCssClasses?: SearchBarCssClasses,
+  hideRecentSearches?: boolean,
+  recentSearchesLimit?: number,
+  customCssClasses?: VisualSearchBarCssClasses,
   cssCompositionMethod?: CompositionMethod
 }
 
@@ -42,9 +58,11 @@ export default function VisualSearchBar({
   placeholder,
   screenReaderInstructionsId,
   headlessId,
+  hideRecentSearches,
   renderEntityPreviews,
   hideVerticalLinks,
   verticalKeyToNameMapping,
+  recentSearchesLimit = 5,
   customCssClasses,
   cssCompositionMethod,
   entityPreviewsDebouncingTime = 500
@@ -54,10 +72,30 @@ export default function VisualSearchBar({
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input) ?? '';
   const isLoading = useAnswersState(state => state.searchStatus.isLoading) ?? false;
-  const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions)
+  const [executeQueryWithNearMeHandling, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions)
   const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(async () => {
     return answersActions.executeUniversalAutocomplete();
   });
+  const [
+    recentSearches,
+    setRecentSearch,
+    clearRecentSearches
+  ] = useRecentSearches(recentSearchesLimit);
+  useEffect(() => {
+    if (hideRecentSearches) {
+      clearRecentSearches();
+    }
+  }, [clearRecentSearches, hideRecentSearches])
+  const haveRecentSearches = !hideRecentSearches && recentSearches?.length !== 0;
+  
+
+  function executeQuery() {
+    if (!hideRecentSearches) {
+      const input = answersActions.state.query.input;
+      input && setRecentSearch(input);
+    }
+    executeQueryWithNearMeHandling();
+  }
 
   const [entityPreviewsState, executeEntityPreviewsQuery] = useEntityPreviews(headlessId, entityPreviewsDebouncingTime);
   const { verticalResultsArray, isLoading: entityPreviewsLoading } = entityPreviewsState;
@@ -77,7 +115,7 @@ export default function VisualSearchBar({
       return null;
     }
     const options = autocompleteResults.map(result => {
-      const verticalKeys = hideVerticalLinks ? undefined : result.verticalKeys;
+      const verticalKeys = hideVerticalLinks ? undefined : ['people', 'events'];//result.verticalKeys;
       const verticalLinks = verticalKeyToNameMapping && verticalKeys?.map(verticalKey => { 
         return {
           label: verticalKeyToNameMapping[verticalKey],
@@ -115,6 +153,34 @@ export default function VisualSearchBar({
     />
   }
 
+  function renderRecentSearches() {
+    const options = recentSearches?.map(result => {
+      return {
+        value: result.query,
+        render: () => (
+          <div className={cssClasses.recentSearchesOption}>
+            <div className={cssClasses.recentSearchesLogoContainer}><RecentSearchIcon /></div>
+            <div className={cssClasses.recentSearchesOptionValue}>{result.query}</div>
+          </div>
+        )
+      }
+    });
+    if (!options) {
+      return null;
+    }
+
+    return <DropdownSection
+      options={options}
+      optionIdPrefix='VisualSearchBar-RecentSearches'
+      onSelectOption={optionValue => {
+        autocompletePromiseRef.current = undefined;
+        answersActions.setQuery(optionValue);
+        executeQuery();
+      }}
+      cssClasses={cssClasses}
+    />
+  }
+
   return (
     <div className={cssClasses.container}>
       <div className={cssClasses.inputDropdownContainer}>
@@ -141,8 +207,9 @@ export default function VisualSearchBar({
           }
           renderLogo={() => <YextLogoIcon />}
           cssClasses={cssClasses}
-          forceHideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0}
+          forceHideDropdown={autocompleteResults.length === 0 && verticalResultsArray.length === 0 && !haveRecentSearches}
         >
+          {!hideRecentSearches && renderRecentSearches()}
           {renderQuerySuggestions()}
           {entityPreviews && transformEntityPreviews(entityPreviews, verticalResultsArray)}
         </InputDropdown>
