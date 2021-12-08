@@ -180,6 +180,9 @@ export default function VisualSearchBar({
     return <DropdownSection
       options={options}
       optionIdPrefix='VisualSearchBar-RecentSearches'
+      onFocusChange={value => {
+        answersActions.setQuery(value);
+      }}
       onSelectOption={optionValue => {
         autocompletePromiseRef.current = undefined;
         answersActions.setQuery(optionValue);
