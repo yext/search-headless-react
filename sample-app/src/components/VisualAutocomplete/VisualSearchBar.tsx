@@ -12,7 +12,7 @@ import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling
 import { builtInCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
 import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
-import renderAutocompleteResult from '../utils/renderAutocompleteResult';
+import renderAutocompleteResult, { AutocompleteResultCssClasses } from '../utils/renderAutocompleteResult';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -29,6 +29,8 @@ interface Props {
   // The debouncing time, in milliseconds, for making API requests for entity previews
   entityPreviewsDebouncingTime: number,
   renderEntityPreviews?: RenderEntityPreviews,
+  hideVerticalLinks?: boolean,
+  verticalKeyToNameMapping?: Record<string, string>,
   customCssClasses?: SearchBarCssClasses,
   cssCompositionMethod?: CompositionMethod
 }
@@ -41,6 +43,8 @@ export default function VisualSearchBar({
   screenReaderInstructionsId,
   headlessId,
   renderEntityPreviews,
+  hideVerticalLinks,
+  verticalKeyToNameMapping,
   customCssClasses,
   cssCompositionMethod,
   entityPreviewsDebouncingTime = 500
@@ -72,9 +76,25 @@ export default function VisualSearchBar({
       return null;
     }
     const options = autocompleteResults.map(result => {
+      const verticalKeys = hideVerticalLinks ? undefined : ['people', 'financial_professionals'];//result.verticalKeys;
+      const verticalLinks = verticalKeyToNameMapping && verticalKeys?.map(verticalKey => { 
+        return {
+          label: verticalKeyToNameMapping[verticalKey],
+          verticalKey
+        }
+      });
       return {
         value: result.value,
-        display: renderAutocompleteResult(result, cssClasses.resultIconContainer)
+        verticalLinks,
+        render: (onClick: () => void, isOptionFocus: boolean, focusLinkIndex: number) => 
+          renderAutocompleteResult(
+            result,
+            onClick,
+            cssClasses as AutocompleteResultCssClasses,
+            verticalLinks,
+            isOptionFocus,
+            focusLinkIndex
+          )
       }
     }) ?? [];
 

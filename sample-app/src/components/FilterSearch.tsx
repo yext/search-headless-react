@@ -17,7 +17,7 @@ const builtInCssClasses: FilterSearchCssClasses = {
   sectionContainer: 'Autocomplete__dropdownSection',
   sectionLabel: 'Autocomplete__sectionLabel',
   optionsContainer: 'Autocomplete_sectionOptions',
-  option: 'Autocomplete__option',
+  optionContainer: 'Autocomplete__option',
   focusedOption: 'Autocomplete__option--focused'
 }
 
@@ -49,13 +49,13 @@ export default function FilterSearch ({
   );
 
   let sections: { results: Option[], label?: string }[] = [];
-  if (filterSearchResponse?.results) {
+  if (filterSearchResponse) {
     sections = filterSearchResponse.sections.map(section => {
       return {
         results: section.results.map(result => {
           return {
             value: result.value,
-            display: renderHighlightedValue(result)
+            render: () => renderHighlightedValue(result)
           };
         }),
         label: section.label

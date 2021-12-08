@@ -8,7 +8,10 @@ import SearchButton from './SearchButton';
 import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
 import useSearchWithNearMeHandling from '../hooks/useSearchWithNearMeHandling';
 import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
-import renderAutocompleteResult from './utils/renderAutocompleteResult';
+import renderAutocompleteResult, {
+  AutocompleteResultCssClasses,
+  builtInCssClasses as AutocompleteResultBuiltInCssClasses
+} from './utils/renderAutocompleteResult';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -16,18 +19,21 @@ export const builtInCssClasses: SearchBarCssClasses = {
   container: 'h-12',
   divider: 'border mx-2',
   dropdownContainer: 'relative bg-white py-1 z-10',
-  focusedOption: 'bg-gray-100',
   inputContainer: 'h-12 inline-flex items-center justify-between w-full',
   inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
   inputElement: 'outline-none flex-grow border-none h-full px-2',
   logoContainer: 'w-8 mx-2',
-  option: 'flex items-center py-1 px-2 cursor-pointer',
+  optionContainer: 'flex flex-col items-stretch py-1 px-2 cursor-pointer',
   resultIconContainer: 'opacity-20 w-8 h-8 pl-1 mr-4',
   searchButtonContainer: 'w-8 h-full mx-2',
-  submitButton: 'h-full w-full'
+  submitButton: 'h-full w-full',
+  ...AutocompleteResultBuiltInCssClasses
 }
 
-export interface SearchBarCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {
+
+export interface SearchBarCssClasses 
+  extends InputDropdownCssClasses, DropdownSectionCssClasses, AutocompleteResultCssClasses 
+{
   container?: string,
   inputDropdownContainer?: string,
   resultIconContainer?: string,
@@ -68,7 +74,8 @@ export default function SearchBar({
   const options = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      display: renderAutocompleteResult(result, cssClasses.resultIconContainer)
+      render: (onClick: () => void) => 
+        renderAutocompleteResult(result, onClick, cssClasses as AutocompleteResultCssClasses)
     }
   }) ?? [];
 

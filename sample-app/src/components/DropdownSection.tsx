@@ -1,16 +1,22 @@
-import classNames from "classnames";
 import { useState, useEffect, useRef } from "react";
+import { useHistory } from "react-router";
+
+export interface VerticalLink {
+  label: string,
+  verticalKey: string
+}
 
 export interface Option {
   value: string,
-  display: JSX.Element
+  verticalLinks?: VerticalLink[],
+  render: (onClick: () => void, isOptionFocus: boolean, focusLinkIndex: number) => JSX.Element
 }
 
 export interface DropdownSectionCssClasses {
   sectionContainer?: string,
   sectionLabel?: string,
   optionsContainer?: string,
-  option?: string,
+  optionContainer?: string,
   focusedOption?: string
 }
 
@@ -37,9 +43,20 @@ export default function DropdownSection({
 }: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
+  const [focusedLinkIndex, setFocusedLinkIndex] = useState<number>(-1);
+  const browserHistory = useHistory();
   const wasFocused = useRef<boolean>(isFocused);
 
   function incrementOptionFocus() {
+    const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
+    if (verticalLinks) {
+      if (focusedLinkIndex !== verticalLinks.length - 1) {
+        setFocusedLinkIndex(focusedLinkIndex + 1);
+        return;
+      } else if (focusedOptionIndex < options.length - 1) {
+        setFocusedLinkIndex(-1);
+      }
+    }
     let newIndex = focusedOptionIndex + 1;
     if (newIndex < options.length) {
       onFocusChange(options[newIndex].value, `${optionIdPrefix}-${newIndex}`);
@@ -51,6 +68,18 @@ export default function DropdownSection({
   }
 
   function decrementOptionFocus() {
+    const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
+    if (verticalLinks) {
+      if (focusedLinkIndex !== -1) {
+        setFocusedLinkIndex(focusedLinkIndex - 1);
+        return;
+      } else if (focusedOptionIndex === 0) {
+        setFocusedLinkIndex(-1);
+      } else {
+        const nextOptionLinks = options[focusedOptionIndex - 1].verticalLinks;
+        nextOptionLinks && setFocusedLinkIndex(nextOptionLinks.length - 1);
+      }
+    }
     let newIndex = focusedOptionIndex - 1;
     if (newIndex > -1) {
       onFocusChange(options[newIndex].value, `${optionIdPrefix}-${newIndex}`);
@@ -72,6 +101,12 @@ export default function DropdownSection({
       decrementOptionFocus();
     } else if (evt.key === 'Enter') {
       onSelectOption(options[focusedOptionIndex].value, focusedOptionIndex);
+      if (focusedLinkIndex !== -1) {
+        const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
+        if (verticalLinks) {
+          browserHistory.push(`/${verticalLinks[focusedLinkIndex].verticalKey}`);
+        }
+      }
     }
   }
 
@@ -90,20 +125,16 @@ export default function DropdownSection({
   });
 
   function renderOption(option: Option, index: number) {
-    const className = cssClasses.focusedOption
-      ? classNames(cssClasses.option, {
-        [cssClasses.focusedOption]: isFocused && index === focusedOptionIndex
-      })
-      : cssClasses.option;
+    const isOptionFocus = isFocused && index === focusedOptionIndex;
+    const onClick = () => onSelectOption(option.value, index);
     return (
       <div
         key={index}
-        className={className}
+        className={cssClasses.optionContainer}
         id={`${optionIdPrefix}-${index}`}
-        onClick={() => onSelectOption(option.value, index)}
         tabIndex={0}
       >
-        {option.display}
+        {option.render(onClick, isOptionFocus, focusedLinkIndex)}
       </div>
     );
   }
