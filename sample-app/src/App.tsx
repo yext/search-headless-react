@@ -1,4 +1,3 @@
-//import VerticalSearchPage from './pages/VerticalSearchPage';
 import UniversalSearchPage from './pages/UniversalSearchPage';
 import FAQsPage from './pages/FAQsPage';
 import EventsPage from './pages/EventsPage';
