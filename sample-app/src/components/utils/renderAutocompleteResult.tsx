@@ -32,19 +32,20 @@ export default function renderAutocompleteResult(
   result: AutocompleteResult,
   onClick: () => void,
   cssClasses: AutocompleteResultCssClasses,
-  verticalLinks?: VerticalLink[],
   isOptionFocus?: boolean,
-  focusLinkIndex?: number,
+  verticalLinks?: VerticalLink[],
+  focusLinkIndex?: number
 ) {
+  const hasFocusLink = focusLinkIndex !== undefined && focusLinkIndex !== -1;
   const OptionCssClasses = cssClasses.focusedOption
     ? classNames(cssClasses.option, {
-      [cssClasses.focusedOption]: isOptionFocus && focusLinkIndex === -1
+      [cssClasses.focusedOption]: isOptionFocus && !hasFocusLink
     })
     : cssClasses.option;
 
   const focusLinkCssClasses = cssClasses.focusedLink
     ? classNames(cssClasses.link, {
-      [cssClasses.focusedLink]: isOptionFocus && focusLinkIndex !== -1
+      [cssClasses.focusedLink]: isOptionFocus && hasFocusLink
     })
     : cssClasses.link;
 

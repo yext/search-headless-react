@@ -131,8 +131,8 @@ export default function VisualSearchBar({
             result,
             onClick,
             cssClasses as AutocompleteResultCssClasses,
-            verticalLinks,
             isOptionFocus,
+            verticalLinks,
             focusLinkIndex
           )
       }

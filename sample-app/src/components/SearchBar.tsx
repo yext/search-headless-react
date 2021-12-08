@@ -2,7 +2,7 @@ import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react
 import InputDropdown, { InputDropdownCssClasses } from './InputDropdown';
 import { ReactComponent as YextLogoIcon } from '../icons/yext_logo.svg';
 import '../sass/Autocomplete.scss';
-import DropdownSection, { DropdownSectionCssClasses } from './DropdownSection';
+import DropdownSection, { DropdownSectionCssClasses, Option } from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import SearchButton from './SearchButton';
 import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
@@ -71,11 +71,11 @@ export default function SearchBar({
   });
   const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, geolocationOptions);
 
-  const options = autocompleteResponse?.results.map(result => {
+  const options: Option[] = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      render: (onClick: () => void) => 
-        renderAutocompleteResult(result, onClick, cssClasses as AutocompleteResultCssClasses)
+      render: (onClick: () => void, isOptionFocus: boolean) => 
+        renderAutocompleteResult(result, onClick, cssClasses as AutocompleteResultCssClasses, isOptionFocus)
     }
   }) ?? [];
 
