@@ -47,16 +47,25 @@ export default function DropdownSection({
   const browserHistory = useHistory();
   const wasFocused = useRef<boolean>(isFocused);
 
-  function incrementOptionFocus() {
+  function updateToNextFocusElement() {
+    if(!incrementVerticalLinkFocus()) {
+      incrementOptionFocus();
+    }
+  }
+
+  function incrementVerticalLinkFocus(): boolean {
     const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
     if (verticalLinks) {
       if (focusedLinkIndex !== verticalLinks.length - 1) {
         setFocusedLinkIndex(focusedLinkIndex + 1);
-        return;
+        return true;
       } else if (focusedOptionIndex < options.length - 1) {
         setFocusedLinkIndex(-1);
       }
     }
+    return false;
+  }
+  function incrementOptionFocus() {
     let newIndex = focusedOptionIndex + 1;
     if (newIndex < options.length) {
       onFocusChange(options[newIndex].value, `${optionIdPrefix}-${newIndex}`);
@@ -67,12 +76,18 @@ export default function DropdownSection({
     setFocusedOptionIndex(newIndex);
   }
 
-  function decrementOptionFocus() {
+  function updateToPrevFocusElement() {
+    if(!decrementVerticalLinkFocus()) {
+      decrementOptionFocus();
+    }
+  }
+
+  function decrementVerticalLinkFocus(): boolean {
     const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
     if (verticalLinks) {
       if (focusedLinkIndex !== -1) {
         setFocusedLinkIndex(focusedLinkIndex - 1);
-        return;
+        return true;
       } else if (focusedOptionIndex === 0) {
         setFocusedLinkIndex(-1);
       } else {
@@ -80,6 +95,10 @@ export default function DropdownSection({
         nextOptionLinks && setFocusedLinkIndex(nextOptionLinks.length - 1);
       }
     }
+    return false;
+  }
+
+  function decrementOptionFocus() {
     let newIndex = focusedOptionIndex - 1;
     if (newIndex > -1) {
       onFocusChange(options[newIndex].value, `${optionIdPrefix}-${newIndex}`);
@@ -96,9 +115,9 @@ export default function DropdownSection({
     }
 
     if (evt.key === 'ArrowDown' || evt.key === 'ArrowRight') {
-      incrementOptionFocus();
+      updateToNextFocusElement();
     } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
-      decrementOptionFocus();
+      updateToPrevFocusElement();
     } else if (evt.key === 'Enter') {
       onSelectOption(options[focusedOptionIndex].value, focusedOptionIndex);
       if (focusedLinkIndex !== -1) {
