@@ -19,7 +19,7 @@ interface Props {
   screenReaderInstructionsId: string,
   screenReaderText: string,
   onlyAllowDropdownOptionSubmissions?: boolean,
-  hideDropdown?: boolean,
+  forceHideDropdown?: boolean,
   onSubmit?: (value: string) => void,
   renderSearchButton?: () => JSX.Element | null,
   renderLogo?: () => JSX.Element | null,
@@ -30,22 +30,22 @@ interface Props {
 
 interface State {
   focusedSectionIndex?: number,
-  shouldDisplayDropdown: boolean
+  dropdownHidden: boolean
 }
 
 type Action =
-  | { type: 'HideSections', hideDropdown?: boolean }
-  | { type: 'ShowSections', hideDropdown?: boolean }
-  | { type: 'FocusSection', newIndex?: number, hideDropdown?: boolean }
+  | { type: 'HideSections' }
+  | { type: 'ShowSections' }
+  | { type: 'FocusSection', newIndex?: number }
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'HideSections':
-      return { focusedSectionIndex: undefined, shouldDisplayDropdown: false }
+      return { focusedSectionIndex: undefined, dropdownHidden: true }
     case 'ShowSections':
-      return { focusedSectionIndex: undefined, shouldDisplayDropdown: true && !action.hideDropdown }
+      return { focusedSectionIndex: undefined, dropdownHidden: false }
     case 'FocusSection':
-      return { focusedSectionIndex: action.newIndex, shouldDisplayDropdown: true && !action.hideDropdown }
+      return { focusedSectionIndex: action.newIndex, dropdownHidden: false }
   }
 }
 
@@ -59,7 +59,7 @@ export default function InputDropdown({
   screenReaderInstructionsId,
   screenReaderText,
   onlyAllowDropdownOptionSubmissions,
-  hideDropdown,
+  forceHideDropdown,
   children,
   onSubmit = () => {},
   renderSearchButton = () => null,
@@ -70,11 +70,12 @@ export default function InputDropdown({
 }: React.PropsWithChildren<Props>): JSX.Element | null {
   const [{
     focusedSectionIndex,
-    shouldDisplayDropdown,
+    dropdownHidden,
   }, dispatch] = useReducer(reducer, {
     focusedSectionIndex: undefined,
-    shouldDisplayDropdown: false,
+    dropdownHidden: true,
   });
+  const shouldDisplayDropdown = !dropdownHidden && !forceHideDropdown;
 
   const [focusedOptionId, setFocusedOptionId] = useState<string | undefined>(undefined);
   const [latestUserInput, setLatestUserInput] = useState(inputValue);
@@ -99,7 +100,7 @@ export default function InputDropdown({
     const modifiedOnSelectOption = (optionValue: string, optionIndex: number) => {
       child.props.onSelectOption?.(optionValue, optionIndex);
       setLatestUserInput(optionValue);
-      dispatch({ type: 'HideSections', hideDropdown });
+      dispatch({ type: 'HideSections' });
     }
 
     const modifiedOnFocusChange = (value: string, focusedOptionId: string) => {
@@ -125,7 +126,7 @@ export default function InputDropdown({
    */
   function onLeaveSectionFocus(pastSectionEnd: boolean) {
     if (focusedSectionIndex === undefined && pastSectionEnd) {
-      dispatch({ type: 'FocusSection', newIndex: 0, hideDropdown });
+      dispatch({ type: 'FocusSection', newIndex: 0 });
     } else if (focusedSectionIndex !== undefined) {
       let newSectionIndex: number | undefined = pastSectionEnd
         ? focusedSectionIndex + 1
@@ -136,14 +137,14 @@ export default function InputDropdown({
       } else if (newSectionIndex > numSections - 1) {
         newSectionIndex = numSections - 1;
       }
-      dispatch({ type: 'FocusSection', newIndex: newSectionIndex, hideDropdown });
+      dispatch({ type: 'FocusSection', newIndex: newSectionIndex });
     }
   }
 
   function handleDocumentClick(evt: MouseEvent) {
     const target = evt.target as HTMLElement;
     if (!(target.isSameNode(inputRef.current) || (dropdownRef.current?.contains(target)))) {
-      dispatch({ type: 'HideSections', hideDropdown });
+      dispatch({ type: 'HideSections' });
     }
   }
 
@@ -153,9 +154,9 @@ export default function InputDropdown({
     }
 
     if (evt.key === 'Escape') {
-      dispatch({ type: 'HideSections', hideDropdown });
+      dispatch({ type: 'HideSections' });
     } else if (evt.key === 'ArrowDown' && numSections > 0 && focusedSectionIndex === undefined) {
-      dispatch({ type: 'FocusSection', newIndex: 0, hideDropdown });
+      dispatch({ type: 'FocusSection', newIndex: 0 });
     }
   }
 
@@ -174,7 +175,7 @@ export default function InputDropdown({
     if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlyAllowDropdownOptionSubmissions) {
       setLatestUserInput(inputValue);
       onSubmit(inputValue);
-      dispatch({ type: 'HideSections', hideDropdown });
+      dispatch({ type: 'HideSections' });
     }
   }
 
@@ -183,7 +184,7 @@ export default function InputDropdown({
       return;
     }
     if (!inputDropdownRef.current.contains(evt.relatedTarget)) {
-      dispatch({ type: 'HideSections', hideDropdown });
+      dispatch({ type: 'HideSections' });
     }
   }
 
@@ -202,13 +203,13 @@ export default function InputDropdown({
             onInputChange(value);
             onInputFocus(value);
             setChildrenKey(childrenKey + 1);
-            dispatch({ type: 'ShowSections', hideDropdown });
+            dispatch({ type: 'ShowSections' });
             setScreenReaderKey(screenReaderKey + 1);
           }}
           onClick={() => {
             onInputFocus(inputValue);
             setChildrenKey(childrenKey + 1);
-            dispatch({ type: 'ShowSections', hideDropdown });
+            dispatch({ type: 'ShowSections' });
             if (numSections > 0 || inputValue) {
               setScreenReaderKey(screenReaderKey + 1);
             }

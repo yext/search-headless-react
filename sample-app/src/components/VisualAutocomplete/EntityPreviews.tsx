@@ -23,7 +23,7 @@ export default function EntityPreviews(_: EntityPreviewsProps) {
 /**
  * Recursively passes vertical results into instances of EntityPreview.
  */
-export function transformEntityPreviews(entityPreviews: JSX.Element, verticalResultsArray: VerticalResults[]) {
+export function transformEntityPreviews(entityPreviews: JSX.Element, verticalResultsArray: VerticalResults[]): ReactNode {
   const verticalKeyToResults = getVerticalKeyToResults(verticalResultsArray);
   const renderedChildren = recursivelyMapChildren(entityPreviews, child => {
     if (!isValidElement(child) || child.type !== EntityPreviews) {
@@ -35,7 +35,7 @@ export function transformEntityPreviews(entityPreviews: JSX.Element, verticalRes
     }
     return children(verticalKeyToResults[verticalKey]);
   });
-  return <>{renderedChildren}</>
+  return renderedChildren;
 }
 
 /**
@@ -49,10 +49,9 @@ function getVerticalKeyToResults(verticalResultsArray: VerticalResults[]): Recor
 }
 
 /**
- * Calculates the restrictedVerticals query param from a ReactNode containing EntityPreview..
- * TODO: Currently unused, will be used in follow up PR after restricted verticals support is added to answers headless.
+ * Calculates the restrictVerticals query param from a ReactNode containing EntityPreviews.
  */
-export function calculateRestrictedVerticals(children: ReactNode): string[] {
+export function calculateRestrictVerticals(children: ReactNode): string[] {
   const restrictedVerticalsSet = new Set<string>();
   recursivelyMapChildren(children, c => {
     if (isValidElement(c) && c.type === EntityPreviews) {
@@ -65,7 +64,7 @@ export function calculateRestrictedVerticals(children: ReactNode): string[] {
 }
 
 /**
- * Calculates the universalLimit query param from a ReactNode containing EntityPreview.
+ * Calculates the universalLimit query param from a ReactNode containing EntityPreviews.
  */
 export function calculateUniversalLimit(children: ReactNode): UniversalLimit {
   const universalLimit: Record<string, number | null> = {};

@@ -111,7 +111,7 @@ export default function SearchBar({
           renderLogo={() => <YextLogoIcon />}
           renderSearchButton={renderSearchButton}
           cssClasses={cssClasses}
-          hideDropdown={options.length === 0}
+          forceHideDropdown={options.length === 0}
         >
           {
             options.length > 0 &&
