@@ -12,7 +12,7 @@ import useSearchWithNearMeHandling from '../../hooks/useSearchWithNearMeHandling
 import { builtInCssClasses as builtInSearchBarCssClasses, SearchBarCssClasses } from '../SearchBar';
 import { CompositionMethod, useComposedCssClasses } from '../../hooks/useComposedCssClasses';
 import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
-import renderAutocompleteResult, { AutocompleteResultCssClasses } from '../utils/renderAutocompleteResult';
+import renderAutocompleteResult from '../utils/renderAutocompleteResult';
 import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
 import useRecentSearches from '../../hooks/useRecentSearches';
 import classNames from 'classnames';
@@ -116,7 +116,11 @@ export default function VisualSearchBar({
       return null;
     }
     const options = autocompleteResults.map(result => {
-      const verticalKeys = hideVerticalLinks ? undefined : ['people', 'events'];//result.verticalKeys;
+      /**
+       * TODO (yen-tt): mocked data is used for testing purposes.
+       * Should be replace with result.verticalKeys when backend work is done.
+       */
+      const verticalKeys = hideVerticalLinks ? undefined : ['people', 'financial_professionals'];
       const verticalLinks = verticalKeyToNameMapping && verticalKeys?.map(verticalKey => { 
         return {
           label: verticalKeyToNameMapping[verticalKey],
@@ -130,7 +134,7 @@ export default function VisualSearchBar({
           renderAutocompleteResult(
             result,
             onClick,
-            cssClasses as AutocompleteResultCssClasses,
+            cssClasses,
             isOptionFocus,
             verticalLinks,
             focusLinkIndex
