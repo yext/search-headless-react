@@ -2,7 +2,7 @@ import { useAnswersActions, useAnswersState, VerticalResults, AutocompleteResult
 import { PropsWithChildren, useEffect } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
-import DropdownSection, { Option } from '../DropdownSection';
+import DropdownSection, { Option, VerticalLink } from '../DropdownSection';
 import { useEntityPreviews } from '../../hooks/useEntityPreviews';
 import SearchButton from '../SearchButton';
 import { processTranslation } from '../utils/processTranslation';
@@ -45,7 +45,7 @@ interface Props {
   entityPreviewsDebouncingTime: number,
   renderEntityPreviews?: RenderEntityPreviews,
   hideVerticalLinks?: boolean,
-  verticalKeyToNameMapping?: Record<string, string>,
+  handleVerticalLinks?: (verticalKeys: string[]|undefined) => VerticalLink[]|undefined,
   hideRecentSearches?: boolean,
   recentSearchesLimit?: number,
   customCssClasses?: VisualSearchBarCssClasses,
@@ -62,7 +62,7 @@ export default function VisualSearchBar({
   hideRecentSearches,
   renderEntityPreviews,
   hideVerticalLinks,
-  verticalKeyToNameMapping,
+  handleVerticalLinks,
   recentSearchesLimit = 5,
   customCssClasses,
   cssCompositionMethod,
@@ -120,13 +120,13 @@ export default function VisualSearchBar({
        * TODO (yen-tt): mocked data is used for testing purposes.
        * Should be replace with result.verticalKeys when backend work is done.
        */
-      const verticalKeys = hideVerticalLinks ? undefined : ['people', 'financial_professionals'];
-      const verticalLinks = verticalKeyToNameMapping && verticalKeys?.map(verticalKey => { 
-        return {
-          label: verticalKeyToNameMapping[verticalKey],
-          verticalKey
-        }
-      });
+      const verticalKeys = ['people', 'financial_professionals'];
+      let verticalLinks: VerticalLink[]|undefined = undefined;
+      if (!hideVerticalLinks) {
+        verticalLinks = handleVerticalLinks
+          ? handleVerticalLinks(verticalKeys)
+          : verticalKeys?.map(verticalKey => { return { label: verticalKey, verticalKey }});
+      }
       return {
         value: result.value,
         verticalLinks,
