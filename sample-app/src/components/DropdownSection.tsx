@@ -9,7 +9,7 @@ export interface VerticalLink {
 export interface Option {
   value: string,
   verticalLinks?: VerticalLink[],
-  render: (onClick: () => void, isOptionFocus: boolean, focusLinkIndex: number) => JSX.Element
+  render: (onClick: () => void, isOptionFocused: boolean, focusLinkIndex: number) => JSX.Element
 }
 
 export interface DropdownSectionCssClasses {
@@ -53,15 +53,20 @@ export default function DropdownSection({
     }
   }
 
+  /**
+   * returns true if the increment was successful and the current focused
+   * option should remain unchange.
+   */
   function incrementVerticalLinkFocus(): boolean {
     const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
-    if (verticalLinks) {
-      if (focusedLinkIndex !== verticalLinks.length - 1) {
-        setFocusedLinkIndex(focusedLinkIndex + 1);
-        return true;
-      } else if (focusedOptionIndex < options.length - 1) {
-        setFocusedLinkIndex(-1);
-      }
+    if (!verticalLinks) {
+      return false;
+    }
+    if (focusedLinkIndex !== verticalLinks.length - 1) {
+      setFocusedLinkIndex(focusedLinkIndex + 1);
+      return true;
+    } else if (focusedOptionIndex < options.length - 1) {
+      setFocusedLinkIndex(-1);
     }
     return false;
   }
@@ -82,18 +87,23 @@ export default function DropdownSection({
     }
   }
 
+  /**
+   * returns true if the decrement was successful and the current focused
+   * option should remain unchange.
+   */
   function decrementVerticalLinkFocus(): boolean {
     const verticalLinks = options[focusedOptionIndex]?.verticalLinks;
-    if (verticalLinks) {
-      if (focusedLinkIndex !== -1) {
-        setFocusedLinkIndex(focusedLinkIndex - 1);
-        return true;
-      } else if (focusedOptionIndex === 0) {
-        setFocusedLinkIndex(-1);
-      } else {
-        const nextOptionLinks = options[focusedOptionIndex - 1].verticalLinks;
-        nextOptionLinks && setFocusedLinkIndex(nextOptionLinks.length - 1);
-      }
+    if (!verticalLinks) {
+      return false;
+    }
+    if (focusedLinkIndex !== -1) {
+      setFocusedLinkIndex(focusedLinkIndex - 1);
+      return true;
+    } else if (focusedOptionIndex === 0) {
+      setFocusedLinkIndex(-1);
+    } else {
+      const nextOptionLinks = options[focusedOptionIndex - 1].verticalLinks;
+      nextOptionLinks && setFocusedLinkIndex(nextOptionLinks.length - 1);
     }
     return false;
   }
@@ -144,7 +154,7 @@ export default function DropdownSection({
   });
 
   function renderOption(option: Option, index: number) {
-    const isOptionFocus = isFocused && index === focusedOptionIndex;
+    const isOptionFocused = isFocused && index === focusedOptionIndex;
     const onClick = () => onSelectOption(option.value, index);
     return (
       <div
@@ -153,7 +163,7 @@ export default function DropdownSection({
         id={`${optionIdPrefix}-${index}`}
         tabIndex={0}
       >
-        {option.render(onClick, isOptionFocus, focusedLinkIndex)}
+        {option.render(onClick, isOptionFocused, focusedLinkIndex)}
       </div>
     );
   }

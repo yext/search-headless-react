@@ -130,12 +130,12 @@ export default function VisualSearchBar({
       return {
         value: result.value,
         verticalLinks,
-        render: (onClick: () => void, isOptionFocus: boolean, focusLinkIndex: number) => 
+        render: (onClick: () => void, isOptionFocused: boolean, focusLinkIndex: number) => 
           renderAutocompleteResult(
             result,
             onClick,
             cssClasses,
-            isOptionFocus,
+            isOptionFocused,
             verticalLinks,
             focusLinkIndex
           )
@@ -162,9 +162,9 @@ export default function VisualSearchBar({
     const options: Option[] = recentSearches?.map(result => {
       return {
         value: result.query,
-        render: (onClick, isOptionFocus) => {
+        render: (onClick, isOptionFocused) => {
           const OptionCssClasses = cssClasses.focusedOption
-            ? classNames(cssClasses.recentSearchesOption, { [cssClasses.focusedOption]: isOptionFocus })
+            ? classNames(cssClasses.recentSearchesOption, { [cssClasses.focusedOption]: isOptionFocused })
             : cssClasses.recentSearchesOption;
           return (<div onClick={onClick} className={OptionCssClasses}>
             <div className={cssClasses.recentSearchesLogoContainer}><RecentSearchIcon /></div>

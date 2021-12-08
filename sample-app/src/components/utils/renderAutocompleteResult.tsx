@@ -31,27 +31,28 @@ export const builtInCssClasses = {
 export default function renderAutocompleteResult(
   result: AutocompleteResult,
   onClick: () => void,
-  cssClasses: AutocompleteResultCssClasses,
-  isOptionFocus?: boolean,
+  cssClasses?: AutocompleteResultCssClasses,
+  isOptionFocused?: boolean,
   verticalLinks?: VerticalLink[],
   focusLinkIndex?: number
 ) {
+  cssClasses = cssClasses ?? {};
   const hasFocusLink = focusLinkIndex !== undefined && focusLinkIndex !== -1;
-  const OptionCssClasses = cssClasses.focusedOption
+  const optionCssClasses = cssClasses.focusedOption
     ? classNames(cssClasses.option, {
-      [cssClasses.focusedOption]: isOptionFocus && !hasFocusLink
+      [cssClasses.focusedOption]: isOptionFocused && !hasFocusLink
     })
     : cssClasses.option;
 
   const focusLinkCssClasses = cssClasses.focusedLink
     ? classNames(cssClasses.link, {
-      [cssClasses.focusedLink]: isOptionFocus && hasFocusLink
+      [cssClasses.focusedLink]: isOptionFocused && hasFocusLink
     })
     : cssClasses.link;
 
   return (
     <>
-      <div className={OptionCssClasses} onClick={onClick}>
+      <div className={optionCssClasses} onClick={onClick}>
         <div className={cssClasses.icon}><MagnifyingGlassIcon /></div>
         <div>{renderHighlightedValue(result)}</div>
       </div>
@@ -60,7 +61,7 @@ export default function renderAutocompleteResult(
           {verticalLinks.map(({ label, verticalKey }, index) => {
             return <Link 
               key={index}
-              className={index === focusLinkIndex ? focusLinkCssClasses : cssClasses.link}
+              className={index === focusLinkIndex ? focusLinkCssClasses : cssClasses?.link}
               onClick={onClick}
               to={`/${verticalKey}`}
             >

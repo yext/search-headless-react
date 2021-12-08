@@ -55,8 +55,8 @@ export default function FilterSearch ({
         results: section.results.map(result => {
           return {
             value: result.value,
-            render: (onClick, isOptionFocus) =>
-              <div onClick={onClick} className={isOptionFocus ? 'Autocomplete__option--focused' : ''}>
+            render: (onClick, isOptionFocused) =>
+              <div onClick={onClick} className={isOptionFocused ? 'Autocomplete__option--focused' : ''}>
                 {renderHighlightedValue(result)}
               </div>
           };

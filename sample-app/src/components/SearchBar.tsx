@@ -74,8 +74,8 @@ export default function SearchBar({
   const options: Option[] = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      render: (onClick: () => void, isOptionFocus: boolean) => 
-        renderAutocompleteResult(result, onClick, cssClasses, isOptionFocus)
+      render: (onClick: () => void, isOptionFocused: boolean) => 
+        renderAutocompleteResult(result, onClick, cssClasses, isOptionFocused)
     }
   }) ?? [];
 
