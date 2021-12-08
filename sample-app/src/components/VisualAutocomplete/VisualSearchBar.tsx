@@ -76,7 +76,7 @@ export default function VisualSearchBar({
       return null;
     }
     const options = autocompleteResults.map(result => {
-      const verticalKeys = hideVerticalLinks ? undefined : ['people', 'financial_professionals'];//result.verticalKeys;
+      const verticalKeys = hideVerticalLinks ? undefined : result.verticalKeys;
       const verticalLinks = verticalKeyToNameMapping && verticalKeys?.map(verticalKey => { 
         return {
           label: verticalKeyToNameMapping[verticalKey],
