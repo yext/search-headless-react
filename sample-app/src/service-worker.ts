@@ -1,13 +1,10 @@
 /// <reference lib="webworker" />
-import { clientsClaim } from 'workbox-core';
 import { precacheAndRoute } from 'workbox-precaching';
-
 declare const self: ServiceWorkerGlobalScope;
 
-clientsClaim();
 const precacheManifest = self.__WB_MANIFEST;
 // Only precache static assets in production.
-// Precaching in development can result in confusing situations.
+// Precaching slows down development and can be frustrating.
 // See https://github.com/facebook/create-react-app/issues/2398#issuecomment-304638935
 if (process.env.NODE_ENV !== 'development') {
   precacheAndRoute(precacheManifest);
@@ -19,8 +16,12 @@ const universalAutocomplete = /v2\/accounts\/me\/answers\/autocomplete/;
 const verticalAutocomplete = /v2\/accounts\/me\/answers\/vertical\/autocomplete/;
 const swFetchedOnHeader = 'yxt-sw-fetched-on';
 
-// Clear the cache when a new service worker activates
+self.addEventListener('install', function(event) {
+  event.waitUntil(self.skipWaiting());
+});
+
 self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim());
   event.waitUntil(caches.delete(cacheName));
 });
 
