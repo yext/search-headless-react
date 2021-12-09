@@ -53,23 +53,6 @@ function FaqCard({ result }: CardProps) {
   )
 }
 
-interface PeopleData {
-  headshot?: {
-    url: string
-  }
-}
-
-function PeopleCard({ result }: CardProps) {
-  const peopleData: PeopleData = result.rawData;
-  const headshotUrl = peopleData.headshot?.url;
-  return (
-    <div tabIndex={0} className='flex flex-col m-4'>
-      <a href={result.link}>{result.name}</a>
-      {headshotUrl && <img src={headshotUrl} alt={result.name} width={100} height={100} />}
-    </div>
-  )
-}
-
 interface EventData {
   venueName?: string
 }
