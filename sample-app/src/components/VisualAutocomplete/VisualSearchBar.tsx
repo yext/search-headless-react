@@ -122,20 +122,6 @@ export default function VisualSearchBar({
     }
     let options: Option[] = [];
     autocompleteResults.forEach(result => {
-      /**
-       * TODO (yen-tt): mocked data is used for testing purposes.
-       * Should be replace with result.verticalKeys when backend work is done.
-       */
-      const verticalKeys = ['faqs', 'events'];
-      let verticalLinks: VerticalLink[]|undefined = hideVerticalLinks
-        ? undefined
-        : verticalKeys?.map(verticalKey => {
-          return { 
-            label: verticalKeyToLabel ? verticalKeyToLabel(verticalKey) : verticalKey,
-            verticalKey
-          }
-        });
-
       options.push({
         value: result.value,
         onSelect: () => {
@@ -144,6 +130,21 @@ export default function VisualSearchBar({
           executeQuery();
         },
         display: renderAutocompleteResult(result, cssClasses, MagnifyingGlassIcon)
+      });
+
+      if (hideVerticalLinks) {
+        return;
+      }
+      /**
+       * TODO (yen-tt): mocked data is used for testing purposes.
+       * Should be replace with result.verticalKeys when backend work is done.
+       */
+      const verticalKeys = ['faqs', 'events'];
+      let verticalLinks: VerticalLink[]|undefined = verticalKeys?.map(verticalKey => {
+        return { 
+          label: verticalKeyToLabel ? verticalKeyToLabel(verticalKey) : verticalKey,
+          verticalKey
+        }
       });
 
       verticalLinks?.forEach(link => 
