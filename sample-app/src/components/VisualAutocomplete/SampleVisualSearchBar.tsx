@@ -11,7 +11,7 @@ export default function SampleVisualSearchBar() {
       placeholder='Search...'
       screenReaderInstructionsId='SearchBar__srInstructions'
       headlessId='visual-autocomplete'
-      entityPreviewsDebouncingTime={150}
+      entityPreviewsDebouncingTime={100}
       renderEntityPreviews={isLoading => (
         <div className={isLoading ? 'opacity-50' : ''}>
           <EntityPreviews verticalKey='events'>
