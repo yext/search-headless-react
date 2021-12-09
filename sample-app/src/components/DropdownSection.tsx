@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 
 export interface Option {
   value: string,
-  onClick: () => void,
+  onSelect: () => void,
   display: JSX.Element
 }
 
@@ -69,7 +69,7 @@ export default function DropdownSection({
     } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
       decrementOptionFocus();
     } else if (evt.key === 'Enter') {
-      options[focusedOptionIndex].onClick();
+      options[focusedOptionIndex].onSelect();
     }
   }
 
@@ -97,7 +97,7 @@ export default function DropdownSection({
       <div
         key={index}
         className={optionContainterCssClasses}
-        onClick={option.onClick}
+        onClick={option.onSelect}
         id={`${optionIdPrefix}-${index}`}
         tabIndex={0}
       >

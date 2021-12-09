@@ -76,7 +76,7 @@ export default function SearchBar({
   const options: Option[] = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      onClick: () => {
+      onSelect: () => {
         autocompletePromiseRef.current = undefined;
         answersActions.setQuery(result.value);
         executeQuery();

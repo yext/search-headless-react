@@ -55,7 +55,7 @@ export default function FilterSearch ({
         results: section.results.map(result => {
           return {
             value: result.value,
-            onClick: () => {
+            onSelect: () => {
               setInput(result.value);
               if (result?.filter) {
                 if (selectedFilterOptionRef.current) {

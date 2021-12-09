@@ -138,7 +138,7 @@ export default function VisualSearchBar({
 
       options.push({
         value: result.value,
-        onClick: () => {
+        onSelect: () => {
           autocompletePromiseRef.current = undefined;
           answersActions.setQuery(result.value);
           executeQuery();
@@ -149,7 +149,7 @@ export default function VisualSearchBar({
       verticalLinks?.forEach(link => 
         options.push({
           value: result.value,
-          onClick: () => {
+          onSelect: () => {
             autocompletePromiseRef.current = undefined;
             answersActions.setQuery(result.value);
             executeQuery();
@@ -181,7 +181,7 @@ export default function VisualSearchBar({
     const options: Option[] = recentSearches?.map(result => {
       return {
         value: result.query,
-        onClick: () => {
+        onSelect: () => {
           autocompletePromiseRef.current = undefined;
           answersActions.setQuery(result.query);
           executeQuery();

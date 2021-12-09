@@ -98,12 +98,12 @@ export default function InputDropdown({
 
     let childProps = child.props as DropdownSectionProps;
     const modifiedOptions = childProps.options.map(option => {
-      const modifiedOnClick = () => {
+      const modifiedOnSelect = () => {
         setLatestUserInput(option.value);
         dispatch({ type: 'HideSections' });
-        option.onClick?.(); 
+        option.onSelect?.(); 
       }
-      return { ...option, onClick: modifiedOnClick }
+      return { ...option, onSelect: modifiedOnSelect }
     });
 
     const modifiedOnFocusChange = (value: string, focusedOptionId: string) => {
