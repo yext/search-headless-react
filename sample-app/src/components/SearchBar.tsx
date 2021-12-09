@@ -63,7 +63,7 @@ export default function SearchBar({
       ? answersActions.executeVerticalAutocomplete()
       : answersActions.executeUniversalAutocomplete();
   });
-  const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, geolocationOptions);
+  const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, isVertical, geolocationOptions);
 
   const options = autocompleteResponse?.results.map(result => {
     return {

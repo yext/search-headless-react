@@ -14,8 +14,8 @@ type AutocompleteRef = MutableRefObject<Promise<AutocompleteResponse | undefined
  */
 export default function useSearchWithNearMeHandling(
   answersActions: AnswersHeadless,
+  isVertical: boolean = false,
   geolocationOptions?: PositionOptions,
-  isVertical = false
 ): [QueryFunc, AutocompleteRef] {
   /**
    * Allow a query search to wait on the response to the autocomplete request right
