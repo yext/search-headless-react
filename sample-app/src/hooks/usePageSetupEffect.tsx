@@ -7,7 +7,7 @@ import { executeSearch, getSearchIntents, updateLocationIfNeeded } from "../util
  * Sets up the state for a page
  * @param verticalKey - The verticalKey associated with the page, or undefined for universal pages
  */
-export default function useAnswersOnPage(verticalKey?: string) {
+export default function usePageSetupEffect(verticalKey?: string) {
   const answersActions = useAnswersActions();
   useLayoutEffect(() => {
     const stateToClear = {

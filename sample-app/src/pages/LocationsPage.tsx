@@ -6,7 +6,7 @@ import VerticalResults from '../components/VerticalResults';
 import SpellCheck from '../components/SpellCheck';
 import LocationBias from '../components/LocationBias';
 import { StandardCard } from '../components/cards/StandardCard';
-import useAnswersOnPage from '../hooks/useAnswersOnPage';
+import usePageSetupEffect from '../hooks/usePageSetupEffect';
 import Facets from '../components/Facets';
 import FilterSearch from '../components/FilterSearch';
 
@@ -24,7 +24,7 @@ const filterSearchFields = [{
 export default function LocationsPage({ verticalKey }: {
   verticalKey: string
 }) {
-  useAnswersOnPage(verticalKey);
+  usePageSetupEffect(verticalKey);
 
   return (
     <div className='pt-7 flex'> 
