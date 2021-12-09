@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { provideAnswersHeadless, VerticalResults, AnswersHeadless, UniversalLimit } from '@yext/answers-headless-react';
 import { ANSWERS_CONFIG } from '../utils/constants';
 import useDebouncedFunction from './useDebouncedFunction';
+import useComponentMountStatus from "./useComponentMountStatus";
 
 interface EntityPreviewsState {
   verticalResultsArray: VerticalResults[],
@@ -25,11 +26,7 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
       headlessId
     });
   }
-  const isMounted = useRef<boolean>(false);
-  useEffect(() => {
-    isMounted.current = true;
-    return () => { isMounted.current = false; }
-  }, []);
+  const isMountedRef = useComponentMountStatus();
   const [verticalResultsArray, setVerticalResultsArray] = useState<VerticalResults[]>([]);
   const debouncedUniversalSearch = useDebouncedFunction(async () => {
     if (!headlessRef.current) {
@@ -40,7 +37,7 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
      * Avoid performing a React state update on an unmounted component
      * (e.g unmounted during async await)
      */
-    if(!isMounted.current) {
+    if (!isMountedRef.current) {
       return;
     }
     const results = headlessRef.current.state.universal.verticals || [];

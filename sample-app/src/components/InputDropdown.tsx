@@ -89,12 +89,6 @@ export default function InputDropdown({
     setScreenReaderKey(0);
   }
 
-  const isMounted = useRef<boolean>(false);
-  useEffect(() => {
-    isMounted.current = true;
-    return () => { isMounted.current = false; }
-  }, []);
-
   let numSections = 0;
   const childrenWithProps = recursivelyMapChildren(children, (child, index) => {
     if (!(React.isValidElement(child) && child.type === DropdownSection)) {
@@ -105,16 +99,9 @@ export default function InputDropdown({
     let childProps = child.props as DropdownSectionProps;
     const modifiedOptions = childProps.options.map(option => {
       const modifiedOnClick = () => {
-        option.onClick?.(); 
-        /**
-         * Avoid performing a React state update on an unmounted component
-         * (e.g unmounted after onClick perform a route navigation)
-         */
-        if (!isMounted.current) {
-          return;
-        }
         setLatestUserInput(option.value);
         dispatch({ type: 'HideSections' });
+        option.onClick?.(); 
       }
       return { ...option, onClick: modifiedOnClick }
     });
