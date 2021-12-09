@@ -13,12 +13,7 @@ export default function SampleVisualSearchBar() {
       screenReaderInstructionsId='SearchBar__srInstructions'
       headlessId='visual-autocomplete'
       entityPreviewsDebouncingTime={150}
-      handleVerticalLinks={verticalKeys => {
-        return verticalKeys?.map(verticalKey => { 
-          const label = universalResultsConfig[verticalKey]?.label ?? verticalKey;
-          return { label, verticalKey }
-        });
-      }}
+      verticalKeyToLabel={verticalKey => universalResultsConfig[verticalKey]?.label ?? verticalKey}
       renderEntityPreviews={isLoading => (
         <div className={isLoading ? 'opacity-50' : ''}>
           <EntityPreviews verticalKey='people'>

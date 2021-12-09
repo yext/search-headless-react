@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 import { useAnswersActions, FilterSearchResponse, SearchParameterField, Filter } from '@yext/answers-headless-react';
 import InputDropdown, { InputDropdownCssClasses } from "./InputDropdown";
-import renderHighlightedValue from "./utils/renderHighlightedValue";
 import DropdownSection, { DropdownSectionCssClasses, Option } from "./DropdownSection";
 import { processTranslation } from "./utils/processTranslation";
 import { useSynchronizedRequest } from "../hooks/useSynchronizedRequest";
+import renderAutocompleteResult, { AutocompleteResultCssClasses } from "./utils/renderAutocompleteResult";
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
-interface FilterSearchCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {}
+interface FilterSearchCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses, AutocompleteResultCssClasses {}
 
 const builtInCssClasses: FilterSearchCssClasses = {
   dropdownContainer: 'Autocomplete',
@@ -18,7 +18,7 @@ const builtInCssClasses: FilterSearchCssClasses = {
   sectionLabel: 'Autocomplete__sectionLabel',
   optionsContainer: 'Autocomplete_sectionOptions',
   optionContainer: 'Autocomplete__option',
-  focusedOption: 'Autocomplete__option--focused'
+  focusedOption: 'bg-gray-100'
 }
 
 export interface FilterSearchProps {
@@ -42,7 +42,7 @@ export default function FilterSearch ({
   const searchParamFields = searchFields.map((searchField) => {
     return { ...searchField, fetchEntities: false }
   });
-  const cssClasses = { builtInCssClasses, ...customCssClasses };
+  const cssClasses = { ...builtInCssClasses, ...customCssClasses };
 
   const [filterSearchResponse, executeFilterSearch] = useSynchronizedRequest<string, FilterSearchResponse>(inputValue =>
     answersActions.executeFilterSearch(inputValue ?? '', sectioned, searchParamFields)
@@ -55,10 +55,18 @@ export default function FilterSearch ({
         results: section.results.map(result => {
           return {
             value: result.value,
-            render: (onClick, isOptionFocused) =>
-              <div onClick={onClick} className={isOptionFocused ? 'Autocomplete__option--focused' : ''}>
-                {renderHighlightedValue(result)}
-              </div>
+            onClick: () => {
+              setInput(result.value);
+              if (result?.filter) {
+                if (selectedFilterOptionRef.current) {
+                  answersActions.setFilterOption({ ...selectedFilterOptionRef.current, selected: false });
+                }
+                selectedFilterOptionRef.current = result.filter;
+                answersActions.setFilterOption({ ...result.filter, selected: true });
+                answersActions.executeVerticalQuery();
+              }
+            },
+            display: renderAutocompleteResult(result, cssClasses)
           };
         }),
         label: section.label
@@ -113,18 +121,6 @@ export default function FilterSearch ({
               optionIdPrefix={`Autocomplete__option-${sectionIndex}`}
               onFocusChange={value => {
                 setInput(value);
-              }}
-              onSelectOption={(optionValue, optionIndex) => {
-                setInput(optionValue);
-                const result = filterSearchResponse?.sections[sectionIndex].results[optionIndex];
-                if (result?.filter) {
-                  if (selectedFilterOptionRef.current) {
-                    answersActions.setFilterOption({ ...selectedFilterOptionRef.current, selected: false });
-                  }
-                  selectedFilterOptionRef.current = result.filter;
-                  answersActions.setFilterOption({ ...result.filter, selected: true });
-                  answersActions.executeVerticalQuery();
-                }
               }}
               label={section.label}
               cssClasses={cssClasses}

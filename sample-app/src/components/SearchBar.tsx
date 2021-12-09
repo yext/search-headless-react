@@ -12,6 +12,7 @@ import renderAutocompleteResult, {
   AutocompleteResultCssClasses,
   builtInCssClasses as AutocompleteResultBuiltInCssClasses
 } from './utils/renderAutocompleteResult';
+import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -23,10 +24,11 @@ export const builtInCssClasses: SearchBarCssClasses = {
   inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
   inputElement: 'outline-none flex-grow border-none h-full px-2',
   logoContainer: 'w-8 mx-2',
-  optionContainer: 'flex flex-col items-stretch py-1 px-2 cursor-pointer',
+  optionContainer: 'flex items-stretch py-1 px-2 cursor-pointer',
   resultIconContainer: 'opacity-20 w-8 h-8 pl-1 mr-4',
   searchButtonContainer: 'w-8 h-full mx-2',
   submitButton: 'h-full w-full',
+  focusedOption: 'bg-gray-100',
   ...AutocompleteResultBuiltInCssClasses
 }
 
@@ -70,12 +72,15 @@ export default function SearchBar({
       : answersActions.executeUniversalAutocomplete();
   });
   const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, geolocationOptions);
-
   const options: Option[] = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      render: (onClick: () => void, isOptionFocused: boolean) => 
-        renderAutocompleteResult(result, onClick, cssClasses, isOptionFocused)
+      onClick: () => {
+        autocompletePromiseRef.current = undefined;
+        answersActions.setQuery(result.value);
+        executeQuery();
+      },
+      display: renderAutocompleteResult(result, cssClasses, MagnifyingGlassIcon)
     }
   }) ?? [];
 
@@ -120,11 +125,6 @@ export default function SearchBar({
               optionIdPrefix='Autocomplete__option-0'
               onFocusChange={value => {
                 answersActions.setQuery(value);
-              }}
-              onSelectOption={optionValue => {
-                autocompletePromiseRef.current = undefined;
-                answersActions.setQuery(optionValue);
-                executeQuery();
               }}
               cssClasses={cssClasses}
             />

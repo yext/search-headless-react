@@ -2,7 +2,7 @@ import { useAnswersActions, useAnswersState, VerticalResults, AutocompleteResult
 import { PropsWithChildren, useEffect } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
-import DropdownSection, { Option, VerticalLink } from '../DropdownSection';
+import DropdownSection, { Option } from '../DropdownSection';
 import { useEntityPreviews } from '../../hooks/useEntityPreviews';
 import SearchButton from '../SearchButton';
 import { processTranslation } from '../utils/processTranslation';
@@ -15,26 +15,34 @@ import { ReactComponent as YextLogoIcon } from '../../icons/yext_logo.svg';
 import renderAutocompleteResult from '../utils/renderAutocompleteResult';
 import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
 import useRecentSearches from '../../hooks/useRecentSearches';
-import classNames from 'classnames';
+import { useHistory } from 'react-router';
+import { ReactComponent as MagnifyingGlassIcon } from '../../icons/magnifying_glass.svg';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 const builtInCssClasses: VisualSearchBarCssClasses = { 
   ...builtInSearchBarCssClasses, 
-  recentSearchesOption: 'flex items-center py-1 px-2 cursor-pointer',
-  recentSearchesLogoContainer: 'w-4',
-  recentSearchesOptionValue: 'ml-2'
+  recentSearchesOptionContainer: 'flex items-center py-1 px-2 cursor-pointer',
+  recentSearchesIcon: 'w-4',
+  recentSearchesOption: 'ml-2',
+  verticalLink: 'ml-14 text-gray-600'
 };
 
 interface VisualSearchBarCssClasses extends SearchBarCssClasses {
+  recentSearchesOptionContainer?: string,
+  recentSearchesIcon?: string,
   recentSearchesOption?: string,
-  recentSearchesLogoContainer?: string,
-  recentSearchesOptionValue?: string
+  verticalLink: string
 }
 
 type RenderEntityPreviews = (
   autocompleteLoading: boolean,
   verticalResultsArray: VerticalResults[]
 ) => JSX.Element;
+
+interface VerticalLink {
+  label: string,
+  verticalKey: string
+}
 
 interface Props {
   placeholder?: string,
@@ -45,7 +53,7 @@ interface Props {
   entityPreviewsDebouncingTime: number,
   renderEntityPreviews?: RenderEntityPreviews,
   hideVerticalLinks?: boolean,
-  handleVerticalLinks?: (verticalKeys: string[]|undefined) => VerticalLink[]|undefined,
+  verticalKeyToLabel?: (verticalKey: string) => string,
   hideRecentSearches?: boolean,
   recentSearchesLimit?: number,
   customCssClasses?: VisualSearchBarCssClasses,
@@ -62,7 +70,7 @@ export default function VisualSearchBar({
   hideRecentSearches,
   renderEntityPreviews,
   hideVerticalLinks,
-  handleVerticalLinks,
+  verticalKeyToLabel,
   recentSearchesLimit = 5,
   customCssClasses,
   cssCompositionMethod,
@@ -70,6 +78,7 @@ export default function VisualSearchBar({
 }: PropsWithChildren<Props>) {
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
 
+  const browserHistory = useHistory();
   const answersActions = useAnswersActions();
   const query = useAnswersState(state => state.query.input) ?? '';
   const isLoading = useAnswersState(state => state.searchStatus.isLoading) ?? false;
@@ -77,11 +86,7 @@ export default function VisualSearchBar({
   const [autocompleteResponse, executeAutocomplete] = useSynchronizedRequest(async () => {
     return answersActions.executeUniversalAutocomplete();
   });
-  const [
-    recentSearches,
-    setRecentSearch,
-    clearRecentSearches
-  ] = useRecentSearches(recentSearchesLimit);
+  const [recentSearches, setRecentSearch, clearRecentSearches] = useRecentSearches(recentSearchesLimit);
   useEffect(() => {
     if (hideRecentSearches) {
       clearRecentSearches();
@@ -115,32 +120,45 @@ export default function VisualSearchBar({
     if (autocompleteResults.length === 0) {
       return null;
     }
-    const options = autocompleteResults.map(result => {
+    let options: Option[] = [];
+    autocompleteResults.forEach(result => {
       /**
        * TODO (yen-tt): mocked data is used for testing purposes.
        * Should be replace with result.verticalKeys when backend work is done.
        */
       const verticalKeys = ['people', 'financial_professionals'];
-      let verticalLinks: VerticalLink[]|undefined = undefined;
-      if (!hideVerticalLinks) {
-        verticalLinks = handleVerticalLinks
-          ? handleVerticalLinks(verticalKeys)
-          : verticalKeys?.map(verticalKey => { return { label: verticalKey, verticalKey }});
-      }
-      return {
+      let verticalLinks: VerticalLink[]|undefined = hideVerticalLinks
+        ? undefined
+        : verticalKeys?.map(verticalKey => {
+          return { 
+            label: verticalKeyToLabel ? verticalKeyToLabel(verticalKey) : verticalKey,
+            verticalKey
+          }
+        });
+
+      options.push({
         value: result.value,
-        verticalLinks,
-        render: (onClick: () => void, isOptionFocused: boolean, focusLinkIndex: number) => 
-          renderAutocompleteResult(
-            result,
-            onClick,
-            cssClasses,
-            isOptionFocused,
-            verticalLinks,
-            focusLinkIndex
-          )
-      }
-    }) ?? [];
+        onClick: () => {
+          autocompletePromiseRef.current = undefined;
+          answersActions.setQuery(result.value);
+          executeQuery();
+        },
+        display: renderAutocompleteResult(result, cssClasses, MagnifyingGlassIcon)
+      });
+
+      verticalLinks?.forEach(link => 
+        options.push({
+          value: result.value,
+          onClick: () => {
+            autocompletePromiseRef.current = undefined;
+            answersActions.setQuery(result.value);
+            executeQuery();
+            browserHistory.push(`/${link.verticalKey}`);
+          },
+          display: renderAutocompleteResult({ value: `in ${link.label}` }, { ...cssClasses, option: cssClasses.verticalLink })
+        })
+      );
+    });
 
     return <DropdownSection
       options={options}
@@ -149,28 +167,26 @@ export default function VisualSearchBar({
         answersActions.setQuery(value);
         updateEntityPreviews(value);
       }}
-      onSelectOption={optionValue => {
-        autocompletePromiseRef.current = undefined;
-        answersActions.setQuery(optionValue);
-        executeQuery();
-      }}
       cssClasses={cssClasses}
     />
   }
 
   function renderRecentSearches() {
+    const recentSearchesCssClasses = {
+      ...cssClasses,
+      optionContainer: cssClasses.recentSearchesOptionContainer,
+      icon: cssClasses.recentSearchesIcon,
+      option: cssClasses.recentSearchesOption
+    }
     const options: Option[] = recentSearches?.map(result => {
       return {
         value: result.query,
-        render: (onClick, isOptionFocused) => {
-          const OptionCssClasses = cssClasses.focusedOption
-            ? classNames(cssClasses.recentSearchesOption, { [cssClasses.focusedOption]: isOptionFocused })
-            : cssClasses.recentSearchesOption;
-          return (<div onClick={onClick} className={OptionCssClasses}>
-            <div className={cssClasses.recentSearchesLogoContainer}><RecentSearchIcon /></div>
-            <div className={cssClasses.recentSearchesOptionValue}>{result.query}</div>
-          </div>)
-        }
+        onClick: () => {
+          autocompletePromiseRef.current = undefined;
+          answersActions.setQuery(result.query);
+          executeQuery();
+        },
+        display: renderAutocompleteResult({ value: result.query }, recentSearchesCssClasses, RecentSearchIcon)
       }
     }) ?? [];
     if (options.length === 0) {
@@ -183,12 +199,7 @@ export default function VisualSearchBar({
       onFocusChange={value => {
         answersActions.setQuery(value);
       }}
-      onSelectOption={optionValue => {
-        autocompletePromiseRef.current = undefined;
-        answersActions.setQuery(optionValue);
-        executeQuery();
-      }}
-      cssClasses={cssClasses}
+      cssClasses={recentSearchesCssClasses}
     />
   }
 

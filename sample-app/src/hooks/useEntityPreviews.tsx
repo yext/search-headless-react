@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { provideAnswersHeadless, VerticalResults, AnswersHeadless, UniversalLimit } from '@yext/answers-headless-react';
 import { ANSWERS_CONFIG } from '../utils/constants';
 import useDebouncedFunction from './useDebouncedFunction';
@@ -25,12 +25,24 @@ export function useEntityPreviews(headlessId: string, debounceTime: number):[ En
       headlessId
     });
   }
+  const isMounted = useRef<boolean>(false);
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; }
+  }, []);
   const [verticalResultsArray, setVerticalResultsArray] = useState<VerticalResults[]>([]);
   const debouncedUniversalSearch = useDebouncedFunction(async () => {
     if (!headlessRef.current) {
       return;
     }
     await headlessRef.current.executeUniversalQuery();
+    /**
+     * Avoid performing a React state update on an unmounted component
+     * (e.g unmounted during async await)
+     */
+    if(!isMounted.current) {
+      return;
+    }
     const results = headlessRef.current.state.universal.verticals || [];
     setVerticalResultsArray(results);
     setLoadingState(false);
