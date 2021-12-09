@@ -17,8 +17,7 @@ export default function useAnswersOnPage(verticalKey?: string) {
     }
     answersActions.setState({
       ...answersActions.state,
-      ...stateToClear,
-      filters: {}
+      ...stateToClear
     });
     verticalKey
       ? answersActions.setVerticalKey(verticalKey)
