@@ -19,6 +19,7 @@ export const builtInCssClasses: SearchBarCssClasses = {
   focusedOption: 'bg-gray-100',
   inputContainer: 'h-11 inline-flex items-center justify-between w-full',
   inputDropdownContainer: 'bg-white border rounded-3xl border-gray-200 w-full overflow-hidden',
+  inputDropdownContainer___active: 'shadow-lg',
   inputElement: 'outline-none flex-grow border-none h-full pl-0.5 pr-2',
   logoContainer: 'w-7 mx-2.5 my-2',
   option: 'flex items-center py-1 px-2 cursor-pointer',
@@ -87,43 +88,41 @@ export default function SearchBar({
   }
   return (
     <div className={cssClasses.container}>
-      <div className={cssClasses.inputDropdownContainer}>
-        <InputDropdown
-          inputValue={query}
-          placeholder={placeholder}
-          screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
-          screenReaderInstructionsId={screenReaderInstructionsId}
-          screenReaderText={screenReaderText}
-          onSubmit={executeQuery}
-          onInputChange={value => {
-            answersActions.setQuery(value);
-          }}
-          onInputFocus={() => {
-            autocompletePromiseRef.current = executeAutocomplete();
-          }}
-          renderLogo={() => <YextLogoIcon />}
-          renderSearchButton={renderSearchButton}
-          cssClasses={cssClasses}
-          forceHideDropdown={options.length === 0}
-        >
-          {
-            options.length > 0 &&
-            <DropdownSection
-              options={options}
-              optionIdPrefix='Autocomplete__option-0'
-              onFocusChange={value => {
-                answersActions.setQuery(value);
-              }}
-              onSelectOption={optionValue => {
-                autocompletePromiseRef.current = undefined;
-                answersActions.setQuery(optionValue);
-                executeQuery();
-              }}
-              cssClasses={cssClasses}
-            />
-          }
-        </InputDropdown>
-      </div>
+      <InputDropdown
+        inputValue={query}
+        placeholder={placeholder}
+        screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
+        screenReaderInstructionsId={screenReaderInstructionsId}
+        screenReaderText={screenReaderText}
+        onSubmit={executeQuery}
+        onInputChange={value => {
+          answersActions.setQuery(value);
+        }}
+        onInputFocus={() => {
+          autocompletePromiseRef.current = executeAutocomplete();
+        }}
+        renderLogo={() => <YextLogoIcon />}
+        renderSearchButton={renderSearchButton}
+        cssClasses={cssClasses}
+        forceHideDropdown={options.length === 0}
+      >
+        {
+          options.length > 0 &&
+          <DropdownSection
+            options={options}
+            optionIdPrefix='Autocomplete__option-0'
+            onFocusChange={value => {
+              answersActions.setQuery(value);
+            }}
+            onSelectOption={optionValue => {
+              autocompletePromiseRef.current = undefined;
+              answersActions.setQuery(optionValue);
+              executeQuery();
+            }}
+            cssClasses={cssClasses}
+          />
+        }
+      </InputDropdown>
     </div>
   )
 }
