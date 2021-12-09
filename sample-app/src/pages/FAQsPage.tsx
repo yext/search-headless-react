@@ -6,12 +6,12 @@ import VerticalResults from '../components/VerticalResults';
 import SpellCheck from '../components/SpellCheck';
 import LocationBias from '../components/LocationBias';
 import { StandardCard } from '../components/cards/StandardCard';
-import useAnswersOnPage from '../hooks/useAnswersOnPage';
+import usePageSetupEffect from '../hooks/usePageSetupEffect';
 
 export default function FAQsPage({ verticalKey }: {
   verticalKey: string
 }) {
-  useAnswersOnPage(verticalKey);
+  usePageSetupEffect(verticalKey);
 
   return (
     <div className='pt-7'>
