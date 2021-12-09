@@ -41,16 +41,16 @@ self.addEventListener('fetch', (event: FetchEvent) => {
 
 async function respondUsingCache(request: Request, timeToLiveInMilliseconds: number): Promise<Response> {
   const cachedResponse = await caches.match(request);
-  const fetchedOn = cachedResponse?.headers.get(swFetchedOnHeader);
-  if (cachedResponse && fetchedOn) {
+  const fetchedOnTimestampHeader = cachedResponse?.headers.get(swFetchedOnHeader);
+  if (cachedResponse && fetchedOnTimestampHeader) {
     try {
-      const fetchedOnTimestamp = parseInt(fetchedOn);
+      const fetchedOnTimestamp = parseInt(fetchedOnTimestampHeader);
       const currentTimestamp = new Date().getTime();
       if (currentTimestamp < fetchedOnTimestamp + timeToLiveInMilliseconds) {
         return cachedResponse;
       }
     } catch (e) {
-      console.error(`Service worker could not parse ${swFetchedOnHeader} header with value "${fetchedOn}".`);
+      console.error(`Service worker could not parse ${swFetchedOnHeader} header with value "${fetchedOnTimestampHeader}".`);
     }
   }
 

@@ -672,11 +672,8 @@ module.exports = function (webpackEnv) {
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
-      /**
-       * @remarks
-       * CRA by default does not build service workers in dev mode.
-       * We do, because we have custom logic for caching API requests.
-       */
+      // By default, create-react-app does not build service workers in dev mode.
+      // However, we have custom service-worker logic we would like to run in development.
       fs.existsSync(swSrc) &&
         new WorkboxWebpackPlugin.InjectManifest({
           swSrc,
