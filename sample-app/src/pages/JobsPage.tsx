@@ -6,12 +6,12 @@ import VerticalResults from '../components/VerticalResults';
 import SpellCheck from '../components/SpellCheck';
 import LocationBias from '../components/LocationBias';
 import { StandardCard } from '../components/cards/StandardCard';
-import usePage from '../hooks/usePage';
+import useAnswersOnPage from '../hooks/useAnswersOnPage';
 
 export default function JobsPage({ verticalKey }: {
   verticalKey: string
 }) {
-  usePage(verticalKey);
+  useAnswersOnPage(verticalKey);
 
   return (
     <div className='pt-7'>

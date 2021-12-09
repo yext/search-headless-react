@@ -38,7 +38,6 @@ export default function App() {
       apiKey='3517add824e992916861b76e456724d9'
       experienceKey='answers-js-docs'
       locale='en'
-      verticalKey='people'
       sessionTrackingEnabled={true}
     >
       <div className='flex justify-center px-8 py-6'>
