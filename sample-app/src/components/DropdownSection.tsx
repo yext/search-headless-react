@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 
 export interface Option {
   value: string,
+  onSelect: () => void,
   display: JSX.Element
 }
 
@@ -10,7 +11,7 @@ export interface DropdownSectionCssClasses {
   sectionContainer?: string,
   sectionLabel?: string,
   optionsContainer?: string,
-  option?: string,
+  optionContainer?: string,
   focusedOption?: string
 }
 
@@ -20,7 +21,6 @@ export interface DropdownSectionProps {
   optionIdPrefix: string,
   onFocusChange?: (value: string, focusedOptionId: string) => void,
   onLeaveSectionFocus?: (pastSectionEnd: boolean) => void,
-  onSelectOption?: (optionValue: string, optionIndex: number) => void,
   label?: string,
   cssClasses?: DropdownSectionCssClasses
 }
@@ -31,14 +31,12 @@ export default function DropdownSection({
   optionIdPrefix,
   onFocusChange = () => {},
   onLeaveSectionFocus = () => {},
-  onSelectOption = () => {},
   label = '',
   cssClasses = {}
 }: DropdownSectionProps): JSX.Element | null {
 
   const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(0);
   const wasFocused = useRef<boolean>(isFocused);
-
   function incrementOptionFocus() {
     let newIndex = focusedOptionIndex + 1;
     if (newIndex < options.length) {
@@ -71,7 +69,7 @@ export default function DropdownSection({
     } else if (evt.key === 'ArrowUp' || evt.key === 'ArrowLeft') {
       decrementOptionFocus();
     } else if (evt.key === 'Enter') {
-      onSelectOption(options[focusedOptionIndex].value, focusedOptionIndex);
+      options[focusedOptionIndex].onSelect();
     }
   }
 
@@ -90,17 +88,17 @@ export default function DropdownSection({
   });
 
   function renderOption(option: Option, index: number) {
-    const className = cssClasses.focusedOption
-      ? classNames(cssClasses.option, {
+    const optionContainterCssClasses = cssClasses.focusedOption
+      ? classNames(cssClasses.optionContainer, {
         [cssClasses.focusedOption]: isFocused && index === focusedOptionIndex
       })
-      : cssClasses.option;
+      : cssClasses.optionContainer;
     return (
       <div
         key={index}
-        className={className}
+        className={optionContainterCssClasses}
+        onClick={option.onSelect}
         id={`${optionIdPrefix}-${index}`}
-        onClick={() => onSelectOption(option.value, index)}
         tabIndex={0}
       >
         {option.display}

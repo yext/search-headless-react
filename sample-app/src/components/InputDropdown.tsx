@@ -1,5 +1,5 @@
 import React, { useReducer, KeyboardEvent, useRef, useEffect, useState, FocusEvent } from "react"
-import DropdownSection from "./DropdownSection";
+import DropdownSection, { DropdownSectionProps } from "./DropdownSection";
 import ScreenReader from "./ScreenReader";
 import recursivelyMapChildren from './utils/recursivelyMapChildren';
 
@@ -85,7 +85,6 @@ export default function InputDropdown({
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputDropdownRef = useRef<HTMLDivElement>(null);
-
   if (!shouldDisplayDropdown && screenReaderKey) {
     setScreenReaderKey(0);
   }
@@ -97,11 +96,15 @@ export default function InputDropdown({
     }
     numSections++;
 
-    const modifiedOnSelectOption = (optionValue: string, optionIndex: number) => {
-      child.props.onSelectOption?.(optionValue, optionIndex);
-      setLatestUserInput(optionValue);
-      dispatch({ type: 'HideSections' });
-    }
+    let childProps = child.props as DropdownSectionProps;
+    const modifiedOptions = childProps.options.map(option => {
+      const modifiedOnSelect = () => {
+        setLatestUserInput(option.value);
+        dispatch({ type: 'HideSections' });
+        option.onSelect?.(); 
+      }
+      return { ...option, onSelect: modifiedOnSelect }
+    });
 
     const modifiedOnFocusChange = (value: string, focusedOptionId: string) => {
       child.props.onFocusChange?.(value, focusedOptionId);
@@ -109,13 +112,27 @@ export default function InputDropdown({
     };
 
     if (focusedSectionIndex === undefined) {
-      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelectOption: modifiedOnSelectOption });
+      return React.cloneElement(child, { 
+        onLeaveSectionFocus,
+        options: modifiedOptions,
+        isFocused: false,
+        key: `${index}-${childrenKey}`
+      });
     } else if (index === focusedSectionIndex) {
       return React.cloneElement(child, {
-        onLeaveSectionFocus, isFocused: true, key: `${index}-${childrenKey}`, onFocusChange: modifiedOnFocusChange, onSelectOption: modifiedOnSelectOption
+        onLeaveSectionFocus,
+        options: modifiedOptions,
+        isFocused: true,
+        key: `${index}-${childrenKey}`,
+        onFocusChange: modifiedOnFocusChange
       });
     } else {
-      return React.cloneElement(child, { onLeaveSectionFocus, isFocused: false, key: `${index}-${childrenKey}`, onSelectOption: modifiedOnSelectOption });
+      return React.cloneElement(child, {
+        onLeaveSectionFocus,
+        options: modifiedOptions,
+        isFocused: false,
+        key: `${index}-${childrenKey}`
+      });
     }
   });
 
@@ -172,7 +189,11 @@ export default function InputDropdown({
   });
 
   function handleInputElementKeydown(evt: KeyboardEvent<HTMLInputElement>) {
-    if (evt.key === 'Enter' && focusedSectionIndex === undefined && !onlyAllowDropdownOptionSubmissions) {
+    if (evt.key === 'Enter' 
+      && evt.target === inputRef.current
+      && focusedSectionIndex === undefined
+      && !onlyAllowDropdownOptionSubmissions
+    ) {
       setLatestUserInput(inputValue);
       onSubmit(inputValue);
       dispatch({ type: 'HideSections' });

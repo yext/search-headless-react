@@ -2,13 +2,17 @@ import { useAnswersActions, useAnswersState } from '@yext/answers-headless-react
 import InputDropdown, { InputDropdownCssClasses } from './InputDropdown';
 import { ReactComponent as YextLogoIcon } from '../icons/yext_logo.svg';
 import '../sass/Autocomplete.scss';
-import DropdownSection, { DropdownSectionCssClasses } from './DropdownSection';
+import DropdownSection, { DropdownSectionCssClasses, Option } from './DropdownSection';
 import { processTranslation } from './utils/processTranslation';
 import SearchButton from './SearchButton';
 import { useSynchronizedRequest } from '../hooks/useSynchronizedRequest';
 import useSearchWithNearMeHandling from '../hooks/useSearchWithNearMeHandling';
 import { CompositionMethod, useComposedCssClasses } from '../hooks/useComposedCssClasses';
-import renderAutocompleteResult from './utils/renderAutocompleteResult';
+import renderAutocompleteResult, {
+  AutocompleteResultCssClasses,
+  builtInCssClasses as AutocompleteResultBuiltInCssClasses
+} from './utils/renderAutocompleteResult';
+import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -16,18 +20,22 @@ export const builtInCssClasses: SearchBarCssClasses = {
   container: 'h-12',
   divider: 'border mx-2',
   dropdownContainer: 'relative bg-white py-1 z-10',
-  focusedOption: 'bg-gray-100',
   inputContainer: 'h-12 inline-flex items-center justify-between w-full',
   inputDropdownContainer: 'bg-white shadow border rounded-3xl border-gray-300 w-full overflow-hidden',
   inputElement: 'outline-none flex-grow border-none h-full px-2',
   logoContainer: 'w-8 mx-2',
-  option: 'flex items-center py-1 px-2 cursor-pointer',
+  optionContainer: 'flex items-stretch py-1 px-2 cursor-pointer',
   resultIconContainer: 'opacity-20 w-8 h-8 pl-1 mr-4',
   searchButtonContainer: 'w-8 h-full mx-2',
-  submitButton: 'h-full w-full'
+  submitButton: 'h-full w-full',
+  focusedOption: 'bg-gray-100',
+  ...AutocompleteResultBuiltInCssClasses
 }
 
-export interface SearchBarCssClasses extends InputDropdownCssClasses, DropdownSectionCssClasses {
+
+export interface SearchBarCssClasses 
+  extends InputDropdownCssClasses, DropdownSectionCssClasses, AutocompleteResultCssClasses 
+{
   container?: string,
   inputDropdownContainer?: string,
   resultIconContainer?: string,
@@ -65,10 +73,15 @@ export default function SearchBar({
   });
   const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, isVertical, geolocationOptions);
 
-  const options = autocompleteResponse?.results.map(result => {
+  const options: Option[] = autocompleteResponse?.results.map(result => {
     return {
       value: result.value,
-      display: renderAutocompleteResult(result, cssClasses.resultIconContainer)
+      onSelect: () => {
+        autocompletePromiseRef.current = undefined;
+        answersActions.setQuery(result.value);
+        executeQuery();
+      },
+      display: renderAutocompleteResult(result, cssClasses, MagnifyingGlassIcon)
     }
   }) ?? [];
 
@@ -113,11 +126,6 @@ export default function SearchBar({
               optionIdPrefix='Autocomplete__option-0'
               onFocusChange={value => {
                 answersActions.setQuery(value);
-              }}
-              onSelectOption={optionValue => {
-                autocompletePromiseRef.current = undefined;
-                answersActions.setQuery(optionValue);
-                executeQuery();
               }}
               cssClasses={cssClasses}
             />
