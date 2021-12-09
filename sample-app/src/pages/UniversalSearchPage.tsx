@@ -2,7 +2,7 @@ import UniversalResults from '../components/UniversalResults';
 import DirectAnswer from '../components/DirectAnswer';
 import { UniversalResultsConfig } from '../universalResultsConfig';
 import SpellCheck from '../components/SpellCheck';
-import usePage from '../hooks/usePage';
+import useAnswersOnPage from '../hooks/useAnswersOnPage';
 
 const universalResultsFilterConfig = {
   show: true
@@ -10,7 +10,7 @@ const universalResultsFilterConfig = {
 
 export default function UniversalSearchPage(props: { universalResultsConfig: UniversalResultsConfig}) {
   const { universalResultsConfig } = props;
-  usePage();
+  useAnswersOnPage();
 
   return (
     <div>

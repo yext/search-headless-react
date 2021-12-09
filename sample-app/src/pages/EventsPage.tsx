@@ -6,7 +6,7 @@ import VerticalResults from '../components/VerticalResults';
 import SpellCheck from '../components/SpellCheck';
 import LocationBias from '../components/LocationBias';
 import { StandardCard } from '../components/cards/StandardCard';
-import usePage from '../hooks/usePage';
+import useAnswersOnPage from '../hooks/useAnswersOnPage';
 import StaticFilters from '../components/StaticFilters';
 
 const staticFiltersConfig = [{
@@ -28,7 +28,7 @@ const staticFiltersConfig = [{
 export default function EventsPage({ verticalKey }: {
   verticalKey: string
 }) {
-  usePage(verticalKey);
+  useAnswersOnPage(verticalKey);
 
   return (
     <div className='pt-7 flex'>
