@@ -1,5 +1,5 @@
 import { useAnswersActions, useAnswersState, VerticalResults, AutocompleteResult } from '@yext/answers-headless-react';
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren, useContext, useEffect, useState } from 'react';
 import InputDropdown from '../InputDropdown';
 import '../../sass/Autocomplete.scss';
 import DropdownSection, { Option } from '../DropdownSection';
@@ -17,6 +17,7 @@ import { ReactComponent as RecentSearchIcon } from '../../icons/history.svg';
 import useRecentSearches from '../../hooks/useRecentSearches';
 import { useHistory } from 'react-router';
 import { ReactComponent as MagnifyingGlassIcon } from '../../icons/magnifying_glass.svg';
+import { ConnectedSearchBarsContext } from '../contexts/SearchbarsContext';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 const builtInCssClasses: VisualSearchBarCssClasses = { 
@@ -27,11 +28,11 @@ const builtInCssClasses: VisualSearchBarCssClasses = {
   verticalLink: 'ml-14 text-gray-600'
 };
 
-interface VisualSearchBarCssClasses extends SearchBarCssClasses {
+export interface VisualSearchBarCssClasses extends SearchBarCssClasses {
   recentSearchesOptionContainer?: string,
   recentSearchesIcon?: string,
   recentSearchesOption?: string,
-  verticalLink: string
+  verticalLink?: string
 }
 
 type RenderEntityPreviews = (
@@ -57,7 +58,9 @@ interface Props {
   hideRecentSearches?: boolean,
   recentSearchesLimit?: number,
   customCssClasses?: VisualSearchBarCssClasses,
-  cssCompositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod,
+  searchBarId?: string,
+  onSubmit?: (value: string|undefined) => void
 }
 
 /**
@@ -74,7 +77,9 @@ export default function VisualSearchBar({
   recentSearchesLimit = 5,
   customCssClasses,
   cssCompositionMethod,
-  entityPreviewsDebouncingTime = 500
+  entityPreviewsDebouncingTime = 500,
+  searchBarId,
+  onSubmit=() => {},
 }: PropsWithChildren<Props>) {
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
 
@@ -93,13 +98,25 @@ export default function VisualSearchBar({
     }
   }, [clearRecentSearches, hideRecentSearches])
   const haveRecentSearches = !hideRecentSearches && recentSearches?.length !== 0;
-  
+
+  const { searchBarsInput } = useContext(ConnectedSearchBarsContext);
+  const [inputFromComponentState, setInputFromComponentState] = useState(query || '');
+  //searchbarContext takes precedent. Otherwise use input in component state
+  const input = searchBarId ? searchBarsInput[searchBarId] : inputFromComponentState;
+  //update input in state and in context
+  const updateInput = (newInput: string) => {
+    setInputFromComponentState(newInput);
+    if (searchBarId) {
+      searchBarsInput[searchBarId] = newInput;
+    }
+  };
 
   function executeQuery() {
     if (!hideRecentSearches) {
       const input = answersActions.state.query.input;
       input && setRecentSearch(input);
     }
+    onSubmit(query);
     executeQueryWithNearMeHandling();
   }
 
@@ -126,6 +143,7 @@ export default function VisualSearchBar({
         value: result.value,
         onSelect: () => {
           autocompletePromiseRef.current = undefined;
+          updateInput(result.value);
           answersActions.setQuery(result.value);
           executeQuery();
         },
@@ -152,6 +170,7 @@ export default function VisualSearchBar({
           value: result.value,
           onSelect: () => {
             autocompletePromiseRef.current = undefined;
+            updateInput(result.value);
             answersActions.setQuery(result.value);
             executeQuery();
             browserHistory.push(`/${link.verticalKey}`);
@@ -165,6 +184,7 @@ export default function VisualSearchBar({
       options={options}
       optionIdPrefix='VisualSearchBar-QuerySuggestions'
       onFocusChange={value => {
+        updateInput(value);
         answersActions.setQuery(value);
         updateEntityPreviews(value);
       }}
@@ -184,6 +204,7 @@ export default function VisualSearchBar({
         value: result.query,
         onSelect: () => {
           autocompletePromiseRef.current = undefined;
+          updateInput(result.query);
           answersActions.setQuery(result.query);
           executeQuery();
         },
@@ -198,6 +219,7 @@ export default function VisualSearchBar({
       options={options}
       optionIdPrefix='VisualSearchBar-RecentSearches'
       onFocusChange={value => {
+        updateInput(value);
         answersActions.setQuery(value);
       }}
       cssClasses={recentSearchesCssClasses}
@@ -208,13 +230,14 @@ export default function VisualSearchBar({
     <div className={cssClasses.container}>
       <div className={cssClasses.inputDropdownContainer}>
         <InputDropdown
-          inputValue={query}
+          inputValue={input}
           placeholder={placeholder}
           screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
           screenReaderInstructionsId={screenReaderInstructionsId}
           screenReaderText={getScreenReaderText(autocompleteResults)}
           onSubmit={executeQuery}
           onInputChange={value => {
+            updateInput(value);
             answersActions.setQuery(value);
           }}
           onInputFocus={value => {

@@ -13,6 +13,8 @@ import renderAutocompleteResult, {
   builtInCssClasses as AutocompleteResultBuiltInCssClasses
 } from './utils/renderAutocompleteResult';
 import { ReactComponent as MagnifyingGlassIcon } from '../icons/magnifying_glass.svg';
+import { useContext, useState } from 'react';
+import { ConnectedSearchBarsContext } from './contexts/SearchbarsContext';
 
 const SCREENREADER_INSTRUCTIONS = 'When autocomplete results are available, use up and down arrows to review and enter to select.'
 
@@ -43,24 +45,29 @@ export interface SearchBarCssClasses
 }
 
 interface Props {
+  onSubmit?: (value: string|undefined) => void,
   placeholder?: string,
   isVertical: boolean,
   geolocationOptions?: PositionOptions,
   screenReaderInstructionsId: string,
   customCssClasses?: SearchBarCssClasses,
-  cssCompositionMethod?: CompositionMethod
+  cssCompositionMethod?: CompositionMethod,
+  inputValue?: string,
+  searchBarId?: string
 }
 
 /**
  * Renders a SearchBar that is hooked up with an InputDropdown component
  */
 export default function SearchBar({
+  onSubmit=() => {},
   placeholder,
   isVertical,
   geolocationOptions,
   screenReaderInstructionsId,
   customCssClasses,
-  cssCompositionMethod
+  cssCompositionMethod,
+  searchBarId,
 }: Props) {
   const cssClasses = useComposedCssClasses(builtInCssClasses, customCssClasses, cssCompositionMethod);
   const answersActions = useAnswersActions();
@@ -71,7 +78,23 @@ export default function SearchBar({
       ? answersActions.executeVerticalAutocomplete()
       : answersActions.executeUniversalAutocomplete();
   });
-  const [executeQuery, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, isVertical, geolocationOptions);
+  const [executeSearchWithNearMeHandling, autocompletePromiseRef] = useSearchWithNearMeHandling(answersActions, isVertical, geolocationOptions);
+  function executeQuery() {
+    onSubmit(query);
+    executeSearchWithNearMeHandling();
+  }
+
+  const { searchBarsInput } = useContext(ConnectedSearchBarsContext);
+  const [inputFromComponentState, setInputFromComponentState] = useState(query || '');
+  //searchbarContext takes precedent. Otherwise use input in component state
+  const input = searchBarId ? searchBarsInput[searchBarId] : inputFromComponentState;
+  //update input in state and in context
+  const updateInput = (newInput: string) => {
+    setInputFromComponentState(newInput);
+    if (searchBarId) {
+      searchBarsInput[searchBarId] = newInput;
+    }
+  };
 
   const options: Option[] = autocompleteResponse?.results.map(result => {
     return {
@@ -102,13 +125,14 @@ export default function SearchBar({
     <div className={cssClasses.container}>
       <div className={cssClasses.inputDropdownContainer}>
         <InputDropdown
-          inputValue={query}
+          inputValue={input}
           placeholder={placeholder}
           screenReaderInstructions={SCREENREADER_INSTRUCTIONS}
           screenReaderInstructionsId={screenReaderInstructionsId}
           screenReaderText={screenReaderText}
           onSubmit={executeQuery}
           onInputChange={value => {
+            updateInput(value);
             answersActions.setQuery(value);
           }}
           onInputFocus={() => {
@@ -125,6 +149,7 @@ export default function SearchBar({
               options={options}
               optionIdPrefix='Autocomplete__option-0'
               onFocusChange={value => {
+                updateInput(value);
                 answersActions.setQuery(value);
               }}
               cssClasses={cssClasses}

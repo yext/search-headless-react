@@ -1,4 +1,4 @@
-import VisualSearchBar from './VisualSearchBar';
+import VisualSearchBar, { VisualSearchBarCssClasses } from './VisualSearchBar';
 import { Result } from '@yext/answers-headless-react';
 import EntityPreviews from './EntityPreviews';
 import { universalResultsConfig } from '../../universalResultsConfig';
@@ -6,12 +6,24 @@ import { universalResultsConfig } from '../../universalResultsConfig';
 /**
  * This is an example of how to use the VisualSearchBar component.
  */
-export default function SampleVisualSearchBar() {
+export default function SampleVisualSearchBar(
+  { searchBarId,
+    onSubmit=() => {},
+    customCssClasses
+  }: { 
+    searchBarId?: string,
+    onSubmit?: (value: string|undefined) => void,
+    customCssClasses?: VisualSearchBarCssClasses
+  }
+) {
   return (
     <VisualSearchBar
       placeholder='Search...'
+      onSubmit={onSubmit}
+      searchBarId={searchBarId}
       screenReaderInstructionsId='SearchBar__srInstructions'
       headlessId='visual-autocomplete'
+      customCssClasses={customCssClasses}
       entityPreviewsDebouncingTime={100}
       verticalKeyToLabel={verticalKey => universalResultsConfig[verticalKey]?.label ?? verticalKey}
       renderEntityPreviews={isLoading => (
