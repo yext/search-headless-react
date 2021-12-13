@@ -6,7 +6,7 @@ module.exports = {
     'plugin:@yext/export-star/recommended'
   ],
   plugins: ['react-perf'],
-  ignorePatterns: ['lib', 'tests/setup/responses', 'scripts'],
+  ignorePatterns: ['lib', 'tests/setup/responses'],
   rules: {
     indent: ['error', 2, { SwitchCase: 1 }],
     'no-trailing-spaces': ['error'],
