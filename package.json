@@ -11,7 +11,7 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "eslint . && jest",
-    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES  && node ./scripts/remove-repo-license.js"
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
