@@ -11,11 +11,11 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "eslint . && jest",
-    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES  && node ./scripts/remove-repo-license.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.2",
-    "@yext/answers-headless": "^0.2.0",
+    "@yext/answers-headless": "^0.3.0",
     "typescript": "^4.3.5",
     "uuid": "^8.3.2"
   },
