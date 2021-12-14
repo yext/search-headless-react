@@ -25,7 +25,7 @@ npm install @yext/answers-headless-react
 
 ## Getting Started - `AnswersHeadlessProvider`
 
-First, wrap your components in an AnswersHeadlessProvider.
+Answers Headless React includes an `<AnswersHeadlessProvider />` component, which instantiates an AnswersHeadless instance and makes it available to the rest of your app.
 
 ```tsx
 import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
@@ -51,8 +51,7 @@ function MyApp() {
 
 ## Respond to State Updates with `useAnswersState`
 
-The Yext Answers equivalent of `useState`.
-Your component will automatically update when relevant state changes.
+`useAnswersState` reads a value from the `AnswersHeadless` state and subscribes to updates.
 
 ```tsx
 import { useAnswersState } from '@yext/answers-headless-react';
@@ -65,11 +64,13 @@ export default function MostRecentSearch() {
 
 ## Dispatch Actions with `useAnswersActions`
 
-Perform searches, get autocomplete suggestions, add filters, and more!
+`useAnswersActions` allows you to dispatch actions using the `AnswersHeadless` instance.
+These include performing searches, getting autocomplete suggestions, and adding filters!
 For a full list of capabilities see [the answers-headless docs](https://www.npmjs.com/package/@yext/answers-headless).
 
 ```tsx
 import { useAnswersActions } from '@yext/answers-headless-react';
+import { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 
 function SearchBar() {
   const answers = useAnswersActions();
