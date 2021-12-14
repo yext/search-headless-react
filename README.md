@@ -49,7 +49,7 @@ function MyApp() {
 }
 ```
 
-## Read from State with `useAnswersState`
+## Respond to State Updates with `useAnswersState`
 
 The Yext Answers equivalent of `useState`.
 Your component will automatically update when relevant state changes.
