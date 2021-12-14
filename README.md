@@ -45,7 +45,7 @@ function MyApp() {
       <MostRecentSearch/>
       <UniversalResults/>
     </AnswersHeadlessProvider>
-  )
+  );
 }
 ```
 
@@ -75,14 +75,14 @@ import { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 function SearchBar() {
   const answers = useAnswersActions();
   const handleTyping = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    answers.setQuery(e.target.value)
+    answers.setQuery(e.target.value);
   }, [answers]);
   
   const handleKeyDown = useCallback((evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter' ) {
       answers.executeUniversalQuery();
     }
-  }, [answers])
+  }, [answers]);
 
   return <input onChange={handleTyping} onKeyDown={handleKeyDown}/>;
 }
