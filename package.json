@@ -14,8 +14,7 @@
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "dependencies": {
-    "@yext/answers-headless": "^0.9.0",
-    "uuid": "^8.3.2"
+    "@yext/answers-headless": "^0.9.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.5",
@@ -45,7 +44,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "ts-jest": "^27.1.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "uuid": "^8.3.2"
   },
   "peerDependencies": {
     "react": "^17.0.2"
