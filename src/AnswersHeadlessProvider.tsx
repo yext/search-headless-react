@@ -1,9 +1,9 @@
 import { ReactChild, ReactChildren } from 'react';
-import { provideAnswersHeadless, AnswersHeadless, AnswersConfig } from '@yext/answers-headless';
+import { provideAnswersHeadless, AnswersHeadless, HeadlessConfig } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import acquireSessionId from './utils/acquireSessionId';
 
-type Props = AnswersConfig & {
+type Props = HeadlessConfig & {
   children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[],
   verticalKey?: string,
   sessionTrackingEnabled?: boolean
