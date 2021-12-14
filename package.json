@@ -75,5 +75,9 @@
     "testMatch": [
       "<rootDir>/tests/**/*.(test).ts(x)?"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yext/answers-headless-react.git"
   }
 }
