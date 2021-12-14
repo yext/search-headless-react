@@ -65,7 +65,9 @@ export default function MostRecentSearch() {
 ## Dispatch Actions with `useAnswersActions`
 
 `useAnswersActions` allows you to dispatch actions using the `AnswersHeadless` instance.
-These include performing searches, getting autocomplete suggestions, and adding filters!
+
+These include performing searches, getting autocomplete suggestions, and adding filters.
+
 For a full list of capabilities see [the answers-headless docs](https://www.npmjs.com/package/@yext/answers-headless).
 
 ```tsx
@@ -90,7 +92,9 @@ function SearchBar() {
 
 ## Class Components
 
-For users that want to use class components instead of functional components, you can use the `AnswersHeadlessContext` directly to dispatch actions, and the `subscribeToStateUpdates` HOC to receive updates from state. These also work with functional components.
+For users that want to use class components instead of functional components, you can use the `AnswersHeadlessContext` directly to dispatch actions, and the `subscribeToStateUpdates` HOC to receive updates from state.
+
+These also work with functional components.
 
 ## `subscribeToStateUpdates`
 
@@ -143,7 +147,9 @@ export default class Searcher extends Component {
 ## `useAnswersUtilities`
 
 We offer a `useAnswersUtilities` convenience hook for accessing AnswersHeadless.utilities, which offers a number of stateless utility methods.
-The `answersUtilities` and `answersUtilitiesFromActions` variables below are equivalent. For class components, you can access AnswersUtilities through `AnswersHeadlessContext`.
+The `answersUtilities` and `answersUtilitiesFromActions` variables below are equivalent.
+
+For class components, you can access AnswersUtilities through `AnswersHeadlessContext`.
 
 ```ts
 const answersUtilities = useAnswersUtilities();
