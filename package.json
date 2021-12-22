@@ -14,7 +14,7 @@
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "dependencies": {
-    "@yext/answers-headless": "^0.9.1-beta.0"
+    "@yext/answers-headless": "^0.10.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.5",
