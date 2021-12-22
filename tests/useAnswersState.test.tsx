@@ -194,11 +194,10 @@ describe('uses the most recent selector',() => {
 });
 
 function createAnswersHeadless() {
-  const answers = provideAnswersHeadless({
+  return provideAnswersHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
     locale: 'en',
+    verticalKey: 'fakeVerticalKey'
   });
-  answers.setVerticalKey('fakeVerticalKey');
-  return answers;
 }
