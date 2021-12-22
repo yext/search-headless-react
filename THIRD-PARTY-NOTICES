@@ -100,7 +100,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM package may be included in this product:
 
- - @yext/answers-headless-react@0.9.2-beta.0
+ - @yext/answers-headless-react@0.10.0
 
 This package contains the following license and notice below:
 
@@ -141,7 +141,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM package may be included in this product:
 
- - @yext/answers-headless@0.9.1-beta.0
+ - @yext/answers-headless@0.10.0
 
 This package contains the following license and notice below:
 
