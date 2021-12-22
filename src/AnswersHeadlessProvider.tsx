@@ -12,7 +12,7 @@ type Props = HeadlessConfig & {
 export function AnswersHeadlessProvider(props: Props): JSX.Element {
   const { children, verticalKey, sessionTrackingEnabled=true, ...answersConfig } = props;
   const answers: AnswersHeadless = provideAnswersHeadless(answersConfig);
-  verticalKey && answers.setVerticalKey(verticalKey);
+  verticalKey && answers.setVertical(verticalKey);
   answers.setSessionTrackingEnabled(sessionTrackingEnabled);
   if (sessionTrackingEnabled) {
     const sessionId = acquireSessionId();
