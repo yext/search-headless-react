@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-headless-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "watch": "tsc --watch",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
