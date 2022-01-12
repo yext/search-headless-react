@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-headless-react",
-  "version": "1.0.1",
+  "version": "1.0.2-beta.0",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
   "module": "./lib/index.js",
@@ -15,7 +15,7 @@
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
-    "@yext/answers-headless": "^1.0.0"
+    "@yext/answers-headless": "^1.1.0-beta.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.5",
