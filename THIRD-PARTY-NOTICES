@@ -32,7 +32,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - @reduxjs/toolkit@1.7.0
+ - @reduxjs/toolkit@1.7.1
 
 This package contains the following license and notice below:
 
@@ -62,7 +62,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - @yext/answers-core@1.6.0-beta.1
+ - @yext/answers-core@1.6.0-beta.2
 
 This package contains the following license and notice below:
 
@@ -100,7 +100,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM package may be included in this product:
 
- - @yext/answers-headless@1.1.0-beta.2
+ - @yext/answers-headless@1.1.0-beta.3
 
 This package contains the following license and notice below:
 
@@ -199,7 +199,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - immer@9.0.7
+ - immer@9.0.12
 
 This package contains the following license and notice below:
 
