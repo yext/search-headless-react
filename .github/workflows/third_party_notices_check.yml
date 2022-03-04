@@ -5,3 +5,5 @@ on: push
 jobs:
   call_check:
     uses:  yext/answers-headless/.github/workflows/third_party_notices_test.yml@dev/test-reusable-workflows
+      with:
+        node_version: 16.x
