@@ -4,7 +4,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, useReducer, useEffect, useContext } from 'react';
-import { State } from '@yext/answers-headless/lib/esm/models/state';
+import { State } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import isShallowEqual from './utils/isShallowEqual';
 

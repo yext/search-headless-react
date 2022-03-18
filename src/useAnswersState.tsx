@@ -1,5 +1,5 @@
 import { useContext, useLayoutEffect, useRef, useState } from 'react';
-import { State } from '@yext/answers-headless/lib/esm/models/state';
+import { State } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 
 export type StateSelector<T> = (s: State) => T;
