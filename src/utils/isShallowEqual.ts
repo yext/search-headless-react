@@ -1,6 +1,4 @@
 /**
- * @param originalObj -
- * @param newObj -
  * @returns whether the two objects have values with equal references
  */
 export default function isShallowEqual(
