@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
  * unavailable. (e.g. The function is running on the server for SSR).
  */
 export default function acquireSessionId(): string | null {
-  if (typeof(window) === undefined) {
+  if (typeof(window) === 'undefined') {
     return null;
   }
   try {
