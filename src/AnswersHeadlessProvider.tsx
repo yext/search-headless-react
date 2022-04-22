@@ -14,10 +14,10 @@ export function AnswersHeadlessProvider(props: Props): JSX.Element {
   const answers: AnswersHeadless = provideAnswersHeadless(answersConfig);
   verticalKey && answers.setVertical(verticalKey);
   answers.setSessionTrackingEnabled(sessionTrackingEnabled);
-  if (sessionTrackingEnabled) {
-    const sessionId = acquireSessionId();
-    sessionId && answers.setSessionId(sessionId);
-  }
+  // if (sessionTrackingEnabled) {
+  //   const sessionId = acquireSessionId();
+  //   sessionId && answers.setSessionId(sessionId);
+  // }
   return (
     <AnswersHeadlessContext.Provider value={answers}>
       {children}
