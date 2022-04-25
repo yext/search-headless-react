@@ -1,7 +1,7 @@
 import { useContext, useRef, useState } from 'react';
 import { State } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useLayoutEffect from './utils/useIsomorphicLayoutEffect';
 
 export type StateSelector<T> = (s: State) => T;
 
