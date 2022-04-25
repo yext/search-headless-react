@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-headless-react",
-  "version": "1.1.0-beta.13",
+  "version": "1.1.0-alpha.6",
   "types": "./lib/src/index.d.ts",
   "main": "./lib/src/index.js",
   "module": "./lib/src/index.js",
@@ -15,9 +15,6 @@
     "watch": "tsc --watch",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
-  },
-  "engines": {
-    "node": ">=17.1.0"
   },
   "dependencies": {
     "@yext/answers-headless": "^1.1.0-beta.12"

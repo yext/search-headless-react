@@ -2,7 +2,7 @@ import { ReactChild, ReactChildren } from 'react';
 import { provideAnswersHeadless, AnswersHeadless, HeadlessConfig } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import acquireSessionId from './utils/acquireSessionId';
-import packageJson from '../package.json' assert { type: 'json' };
+import packageJson from '../package.json';
 
 const { version } = packageJson;
 
