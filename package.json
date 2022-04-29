@@ -1,9 +1,12 @@
 {
   "name": "@yext/answers-headless-react",
   "version": "1.1.0-beta.12",
+  "main": "./lib/esm/src/index.js",
   "types": "./lib/esm/src/index.d.ts",
-  "main": "./lib/commonjs/src/index.js",
-  "module": "./lib/esm/src/index.js",
+  "exports": {
+    "import": "./lib/esm/src/index.js",
+    "require": "./lib/commonjs/src/index.js"
+  },
   "files": [
     "lib",
     "src"
@@ -13,7 +16,7 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "prepublishOnly": "npm run build",
-    "watch": "tsc --watch",
+    "dev": "tsc --watch -p tsconfig.esm.json",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
