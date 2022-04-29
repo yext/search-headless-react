@@ -4,11 +4,8 @@
     "paths": {
       "@yext/answers-headless-react": ["src"]
     },
-    "target": "es2015",
-    "outDir": "lib",
     "esModuleInterop": true,
     "strict": true,
-    "module": "esnext",
     "skipLibCheck": true,
     "noImplicitAny": false,
     "moduleResolution": "node",
