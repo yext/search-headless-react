@@ -83,7 +83,12 @@
     "testEnvironment": "jsdom",
     "testMatch": [
       "<rootDir>/tests/**/*.(test).ts(x)?"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.esm.json"
+      }
+    }
   },
   "repository": {
     "type": "git",
