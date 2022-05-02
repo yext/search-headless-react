@@ -12,9 +12,9 @@
     "src"
   ],
   "scripts": {
-    "build": "rm -rf lib/** && npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch -p tsconfig.esm.json",
     "test": "eslint . && jest",
