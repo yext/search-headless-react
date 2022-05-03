@@ -14,9 +14,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "jsx": "react-jsx",
-    "resolveJsonModule": true
-  },
-  "include": [
-    "src"
-  ]
+    "resolveJsonModule": true,
+    "target": "es2015",
+    "outDir": "lib"
+  }
 }
