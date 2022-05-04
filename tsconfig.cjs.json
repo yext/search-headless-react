@@ -2,7 +2,8 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "module": "commonjs",
-    "composite": true
+    "composite": true,
+    // "target": "esnext"
   },
   "include": [
     "src",
