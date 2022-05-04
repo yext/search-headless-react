@@ -5,5 +5,10 @@
   },
   "include": [
     "src/esm-wrapper.ts",
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.cjs.json"
+    }
   ]
 }

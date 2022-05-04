@@ -2,7 +2,7 @@
   "name": "@yext/answers-headless-react",
   "version": "1.1.0-beta.13",
   "main": "./lib/src/esm-wrapper.js",
-  "types": "./lib/src/index.d.ts",
+  "types": "./lib/src/esm-wrapper.d.ts",
   "exports": {
     "import": "./lib/src/esm-wrapper.js",
     "require": "./lib/src/index.js"
@@ -12,11 +12,11 @@
     "src"
   ],
   "scripts": {
-    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "rm -rf lib/** && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "prepublishOnly": "npm run build",
-    "dev": "tsc --watch -p tsconfig.esm.json & tsc --watch -p tsconfig.cjs.json",
+    "dev": "npm run build:cjs && (tsc --watch -p tsconfig.cjs.json & tsc --watch -p tsconfig.esm.json)",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },

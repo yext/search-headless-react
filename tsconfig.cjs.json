@@ -1,10 +1,12 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs"
+    "module": "commonjs",
+    "composite": true
   },
   "include": [
-    "src"
+    "src",
+    "package.json"
   ],
   "exclude": [
     "src/esm-wrapper.ts",

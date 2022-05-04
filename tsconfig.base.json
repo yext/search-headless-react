@@ -16,6 +16,7 @@
     "jsx": "react-jsx",
     "resolveJsonModule": true,
     "target": "es2015",
-    "outDir": "lib"
+    "outDir": "lib",
+    "rootDir": "."
   }
 }
