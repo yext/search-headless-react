@@ -15,5 +15,5 @@ export {
   useAnswersUtilities,
   AnswersActions,
   AnswersUtilities,
-  StateSelector,
+  StateSelector
 };
