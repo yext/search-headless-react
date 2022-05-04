@@ -6,12 +6,15 @@ export {
   useAnswersActions,
   useAnswersState,
   useAnswersUtilities,
+  AnswersActions,
+  AnswersUtilities,
+  StateSelector,
 
   // answers-headless
+  answersUtilities,
   HeadlessConfig,
   provideAnswersHeadless,
   AnswersHeadless,
-  answersUtilities,
 
   // answers-headless models
   DirectAnswerState,
@@ -35,10 +38,10 @@ export {
 
   // answers-headless utils/filter-creators
   FilterTypes,
-  createDateRangeFilter,
   createEqualsFilter,
-  createNearMeFilter,
   createNumberRangeFilter,
+  createDateRangeFilter,
+  createNearMeFilter,
   combineFilters,
 
   // answers-headless utils/types

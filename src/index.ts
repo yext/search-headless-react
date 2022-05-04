@@ -8,12 +8,12 @@ import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 export * from '@yext/answers-headless';
 export {
   AnswersHeadlessContext,
+  AnswersHeadlessProvider,
   subscribeToStateUpdates,
   useAnswersActions,
   useAnswersState,
   useAnswersUtilities,
-  AnswersHeadlessProvider,
   AnswersActions,
   AnswersUtilities,
-  StateSelector
+  StateSelector,
 };
