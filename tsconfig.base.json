@@ -4,6 +4,9 @@
     "paths": {
       "@yext/answers-headless-react": ["src"]
     },
+    "target": "es2015",
+    "outDir": "lib",
+    "rootDir": ".",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
@@ -14,9 +17,6 @@
     "declarationMap": true,
     "sourceMap": true,
     "jsx": "react-jsx",
-    "resolveJsonModule": true,
-    "target": "es2015",
-    "outDir": "lib",
-    "rootDir": "."
+    "resolveJsonModule": true
   }
 }
