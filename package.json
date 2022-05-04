@@ -1,18 +1,22 @@
 {
   "name": "@yext/answers-headless-react",
-  "version": "1.1.0-beta.12",
-  "types": "./lib/src/index.d.ts",
-  "main": "./lib/src/index.js",
-  "module": "./lib/src/index.js",
-  "type": "module",
+  "version": "1.1.0-beta.13",
+  "main": "./lib/esm/src/index.js",
+  "types": "./lib/esm/src/index.d.ts",
+  "exports": {
+    "import": "./lib/esm/src/index.js",
+    "require": "./lib/commonjs/src/index.js"
+  },
   "files": [
     "lib",
     "src"
   ],
   "scripts": {
-    "build": "rm -rf lib/** && tsc",
+    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "prepublishOnly": "npm run build",
-    "watch": "tsc --watch",
+    "dev": "tsc --watch -p tsconfig.esm.json",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
@@ -79,7 +83,12 @@
     "testEnvironment": "jsdom",
     "testMatch": [
       "<rootDir>/tests/**/*.(test).ts(x)?"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.esm.json"
+      }
+    }
   },
   "repository": {
     "type": "git",
