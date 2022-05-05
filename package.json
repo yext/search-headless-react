@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@yext/answers-headless": "^1.1.0-beta.12",
-    "jambo": "^1.12.2",
     "use-isomorphic-layout-effect": "^1.1.2"
   },
   "devDependencies": {
