@@ -1,7 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { provideAnswersHeadless, Result } from '@yext/answers-headless';
-import { State } from '@yext/answers-headless/lib/esm/models/state';
+import { provideAnswersHeadless, Result, State } from '@yext/answers-headless';
 import React, { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
 
@@ -11,12 +10,10 @@ it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
     return <div>{query}</div>;
   }
   jest.spyOn(global.console, 'error').mockImplementation();
-  try {
-    render(<Test />);
-  } catch(e) {
-    expect(e).toEqual(new Error('Attempted to call useAnswersState() outside of AnswersHeadlessProvider.'
-    + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.'));
-  }
+  const expectedError = new Error(
+    'Attempted to call useAnswersState() outside of AnswersHeadlessProvider.' +
+    ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
+  expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
 });
 
@@ -71,19 +68,17 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(parentStateUpdates).toHaveLength(1);
   expect(childStateUpdates).toHaveLength(0);
 
-  await act(async () => {
-    userEvent.click(screen.getByText('Search'));
-    await pendingVerticalQuery;
-  });
+  userEvent.click(screen.getByText('Search'));
+  await pendingVerticalQuery;
+
   // Check that only a single addListener call is made for the conditionally rendered Child
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
   expect(parentStateUpdates).toHaveLength(2);
   expect(childStateUpdates).toHaveLength(1);
 
-  await act(async () => {
-    userEvent.click(screen.getByText('Search'));
-    await pendingVerticalQuery;
-  });
+  userEvent.click(screen.getByText('Search'));
+  await pendingVerticalQuery;
+
   // Check that additional addListener calls are not made
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
   expect(parentStateUpdates).toHaveLength(3);
@@ -143,7 +138,7 @@ describe('uses the most recent selector',() => {
     expect(screen.getByTestId('selected-state')).toHaveTextContent('initial selector');
 
     selector = () => 'new selector';
-    act(() => userEvent.click(screen.getByText('rerender')));
+    userEvent.click(screen.getByText('rerender'));
     expect(screen.getByTestId('selected-state')).toHaveTextContent('new selector');
   });
 
@@ -177,13 +172,12 @@ describe('uses the most recent selector',() => {
     );
     expect(stateUpdates).toEqual(['initial value']);
 
-    act(() => {
-      let numNewSelectorCalls = 0;
-      selector = () => {
-        return ++numNewSelectorCalls;
-      };
-      userEvent.click(screen.getByText('rerender'));
-    });
+    let numNewSelectorCalls = 0;
+    selector = () => {
+      return ++numNewSelectorCalls;
+    };
+    userEvent.click(screen.getByText('rerender'));
+
     expect(stateUpdates).toEqual(['initial value', 1]);
 
     act(() => {
