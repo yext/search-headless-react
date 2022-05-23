@@ -1,4 +1,4 @@
-import { ReactChild, ReactChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { provideAnswersHeadless, AnswersHeadless, HeadlessConfig } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import acquireSessionId from './utils/acquireSessionId';
@@ -7,12 +7,11 @@ import packageJson from '../package.json';
 const { version } = packageJson;
 
 type Props = HeadlessConfig & {
-  children?: ReactChildren | ReactChild | (ReactChildren | ReactChild)[],
   verticalKey?: string,
   sessionTrackingEnabled?: boolean
 };
 
-export function AnswersHeadlessProvider(props: Props): JSX.Element {
+export function AnswersHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
   const { children, verticalKey, sessionTrackingEnabled=true, ...answersConfig } = props;
   const additionalHttpHeaders = {
     'Client-SDK': {

@@ -69,7 +69,7 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(0);
 
   userEvent.click(screen.getByText('Search'));
-  await pendingVerticalQuery;
+  await act( async () => { await pendingVerticalQuery; });
 
   // Check that only a single addListener call is made for the conditionally rendered Child
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
@@ -77,7 +77,7 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(1);
 
   userEvent.click(screen.getByText('Search'));
-  await pendingVerticalQuery;
+  await act( async () => { await pendingVerticalQuery; });
 
   // Check that additional addListener calls are not made
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
