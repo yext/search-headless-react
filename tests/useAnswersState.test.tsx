@@ -1,8 +1,9 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { provideAnswersHeadless, Result, State } from '@yext/answers-headless';
-import React, { useCallback, useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
+import { renderToString } from 'react-dom/server';
 
 it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
   function Test(): JSX.Element {
@@ -15,6 +16,39 @@ it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
     ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
   expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
+});
+
+it('Retrieve state snapshot in server side rendering and hydration process', () => {
+  const answers = createAnswersHeadless();
+  const consoleSpy = jest.spyOn(console, 'error');
+  const mockedOnClick= jest.fn().mockImplementation(() => {
+    answers.setVertical('anotherFakeKey');
+  });
+  function Test(): JSX.Element {
+    const verticalKey = useAnswersState(state => state.vertical.verticalKey);
+    return <button onClick={mockedOnClick}>{verticalKey}</button>;
+  }
+  function App(): JSX.Element {
+    return (
+      <AnswersHeadlessContext.Provider value={answers}>
+        <Test />
+      </AnswersHeadlessContext.Provider>
+    );
+  }
+  const renderOnServer = () => renderToString(<App />);
+  expect(renderOnServer).not.toThrow();
+
+  const container = document.body.appendChild(document.createElement('div'));
+  container.innerHTML = renderOnServer();
+  userEvent.click(screen.getByText('fakeVerticalKey'));
+  expect(mockedOnClick).toBeCalledTimes(0);
+
+  //attach event listeners to the existing markup
+  render(<App />, { container, hydrate: true });
+  userEvent.click(screen.getByText('fakeVerticalKey'));
+  expect(mockedOnClick).toBeCalledTimes(1);
+  expect(screen.getByText('anotherFakeKey')).toBeDefined();
+  expect(consoleSpy).not.toBeCalled();
 });
 
 it('does not perform extra renders/listener registrations for nested components', async () => {
