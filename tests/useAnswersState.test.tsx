@@ -20,7 +20,6 @@ it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
 
 it('Retrieve state snapshot in server side rendering and hydration process', () => {
   const answers = createAnswersHeadless();
-  const consoleSpy = jest.spyOn(console, 'error');
   const mockedOnClick= jest.fn().mockImplementation(() => {
     answers.setVertical('anotherFakeKey');
   });
@@ -48,7 +47,6 @@ it('Retrieve state snapshot in server side rendering and hydration process', () 
   userEvent.click(screen.getByText('fakeVerticalKey'));
   expect(mockedOnClick).toBeCalledTimes(1);
   expect(screen.getByText('anotherFakeKey')).toBeDefined();
-  expect(consoleSpy).not.toBeCalled();
 });
 
 it('does not perform extra renders/listener registrations for nested components', async () => {
