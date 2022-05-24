@@ -53,8 +53,7 @@ function useAnswersStateWithReactStoreSync<T>(stateSelector: StateSelector<T>): 
         }
         cb();
       }
-    })
-  , [answers]);
+    }), [answers]);
 
   const selectedState = useSyncExternalStoreWithSelector(
     subscribe,
