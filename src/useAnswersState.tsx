@@ -7,7 +7,7 @@ export type StateSelector<T> = (s: State) => T;
 
 /**
  * Returns the Answers State returned by the map function.
- * Used useSyncExternalStoreWithSelector to handle reading
+ * Uses "use-sync-external-store/shim" to handle reading
  * and subscribing from external store in React version
  * pre-18 and 18.
  */
