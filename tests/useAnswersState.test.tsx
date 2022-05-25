@@ -1,8 +1,9 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { provideAnswersHeadless, Result, State } from '@yext/answers-headless';
-import React, { useCallback, useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
+import { renderToString } from 'react-dom/server';
 
 it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
   function Test(): JSX.Element {
@@ -15,6 +16,37 @@ it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
     ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
   expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
+});
+
+it('Retrieves state snapshot during server side rendering and hydration process', () => {
+  const answers = createAnswersHeadless();
+  const mockedOnClick= jest.fn().mockImplementation(() => {
+    answers.setVertical('anotherFakeKey');
+  });
+  function Test(): JSX.Element {
+    const verticalKey = useAnswersState(state => state.vertical.verticalKey);
+    return <button onClick={mockedOnClick}>{verticalKey}</button>;
+  }
+  function App(): JSX.Element {
+    return (
+      <AnswersHeadlessContext.Provider value={answers}>
+        <Test />
+      </AnswersHeadlessContext.Provider>
+    );
+  }
+  const renderOnServer = () => renderToString(<App />);
+  expect(renderOnServer).not.toThrow();
+
+  const container = document.body.appendChild(document.createElement('div'));
+  container.innerHTML = renderOnServer();
+  userEvent.click(screen.getByText('fakeVerticalKey'));
+  expect(mockedOnClick).toBeCalledTimes(0);
+
+  //attach event listeners to the existing markup
+  render(<App />, { container, hydrate: true });
+  userEvent.click(screen.getByText('fakeVerticalKey'));
+  expect(mockedOnClick).toBeCalledTimes(1);
+  expect(screen.getByText('anotherFakeKey')).toBeDefined();
 });
 
 it('does not perform extra renders/listener registrations for nested components', async () => {
@@ -69,7 +101,7 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(0);
 
   userEvent.click(screen.getByText('Search'));
-  await pendingVerticalQuery;
+  await act( async () => { await pendingVerticalQuery; });
 
   // Check that only a single addListener call is made for the conditionally rendered Child
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
@@ -77,7 +109,7 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(1);
 
   userEvent.click(screen.getByText('Search'));
-  await pendingVerticalQuery;
+  await act( async () => { await pendingVerticalQuery; });
 
   // Check that additional addListener calls are not made
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
