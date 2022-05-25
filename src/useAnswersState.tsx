@@ -7,8 +7,9 @@ export type StateSelector<T> = (s: State) => T;
 
 /**
  * Returns the Answers State returned by the map function.
- * used useSyncExternalStoreWithSelector to handle reading and subscribing from external store
- * in React version pre-18 and 18.
+ * Used useSyncExternalStoreWithSelector to handle reading
+ * and subscribing from external store in React version
+ * pre-18 and 18.
  */
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const answers = useContext(AnswersHeadlessContext);
