@@ -18,7 +18,7 @@ it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
   jest.clearAllMocks();
 });
 
-it('Retrieve state snapshot in server side rendering and hydration process', () => {
+it('Retrieves state snapshot during server side rendering and hydration process', () => {
   const answers = createAnswersHeadless();
   const mockedOnClick= jest.fn().mockImplementation(() => {
     answers.setVertical('anotherFakeKey');
