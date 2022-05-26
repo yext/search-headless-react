@@ -21,6 +21,6 @@ jobs:
     uses: yext/slapshot-reusable-workflows/.github/workflows/run_tests.yml@v1
     with:
       build_script: |
-        npm i -D react@16 react-dom@16 @testing-library/react@12
+        npm i -D react@16.14 react-dom@16.14 @testing-library/react@12
         npm run build
       node_matrix: '["16.x"]'
