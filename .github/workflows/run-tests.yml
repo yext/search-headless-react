@@ -12,9 +12,12 @@ jobs:
       build_script: |
         npm i -D react@17 react-dom@17
         npm run build
+      node_matrix: '["16.x"]'
 
   call_run_tests:
     uses: yext/slapshot-reusable-workflows/.github/workflows/run_tests.yml@v1
+    with:
+      node_matrix: '["16.x"]'
 
   call_run_tests-react-16:
     uses: yext/slapshot-reusable-workflows/.github/workflows/run_tests.yml@v1
@@ -22,3 +25,4 @@ jobs:
       build_script: |
         npm i -D react@16 react-dom@16
         npm run build
+      node_matrix: '["16.x"]'
