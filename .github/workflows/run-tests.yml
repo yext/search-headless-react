@@ -5,8 +5,6 @@ on: [push, pull_request]
 jobs:
   call_run_tests:
     uses: yext/slapshot-reusable-workflows/.github/workflows/run_tests.yml@v1
-    with:
-      node_matrix: '["16.x"]'
 
   # It's necessary to use v12 of the react-testing-library since v13 was updated to only support react 18
   call_run_tests-react-17:
@@ -15,7 +13,6 @@ jobs:
       build_script: |
         npm i -D react@17 react-dom@17 @testing-library/react@12
         npm run build
-      node_matrix: '["16.x"]'
 
   call_run_tests-react-16:
     uses: yext/slapshot-reusable-workflows/.github/workflows/run_tests.yml@v1
@@ -23,4 +20,3 @@ jobs:
       build_script: |
         npm i -D react@16.14 react-dom@16.14 @testing-library/react@12
         npm run build
-      node_matrix: '["16.x"]'
