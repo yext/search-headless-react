@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-headless-react",
-  "version": "1.1.1-alpha.123",
+  "version": "1.1.1-alpha.124",
   "main": "./lib/esm/src/index.js",
   "types": "./lib/esm/src/index.d.ts",
   "exports": {
@@ -59,7 +59,7 @@
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
-    "react": "^17 || ^18"
+    "react": "^16.14 || ^17 || ^18"
   },
   "jest": {
     "bail": 0,
