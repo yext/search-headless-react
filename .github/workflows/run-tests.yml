@@ -5,5 +5,3 @@ on: [push, pull_request]
 jobs:
   call_run_tests:
     uses: yext/slapshot-reusable-workflows/.github/workflows/run_tests.yml@v1
-    with:
-      node_matrix: '["16.x"]'
