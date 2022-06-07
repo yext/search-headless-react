@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { provideAnswersHeadless, Result, State } from '@yext/answers-headless';
-import { useCallback, useReducer } from 'react';
+import React, { useCallback, useReducer } from 'react';
 import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
 import { renderToString } from 'react-dom/server';
 
@@ -101,7 +101,7 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(0);
 
   userEvent.click(screen.getByText('Search'));
-  await act( async () => { await pendingVerticalQuery; });
+  act( async () => { await pendingVerticalQuery; });
 
   // Check that only a single addListener call is made for the conditionally rendered Child
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
@@ -109,7 +109,7 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(childStateUpdates).toHaveLength(1);
 
   userEvent.click(screen.getByText('Search'));
-  await act( async () => { await pendingVerticalQuery; });
+  act( async () => { await pendingVerticalQuery; });
 
   // Check that additional addListener calls are not made
   expect(addListenerSpy).toHaveBeenCalledTimes(2);
@@ -136,9 +136,9 @@ it('does not trigger render on unmounted component', async () => {
     </AnswersHeadlessContext.Provider>
   );
   act(() => answers.setQuery('resultsWithFilter'));
-  await act( async () => { await answers.executeUniversalQuery(); });
+  act(async () => { await answers.executeUniversalQuery(); });
   act(() => answers.setQuery('default'));
-  await act( async () => { await answers.executeUniversalQuery(); });
+  act(async () => { await answers.executeUniversalQuery(); });
   expect(consoleSpy).not.toHaveBeenCalledWith(
     expect.stringMatching('Can\'t perform a React state update on an unmounted component'),
     expect.anything(),

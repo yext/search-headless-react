@@ -1,6 +1,7 @@
 import { AnswersHeadlessProvider, SandboxEndpoints } from '../src';
 import { render } from '@testing-library/react';
 import { provideAnswersHeadless } from '@yext/answers-headless';
+import React from 'react';
 
 jest.mock('@yext/answers-headless', () => ({
   provideAnswersHeadless: jest.fn(() => ({

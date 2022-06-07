@@ -3,7 +3,7 @@
 // May require use of typescript generics.
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentType, useReducer, useEffect, useContext } from 'react';
+import React, { ComponentType, useReducer, useEffect, useContext } from 'react';
 import { State } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import isShallowEqual from './utils/isShallowEqual';
