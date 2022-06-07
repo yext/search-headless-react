@@ -49,34 +49,6 @@ it('Retrieves state snapshot during server side rendering and hydration process'
   expect(screen.getByText('anotherFakeKey')).toBeDefined();
 });
 
-it('does not trigger render on unmounted component', async () => {
-  const consoleSpy = jest.spyOn(console, 'error');
-  function ParentComponent() {
-    const results = useAnswersState(state => state.universal?.verticals) || [];
-    return <div>{results.map((_, index) => <ChildComponent key={index}/>)}</div>;
-  }
-
-  function ChildComponent() {
-    useAnswersState(state => state);
-    return <div>child component</div>;
-  }
-
-  const answers = createAnswersHeadless();
-  render(
-    <AnswersHeadlessContext.Provider value={answers}>
-      <ParentComponent/>
-    </AnswersHeadlessContext.Provider>
-  );
-  act(() => answers.setQuery('resultsWithFilter'));
-  await answers.executeUniversalQuery();
-  act(() => answers.setQuery('default'));
-  await answers.executeUniversalQuery();
-  expect(consoleSpy).not.toHaveBeenCalledWith(
-    expect.stringMatching('Can\'t perform a React state update on an unmounted component'),
-    expect.anything(),
-    expect.stringMatching('ChildComponent'));
-});
-
 describe('uses the most recent selector',() => {
   it('for determining the hook\'s return value', () => {
     let selector = () => 'initial selector';

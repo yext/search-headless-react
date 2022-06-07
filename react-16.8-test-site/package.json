@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@yext/answers-headless-react": "file:..",
-    "react": "16.8.0",
-    "react-dom": "16.8.0",
+    "react": "file:../node_modules/react",
+    "react-dom": "file:../node_modules/react-dom",
     "react-scripts": "4.0.3"
   },
   "scripts": {
