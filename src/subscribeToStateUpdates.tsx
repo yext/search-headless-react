@@ -40,7 +40,7 @@ export function subscribeToStateUpdates(
           callback: newPropsFromState => {
             if (!isShallowEqual(previousPropsFromState, newPropsFromState)) {
               previousPropsFromState = newPropsFromState;
-              dispatch();
+              dispatch(null);
             }
           }
         });
