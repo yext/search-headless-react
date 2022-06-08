@@ -1,5 +1,6 @@
 import { useAnswersActions } from '../src';
 import { render } from '@testing-library/react';
+import React from 'react';
 
 it('invoke useAnswersActions outside of AnswersHeadlessProvider', () => {
   function Test(): JSX.Element {

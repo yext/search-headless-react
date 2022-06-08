@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { provideAnswersHeadless, AnswersHeadless, HeadlessConfig } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
 import acquireSessionId from './utils/acquireSessionId';
