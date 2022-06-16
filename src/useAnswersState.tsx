@@ -1,13 +1,15 @@
-import { useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { State } from '@yext/answers-headless';
 import { AnswersHeadlessContext } from './AnswersHeadlessContext';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 
 export type StateSelector<T> = (s: State) => T;
 
 /**
  * Returns the Answers State returned by the map function.
- * Very similar to useSelector in react-redux.
+ * Uses "use-sync-external-store/shim" to handle reading
+ * and subscribing from external store in React version
+ * pre-18 and 18.
  */
 export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   const answers = useContext(AnswersHeadlessContext);
@@ -16,57 +18,32 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
      + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
   }
 
-  // useRef stores values across renders without triggering additional ones
-  const storedStoreState = useRef<State>(answers.state);
-  const storedSelector = useRef<StateSelector<T>>(stateSelector);
-  const storedSelectedState = useRef<T>();
-  /**
-   * Guard execution of {@link stateSelector} for initializing storedSelectedState.
-   * Otherwise it's run an additional time every render, even when storedSelectedState is already initialized.
-   */
-  if (storedSelectedState.current === undefined) {
-    storedSelectedState.current = stateSelector(answers.state);
-  }
+  const getSnapshot = useCallback(() => answers.state, [answers.state]);
+  const isMountedRef = useRef<boolean>(false);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
-  /**
-   * The currently selected state - this is the value returned by the hook.
-   * Tries to use {@link storedSelectedState} when possible.
-   */
-  const selectedStateToReturn: T = (() => {
-    if (storedStoreState.current !== answers.state || storedSelector.current !== stateSelector) {
-      return stateSelector(answers.state);
-    }
-    return storedSelectedState.current;
-  })();
-
-  const [, triggerRender] = useState<T>(storedSelectedState.current);
-  useLayoutEffect(() => {
-    storedSelector.current = stateSelector;
-    storedStoreState.current = answers.state;
-    storedSelectedState.current = selectedStateToReturn;
-  });
-
-  useLayoutEffect(() => {
-    let unsubscribed = false;
-    const unsubscribe = answers.addListener({
+  const subscribe = useCallback(cb =>
+    answers.addListener({
       valueAccessor: state => state,
-      callback: (state: State) => {
+      callback: () => {
         // prevent React state update on an unmounted component
-        if (unsubscribed) {
+        if (!isMountedRef.current) {
           return;
         }
-        const currentSelectedState = storedSelector.current(state);
-        if (storedSelectedState.current !== currentSelectedState) {
-          storedSelectedState.current = currentSelectedState;
-          triggerRender(currentSelectedState);
-        }
+        cb();
       }
-    });
-    return () => {
-      unsubscribed = true;
-      unsubscribe();
-    };
-  }, [answers]);
+    }), [answers]);
 
-  return selectedStateToReturn;
+  const selectedState = useSyncExternalStoreWithSelector<State, T>(
+    subscribe,
+    getSnapshot,
+    getSnapshot,
+    stateSelector
+  );
+  return selectedState;
 }
