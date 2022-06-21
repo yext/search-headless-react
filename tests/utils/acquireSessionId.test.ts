@@ -6,7 +6,6 @@ jest.mock('uuid', () => ({
   v4: () => mockUuid()
 }));
 
-
 describe('handle session id properly', () => {
   beforeEach(() => {
     window.sessionStorage.clear();
