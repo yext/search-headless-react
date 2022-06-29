@@ -1,8 +1,18 @@
 {
   "name": "@yext/answers-headless-react",
   "version": "1.2.0",
+  "description": "Answers Headless React is the official React UI Bindings layer for Answers Headless.",
   "main": "./lib/esm/src/index.js",
   "types": "./lib/esm/src/index.d.ts",
+  "keywords": [
+    "search",
+    "nlp",
+    "ai",
+    "answers",
+    "yext",
+    "react",
+    "components"
+  ],
   "exports": {
     "import": "./lib/esm/src/index.js",
     "require": "./lib/commonjs/src/index.js"
@@ -17,6 +27,7 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch -p tsconfig.esm.json",
+    "lint": "eslint .",
     "test": "eslint . && jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
