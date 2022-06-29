@@ -18,7 +18,7 @@
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch -p tsconfig.esm.json",
     "lint": "eslint .",
-    "test": "eslint . && jest",
+    "test": "jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
