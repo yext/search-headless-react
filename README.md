@@ -1,6 +1,6 @@
-# Answers Headless React
+# Search Headless React
 
-Answers Headless React is the official React UI Bindings layer for [Answers Headless](https://www.npmjs.com/package/@yext/answers-headless).
+Search Headless React is the official React UI Bindings layer for [Search Headless](https://www.npmjs.com/package/@yext/answers-headless).
 
 Written in 100% TypeScript.
 
