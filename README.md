@@ -5,14 +5,14 @@ Search Headless React is the official React UI Bindings layer for [Search Headle
 Written in 100% TypeScript.
 
 <div>
-  <a href="https://npmjs.org/package/@yext/answers-headless-react">
-    <img src="https://img.shields.io/npm/v/@yext/answers-headless-react" alt="NPM version"/>
+  <a href="https://npmjs.org/package/@yext/search-headless-react">
+    <img src="https://img.shields.io/npm/v/@yext/search-headless-react" alt="NPM version"/>
   </a>
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" alt="License"/>
   </a>
-  <a href='https://coveralls.io/github/yext/answers-headless-react?branch=main'>
-    <img src='https://coveralls.io/repos/github/yext/answers-headless-react/badge.svg?branch=main' alt='Coverage Status' />
+  <a href='https://coveralls.io/github/yext/search-headless-react?branch=main'>
+    <img src='https://coveralls.io/repos/github/yext/search-headless-react/badge.svg?branch=main' alt='Coverage Status' />
   </a>
 </div>
 <br>
@@ -20,15 +20,15 @@ Written in 100% TypeScript.
 ## Installation
 
 ```shell
-npm install @yext/answers-headless-react
+npm install @yext/search-headless-react
 ```
 
 ## Getting Started - `AnswersHeadlessProvider`
 
-Answers Headless React includes an `<AnswersHeadlessProvider />` component, which instantiates an AnswersHeadless instance and makes it available to the rest of your app.
+Search Headless React includes an `<AnswersHeadlessProvider />` component, which instantiates an AnswersHeadless instance and makes it available to the rest of your app.
 
 ```tsx
-import { AnswersHeadlessProvider } from '@yext/answers-headless-react';
+import { AnswersHeadlessProvider } from '@yext/search-headless-react';
 import SearchBar from './SearchBar';
 import MostRecentSearch from './MostRecentSearch';
 import UniversalResults from './UniversalResults';
@@ -54,7 +54,7 @@ function MyApp() {
 `useAnswersState` reads a value from the `AnswersHeadless` state and subscribes to updates.
 
 ```tsx
-import { useAnswersState } from '@yext/answers-headless-react';
+import { useAnswersState } from '@yext/search-headless-react';
 
 export default function MostRecentSearch() {
   const mostRecentSearch = useAnswersState(state => state.query.mostRecentSearch);
@@ -71,7 +71,7 @@ These include performing searches, getting autocomplete suggestions, and adding 
 For a full list of capabilities see [the answers-headless docs](https://www.npmjs.com/package/@yext/answers-headless).
 
 ```tsx
-import { useAnswersActions } from '@yext/answers-headless-react';
+import { useAnswersActions } from '@yext/search-headless-react';
 import { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 
 function SearchBar() {
@@ -101,7 +101,7 @@ These also work with functional components.
 Here is our MostRecentSearch component again, rewritten as a class with `subscribeToStateUpdates`.
 
 ```tsx
-import { subscribeToStateUpdates } from '@yext/answers-headless-react';
+import { subscribeToStateUpdates } from '@yext/search-headless-react';
 import { Component } from 'react';
 
 interface Props {
@@ -124,7 +124,7 @@ export default subscribeToStateUpdates(state => ({
 And here is our simple SearchBar again, rewritten as a class using `AnswersHeadlessContext`.
 
 ```tsx
-import { AnswersHeadlessContext, AnswersHeadless } from '@yext/answers-headless-react';
+import { AnswersHeadlessContext, AnswersHeadless } from '@yext/search-headless-react';
 import { Component } from 'react';
 
 export default class Searcher extends Component {

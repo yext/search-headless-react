@@ -1,5 +1,5 @@
 {
-  "name": "@yext/answers-headless-react",
+  "name": "@yext/search-headless-react",
   "version": "1.2.0",
   "main": "./lib/esm/src/index.js",
   "types": "./lib/esm/src/index.d.ts",
@@ -95,6 +95,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yext/answers-headless-react.git"
+    "url": "https://github.com/yext/search-headless-react.git"
   }
 }
