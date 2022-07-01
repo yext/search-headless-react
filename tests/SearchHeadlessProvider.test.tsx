@@ -1,4 +1,4 @@
-import { AnswersHeadlessProvider, SandboxEndpoints } from '../src';
+import { SearchHeadlessProvider, SandboxEndpoints } from '../src';
 import { render } from '@testing-library/react';
 import { provideAnswersHeadless } from '@yext/answers-headless';
 
@@ -17,7 +17,7 @@ it('correctly passes through an answers config with sandbox endpoints', () => {
     endpoints: SandboxEndpoints
   };
 
-  render(<AnswersHeadlessProvider {...config}/>);
+  render(<SearchHeadlessProvider {...config}/>);
   expect(provideAnswersHeadless).toHaveBeenCalledTimes(1);
   expect(provideAnswersHeadless).toHaveBeenCalledWith(config, expect.anything());
 });

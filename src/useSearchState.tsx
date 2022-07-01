@@ -1,24 +1,24 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { State } from '@yext/answers-headless';
-import { AnswersHeadlessContext } from './AnswersHeadlessContext';
+import { SearchHeadlessContext } from './SearchHeadlessContext';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 
 export type StateSelector<T> = (s: State) => T;
 
 /**
- * Returns the Answers State returned by the map function.
+ * Returns the Search State returned by the map function.
  * Uses "use-sync-external-store/shim" to handle reading
  * and subscribing from external store in React version
  * pre-18 and 18.
  */
-export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
-  const answers = useContext(AnswersHeadlessContext);
-  if (answers.state === undefined) {
-    throw new Error('Attempted to call useAnswersState() outside of AnswersHeadlessProvider.'
-     + ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
+export function useSearchState<T>(stateSelector: StateSelector<T>): T {
+  const search = useContext(SearchHeadlessContext);
+  if (search.state === undefined) {
+    throw new Error('Attempted to call useSearchState() outside of SearchHeadlessProvider.'
+     + ' Please ensure that \'useSearchState()\' is called within an SearchHeadlessProvider component.');
   }
 
-  const getSnapshot = useCallback(() => answers.state, [answers.state]);
+  const getSnapshot = useCallback(() => search.state, [search.state]);
   const isMountedRef = useRef<boolean>(false);
   useEffect(() => {
     isMountedRef.current = true;
@@ -28,7 +28,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   }, []);
 
   const subscribe = useCallback(cb =>
-    answers.addListener({
+    search.addListener({
       valueAccessor: state => state,
       callback: () => {
         // prevent React state update on an unmounted component
@@ -37,7 +37,7 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
         }
         cb();
       }
-    }), [answers]);
+    }), [search]);
 
   const selectedState = useSyncExternalStoreWithSelector<State, T>(
     subscribe,
@@ -47,3 +47,8 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
   );
   return selectedState;
 }
+
+export type AnswersSelector<T> = StateSelector<T>;
+export function useAnswersState<T>(stateSelector: AnswersSelector<T>): T {
+  return useSearchState(stateSelector);
+};
