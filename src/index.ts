@@ -19,7 +19,7 @@ export {
 };
 
 /**
- * @deprecated Answers components should be replaced with their Search counterparts
+ * @public @deprecated Answers components should be replaced with their Search counterparts
  */
 export {
   useSearchActions as useAnswersActions,
