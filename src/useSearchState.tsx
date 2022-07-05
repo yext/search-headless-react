@@ -47,8 +47,3 @@ export function useSearchState<T>(stateSelector: StateSelector<T>): T {
   );
   return selectedState;
 }
-
-export type AnswersSelector<T> = StateSelector<T>;
-export function useAnswersState<T>(stateSelector: AnswersSelector<T>): T {
-  return useSearchState(stateSelector);
-};

@@ -12,8 +12,3 @@ export function useSearchActions(): SearchActions {
   }
   return answersHeadless;
 }
-
-export type AnswersActions = SearchActions;
-export function useAnswersActions(): AnswersActions {
-  return useSearchActions();
-}

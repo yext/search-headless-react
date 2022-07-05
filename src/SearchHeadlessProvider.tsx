@@ -32,7 +32,3 @@ export function SearchHeadlessProvider(props: PropsWithChildren<Props>): JSX.Ele
     </SearchHeadlessContext.Provider>
   );
 }
-
-export function AnswersHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
-  return SearchHeadlessProvider(props);
-}

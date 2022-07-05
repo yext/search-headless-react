@@ -1,9 +1,9 @@
-import { useSearchActions, SearchActions, useAnswersActions, AnswersActions } from './useSearchActions';
-import { useSearchState, StateSelector, useAnswersState, AnswersSelector } from './useSearchState';
-import { useSearchUtilities, SearchUtilities, useAnswersUtilities, AnswersUtilities } from './useSearchUtilities';
+import { useSearchActions, SearchActions } from './useSearchActions';
+import { useSearchState, StateSelector } from './useSearchState';
+import { useSearchUtilities, SearchUtilities } from './useSearchUtilities';
 import { subscribeToStateUpdates } from './subscribeToStateUpdates';
-import { SearchHeadlessProvider, AnswersHeadlessProvider } from './SearchHeadlessProvider';
-import { SearchHeadlessContext, AnswersHeadlessContext } from './SearchHeadlessContext';
+import { SearchHeadlessProvider } from './SearchHeadlessProvider';
+import { SearchHeadlessContext } from './SearchHeadlessContext';
 
 export * from '@yext/answers-headless';
 export {
@@ -15,13 +15,18 @@ export {
   SearchHeadlessProvider,
   SearchActions,
   SearchUtilities,
-  StateSelector,
-  useAnswersActions,
-  AnswersActions,
-  useAnswersState,
-  AnswersSelector,
-  useAnswersUtilities,
-  AnswersUtilities,
-  AnswersHeadlessProvider,
-  AnswersHeadlessContext
+  StateSelector
+};
+
+/**
+ * @deprecated Answers components should be replaced with their Search counterparts
+ */
+export {
+  useSearchActions as useAnswersActions,
+  SearchActions as AnswersActions,
+  useSearchState as useAnswersState,
+  useSearchUtilities as useAnswersUtilities,
+  SearchUtilities as AnswersUtilities,
+  SearchHeadlessProvider as AnswersHeadlessProvider,
+  SearchHeadlessContext as AnswersHeadlessContext
 };
