@@ -7,12 +7,12 @@ import isShallowEqual from './utils/isShallowEqual';
 type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any) => JSX.Element;
 
 /**
- * @deprecated
- * For class component, use `AnswersHeadlessContext` directly to dispatch actions and receive state updates.
- * For functional component, use `useAnswersAcions` and `useAnswersState` instead.
- *
  * Generates a HOC that updates a given Component's props based on the current
  * answers-headless state and a given mapping function.
+ *
+ * @deprecated
+ * For class component, use `AnswersHeadlessContext` directly to dispatch actions and receive state updates.
+ * For functional component, use `useAnswersActions` and `useAnswersState` instead.
  */
 export function subscribeToStateUpdates(
   mapStateToProps: (s: State) => Record<string, unknown>
