@@ -90,11 +90,10 @@ function SearchBar() {
 }
 ```
 
-## Class Components
+## `AnswersHeadlessContext`
+### Class Components
 
 For users that want to use class components instead of functional components, you can use the `AnswersHeadlessContext` directly to dispatch actions and receive updates from state.
-
-## `AnswersHeadlessContext`
 
 As an example, here is our simple SearchBar again, rewritten as a class using `AnswersHeadlessContext`.
 
