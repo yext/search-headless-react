@@ -1,9 +1,17 @@
 {
   "name": "@yext/answers-headless-react",
   "version": "1.2.0",
+  "description": "The official React UI Bindings layer for Answers Headless",
   "main": "./lib/esm/src/index.js",
   "license": "BSD-3-Clause",
   "types": "./lib/esm/src/index.d.ts",
+  "keywords": [
+    "search",
+    "react",
+    "hooks",
+    "react binding",
+    "yext"
+  ],
   "exports": {
     "import": "./lib/esm/src/index.js",
     "require": "./lib/commonjs/src/index.js"
