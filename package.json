@@ -5,11 +5,11 @@
   "main": "./lib/esm/src/index.js",
   "types": "./lib/esm/src/index.d.ts",
   "keywords": [
-    "Search",
-    "React",
-    "Hooks",
-    "React Binding",
-    "Yext"
+    "search",
+    "react",
+    "hooks",
+    "react binding",
+    "yext"
   ],
   "exports": {
     "import": "./lib/esm/src/index.js",
