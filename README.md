@@ -90,56 +90,51 @@ function SearchBar() {
 }
 ```
 
-## Class Components
+## `AnswersHeadlessContext`
+### Class Components
 
-For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions, and the `subscribeToStateUpdates` HOC to receive updates from state.
+For users that want to use class components instead of functional components, you can use the `AnswersHeadlessContext` directly to dispatch actions and receive updates from state.
 
-These also work with functional components.
-
-## `subscribeToStateUpdates`
-
-Here is our MostRecentSearch component again, rewritten as a class with `subscribeToStateUpdates`.
+As an example, here is our simple SearchBar again, rewritten as a class using `AnswersHeadlessContext`.
 
 ```tsx
-import { subscribeToStateUpdates } from '@yext/search-headless-react';
-import { Component } from 'react';
-
-interface Props {
-  mostRecentSearch: string
-}
-
-class MostRecentSearch extends Component<Props> {
-  render() {
-    return <div>Showing results for {this.props.mostRecentSearch}</div>;
-  }
-}
-
-export default subscribeToStateUpdates(state => ({
-  mostRecentSearch: state.query.mostRecentSearch
-}))(MostRecentSearch);
-```
-
-## `SearchHeadlessContext`
-
-And here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
-
-```tsx
-import { SearchHeadlessContext, AnswersHeadless } from '@yext/search-headless-react';
+import { AnswersHeadlessContext, AnswersHeadless, State } from '@yext/answers-headless-react';
 import { Component } from 'react';
 
 export default class Searcher extends Component {
-  static contextType = SearchHeadlessContext;
+  static contextType = AnswersHeadlessContext;
+  unsubscribeQueryListener: any;
+  state = { query: "" };
+
+  componentDidMount() {
+    const answers: AnswersHeadless = this.context;
+    this.unsubscribeQueryListener = answers.addListener({
+      valueAccessor: (state: State) => state.query.mostRecentSearch,
+      callback: newPropsFromState => {
+        this.setState({ query: newPropsFromState })
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeQueryListener();
+  }
 
   render() {
     const answers: AnswersHeadless = this.context;
-    return <input
-      onChange={evt => answers.setQuery(evt.target.value)}
-      onKeyDown={evt => {
-        if (evt.key === 'Enter') {
-          answers.executeUniversalQuery();
-        }
-      }}
-    />
+    return (
+      <div>
+        <p>Query: {this.state.query}</p>
+        <input
+          onChange={evt => answers.setQuery(evt.target.value)}
+          onKeyDown={evt => {
+            if (evt.key === 'Enter') {
+              answers.executeUniversalQuery();
+            }
+          }}
+        />
+      </div>
+    )
   }
 }
 ```

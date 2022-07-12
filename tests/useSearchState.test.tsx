@@ -145,7 +145,7 @@ it('does not trigger render on unmounted component', async () => {
     expect.stringMatching('ChildComponent'));
 });
 
-describe('uses the most recent selector',() => {
+describe('uses the most recent selector', () => {
   it('for determining the hook\'s return value', () => {
     let selector = () => 'initial selector';
 

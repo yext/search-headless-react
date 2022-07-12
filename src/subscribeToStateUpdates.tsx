@@ -1,7 +1,3 @@
-// TODO(SLAP-1485): find out how to specify generic component props without using `any`
-// I sank a 3-4 hours into this but couldn't figure out exactly how to get it to work.
-// May require use of typescript generics.
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentType, useReducer, useEffect, useContext } from 'react';
 import { State } from '@yext/answers-headless';
@@ -13,6 +9,10 @@ type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any
 /**
  * Generates a HOC that updates a given Component's props based on the current
  * answers-headless state and a given mapping function.
+ *
+ * @deprecated
+ * For class component, use `AnswersHeadlessContext` directly to dispatch actions and receive state updates.
+ * For functional component, use `useAnswersActions` and `useAnswersState` instead.
  */
 export function subscribeToStateUpdates(
   mapStateToProps: (s: State) => Record<string, unknown>

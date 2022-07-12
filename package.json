@@ -1,15 +1,25 @@
 {
   "name": "@yext/search-headless-react",
   "version": "1.2.0",
+  "description": "The official React UI Bindings layer for Answers Headless",
   "main": "./lib/esm/src/index.js",
+  "license": "BSD-3-Clause",
   "types": "./lib/esm/src/index.d.ts",
+  "keywords": [
+    "search",
+    "react",
+    "hooks",
+    "react binding",
+    "yext"
+  ],
   "exports": {
     "import": "./lib/esm/src/index.js",
     "require": "./lib/commonjs/src/index.js"
   },
   "files": [
     "lib",
-    "src"
+    "src",
+    "THIRD-PARTY-NOTICES"
   ],
   "scripts": {
     "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs",
@@ -17,7 +27,8 @@
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch -p tsconfig.esm.json",
-    "test": "eslint . && jest",
+    "lint": "eslint .",
+    "test": "jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
@@ -38,12 +49,12 @@
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
-    "@yext/eslint-config-slapshot": "^0.2.0",
+    "@yext/eslint-config-slapshot": "^0.4.0",
     "@yext/eslint-plugin-export-star": "^1.0.0",
     "eslint": "^8.11.0",
     "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
