@@ -90,56 +90,51 @@ function SearchBar() {
 }
 ```
 
+## `SearchHeadlessContext`
 ## Class Components
 
 For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions, and the `subscribeToStateUpdates` HOC to receive updates from state.
 
-These also work with functional components.
-
-## `subscribeToStateUpdates`
-
-Here is our MostRecentSearch component again, rewritten as a class with `subscribeToStateUpdates`.
+As an example, here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
 
 ```tsx
-import { subscribeToStateUpdates } from '@yext/search-headless-react';
-import { Component } from 'react';
-
-interface Props {
-  mostRecentSearch: string
-}
-
-class MostRecentSearch extends Component<Props> {
-  render() {
-    return <div>Showing results for {this.props.mostRecentSearch}</div>;
-  }
-}
-
-export default subscribeToStateUpdates(state => ({
-  mostRecentSearch: state.query.mostRecentSearch
-}))(MostRecentSearch);
-```
-
-## `SearchHeadlessContext`
-
-And here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
-
-```tsx
-import { SearchHeadlessContext, SearchHeadless } from '@yext/search-headless-react';
+import { SearchHeadlessContext, SearchHeadless, State } from '@yext/search-headless-react';
 import { Component } from 'react';
 
 export default class Searcher extends Component {
   static contextType = SearchHeadlessContext;
+  unsubscribeQueryListener: any;
+  state = { query: "" };
+
+  componentDidMount() {
+    const search: SearchHeadless = this.context;
+    this.unsubscribeQueryListener = search.addListener({
+      valueAccessor: (state: State) => state.query.mostRecentSearch,
+      callback: newPropsFromState => {
+        this.setState({ query: newPropsFromState })
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeQueryListener();
+  }
 
   render() {
     const search: SearchHeadless = this.context;
-    return <input
-      onChange={evt => search.setQuery(evt.target.value)}
-      onKeyDown={evt => {
-        if (evt.key === 'Enter') {
-          search.executeUniversalQuery();
-        }
-      }}
-    />
+    return (
+      <div>
+        <p>Query: {this.state.query}</p>
+        <input
+          onChange={evt => search.setQuery(evt.target.value)}
+          onKeyDown={evt => {
+            if (evt.key === 'Enter') {
+              search.executeUniversalQuery();
+            }
+          }}
+        />
+      </div>
+    )
   }
 }
 ```
