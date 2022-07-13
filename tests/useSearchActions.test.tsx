@@ -9,8 +9,8 @@ it('invoke useSearchActions outside of SearchHeadlessProvider', () => {
   }
   jest.spyOn(global.console, 'error').mockImplementation();
   const expectedError = new Error(
-    'Attempted to call useAnswersActions() outside of SearchHeadlessProvider.' +
-    ' Please ensure that \'useAnswersActions()\' is called within an SearchHeadlessProvider component.');
+    'Attempted to call useSearchActions() outside of SearchHeadlessProvider.' +
+    ' Please ensure that \'useSearchActions()\' is called within an SearchHeadlessProvider component.');
   expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
 });
