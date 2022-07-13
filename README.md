@@ -1,6 +1,6 @@
 # Search Headless React
 
-Search Headless React is the official React UI Bindings layer for [Search Headless](https://www.npmjs.com/package/@yext/answers-headless).
+Search Headless React is the official React UI Bindings layer for [Search Headless](https://www.npmjs.com/package/@yext/search-headless).
 
 Written in 100% TypeScript.
 
@@ -25,7 +25,7 @@ npm install @yext/search-headless-react
 
 ## Getting Started - `SearchHeadlessProvider`
 
-Search Headless React includes an `<SearchHeadlessProvider />` component, which instantiates an AnswersHeadless instance and makes it available to the rest of your app.
+Search Headless React includes an `<SearchHeadlessProvider />` component, which instantiates an SearchHeadless instance and makes it available to the rest of your app.
 
 ```tsx
 import { SearchHeadlessProvider } from '@yext/search-headless-react';
@@ -40,7 +40,7 @@ function MyApp() {
       experienceKey='your experience key'
       locale='en'
     >
-      {/* Add components that use Answers as children */}
+      {/* Add components that use Search as children */}
       <SearchBar/>
       <MostRecentSearch/>
       <UniversalResults/>
@@ -51,7 +51,7 @@ function MyApp() {
 
 ## Respond to State Updates with `useSearchState`
 
-`useSearchState` reads a value from the `AnswersHeadless` state and subscribes to updates.
+`useSearchState` reads a value from the `SearchHeadless` state and subscribes to updates.
 
 ```tsx
 import { useSearchState } from '@yext/search-headless-react';
@@ -64,11 +64,11 @@ import { useSearchState } from '@yext/search-headless-react';
 
 ## Dispatch Actions with `useSearchActions`
 
-`useSearchActions` allows you to dispatch actions using the `AnswersHeadless` instance.
+`useSearchActions` allows you to dispatch actions using the `SearchHeadless` instance.
 
 These include performing searches, getting autocomplete suggestions, and adding filters.
 
-For a full list of capabilities see [the answers-headless docs](https://www.npmjs.com/package/@yext/answers-headless).
+For a full list of capabilities see [the search-headless docs](https://www.npmjs.com/package/@yext/search-headless).
 
 ```tsx
 import { useSearchActions } from '@yext/search-headless-react';
@@ -90,58 +90,63 @@ function SearchBar() {
 }
 ```
 
-## `AnswersHeadlessContext`
-### Class Components
+## Class Components
 
-For users that want to use class components instead of functional components, you can use the `AnswersHeadlessContext` directly to dispatch actions and receive updates from state.
+For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions, and the `subscribeToStateUpdates` HOC to receive updates from state.
 
-As an example, here is our simple SearchBar again, rewritten as a class using `AnswersHeadlessContext`.
+These also work with functional components.
+
+## `subscribeToStateUpdates`
+
+Here is our MostRecentSearch component again, rewritten as a class with `subscribeToStateUpdates`.
 
 ```tsx
-import { AnswersHeadlessContext, AnswersHeadless, State } from '@yext/answers-headless-react';
+import { subscribeToStateUpdates } from '@yext/search-headless-react';
+import { Component } from 'react';
+
+interface Props {
+  mostRecentSearch: string
+}
+
+class MostRecentSearch extends Component<Props> {
+  render() {
+    return <div>Showing results for {this.props.mostRecentSearch}</div>;
+  }
+}
+
+export default subscribeToStateUpdates(state => ({
+  mostRecentSearch: state.query.mostRecentSearch
+}))(MostRecentSearch);
+```
+
+## `SearchHeadlessContext`
+
+And here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
+
+```tsx
+import { SearchHeadlessContext, SearchHeadless } from '@yext/search-headless-react';
 import { Component } from 'react';
 
 export default class Searcher extends Component {
-  static contextType = AnswersHeadlessContext;
-  unsubscribeQueryListener: any;
-  state = { query: "" };
-
-  componentDidMount() {
-    const answers: AnswersHeadless = this.context;
-    this.unsubscribeQueryListener = answers.addListener({
-      valueAccessor: (state: State) => state.query.mostRecentSearch,
-      callback: newPropsFromState => {
-        this.setState({ query: newPropsFromState })
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeQueryListener();
-  }
+  static contextType = SearchHeadlessContext;
 
   render() {
-    const answers: AnswersHeadless = this.context;
-    return (
-      <div>
-        <p>Query: {this.state.query}</p>
-        <input
-          onChange={evt => answers.setQuery(evt.target.value)}
-          onKeyDown={evt => {
-            if (evt.key === 'Enter') {
-              answers.executeUniversalQuery();
-            }
-          }}
-        />
-      </div>
-    )
+    const search: SearchHeadless = this.context;
+    return <input
+      onChange={evt => search.setQuery(evt.target.value)}
+      onKeyDown={evt => {
+        if (evt.key === 'Enter') {
+          search.executeUniversalQuery();
+        }
+      }}
+    />
   }
 }
 ```
 
 ## `useSearchUtilities`
 
-We offer a `useSearchUtilities` convenience hook for accessing `AnswersHeadless.utilities`, which offers a number of stateless utility methods.
+We offer a `useSearchUtilities` convenience hook for accessing `SearchHeadless.utilities`, which offers a number of stateless utility methods.
 The `searchUtilities` and `searchUtilitiesFromActions` variables below are equivalent.
 
 For class components, you can access `SearchUtilities` through `SearchHeadlessContext`.

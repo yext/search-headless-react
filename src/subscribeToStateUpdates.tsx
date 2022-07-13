@@ -8,11 +8,11 @@ type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any
 
 /**
  * Generates a HOC that updates a given Component's props based on the current
- * answers-headless state and a given mapping function.
+ * search-headless state and a given mapping function.
  *
  * @deprecated
- * For class component, use `AnswersHeadlessContext` directly to dispatch actions and receive state updates.
- * For functional component, use `useAnswersActions` and `useAnswersState` instead.
+ * For class component, use `SearchHeadlessContext` directly to dispatch actions and receive state updates.
+ * For functional component, use `useSearchActions` and `useSearchState` instead.
  */
 export function subscribeToStateUpdates(
   mapStateToProps: (s: State) => Record<string, unknown>
@@ -20,9 +20,9 @@ export function subscribeToStateUpdates(
   const generateSubscriberHOC: SubscriberGenerator = WrappedComponent => {
     /**
      * Keep manual track of the props mapped from state instead of storing
-     * it in the AnswersHeadlessSubscriber's state. This avoids react's batching
+     * it in the SearchHeadlessSubscriber's state. This avoids react's batching
      * of state updates, which can result in mappedState not updating immediately.
-     * This can, in turn, result in extra answers-headless listener invocations.
+     * This can, in turn, result in extra search-headless listener invocations.
      */
     let previousPropsFromState = {};
     return function AnswersHeadlessSubscriber(props: Record<string, unknown>) {
