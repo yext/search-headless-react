@@ -1,8 +1,8 @@
-import { AnswersHeadless } from '@yext/answers-headless';
+import { SearchHeadless } from '@yext/search-headless';
 import { useContext } from 'react';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 
-export type SearchUtilities = AnswersHeadless['utilities'];
+export type SearchUtilities = SearchHeadless['utilities'];
 
 export function useSearchUtilities(): SearchUtilities {
   return useContext(SearchHeadlessContext).utilities;

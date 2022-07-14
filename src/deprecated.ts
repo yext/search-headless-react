@@ -4,7 +4,7 @@ import { useSearchUtilities, SearchUtilities } from './useSearchUtilities';
 import { SearchHeadlessProvider } from './SearchHeadlessProvider';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 import { PropsWithChildren } from 'react';
-import { HeadlessConfig } from '@yext/answers-headless';
+import { HeadlessConfig } from '@yext/search-headless';
 
 type Props = HeadlessConfig & {
   verticalKey?: string,

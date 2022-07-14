@@ -1,9 +1,9 @@
 import { SearchHeadlessProvider, SandboxEndpoints } from '../src';
 import { render } from '@testing-library/react';
-import { provideAnswersHeadless } from '@yext/answers-headless';
+import { provideHeadless } from '@yext/search-headless';
 
-jest.mock('@yext/answers-headless', () => ({
-  provideAnswersHeadless: jest.fn(() => ({
+jest.mock('@yext/search-headless', () => ({
+  provideHeadless: jest.fn(() => ({
     setSessionTrackingEnabled: jest.fn(),
     setSessionId: jest.fn()
   }))
@@ -18,6 +18,6 @@ it('correctly passes through an answers config with sandbox endpoints', () => {
   };
 
   render(<SearchHeadlessProvider {...config}/>);
-  expect(provideAnswersHeadless).toHaveBeenCalledTimes(1);
-  expect(provideAnswersHeadless).toHaveBeenCalledWith(config, expect.anything());
+  expect(provideHeadless).toHaveBeenCalledTimes(1);
+  expect(provideHeadless).toHaveBeenCalledWith(config, expect.anything());
 });

@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
-import { State } from '@yext/answers-headless';
+import { State } from '@yext/search-headless';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
 

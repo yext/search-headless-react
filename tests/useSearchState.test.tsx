@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { provideAnswersHeadless, Result, State } from '@yext/answers-headless';
+import { provideHeadless, Result, State } from '@yext/search-headless';
 import { useCallback, useReducer } from 'react';
 import { SearchHeadlessContext, useSearchActions, useSearchState } from '../src';
 import { renderToString } from 'react-dom/server';
@@ -220,7 +220,7 @@ describe('uses the most recent selector', () => {
 });
 
 function createAnswersHeadless() {
-  return provideAnswersHeadless({
+  return provideHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
     locale: 'en',
