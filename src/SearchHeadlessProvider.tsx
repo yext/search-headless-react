@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { provideAnswersHeadless, AnswersHeadless, HeadlessConfig } from '@yext/answers-headless';
-import { AnswersHeadlessContext } from './AnswersHeadlessContext';
+import { SearchHeadlessContext } from './SearchHeadlessContext';
 import acquireSessionId from './utils/acquireSessionId';
 import packageJson from '../package.json';
 
@@ -11,7 +11,7 @@ type Props = HeadlessConfig & {
   sessionTrackingEnabled?: boolean
 };
 
-export function AnswersHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
+export function SearchHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
   const { children, verticalKey, sessionTrackingEnabled=true, ...answersConfig } = props;
   const additionalHttpHeaders = {
     'Client-SDK': {
@@ -27,8 +27,8 @@ export function AnswersHeadlessProvider(props: PropsWithChildren<Props>): JSX.El
     sessionId && answers.setSessionId(sessionId);
   }
   return (
-    <AnswersHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={answers}>
       {children}
-    </AnswersHeadlessContext.Provider>
+    </SearchHeadlessContext.Provider>
   );
 }

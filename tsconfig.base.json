@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@yext/answers-headless-react": ["src"]
+      "@yext/search-headless-react": ["src"]
     },
     "target": "es2015",
     "esModuleInterop": true,
