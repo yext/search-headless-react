@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { provideAnswersHeadless, AnswersHeadless, HeadlessConfig } from '@yext/answers-headless';
+import { provideHeadless, SearchHeadless, HeadlessConfig } from '@yext/search-headless';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 import acquireSessionId from './utils/acquireSessionId';
 import packageJson from '../package.json';
@@ -18,7 +18,7 @@ export function SearchHeadlessProvider(props: PropsWithChildren<Props>): JSX.Ele
       ANSWERS_HEADLESS_REACT: version
     }
   };
-  const answers: AnswersHeadless = provideAnswersHeadless(answersConfig, additionalHttpHeaders);
+  const answers: SearchHeadless = provideHeadless(answersConfig, additionalHttpHeaders);
 
   verticalKey && answers.setVertical(verticalKey);
   answers.setSessionTrackingEnabled(sessionTrackingEnabled);

@@ -5,7 +5,7 @@ import { subscribeToStateUpdates } from './subscribeToStateUpdates';
 import { SearchHeadlessProvider } from './SearchHeadlessProvider';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 
-export * from '@yext/answers-headless';
+export * from '@yext/search-headless';
 export * from './deprecated';
 export {
   SearchHeadlessContext,
