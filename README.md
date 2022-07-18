@@ -93,7 +93,7 @@ function SearchBar() {
 ## `SearchHeadlessContext`
 ## Class Components
 
-For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions, and the `subscribeToStateUpdates` HOC to receive updates from state.
+For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions and receive updates from state.
 
 As an example, here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
 
