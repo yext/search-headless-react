@@ -56,7 +56,7 @@ function MyApp() {
 ```tsx
 import { useSearchState } from '@yext/search-headless-react';
 
- default function MostRecentSearch() {
+export default function MostRecentSearch() {
   const mostRecentSearch = useSearchState(state => state.query.mostRecentSearch);
   return <div>Showing results for {mostRecentSearch}</div>;
 }
@@ -91,7 +91,7 @@ function SearchBar() {
 ```
 
 ## `SearchHeadlessContext`
-## Class Components
+### Class Components
 
 For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions and receive updates from state.
 
