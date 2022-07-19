@@ -1,19 +1,20 @@
-import { useAnswersActions, AnswersActions } from './useAnswersActions';
-import { useAnswersState, StateSelector } from './useAnswersState';
-import { useAnswersUtilities, AnswersUtilities } from './useAnswersUtilities';
+import { useSearchActions, SearchActions } from './useSearchActions';
+import { useSearchState, StateSelector } from './useSearchState';
+import { useSearchUtilities, SearchUtilities } from './useSearchUtilities';
 import { subscribeToStateUpdates } from './subscribeToStateUpdates';
-import { AnswersHeadlessProvider } from './AnswersHeadlessProvider';
-import { AnswersHeadlessContext } from './AnswersHeadlessContext';
+import { SearchHeadlessProvider } from './SearchHeadlessProvider';
+import { SearchHeadlessContext } from './SearchHeadlessContext';
 
-export * from '@yext/answers-headless';
+export * from '@yext/search-headless';
+export * from './deprecated';
 export {
-  AnswersHeadlessContext,
+  SearchHeadlessContext,
   subscribeToStateUpdates,
-  useAnswersActions,
-  useAnswersState,
-  useAnswersUtilities,
-  AnswersHeadlessProvider,
-  AnswersActions,
-  AnswersUtilities,
+  useSearchActions,
+  useSearchState,
+  useSearchUtilities,
+  SearchHeadlessProvider,
+  SearchActions,
+  SearchUtilities,
   StateSelector
 };

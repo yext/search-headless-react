@@ -1,19 +1,19 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { provideAnswersHeadless, Result, State } from '@yext/answers-headless';
+import { provideHeadless, Result, State } from '@yext/search-headless';
 import { useCallback, useReducer } from 'react';
-import { AnswersHeadlessContext, useAnswersActions, useAnswersState } from '../src';
+import { SearchHeadlessContext, useSearchActions, useSearchState } from '../src';
 import { renderToString } from 'react-dom/server';
 
-it('invoke useAnswersState outside of AnswersHeadlessProvider', () => {
+it('invoke useSearchState outside of SearchHeadlessProvider', () => {
   function Test(): JSX.Element {
-    const query = useAnswersState(state => state.query.input);
+    const query = useSearchState(state => state.query.input);
     return <div>{query}</div>;
   }
   jest.spyOn(global.console, 'error').mockImplementation();
   const expectedError = new Error(
-    'Attempted to call useAnswersState() outside of AnswersHeadlessProvider.' +
-    ' Please ensure that \'useAnswersState()\' is called within an AnswersHeadlessProvider component.');
+    'Attempted to call useSearchState() outside of SearchHeadlessProvider.' +
+    ' Please ensure that \'useSearchState()\' is called within an SearchHeadlessProvider component.');
   expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
 });
@@ -24,14 +24,14 @@ it('Retrieves state snapshot during server side rendering and hydration process'
     answers.setVertical('anotherFakeKey');
   });
   function Test(): JSX.Element {
-    const verticalKey = useAnswersState(state => state.vertical.verticalKey);
+    const verticalKey = useSearchState(state => state.vertical.verticalKey);
     return <button onClick={mockedOnClick}>{verticalKey}</button>;
   }
   function App(): JSX.Element {
     return (
-      <AnswersHeadlessContext.Provider value={answers}>
+      <SearchHeadlessContext.Provider value={answers}>
         <Test />
-      </AnswersHeadlessContext.Provider>
+      </SearchHeadlessContext.Provider>
     );
   }
   const renderOnServer = () => renderToString(<App />);
@@ -54,8 +54,8 @@ it('does not perform extra renders/listener registrations for nested components'
   const childStateUpdates: string[] = [];
   let pendingVerticalQuery;
   function Test() {
-    const actions = useAnswersActions();
-    const results = useAnswersState(state => {
+    const actions = useSearchActions();
+    const results = useSearchState(state => {
       return state?.vertical?.results;
     }) || [];
     parentStateUpdates.push(results);
@@ -73,7 +73,7 @@ it('does not perform extra renders/listener registrations for nested components'
   }
 
   function Child({ results }: { results: Result[] }) {
-    const queryId = useAnswersState(state => {
+    const queryId = useSearchState(state => {
       return state.query.queryId;
     }) || '';
     childStateUpdates.push(queryId);
@@ -92,9 +92,9 @@ it('does not perform extra renders/listener registrations for nested components'
   expect(parentStateUpdates).toHaveLength(0);
   expect(childStateUpdates).toHaveLength(0);
   render(
-    <AnswersHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={answers}>
       <Test />
-    </AnswersHeadlessContext.Provider>
+    </SearchHeadlessContext.Provider>
   );
   expect(addListenerSpy).toHaveBeenCalledTimes(1);
   expect(parentStateUpdates).toHaveLength(1);
@@ -120,20 +120,20 @@ it('does not perform extra renders/listener registrations for nested components'
 it('does not trigger render on unmounted component', async () => {
   const consoleSpy = jest.spyOn(console, 'error');
   function ParentComponent() {
-    const results = useAnswersState(state => state.universal?.verticals) || [];
+    const results = useSearchState(state => state.universal?.verticals) || [];
     return <div>{results.map((_, index) => <ChildComponent key={index}/>)}</div>;
   }
 
   function ChildComponent() {
-    useAnswersState(state => state);
+    useSearchState(state => state);
     return <div>child component</div>;
   }
 
   const answers = createAnswersHeadless();
   render(
-    <AnswersHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={answers}>
       <ParentComponent/>
-    </AnswersHeadlessContext.Provider>
+    </SearchHeadlessContext.Provider>
   );
   act(() => answers.setQuery('resultsWithFilter'));
   await act( async () => { await answers.executeUniversalQuery(); });
@@ -145,12 +145,12 @@ it('does not trigger render on unmounted component', async () => {
     expect.stringMatching('ChildComponent'));
 });
 
-describe('uses the most recent selector',() => {
+describe('uses the most recent selector', () => {
   it('for determining the hook\'s return value', () => {
     let selector = () => 'initial selector';
 
     function Test() {
-      const selectedState: string = useAnswersState(selector);
+      const selectedState: string = useSearchState(selector);
       const [, triggerRender] = useReducer(s => s + 1, 0);
 
       return (
@@ -163,9 +163,9 @@ describe('uses the most recent selector',() => {
 
     const answers = createAnswersHeadless();
     render(
-      <AnswersHeadlessContext.Provider value={answers}>
+      <SearchHeadlessContext.Provider value={answers}>
         <Test />
-      </AnswersHeadlessContext.Provider>
+      </SearchHeadlessContext.Provider>
     );
     expect(screen.getByTestId('selected-state')).toHaveTextContent('initial selector');
 
@@ -182,7 +182,7 @@ describe('uses the most recent selector',() => {
     const stateUpdates: (string | undefined | number)[] = [];
 
     function Test() {
-      const selectedState: string | undefined | number = useAnswersState(selector);
+      const selectedState: string | undefined | number = useSearchState(selector);
       const [, triggerRender] = useReducer(s => s + 1, 0);
       stateUpdates.push(selectedState);
 
@@ -198,9 +198,9 @@ describe('uses the most recent selector',() => {
     answers.setQuery('initial value');
     expect(stateUpdates).toHaveLength(0);
     render(
-      <AnswersHeadlessContext.Provider value={answers}>
+      <SearchHeadlessContext.Provider value={answers}>
         <Test />
-      </AnswersHeadlessContext.Provider>
+      </SearchHeadlessContext.Provider>
     );
     expect(stateUpdates).toEqual(['initial value']);
 
@@ -220,7 +220,7 @@ describe('uses the most recent selector',() => {
 });
 
 function createAnswersHeadless() {
-  return provideAnswersHeadless({
+  return provideHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
     locale: 'en',
