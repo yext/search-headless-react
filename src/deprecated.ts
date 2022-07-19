@@ -39,12 +39,12 @@ export function useAnswersState<T>(stateSelector: StateSelector<T>): T {
 }
 
 /**
- * @deprecated useAnswersUtilities has been deprecated and repalced by useSearchUtilities
+ * @deprecated useAnswersUtilities has been deprecated and replaced by useSearchUtilities
  */
 export function useAnswersUtilities(): SearchUtilities { return useSearchUtilities(); }
 
 /**
- * @deprecated AnswersHeadlessProvider has been deprecated and replaced by SearfchHeadlessProvider
+ * @deprecated AnswersHeadlessProvider has been deprecated and replaced by SearchHeadlessProvider
  */
 export function AnswersHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
   return SearchHeadlessProvider(props);

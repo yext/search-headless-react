@@ -11,8 +11,8 @@ type SubscriberGenerator = (WrappedComponent: ComponentType<any>) => (props: any
  * search-headless state and a given mapping function.
  *
  * @deprecated
- * For class component, use `SearchHeadlessContext` directly to dispatch actions and receive state updates.
- * For functional component, use `useSearchActions` and `useSearchState` instead.
+ * For class components, use `SearchHeadlessContext` directly to dispatch actions and receive state updates.
+ * For functional components, use `useSearchActions` and `useSearchState` instead.
  */
 export function subscribeToStateUpdates(
   mapStateToProps: (s: State) => Record<string, unknown>
