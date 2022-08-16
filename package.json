@@ -1,6 +1,6 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "1.4.0",
+  "version": "2.0.0-alpha.151",
   "description": "The official React UI Bindings layer for Search Headless",
   "main": "./lib/esm/src/index.js",
   "license": "BSD-3-Clause",
