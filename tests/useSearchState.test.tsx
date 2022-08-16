@@ -21,7 +21,7 @@ it('invoke useSearchState outside of SearchHeadlessProvider', () => {
 it('Retrieves state snapshot during server side rendering and hydration process', () => {
   const answers = createAnswersHeadless();
   const mockedOnClick= jest.fn().mockImplementation(() => {
-    answers.setVertical('anotherFakeKey');
+    answers.setVertical('products');
   });
   function Test(): JSX.Element {
     const verticalKey = useSearchState(state => state.vertical.verticalKey);
@@ -39,14 +39,14 @@ it('Retrieves state snapshot during server side rendering and hydration process'
 
   const container = document.body.appendChild(document.createElement('div'));
   container.innerHTML = renderOnServer();
-  userEvent.click(screen.getByText('fakeVerticalKey'));
+  userEvent.click(screen.getByText('people'));
   expect(mockedOnClick).toBeCalledTimes(0);
 
   //attach event listeners to the existing markup
   render(<App />, { container, hydrate: true });
-  userEvent.click(screen.getByText('fakeVerticalKey'));
+  userEvent.click(screen.getByText('people'));
   expect(mockedOnClick).toBeCalledTimes(1);
-  expect(screen.getByText('anotherFakeKey')).toBeDefined();
+  expect(screen.getByText('products')).toBeDefined();
 });
 
 it('does not perform extra renders/listener registrations for nested components', async () => {
@@ -60,7 +60,7 @@ it('does not perform extra renders/listener registrations for nested components'
     }) || [];
     parentStateUpdates.push(results);
     const search = useCallback(() => {
-      actions.setQuery('iphone');
+      actions.setQuery('amani');
       pendingVerticalQuery = actions.executeVerticalQuery();
     }, [actions]);
 
@@ -221,9 +221,9 @@ describe('uses the most recent selector', () => {
 
 function createAnswersHeadless() {
   return provideHeadless({
-    apiKey: 'fake api key',
-    experienceKey: 'fake exp key',
+    apiKey: '2d8c550071a64ea23e263118a2b0680b',
+    experienceKey: 'slanswers',
     locale: 'en',
-    verticalKey: 'fakeVerticalKey'
+    verticalKey: 'people'
   });
 }
