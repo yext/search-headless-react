@@ -19,7 +19,7 @@ it('invoke useSearchState outside of SearchHeadlessProvider', () => {
 });
 
 it('Retrieves state snapshot during server side rendering and hydration process', () => {
-  const answers = createAnswersHeadless();
+  const answers = createSearchHeadless();
   const mockedOnClick= jest.fn().mockImplementation(() => {
     answers.setVertical('anotherFakeKey');
   });
@@ -86,7 +86,7 @@ it('does not perform extra renders/listener registrations for nested components'
     );
   }
 
-  const answers = createAnswersHeadless();
+  const answers = createSearchHeadless();
   const addListenerSpy = jest.spyOn(answers, 'addListener');
   expect(addListenerSpy).toHaveBeenCalledTimes(0);
   expect(parentStateUpdates).toHaveLength(0);
@@ -129,7 +129,7 @@ it('does not trigger render on unmounted component', async () => {
     return <div>child component</div>;
   }
 
-  const answers = createAnswersHeadless();
+  const answers = createSearchHeadless();
   render(
     <SearchHeadlessContext.Provider value={answers}>
       <ParentComponent/>
@@ -161,7 +161,7 @@ describe('uses the most recent selector', () => {
       );
     }
 
-    const answers = createAnswersHeadless();
+    const answers = createSearchHeadless();
     render(
       <SearchHeadlessContext.Provider value={answers}>
         <Test />
@@ -194,7 +194,7 @@ describe('uses the most recent selector', () => {
       );
     }
 
-    const answers = createAnswersHeadless();
+    const answers = createSearchHeadless();
     answers.setQuery('initial value');
     expect(stateUpdates).toHaveLength(0);
     render(
@@ -219,7 +219,7 @@ describe('uses the most recent selector', () => {
   });
 });
 
-function createAnswersHeadless() {
+function createSearchHeadless() {
   return provideHeadless({
     apiKey: 'fake api key',
     experienceKey: 'fake exp key',
