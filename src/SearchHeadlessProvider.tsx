@@ -18,16 +18,16 @@ export function SearchHeadlessProvider(props: PropsWithChildren<Props>): JSX.Ele
       ANSWERS_HEADLESS_REACT: version
     }
   };
-  const answers: SearchHeadless = provideHeadless(searchConfig, additionalHttpHeaders);
+  const search: SearchHeadless = provideHeadless(searchConfig, additionalHttpHeaders);
 
-  verticalKey && answers.setVertical(verticalKey);
-  answers.setSessionTrackingEnabled(sessionTrackingEnabled);
+  verticalKey && search.setVertical(verticalKey);
+  search.setSessionTrackingEnabled(sessionTrackingEnabled);
   if (sessionTrackingEnabled) {
     const sessionId = acquireSessionId();
-    sessionId && answers.setSessionId(sessionId);
+    sessionId && search.setSessionId(sessionId);
   }
   return (
-    <SearchHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={search}>
       {children}
     </SearchHeadlessContext.Provider>
   );

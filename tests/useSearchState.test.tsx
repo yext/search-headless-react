@@ -19,9 +19,9 @@ it('invoke useSearchState outside of SearchHeadlessProvider', () => {
 });
 
 it('Retrieves state snapshot during server side rendering and hydration process', () => {
-  const answers = createSearchHeadless();
+  const search = createSearchHeadless();
   const mockedOnClick= jest.fn().mockImplementation(() => {
-    answers.setVertical('anotherFakeKey');
+    search.setVertical('anotherFakeKey');
   });
   function Test(): JSX.Element {
     const verticalKey = useSearchState(state => state.vertical.verticalKey);
@@ -29,7 +29,7 @@ it('Retrieves state snapshot during server side rendering and hydration process'
   }
   function App(): JSX.Element {
     return (
-      <SearchHeadlessContext.Provider value={answers}>
+      <SearchHeadlessContext.Provider value={search}>
         <Test />
       </SearchHeadlessContext.Provider>
     );
@@ -86,13 +86,13 @@ it('does not perform extra renders/listener registrations for nested components'
     );
   }
 
-  const answers = createSearchHeadless();
-  const addListenerSpy = jest.spyOn(answers, 'addListener');
+  const search = createSearchHeadless();
+  const addListenerSpy = jest.spyOn(search, 'addListener');
   expect(addListenerSpy).toHaveBeenCalledTimes(0);
   expect(parentStateUpdates).toHaveLength(0);
   expect(childStateUpdates).toHaveLength(0);
   render(
-    <SearchHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={search}>
       <Test />
     </SearchHeadlessContext.Provider>
   );
@@ -129,16 +129,16 @@ it('does not trigger render on unmounted component', async () => {
     return <div>child component</div>;
   }
 
-  const answers = createSearchHeadless();
+  const search = createSearchHeadless();
   render(
-    <SearchHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={search}>
       <ParentComponent/>
     </SearchHeadlessContext.Provider>
   );
-  act(() => answers.setQuery('resultsWithFilter'));
-  await act( async () => { await answers.executeUniversalQuery(); });
-  act(() => answers.setQuery('default'));
-  await act( async () => { await answers.executeUniversalQuery(); });
+  act(() => search.setQuery('resultsWithFilter'));
+  await act( async () => { await search.executeUniversalQuery(); });
+  act(() => search.setQuery('default'));
+  await act( async () => { await search.executeUniversalQuery(); });
   expect(consoleSpy).not.toHaveBeenCalledWith(
     expect.stringMatching('Can\'t perform a React state update on an unmounted component'),
     expect.anything(),
@@ -161,9 +161,9 @@ describe('uses the most recent selector', () => {
       );
     }
 
-    const answers = createSearchHeadless();
+    const search = createSearchHeadless();
     render(
-      <SearchHeadlessContext.Provider value={answers}>
+      <SearchHeadlessContext.Provider value={search}>
         <Test />
       </SearchHeadlessContext.Provider>
     );
@@ -194,11 +194,11 @@ describe('uses the most recent selector', () => {
       );
     }
 
-    const answers = createSearchHeadless();
-    answers.setQuery('initial value');
+    const search = createSearchHeadless();
+    search.setQuery('initial value');
     expect(stateUpdates).toHaveLength(0);
     render(
-      <SearchHeadlessContext.Provider value={answers}>
+      <SearchHeadlessContext.Provider value={search}>
         <Test />
       </SearchHeadlessContext.Provider>
     );
@@ -213,7 +213,7 @@ describe('uses the most recent selector', () => {
     expect(stateUpdates).toEqual(['initial value', 1]);
 
     act(() => {
-      answers.setContext('trigger a state update that would not update the initial selector');
+      search.setContext('trigger a state update that would not update the initial selector');
     });
     expect(stateUpdates).toEqual(['initial value', 1, 3]);
   });
