@@ -9,7 +9,7 @@ jest.mock('@yext/search-headless', () => ({
   }))
 }));
 
-it('correctly passes through an answers config with sandbox endpoints', () => {
+it('correctly passes through a search config with sandbox endpoints', () => {
   const config = {
     apiKey: '<apiKey>',
     experienceKey: '<experienceKey>',

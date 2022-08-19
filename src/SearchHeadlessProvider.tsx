@@ -12,22 +12,22 @@ type Props = HeadlessConfig & {
 };
 
 export function SearchHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
-  const { children, verticalKey, sessionTrackingEnabled=true, ...answersConfig } = props;
+  const { children, verticalKey, sessionTrackingEnabled=true, ...searchConfig } = props;
   const additionalHttpHeaders = {
     'Client-SDK': {
       ANSWERS_HEADLESS_REACT: version
     }
   };
-  const answers: SearchHeadless = provideHeadless(answersConfig, additionalHttpHeaders);
+  const search: SearchHeadless = provideHeadless(searchConfig, additionalHttpHeaders);
 
-  verticalKey && answers.setVertical(verticalKey);
-  answers.setSessionTrackingEnabled(sessionTrackingEnabled);
+  verticalKey && search.setVertical(verticalKey);
+  search.setSessionTrackingEnabled(sessionTrackingEnabled);
   if (sessionTrackingEnabled) {
     const sessionId = acquireSessionId();
-    sessionId && answers.setSessionId(sessionId);
+    sessionId && search.setSessionId(sessionId);
   }
   return (
-    <SearchHeadlessContext.Provider value={answers}>
+    <SearchHeadlessContext.Provider value={search}>
       {children}
     </SearchHeadlessContext.Provider>
   );
