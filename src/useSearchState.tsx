@@ -14,8 +14,8 @@ export type StateSelector<T> = (s: State) => T;
 export function useSearchState<T>(stateSelector: StateSelector<T>): T {
   const search = useContext(SearchHeadlessContext);
   if (search.state === undefined) {
-    throw new Error('Attempted to call useSearchState() outside of SearchHeadlessProvider.'
-     + ' Please ensure that \'useSearchState()\' is called within an SearchHeadlessProvider component.');
+    throw new Error('Attempted to call useSearchState() outside of a SearchHeadlessContext.'
+     + ' Please ensure that \'useSearchState()\' is called within the scope of a SearchHeadlessContext.');
   }
 
   const getSnapshot = useCallback(() => search.state, [search.state]);

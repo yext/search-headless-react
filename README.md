@@ -23,29 +23,84 @@ Written in 100% TypeScript.
 npm install @yext/search-headless-react
 ```
 
-## Getting Started - `SearchHeadlessProvider`
+## Getting Started - `SearchHeadlessContext`
 
-Search Headless React includes an `<SearchHeadlessProvider />` component, which instantiates an SearchHeadless instance and makes it available to the rest of your app.
+This Context object provides access to a `SearchHeadless` instance. Using this instance, users can dispatch actions related to Search, or create
+`SearchHeadless` state listeners. To create an instance of Headless, this library exports a `provideHeadless` method. The newly created instance
+can then be passed to the `SearchHeadlessContext.Provider`:
 
 ```tsx
-import { SearchHeadlessProvider } from '@yext/search-headless-react';
+import { SearchHeadlessContext, SearchHeadless } from '@yext/search-headless-react';
 import SearchBar from './SearchBar';
 import MostRecentSearch from './MostRecentSearch';
 import UniversalResults from './UniversalResults';
 
 function MyApp() {
-  return (
-    <SearchHeadlessProvider
+  const headless: SearchHeadless = provideHeadless({
       apiKey='your api key'
       experienceKey='your experience key'
       locale='en'
-    >
+  });
+
+  return (
+    <SearchHeadlessContext.Provider>
       {/* Add components that use Search as children */}
       <SearchBar/>
       <MostRecentSearch/>
       <UniversalResults/>
-    </SearchHeadlessProvider>
+    </SearchHeadlessContext.Provider>
   );
+}
+```
+
+Functional Components enclosed within the Provider have access to two hooks: `useSearchState` and `useSearchActions`. These hooks will be described in
+more detail below.
+
+### Class Components
+
+For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions and receive updates from state.
+
+As an example, here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
+
+```tsx
+import { SearchHeadlessContext, SearchHeadless, State } from '@yext/search-headless-react';
+import { Component } from 'react';
+
+export default class Searcher extends Component {
+  static contextType = SearchHeadlessContext;
+  unsubscribeQueryListener: any;
+  state = { query: "" };
+
+  componentDidMount() {
+    const search: SearchHeadless = this.context;
+    this.unsubscribeQueryListener = search.addListener({
+      valueAccessor: (state: State) => state.query.mostRecentSearch,
+      callback: newPropsFromState => {
+        this.setState({ query: newPropsFro
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeQueryListener();
+  }
+
+  render() {
+    const search: SearchHeadless = this.context;
+    return (
+      <div>
+        <p>Query: {this.state.query}</p>
+        <input
+          onChange={evt => search.setQuery(evt.target.value)}
+          onKeyDown={evt => {
+            if (evt.key === 'Enter') {
+              search.executeUniversalQuery();
+            }
+          }}
+        />
+      </div>
+    )
+  }
 }
 ```
 
@@ -87,55 +142,6 @@ function SearchBar() {
   }, [search]);
 
   return <input onChange={handleTyping} onKeyDown={handleKeyDown}/>;
-}
-```
-
-## `SearchHeadlessContext`
-### Class Components
-
-For users that want to use class components instead of functional components, you can use the `SearchHeadlessContext` directly to dispatch actions and receive updates from state.
-
-As an example, here is our simple SearchBar again, rewritten as a class using `SearchHeadlessContext`.
-
-```tsx
-import { SearchHeadlessContext, SearchHeadless, State } from '@yext/search-headless-react';
-import { Component } from 'react';
-
-export default class Searcher extends Component {
-  static contextType = SearchHeadlessContext;
-  unsubscribeQueryListener: any;
-  state = { query: "" };
-
-  componentDidMount() {
-    const search: SearchHeadless = this.context;
-    this.unsubscribeQueryListener = search.addListener({
-      valueAccessor: (state: State) => state.query.mostRecentSearch,
-      callback: newPropsFromState => {
-        this.setState({ query: newPropsFromState })
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeQueryListener();
-  }
-
-  render() {
-    const search: SearchHeadless = this.context;
-    return (
-      <div>
-        <p>Query: {this.state.query}</p>
-        <input
-          onChange={evt => search.setQuery(evt.target.value)}
-          onKeyDown={evt => {
-            if (evt.key === 'Enter') {
-              search.executeUniversalQuery();
-            }
-          }}
-        />
-      </div>
-    )
-  }
 }
 ```
 

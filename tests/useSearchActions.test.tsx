@@ -1,7 +1,7 @@
 import { useSearchActions } from '../src';
 import { render } from '@testing-library/react';
 
-it('invoke useSearchActions outside of SearchHeadlessProvider', () => {
+it('invoke useSearchActions outside of SearchHeadlessContext', () => {
   function Test(): JSX.Element {
     const searchActions = useSearchActions();
     searchActions.setQuery('');
@@ -9,8 +9,8 @@ it('invoke useSearchActions outside of SearchHeadlessProvider', () => {
   }
   jest.spyOn(global.console, 'error').mockImplementation();
   const expectedError = new Error(
-    'Attempted to call useSearchActions() outside of SearchHeadlessProvider.' +
-    ' Please ensure that \'useSearchActions()\' is called within an SearchHeadlessProvider component.');
+    'Attempted to call useSearchActions() outside of a SearchHeadlessContext.' +
+    ' Please ensure that \'useSearchActions()\' is called within the scope of a SearchHeadlessContext.');
   expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
 });

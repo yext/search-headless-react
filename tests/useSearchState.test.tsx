@@ -5,15 +5,15 @@ import { useCallback, useReducer } from 'react';
 import { SearchHeadlessContext, useSearchActions, useSearchState } from '../src';
 import { renderToString } from 'react-dom/server';
 
-it('invoke useSearchState outside of SearchHeadlessProvider', () => {
+it('invoke useSearchState outside of SearchHeadlessContext', () => {
   function Test(): JSX.Element {
     const query = useSearchState(state => state.query.input);
     return <div>{query}</div>;
   }
   jest.spyOn(global.console, 'error').mockImplementation();
   const expectedError = new Error(
-    'Attempted to call useSearchState() outside of SearchHeadlessProvider.' +
-    ' Please ensure that \'useSearchState()\' is called within an SearchHeadlessProvider component.');
+    'Attempted to call useSearchState() outside of a SearchHeadlessContext.' +
+    ' Please ensure that \'useSearchState()\' is called within the scope of a SearchHeadlessContext.');
   expect(() => render(<Test />)).toThrow(expectedError);
   jest.clearAllMocks();
 });
