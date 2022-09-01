@@ -1,23 +1,19 @@
-import { SearchHeadlessProvider, SandboxEndpoints } from '../src';
+import { SearchHeadlessProvider } from '../src';
 import { render } from '@testing-library/react';
-import { provideHeadless } from '@yext/search-headless';
+import { provideHeadless, SearchHeadless } from '@yext/search-headless';
 
 jest.mock('@yext/search-headless', () => ({
-  provideHeadless: jest.fn(() => ({
-    setSessionTrackingEnabled: jest.fn(),
-    setSessionId: jest.fn()
-  }))
+  provideHeadless: jest.fn(() => { return {}; })
 }));
 
-it('correctly passes through a search config with sandbox endpoints', () => {
+it('does not change anything about the supplied Headless instance', () => {
   const config = {
     apiKey: '<apiKey>',
     experienceKey: '<experienceKey>',
-    locale: 'en',
-    endpoints: SandboxEndpoints
+    locale: 'en'
   };
+  const searcher: SearchHeadless = provideHeadless(config);
 
-  render(<SearchHeadlessProvider {...config}/>);
-  expect(provideHeadless).toHaveBeenCalledTimes(1);
-  expect(provideHeadless).toHaveBeenCalledWith(config, expect.anything());
+  expect(
+    () => render(<SearchHeadlessProvider searcher={searcher}></SearchHeadlessProvider>)).not.toThrowError();
 });
