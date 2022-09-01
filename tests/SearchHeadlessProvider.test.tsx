@@ -6,7 +6,7 @@ jest.mock('@yext/search-headless', () => ({
   provideHeadless: jest.fn(() => { return {}; })
 }));
 
-it('does not change anything about the supplied Headless instance', () => {
+it('Provider does not invoke any methods or attributes of the Searcher', () => {
   const config = {
     apiKey: '<apiKey>',
     experienceKey: '<experienceKey>',
@@ -16,4 +16,17 @@ it('does not change anything about the supplied Headless instance', () => {
 
   expect(
     () => render(<SearchHeadlessProvider searcher={searcher}></SearchHeadlessProvider>)).not.toThrowError();
+});
+
+it('Provider does decorate any methods in the Searcher', () => {
+  const config = {
+    apiKey: '<apiKey>',
+    experienceKey: '<experienceKey>',
+    locale: 'en'
+  };
+  const searcher: SearchHeadless = provideHeadless(config);
+  const searcherProxy = new Proxy(searcher, { set() { throw new Error(); } });
+
+  expect(() => render(
+    <SearchHeadlessProvider searcher={searcherProxy}></SearchHeadlessProvider>)).not.toThrowError();
 });
