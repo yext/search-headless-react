@@ -25,21 +25,20 @@ npm install @yext/search-headless-react
 
 ## Getting Started - `SearchHeadlessProvider`
 
-Search Headless React includes an `<SearchHeadlessProvider />` component, which instantiates an SearchHeadless instance and makes it available to the rest of your app.
+Search Headless React includes an `<SearchHeadlessProvider />` component, which takes in a `SearchHeadless` instance and makes it available to the rest of your app. `SearchHeadless` instance is created
+using `provideHeadless(...)` with the appropriate credentials:
 
 ```tsx
-import { SearchHeadlessProvider } from '@yext/search-headless-react';
+import { provideHeadless, SearchHeadlessProvider } from '@yext/search-headless-react';
 import SearchBar from './SearchBar';
 import MostRecentSearch from './MostRecentSearch';
 import UniversalResults from './UniversalResults';
 
+const searcher = provideHeadless(config);
+
 function MyApp() {
   return (
-    <SearchHeadlessProvider
-      apiKey='your api key'
-      experienceKey='your experience key'
-      locale='en'
-    >
+    <SearchHeadlessProvider searcher={searcher}>
       {/* Add components that use Search as children */}
       <SearchBar/>
       <MostRecentSearch/>
