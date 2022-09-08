@@ -5,7 +5,7 @@ import { universalQueryResponse, universalQueryResponseWithFilters } from './res
 
 // Any unhandled requests are dropped and logged as warnings
 const handlers = [
-  rest.get(/answers\/vertical\/query/, (req, res, ctx) => {
+  rest.get(/search\/vertical\/query/, (req, res, ctx) => {
     const input = req.url.searchParams.get('input');
     switch (input) {
       case 'resultsWithNlpFilter':
@@ -18,7 +18,7 @@ const handlers = [
         );
     }
   }),
-  rest.get(/answers\/query/, (req, res, ctx) => {
+  rest.get(/search\/query/, (req, res, ctx) => {
     const input = req.url.searchParams.get('input');
     switch (input) {
       case 'resultsWithFilter':

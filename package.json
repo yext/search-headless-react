@@ -1,10 +1,10 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "The official React UI Bindings layer for Search Headless",
-  "main": "./lib/esm/src/index.js",
+  "main": "./lib/esm/index.js",
   "license": "BSD-3-Clause",
-  "types": "./lib/esm/src/index.d.ts",
+  "types": "./lib/esm/index.d.ts",
   "keywords": [
     "search",
     "react",
@@ -13,8 +13,8 @@
     "yext"
   ],
   "exports": {
-    "import": "./lib/esm/src/index.js",
-    "require": "./lib/commonjs/src/index.js"
+    "import": "./lib/esm/index.js",
+    "require": "./lib/commonjs/index.js"
   },
   "files": [
     "lib",
@@ -22,7 +22,7 @@
     "THIRD-PARTY-NOTICES"
   ],
   "scripts": {
-    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs",
+    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs && npm run generate-notices",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "prepublishOnly": "npm run build",
@@ -32,7 +32,7 @@
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
-    "@yext/search-headless": "^1.4.0",
+    "@yext/search-headless": "^2.0.0",
     "use-sync-external-store": "^1.1.0"
   },
   "devDependencies": {
