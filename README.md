@@ -1,4 +1,4 @@
-# Search Headless React
+# Search Headless React 
 
 Search Headless React is the official React UI Bindings layer for [Search Headless](https://www.npmjs.com/package/@yext/search-headless).
 
