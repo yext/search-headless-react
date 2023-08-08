@@ -5,6 +5,7 @@
   "main": "./lib/esm/index.js",
   "license": "BSD-3-Clause",
   "types": "./lib/esm/index.d.ts",
+  "type": "module",
   "keywords": [
     "search",
     "react",
