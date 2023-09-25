@@ -1,10 +1,11 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.3.2",
+  "version": "2.4.0-alpha.4",
   "description": "The official React UI Bindings layer for Search Headless",
-  "main": "./lib/esm/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "license": "BSD-3-Clause",
-  "types": "./lib/esm/index.d.ts",
+  "types": "./dist/index.d.ts",
   "keywords": [
     "search",
     "react",
@@ -13,18 +14,20 @@
     "yext"
   ],
   "exports": {
-    "import": "./lib/esm/index.js",
-    "require": "./lib/commonjs/index.js"
+    "import": "./dist/index.mjs",
+    "import.types": "./dist/index.d.ts",
+    "require": "./dist/index.js",
+    "require.types": "./dist/index.d.ts"
   },
   "files": [
     "lib",
+    "dist",
     "src",
     "THIRD-PARTY-NOTICES"
   ],
   "scripts": {
-    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs && npm run generate-notices",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "rm -rf lib/** && rm -rf dist/** && npm run build:js && npm run generate-notices",
+    "build:js": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && tsup src/index.ts --dts --sourcemap --format esm,cjs",
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch -p tsconfig.esm.json",
     "lint": "eslint .",
@@ -67,6 +70,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "ts-jest": "^28.0.4",
+    "tsup": "^7.2.0",
     "typescript": "^4.5.4",
     "uuid": "^8.3.2"
   },
