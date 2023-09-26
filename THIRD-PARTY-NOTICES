@@ -178,7 +178,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - cross-fetch@3.1.6
+ - cross-fetch@3.1.8
 
 This package contains the following license and notice below:
 
@@ -384,7 +384,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - node-fetch@2.6.11
+ - node-fetch@2.7.0
 
 This package contains the following license and notice below:
 
