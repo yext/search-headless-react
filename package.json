@@ -1,9 +1,9 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.4.0-alpha.5",
+  "version": "2.4.0-alpha.6",
   "description": "The official React UI Bindings layer for Search Headless",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "type": "module",
   "license": "BSD-3-Clause",
   "types": "./dist/index.d.ts",
@@ -15,10 +15,10 @@
     "yext"
   ],
   "exports": {
-    "import": "./dist/index.mjs",
+    "import": "./dist/index.js",
     "import.types": "./dist/index.d.ts",
-    "require": "./dist/index.js",
-    "require.types": "./dist/index.d.ts"
+    "require": "./dist/index.cjs",
+    "require.types": "./dist/index.d.cts"
   },
   "files": [
     "lib",
