@@ -112,8 +112,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/yext/search-headless-react.git"
-  },
-  "optionalDependencies": {
-    "esbuild-android-64": "^0.15.18"
   }
 }
