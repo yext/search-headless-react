@@ -1,10 +1,11 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.4.0-alpha.6",
+  "version": "2.4.0-beta.0",
   "description": "The official React UI Bindings layer for Search Headless",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "type": "module",
+  "sideEffects": false,
   "license": "BSD-3-Clause",
   "types": "./dist/index.d.ts",
   "keywords": [
@@ -28,7 +29,9 @@
   ],
   "scripts": {
     "build": "rm -rf lib/** && rm -rf dist/** && npm run build:js && npm run generate-notices",
-    "build:js": "tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && tsup src/index.ts --dts --sourcemap --format esm,cjs",
+    "build:js": "tsup src/index.ts --dts --sourcemap --format esm,cjs && npm run create:lib-esm && npm run create:lib-commonjs",
+    "create:lib-esm": "mkdir -p lib/esm && cp dist/index.js dist/index.d.ts dist/index.js.map lib/esm",
+    "create:lib-commonjs": "mkdir -p lib/commonjs && cp dist/index.cjs dist/index.d.cts dist/index.cjs.map lib/commonjs",
     "prepublishOnly": "npm run build",
     "dev": "tsc --watch -p tsconfig.esm.json",
     "lint": "eslint .",
