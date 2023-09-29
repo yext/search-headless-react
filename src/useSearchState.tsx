@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { State } from '@yext/search-headless';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
-import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector';
+import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/shim/with-selector.js';
 
 export type StateSelector<T> = (s: State) => T;
 

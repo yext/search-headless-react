@@ -1,5 +1,5 @@
 import { SearchHeadless } from '@yext/search-headless';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 
 export type SearchUtilities = SearchHeadless['utilities'];

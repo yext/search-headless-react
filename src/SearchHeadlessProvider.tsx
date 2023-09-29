@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { SearchHeadless } from '@yext/search-headless';
 import { SearchHeadlessContext } from './SearchHeadlessContext';
 
