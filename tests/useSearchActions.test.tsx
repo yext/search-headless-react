@@ -1,5 +1,6 @@
 import { useSearchActions } from '../src';
 import { render } from '@testing-library/react';
+import React from 'react';
 
 it('invoke useSearchActions outside of SearchHeadlessProvider', () => {
   function Test(): JSX.Element {

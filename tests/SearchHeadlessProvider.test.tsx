@@ -1,6 +1,7 @@
 import { SearchHeadlessProvider } from '../src';
 import { render } from '@testing-library/react';
 import { provideHeadless, SearchHeadless } from '@yext/search-headless';
+import React from 'react';
 
 jest.mock('@yext/search-headless', () => ({
   provideHeadless: jest.fn(() => { return {}; })
