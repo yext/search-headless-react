@@ -3,6 +3,7 @@
 
 # build
 /lib
+/dist
 
 # misc
 .DS_Store

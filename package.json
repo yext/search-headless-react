@@ -1,10 +1,12 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "description": "The official React UI Bindings layer for Search Headless",
-  "main": "./lib/esm/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "sideEffects": false,
   "license": "BSD-3-Clause",
-  "types": "./lib/esm/index.d.ts",
+  "types": "./dist/index.d.mts",
   "keywords": [
     "search",
     "react",
@@ -13,26 +15,30 @@
     "yext"
   ],
   "exports": {
-    "import": "./lib/esm/index.js",
-    "require": "./lib/commonjs/index.js"
+    "import": "./dist/index.mjs",
+    "import.types": "./dist/index.d.mts",
+    "require": "./dist/index.js",
+    "require.types": "./dist/index.d.ts"
   },
   "files": [
     "lib",
+    "dist",
     "src",
     "THIRD-PARTY-NOTICES"
   ],
   "scripts": {
-    "build": "rm -rf lib/** && npm run build:esm && npm run build:cjs && npm run generate-notices",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "rm -rf lib/** && rm -rf dist/** && npm run build:js && npm run generate-notices",
+    "build:js": "tsup src/index.ts --dts --sourcemap --format esm,cjs && npm run create:lib-esm && npm run create:lib-commonjs",
+    "create:lib-esm": "mkdir -p lib/esm && cp dist/index.mjs dist/index.d.mts dist/index.mjs.map lib/esm",
+    "create:lib-commonjs": "mkdir -p lib/commonjs && cp dist/index.js dist/index.d.ts dist/index.js.map lib/commonjs",
     "prepublishOnly": "npm run build",
-    "dev": "tsc --watch -p tsconfig.esm.json",
+    "dev": "tsc --watch -p tsconfig.json",
     "lint": "eslint .",
     "test": "jest",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
-    "@yext/search-headless": "^2.4.0",
+    "@yext/search-headless": "^2.5.0",
     "use-sync-external-store": "^1.1.0"
   },
   "devDependencies": {
@@ -41,14 +47,13 @@
     "@babel/preset-typescript": "^7.16.5",
     "@css-modules-theme/core": "^2.3.0",
     "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^28.1.1",
-    "@types/react": "^18.0.9",
     "@types/use-sync-external-store": "^0.0.3",
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "@yext/eslint-config-slapshot": "^0.4.0",
     "@yext/eslint-plugin-export-star": "^1.0.0",
     "eslint": "^8.11.0",
@@ -64,10 +69,11 @@
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "msw": "^0.36.3",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "ts-jest": "^28.0.4",
-    "typescript": "^4.5.4",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
@@ -100,7 +106,7 @@
     ],
     "globals": {
       "ts-jest": {
-        "tsconfig": "tsconfig.esm.json"
+        "tsconfig": "tsconfig.json"
       }
     }
   },

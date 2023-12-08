@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { provideHeadless, Result, State } from '@yext/search-headless';
-import { useCallback, useReducer } from 'react';
+import React, { useCallback, useReducer } from 'react';
 import { SearchHeadlessContext, useSearchActions, useSearchState } from '../src';
 import { renderToString } from 'react-dom/server';
 
