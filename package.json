@@ -1,6 +1,6 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.4.0-beta",
+  "version": "2.5.0-beta",
   "description": "The official React UI Bindings layer for Search Headless",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
