@@ -1,6 +1,6 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.5.0-beta.5",
+  "version": "2.5.0-beta.6",
   "description": "The official React UI Bindings layer for Search Headless",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -42,7 +42,7 @@
     "use-sync-external-store": "^1.1.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.16.5",
     "@babel/preset-typescript": "^7.16.5",
     "@css-modules-theme/core": "^2.3.0",
@@ -109,6 +109,11 @@
         "tsconfig": "tsconfig.json"
       }
     }
+  },
+  "overrides": {
+    "@babel/plugin-transform-runtime": "^7.23.2",
+    "@babel/traverse": "^7.23.2",
+    "rollup": "^3.29.5"
   },
   "repository": {
     "type": "git",
