@@ -18,7 +18,7 @@ it('invoke useSearchState outside of SearchHeadlessProvider', () => {
   jest.clearAllMocks();
 });
 
-it('Retrieves state snapshot during server side rendering and hydration process', () => {
+it('Retrieves state snapshot during server side rendering and hydration process', async () => {
   const search = createSearchHeadless();
   const mockedOnClick= jest.fn().mockImplementation(() => {
     search.setVertical('anotherFakeKey');
@@ -44,7 +44,7 @@ it('Retrieves state snapshot during server side rendering and hydration process'
 
   //attach event listeners to the existing markup
   render(<App />, { container, hydrate: true });
-  userEvent.click(screen.getByText('fakeVerticalKey'));
+  await userEvent.click(screen.getByText('fakeVerticalKey'));
   expect(mockedOnClick).toBeCalledTimes(1);
   expect(screen.getByText('anotherFakeKey')).toBeDefined();
 });
@@ -146,7 +146,7 @@ it('does not trigger render on unmounted component', async () => {
 });
 
 describe('uses the most recent selector', () => {
-  it('for determining the hook\'s return value', () => {
+  it('for determining the hook\'s return value', async () => {
     let selector = () => 'initial selector';
 
     function Test() {
@@ -170,11 +170,11 @@ describe('uses the most recent selector', () => {
     expect(screen.getByTestId('selected-state')).toHaveTextContent('initial selector');
 
     selector = () => 'new selector';
-    userEvent.click(screen.getByText('rerender'));
+    await userEvent.click(screen.getByText('rerender'));
     expect(screen.getByTestId('selected-state')).toHaveTextContent('new selector');
   });
 
-  it('for determining whether to trigger a rerender', () => {
+  it('for determining whether to trigger a rerender', async () => {
     type Selector = (state: State) => string | number | undefined;
     let selector: Selector = state => {
       return state.query.input;
@@ -208,7 +208,7 @@ describe('uses the most recent selector', () => {
     selector = () => {
       return ++numNewSelectorCalls;
     };
-    userEvent.click(screen.getByText('rerender'));
+    await userEvent.click(screen.getByText('rerender'));
 
     expect(stateUpdates).toEqual(['initial value', 1]);
 
