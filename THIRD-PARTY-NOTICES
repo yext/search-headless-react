@@ -1,7 +1,7 @@
 The following NPM packages may be included in this product:
 
- - @babel/runtime-corejs3@7.27.0
- - @babel/runtime@7.27.0
+ - @babel/runtime-corejs3@7.16.3
+ - @babel/runtime@7.16.3
 
 These packages each contain the following license and notice below:
 
@@ -32,7 +32,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - @reduxjs/toolkit@1.9.7
+ - @reduxjs/toolkit@1.8.1
 
 This package contains the following license and notice below:
 
@@ -62,11 +62,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
-<<<<<<< HEAD
  - @yext/search-core@2.6.1
-=======
- - @yext/search-core@2.6.0
->>>>>>> develop
 
 This package contains the following license and notice below:
 
@@ -110,11 +106,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM package may be included in this product:
 
-<<<<<<< HEAD
  - @yext/search-headless@2.6.1
-=======
- - @yext/search-headless@2.6.0
->>>>>>> develop
 
 This package contains the following license and notice below:
 
@@ -158,11 +150,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM package may be included in this product:
 
- - core-js-pure@3.41.0
+ - core-js-pure@3.19.3
 
 This package contains the following license and notice below:
 
-Copyright (c) 2014-2025 Denis Pushkarev
+Copyright (c) 2014-2021 Denis Pushkarev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -270,11 +262,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
-<<<<<<< HEAD
- - immer@9.0.21
-=======
  - immer@9.0.14
->>>>>>> develop
 
 This package contains the following license and notice below:
 
@@ -478,11 +466,12 @@ SOFTWARE.
 
 -----------
 
-The following NPM package may be included in this product:
+The following NPM packages may be included in this product:
 
  - react@18.3.1
+ - use-sync-external-store@1.1.0
 
-This package contains the following license and notice below:
+These packages each contain the following license and notice below:
 
 MIT License
 
@@ -510,7 +499,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - redux-thunk@2.4.2
+ - redux-thunk@2.4.1
 
 This package contains the following license and notice below:
 
@@ -540,7 +529,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - redux@4.2.1
+ - redux@4.1.2
 
 This package contains the following license and notice below:
 
@@ -570,7 +559,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - regenerator-runtime@0.14.1
+ - regenerator-runtime@0.13.9
 
 This package contains the following license and notice below:
 
@@ -600,7 +589,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - reselect@4.1.8
+ - reselect@4.1.5
 
 This package contains the following license and notice below:
 
@@ -665,36 +654,6 @@ The following NPM package may be included in this product:
 This package contains the following license and notice below:
 
 (MIT)
-
------------
-
-The following NPM package may be included in this product:
-
- - use-sync-external-store@1.5.0
-
-This package contains the following license and notice below:
-
-MIT License
-
-Copyright (c) Meta Platforms, Inc. and affiliates.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 -----------
 
