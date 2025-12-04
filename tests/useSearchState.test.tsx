@@ -6,7 +6,7 @@ import { SearchHeadlessContext, useSearchActions, useSearchState } from '../src'
 import { renderToString } from 'react-dom/server';
 
 it('invoke useSearchState outside of SearchHeadlessProvider', () => {
-  function Test(): JSX.Element {
+  function Test(): React.ReactElement {
     const query = useSearchState(state => state.query.input);
     return <div>{query}</div>;
   }
@@ -23,11 +23,11 @@ it('Retrieves state snapshot during server side rendering and hydration process'
   const mockedOnClick= jest.fn().mockImplementation(() => {
     search.setVertical('anotherFakeKey');
   });
-  function Test(): JSX.Element {
+  function Test(): React.ReactElement {
     const verticalKey = useSearchState(state => state.vertical.verticalKey);
     return <button onClick={mockedOnClick}>{verticalKey}</button>;
   }
-  function App(): JSX.Element {
+  function App(): React.ReactElement {
     return (
       <SearchHeadlessContext.Provider value={search}>
         <Test />

@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 
 it('invoke useSearchActions outside of SearchHeadlessProvider', () => {
-  function Test(): JSX.Element {
+  function Test(): React.ReactElement {
     const searchActions = useSearchActions();
     searchActions.setQuery('');
     return <div>Test</div>;

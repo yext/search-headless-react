@@ -1,5 +1,12 @@
 {
   "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "react",
+      "jest",
+      "node"
+    ]
+  },
   "include": [
     "."
   ]
