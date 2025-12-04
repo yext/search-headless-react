@@ -4,7 +4,7 @@ import { SearchHeadlessContext } from './SearchHeadlessContext';
 
 type Props = { searcher: SearchHeadless };
 
-export function SearchHeadlessProvider(props: PropsWithChildren<Props>): JSX.Element {
+export function SearchHeadlessProvider(props: PropsWithChildren<Props>): React.ReactElement {
   const { children, searcher } = props;
 
   return (

@@ -15,7 +15,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "jsx": "react",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "react"
+    ]
   },
   "include": [
     "src"
