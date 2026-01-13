@@ -1,6 +1,6 @@
 {
   "name": "@yext/search-headless-react",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "The official React UI Bindings layer for Search Headless",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -38,7 +38,7 @@
     "generate-notices": "node ./scripts/run-generate-license-file.cjs --input package.json --output THIRD-PARTY-NOTICES --overwrite"
   },
   "dependencies": {
-    "@yext/search-headless": "^2.8.0",
+    "@yext/search-headless": "^2.8.1",
     "use-sync-external-store": "^1.1.0"
   },
   "devDependencies": {
